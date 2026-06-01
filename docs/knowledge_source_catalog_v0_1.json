@@ -1,0 +1,942 @@
+[
+  {
+    "source_id": "SRC-001",
+    "title": "ACSM Position Stands",
+    "organization": "American College of Sports Medicine (ACSM)",
+    "official_url": "https://acsm.org/education-resources/pronouncements-scientific-communications/position-stands/",
+    "download_url": "按单篇 Position Stand 在 ACSM/期刊页面下载；需逐篇确认开放状态",
+    "document_type": "position_statement",
+    "version": "持续更新；按单篇发布日期记录",
+    "published_date": "various",
+    "language": "en",
+    "scope": [
+      "运动医学",
+      "运动处方",
+      "慢病与特殊人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "专家审核依据库",
+      "慢病干预",
+      "禁忌动作"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "ACSM 官方立场声明索引；多数内容受期刊/出版社版权约束，需逐篇确认是否开放全文和可再利用条件。",
+    "why_useful": "ACSM Position Stand 是 ACSM 的官方科学声明，可为处方原则、禁忌和专家审核提供高等级依据。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-002",
+    "title": "ACSM Physical Activity Guidelines and Recommendations",
+    "organization": "ACSM",
+    "official_url": "https://acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines/",
+    "download_url": "网页资料；按页面引用和归档",
+    "document_type": "guideline_web_resource",
+    "version": "当前网页版本；需抓取日期归档",
+    "published_date": "not clearly stated",
+    "language": "en",
+    "scope": [
+      "成年人",
+      "老年人",
+      "健康促进"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "用户报告免责声明"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "ACSM 网站内容版权需确认；建议摘要入库并保留官方链接。",
+    "why_useful": "提供 ACSM 对身体活动建议和常见问题的官方入口。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-003",
+    "title": "ACSM’s Guidelines for Exercise Testing and Prescription, 12th Edition",
+    "organization": "ACSM / Wolters Kluwer",
+    "official_url": "https://shop.acsm.org/acsm-guidelines-for-exercise-testing-and-prescription-12th-edition/p/9781975196694",
+    "download_url": "需购买；不提供 PDF 下载",
+    "document_type": "textbook",
+    "version": "12th Edition",
+    "published_date": "2025/2026 catalog listing varies by retailer; use official product metadata",
+    "language": "en",
+    "scope": [
+      "运动测试",
+      "运动处方",
+      "健康与疾病人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "风险筛查",
+      "专家审核依据库"
+    ],
+    "license_status": "需购买",
+    "ingestion_recommendation": "只存元数据",
+    "copyright_note": "版权教材；不得查找或使用盗版 PDF。仅记录书目信息、ISBN、购买页和引用格式。",
+    "why_useful": "ACSM 旗舰教材，提供运动测试与处方的标准框架和 FITT 表。",
+    "risk_level": "high"
+  },
+  {
+    "source_id": "SRC-004",
+    "title": "Exercise Preparticipation Screening Questionnaire for Exercise Professionals",
+    "organization": "Exercise is Medicine / ACSM",
+    "official_url": "https://www.exerciseismedicine.org/wp-content/uploads/2021/04/EIM-exercise-preparticipation-screening.pdf",
+    "download_url": "https://www.exerciseismedicine.org/wp-content/uploads/2021/04/EIM-exercise-preparticipation-screening.pdf",
+    "document_type": "screening_tool_pdf",
+    "version": "2021 site copy; based on ACSM algorithm",
+    "published_date": "2021-04 site path",
+    "language": "en",
+    "scope": [
+      "运动前筛查",
+      "健康与慢病人群",
+      "运动专业人员"
+    ],
+    "knowledge_tags": [
+      "风险筛查与禁忌库",
+      "R3红色信号",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "公开可下载；表单和算法版权/改编权需确认，RAG 中建议摘要和链接引用，不直接复制成产品问卷。",
+    "why_useful": "覆盖胸痛、异常气短、晕厥/黑蒙、心悸等运动前 STOP 信号，是 R2/R3 规则的重要来源。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-005",
+    "title": "Updating ACSM’s Recommendations for Exercise Preparticipation Health Screening",
+    "organization": "ACSM / Medicine & Science in Sports & Exercise",
+    "official_url": "https://www.exerciseismedicine.org/wp-content/uploads/2021/04/Preparticipation-Screening-Guidelines.pdf",
+    "download_url": "https://www.exerciseismedicine.org/wp-content/uploads/2021/04/Preparticipation-Screening-Guidelines.pdf",
+    "document_type": "journal_article_pdf",
+    "version": "MSSE 2015;47(11):2473-2479",
+    "published_date": "2015",
+    "language": "en",
+    "scope": [
+      "运动前筛查",
+      "慢病风险分层",
+      "医学许可"
+    ],
+    "knowledge_tags": [
+      "风险筛查与禁忌库",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "期刊文章版权需确认；可引用题录和摘要，全文入库需授权核查。",
+    "why_useful": "解释 ACSM 运动前健康筛查算法更新逻辑。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-006",
+    "title": "Exercise is Medicine Rx for Health Series",
+    "organization": "Exercise is Medicine / ACSM",
+    "official_url": "https://www.exerciseismedicine.org/eim-in-action/health-care/resources/rx-for-health-series/",
+    "download_url": "官网页面含高血压、糖尿病、血脂异常、CKD、COPD、骨质疏松、肥胖等 PDF 链接",
+    "document_type": "patient_professional_handouts",
+    "version": "©2021 ACSM handouts",
+    "published_date": "2021",
+    "language": "en",
+    "scope": [
+      "慢病患者",
+      "临床转介",
+      "健康专业人员"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "FITT-VP",
+      "专家审核依据库",
+      "报告免责声明"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "页面标注 © 2021 ACSM all rights reserved worldwide；可公开下载但内部全文入库和商用需确认。",
+    "why_useful": "慢病运动处方手册式材料，覆盖多个平台 R2 模板。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-007",
+    "title": "Rx for Health: Exercising with High Blood Pressure",
+    "organization": "Exercise is Medicine / ACSM",
+    "official_url": "https://www.exerciseismedicine.org/eim-in-action/health-care/resources/rx-for-health-series/",
+    "download_url": "https://exerciseismedicine.org/assets/page_documents/EIM%20Rx%20series_Exercising%20with%20High%20Blood%20Pressure.pdf",
+    "document_type": "handout_pdf",
+    "version": "©2021 ACSM",
+    "published_date": "2021",
+    "language": "en",
+    "scope": [
+      "高血压稳定型",
+      "慢病患者",
+      "健康专业人员"
+    ],
+    "knowledge_tags": [
+      "高血压",
+      "慢病运动干预库",
+      "FITT-VP",
+      "监测指标"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "公开下载但 ACSM all rights reserved；需授权确认后方可全文入库/商用。",
+    "why_useful": "提供高血压人群有氧、抗阻、血压监测和β受体阻滞剂/利尿剂注意事项。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-008",
+    "title": "Rx for Health: Exercising with Type 2 Diabetes",
+    "organization": "Exercise is Medicine / ACSM",
+    "official_url": "https://www.exerciseismedicine.org/eim-in-action/health-care/resources/rx-for-health-series/",
+    "download_url": "https://exerciseismedicine.org/assets/page_documents/EIM%20Rx%20series_Exercising%20with%20Diabetes.pdf",
+    "document_type": "handout_pdf",
+    "version": "©2021 ACSM",
+    "published_date": "2021",
+    "language": "en",
+    "scope": [
+      "2型糖尿病",
+      "糖代谢异常",
+      "慢病患者"
+    ],
+    "knowledge_tags": [
+      "糖尿病",
+      "低血糖风险",
+      "用药注意",
+      "FITT-VP"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "公开下载但 ACSM all rights reserved；需授权确认。",
+    "why_useful": "覆盖运动前血糖、胰岛素/促泌剂低血糖风险、运动安全提示。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-009",
+    "title": "Rx for Health: Exercising with Blood Lipid Disorders",
+    "organization": "Exercise is Medicine / ACSM",
+    "official_url": "https://www.exerciseismedicine.org/eim-in-action/health-care/resources/rx-for-health-series/",
+    "download_url": "https://exerciseismedicine.org/assets/page_documents/EIM%20Rx%20series_Exercising%20with%20Blood%20Lipid%20Disorders.pdf",
+    "document_type": "handout_pdf",
+    "version": "©2021 ACSM",
+    "published_date": "2021",
+    "language": "en",
+    "scope": [
+      "血脂异常",
+      "心血管风险管理"
+    ],
+    "knowledge_tags": [
+      "血脂异常",
+      "慢病运动干预库",
+      "FITT-VP"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "公开下载但 ACSM all rights reserved；需授权确认。",
+    "why_useful": "提供血脂异常人群有氧和抗阻建议及他汀相关肌肉疼痛提示。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-010",
+    "title": "Rx for Health: Exercising with Overweight or Obesity",
+    "organization": "Exercise is Medicine / ACSM",
+    "official_url": "https://www.exerciseismedicine.org/eim-in-action/health-care/resources/rx-for-health-series/",
+    "download_url": "https://exerciseismedicine.org/assets/page_documents/EIM%20Rx%20series_Exercising%20with%20Overweight%20or%20Obesity.pdf",
+    "document_type": "handout_pdf",
+    "version": "©2021 ACSM",
+    "published_date": "2021",
+    "language": "en",
+    "scope": [
+      "超重肥胖",
+      "减脂",
+      "代谢风险"
+    ],
+    "knowledge_tags": [
+      "肥胖",
+      "减脂",
+      "FITT-VP",
+      "久坐减少"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "公开下载但 ACSM all rights reserved；需授权确认。",
+    "why_useful": "为肥胖/减脂模板提供活动量、久坐打断和抗阻训练依据。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-011",
+    "title": "PAR-Q+ and ePARmed-X+ Official Website / Print Versions",
+    "organization": "PAR-Q+ Collaboration / ePARmed-X+",
+    "official_url": "https://eparmedx.com/",
+    "download_url": "https://eparmedx.com/printable/",
+    "document_type": "screening_tool",
+    "version": "官方当前版本；网页提示需使用最新版",
+    "published_date": "continually updated",
+    "language": "en/fr/other",
+    "scope": [
+      "运动前筛查",
+      "自我清除",
+      "医学许可"
+    ],
+    "knowledge_tags": [
+      "风险筛查与禁忌库",
+      "PAR-Q+",
+      "R2/R3分流"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "需人工授权",
+    "copyright_note": "官网说明表单必须保持原样，未经书面同意不得纳入电子调查/研究工具或衍生材料；产品化需书面授权。",
+    "why_useful": "运动前筛查核心工具，可用于风险分流和医学评估触发逻辑。",
+    "risk_level": "high"
+  },
+  {
+    "source_id": "SRC-012",
+    "title": "WHO Guidelines on Physical Activity and Sedentary Behaviour",
+    "organization": "World Health Organization (WHO)",
+    "official_url": "https://www.who.int/publications/i/item/9789240015128",
+    "download_url": "https://iris.who.int/server/api/core/bitstreams/faa83413-d89e-4be9-bb01-b24671aef7ca/content",
+    "document_type": "guideline_pdf",
+    "version": "2020；ISBN 9789240015128",
+    "published_date": "2020-11-25",
+    "language": "en",
+    "scope": [
+      "儿童青少年",
+      "成年人",
+      "老年人",
+      "孕产期",
+      "慢病患者",
+      "残障人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "久坐行为",
+      "老年平衡",
+      "慢病活动建议"
+    ],
+    "license_status": "开放许可",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "WHO 页面标注 Creative Commons 许可；入库前记录具体 CC 条款并保留来源署名。",
+    "why_useful": "第一版知识库 P0 基准资料，覆盖活动频率、强度、持续时间和久坐行为建议。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-013",
+    "title": "Physical Activity Guidelines for Americans, 2nd Edition",
+    "organization": "U.S. Department of Health and Human Services / Office of Disease Prevention and Health Promotion",
+    "official_url": "https://odphp.health.gov/our-work/nutrition-physical-activity/physical-activity-guidelines/current-guidelines",
+    "download_url": "https://odphp.health.gov/sites/default/files/2019-09/Physical_Activity_Guidelines_2nd_edition.pdf",
+    "document_type": "guideline_pdf",
+    "version": "2nd Edition",
+    "published_date": "2018",
+    "language": "en",
+    "scope": [
+      "3岁及以上人群",
+      "成年人",
+      "老年人",
+      "慢病/残障人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "老年平衡",
+      "健康促进"
+    ],
+    "license_status": "明确公开",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "美国政府公开指南；仍建议在入库说明中保留来源和免责声明。",
+    "why_useful": "与 WHO 建议交叉验证，可用于 R0/R1 处方基础剂量和老年多成分训练。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-014",
+    "title": "CDC Physical Activity Basics / Older Adults Recommendations",
+    "organization": "U.S. Centers for Disease Control and Prevention (CDC)",
+    "official_url": "https://www.cdc.gov/physical-activity-basics/guidelines/older-adults.html",
+    "download_url": "网页资料；可归档 HTML 摘要，不是 PDF",
+    "document_type": "government_web_guidance",
+    "version": "current webpage",
+    "published_date": "not clearly stated; accessed 2026-06-01",
+    "language": "en",
+    "scope": [
+      "成年人",
+      "老年人",
+      "跌倒风险"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "老年功能下降",
+      "跌倒风险",
+      "用户教育"
+    ],
+    "license_status": "明确公开",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "CDC 政府网页；建议保留访问日期和来源链接。",
+    "why_useful": "适合作为用户端通俗解释和老年平衡/力量建议的补充来源。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-015",
+    "title": "中国人群身体活动指南（2021）",
+    "organization": "中国疾控中心、国家体育总局体育科学研究所等；人民卫生出版社/中国公共卫生",
+    "official_url": "https://www.zgggws.com/cn/article/doi/10.11847/zgggws1137503",
+    "download_url": "https://www.pmphmall.com/gdsdetail/628431-322875",
+    "document_type": "guideline_book_and_journal_article",
+    "version": "2021；ISBN 978-7-117-32151-8",
+    "published_date": "2021-10-01 book; 2022 journal article",
+    "language": "zh-CN",
+    "scope": [
+      "中国人群",
+      "儿童青少年",
+      "成年人",
+      "老年人",
+      "慢病人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "中国人群本土化",
+      "FITT-VP",
+      "慢病活动建议"
+    ],
+    "license_status": "需购买/授权待确认",
+    "ingestion_recommendation": "只存元数据",
+    "copyright_note": "出版社页面明确电子书不提供原文件导出/打印；不得抓取付费书全文。期刊文章版权需确认。",
+    "why_useful": "中国人群身体活动建议的核心本土化依据，适合作为元数据和专家引用源。",
+    "risk_level": "high"
+  },
+  {
+    "source_id": "SRC-016",
+    "title": "国民体质测定标准（2023年修订）",
+    "organization": "国家国民体质监测中心 / 国家体育总局体育科学研究所",
+    "official_url": "https://www.ciss.cn/zhxw/info/2023/33701.html",
+    "download_url": "同官方附件页；需人工确认最终附件链接和版本",
+    "document_type": "national_standard",
+    "version": "2023年修订",
+    "published_date": "2023-08-10",
+    "language": "zh-CN",
+    "scope": [
+      "国民体质测试",
+      "成年人",
+      "老年人",
+      "体质评价"
+    ],
+    "knowledge_tags": [
+      "体质测试与评价库",
+      "风险筛查",
+      "阶段评估"
+    ],
+    "license_status": "免费公开/授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "官方发布但版权/再利用条款需确认；建议先做字段映射和摘要入库。",
+    "why_useful": "平台体测字段和评价阈值的重要国家标准来源。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-017",
+    "title": "国家学生体质健康标准（2014年修订）",
+    "organization": "教育部等；中国学生体质健康网",
+    "official_url": "https://www.csh.moe.edu.cn/wtzx/zcwj/20141226/2c909e854a8490a4014a84fda9b4001d.html",
+    "download_url": "官方页面附件下载",
+    "document_type": "national_student_standard",
+    "version": "2014年修订",
+    "published_date": "2014-07-07/2014-07-28发布页面",
+    "language": "zh-CN",
+    "scope": [
+      "学校体育",
+      "学生体质健康",
+      "体测评价"
+    ],
+    "knowledge_tags": [
+      "体质测试与评价库",
+      "学校体育",
+      "阶段评估"
+    ],
+    "license_status": "明确公开",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "官方政策文件页面；建议保留来源和版本，不作商业包装转载。",
+    "why_useful": "学校体质健康模块和未成年人测试评价的官方标准依据。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-018",
+    "title": "运动处方中国专家共识（2023）",
+    "organization": "中国运动医学杂志 / 国内运动医学专家组",
+    "official_url": "https://ydyxzz.ciss.cn/cn/article/doi/10.16038/j.1000-6710.2023.01.001",
+    "download_url": "以期刊官网为准；第三方 PDF 授权待确认",
+    "document_type": "expert_consensus",
+    "version": "2023年第1期",
+    "published_date": "2023",
+    "language": "zh-CN",
+    "scope": [
+      "运动处方原则",
+      "运动前筛查",
+      "处方设计"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "期刊内容版权需确认；建议题录、摘要、结构化要点入库。",
+    "why_useful": "中国语境下运动处方定义、类型和实施框架的重要专家共识。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-019",
+    "title": "中国高血压防治指南（2024年修订版）",
+    "organization": "中国高血压联盟等",
+    "official_url": "https://www.chl-bha.org.cn/Uploads/Download/2024/08/15/u66bdc4767ef0d.pdf",
+    "download_url": "https://www.chl-bha.org.cn/Uploads/Download/2024/08/15/u66bdc4767ef0d.pdf",
+    "document_type": "clinical_guideline_pdf",
+    "version": "2024年修订版",
+    "published_date": "2024-08-15",
+    "language": "zh-CN",
+    "scope": [
+      "高血压",
+      "心血管风险",
+      "生活方式干预"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "高血压",
+      "专家审核依据库",
+      "禁忌阈值"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "官方公开 PDF，但医学指南版权和商用入库授权需确认。",
+    "why_useful": "高血压诊断分层、生活方式和运动安全边界的中国最新版依据。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-020",
+    "title": "中国2型糖尿病运动治疗指南（2024版）",
+    "organization": "国家老年医学中心、中华医学会糖尿病学分会、中国体育科学学会等",
+    "official_url": "https://www.chinagp.net/CN/10.12114/j.issn.1007-9572.2024.0018",
+    "download_url": "期刊页面为准；PDF/HTML 权限需确认",
+    "document_type": "clinical_exercise_guideline",
+    "version": "2024版",
+    "published_date": "2024",
+    "language": "zh-CN",
+    "scope": [
+      "2型糖尿病",
+      "血糖监测",
+      "运动治疗",
+      "用药安全"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "糖尿病",
+      "低血糖风险",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "期刊发表指南，授权需确认；不得未经授权复制全文。",
+    "why_useful": "覆盖糖尿病运动原则、并发症、用药、运动时机、血糖监测和数字健康，强相关于平台 R2 模板。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-021",
+    "title": "中国血脂管理指南（2023年）",
+    "organization": "中华医学会心血管病学分会等",
+    "official_url": "https://csc.cma.org.cn/attach/0/96b4e603cee74b7fb208b278aa92bd8b.pdf",
+    "download_url": "https://csc.cma.org.cn/attach/0/96b4e603cee74b7fb208b278aa92bd8b.pdf",
+    "document_type": "clinical_guideline_pdf",
+    "version": "2023年",
+    "published_date": "2023",
+    "language": "zh-CN",
+    "scope": [
+      "血脂异常",
+      "ASCVD 风险",
+      "生活方式干预"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "血脂异常",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "中华医学会/期刊指南版权需确认。",
+    "why_useful": "中国血脂管理和生活方式干预的核心依据。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-022",
+    "title": "体重管理指导原则（2024年版）",
+    "organization": "国家卫生健康委员会等",
+    "official_url": "https://www.nhc.gov.cn/cms-search/xxgk/getManuscriptXxgk.htm?id=5e4f0829d7e34e639ae138b462edb3cf",
+    "download_url": "官方页面附件：体重管理指导原则（2024年版）",
+    "document_type": "government_guidance_pdf",
+    "version": "2024年版",
+    "published_date": "2024-12-31",
+    "language": "zh-CN",
+    "scope": [
+      "体重管理",
+      "超重肥胖",
+      "全人群"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "肥胖",
+      "减脂",
+      "运动处方原则库"
+    ],
+    "license_status": "免费公开/授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "国家卫健委公开附件；全文入库和商业再利用需法务确认。",
+    "why_useful": "国家层面体重管理文件，含不同体重状态下运动原则和健康筛查提醒。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-023",
+    "title": "冠心病心脏康复基层指南（2020年）",
+    "organization": "中华医学会 / 中华全科医师杂志",
+    "official_url": "https://rs.yiigle.com/cmaid/1316043",
+    "download_url": "期刊 HTML；PDF/转载授权需确认",
+    "document_type": "clinical_rehab_guideline",
+    "version": "2020年",
+    "published_date": "2021-02-04 online",
+    "language": "zh-CN",
+    "scope": [
+      "冠心病",
+      "心脏康复",
+      "基层医疗"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "冠心病",
+      "R3/R2转介",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "中华医学会期刊版权需确认；适合结构化摘要与元数据。",
+    "why_useful": "冠心病运动康复和分期康复框架可支持 R3/R2 慢病转介边界。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-024",
+    "title": "稳定性心绞痛运动康复中国专家共识",
+    "organization": "Chinese Society of Cardiology / PubMed indexed article",
+    "official_url": "https://pubmed.ncbi.nlm.nih.gov/38423726/",
+    "download_url": "PubMed 题录；全文以期刊授权为准",
+    "document_type": "expert_consensus_metadata",
+    "version": "2023",
+    "published_date": "2023",
+    "language": "zh-CN abstract/en metadata",
+    "scope": [
+      "冠心病",
+      "稳定性心绞痛",
+      "心脏康复"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "冠心病",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "只存元数据",
+    "copyright_note": "PubMed 提供题录；全文版权归期刊/出版方。",
+    "why_useful": "冠心病/心绞痛运动康复专家共识的可验证题录。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-025",
+    "title": "我国成人慢性肾脏病患者运动康复的专家共识",
+    "organization": "中华肾脏病杂志",
+    "official_url": "https://www.cjn.org.cn/cn/article/doi/10.3760/cma.j.issn.1001-7097.2019.07.001",
+    "download_url": "期刊页面为准；PDF 授权需确认",
+    "document_type": "expert_consensus",
+    "version": "2019",
+    "published_date": "2019-07-15",
+    "language": "zh-CN",
+    "scope": [
+      "慢性肾病",
+      "运动康复",
+      "成人"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "CKD",
+      "FITT-VP",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "中华医学会期刊版权需确认。",
+    "why_useful": "直接覆盖 CKD 患者运动康复处方，包括评估、运动类型、频率、时间和强度。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-026",
+    "title": "慢性阻塞性肺疾病临床康复循证实践指南",
+    "organization": "中国康复理论与实践",
+    "official_url": "https://www.cjrtponline.com/CN/10.3969/j.issn.1006-9771.2021.01.002",
+    "download_url": "期刊页面为准；PDF 授权需确认",
+    "document_type": "evidence_based_practice_guideline",
+    "version": "2021;27(1):15-26",
+    "published_date": "2021",
+    "language": "zh-CN",
+    "scope": [
+      "COPD",
+      "肺康复",
+      "呼吸疾病"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "COPD",
+      "呼吸训练",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "期刊版权需确认；建议摘要入库。",
+    "why_useful": "为呼吸疾病稳定型、气短监测和肺康复运动提供依据。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-027",
+    "title": "社区老年人跌倒预防控制技术标准 WS/T 887—2026",
+    "organization": "国家卫生健康委员会",
+    "official_url": "https://www.nhc.gov.cn/fzs/c100048/202603/bc137ea10a084a9e87ed57902be81cb5.shtml",
+    "download_url": "https://www.nhc.gov.cn/fzs/c100048/202603/bc137ea10a084a9e87ed57902be81cb5/files/WST%20887%E2%80%942026.pdf",
+    "document_type": "health_industry_standard_pdf",
+    "version": "WS/T 887—2026",
+    "published_date": "2026-03-03/2026实施信息以页面为准",
+    "language": "zh-CN",
+    "scope": [
+      "社区老年人",
+      "跌倒预防",
+      "平衡/力量/步态训练"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "老年跌倒风险",
+      "平衡训练",
+      "传统功法"
+    ],
+    "license_status": "免费公开/授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "官方公开标准；全文入库和商用再利用需确认标准版权/使用规则。",
+    "why_useful": "覆盖老年跌倒预防训练要素，并提及太极拳、八段锦、五禽戏等适宜运动。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-028",
+    "title": "老年人失能预防运动干预临床实践指南（2023版）",
+    "organization": "中国全科医学等",
+    "official_url": "https://www.chinagp.net/CN/10.12114/j.issn.1007-9572.2023.0058",
+    "download_url": "期刊页面为准；PDF 授权需确认",
+    "document_type": "clinical_practice_guideline",
+    "version": "2023版",
+    "published_date": "2023",
+    "language": "zh-CN",
+    "scope": [
+      "老年人",
+      "失能预防",
+      "功能下降",
+      "运动干预"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "老年功能下降",
+      "跌倒风险",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "期刊版权需确认。",
+    "why_useful": "面向老年功能下降/失能预防，可支持 R2 老年功能模板。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-029",
+    "title": "原发性骨质疏松症诊疗指南（2022）",
+    "organization": "中华医学会骨质疏松和骨矿盐疾病分会",
+    "official_url": "https://www.chinagp.net/CN/10.12114/j.issn.1007-9572.2023.0121",
+    "download_url": "期刊页面为准；PDF 授权需确认",
+    "document_type": "clinical_guideline",
+    "version": "2022版；2023刊发页面",
+    "published_date": "2023",
+    "language": "zh-CN",
+    "scope": [
+      "骨质疏松",
+      "跌倒/骨折风险",
+      "运动与生活方式"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "骨质疏松",
+      "禁忌动作",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "医学指南版权需确认。",
+    "why_useful": "骨质疏松人群禁忌动作、跌倒和抗阻/负重活动安全边界的中国依据。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-030",
+    "title": "《八段锦》团体标准及编制说明相关资料",
+    "organization": "中华中医药学会 / 中国健身气功协会 / 国家体育总局健身气功管理中心",
+    "official_url": "https://www.sport.gov.cn/qgzx/n5437/c28739084/content.html",
+    "download_url": "国家体育总局健身气功管理中心页面附件；正式标准文本需确认发布渠道",
+    "document_type": "group_standard_draft_or_standard_notice",
+    "version": "2026相关征求意见稿/发布信息；正式版本待确认",
+    "published_date": "2026-04-22/2026-05-28相关信息",
+    "language": "zh-CN",
+    "scope": [
+      "八段锦",
+      "传统功法",
+      "动作规范",
+      "安全提示"
+    ],
+    "knowledge_tags": [
+      "传统功法库",
+      "动作库",
+      "禁忌动作",
+      "专家审核依据库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "需人工授权",
+    "copyright_note": "团体标准/征求意见稿/正式文本版权和入库授权需确认；不得以征求意见稿替代正式标准。",
+    "why_useful": "传统功法模块 P0/P1 来源，适合动作规范、安全提示和分级练习结构。",
+    "risk_level": "high"
+  },
+  {
+    "source_id": "SRC-031",
+    "title": "健身气功·易筋经 五禽戏 六字诀 八段锦",
+    "organization": "国家体育总局健身气功管理中心 / 人民体育出版社",
+    "official_url": "https://www.china-pub.com/4490026",
+    "download_url": "需购买纸质/电子书；不提供非法下载",
+    "document_type": "book",
+    "version": "2015-10-01；ISBN 9787500928751",
+    "published_date": "2015-10-01",
+    "language": "zh-CN",
+    "scope": [
+      "健身气功",
+      "易筋经",
+      "五禽戏",
+      "六字诀",
+      "八段锦"
+    ],
+    "knowledge_tags": [
+      "传统功法库",
+      "动作库",
+      "专家审核依据库"
+    ],
+    "license_status": "需购买",
+    "ingestion_recommendation": "只存元数据",
+    "copyright_note": "出版社图书，受版权保护；仅记录书目信息和购买链接，不入库全文。",
+    "why_useful": "国家体育总局健身气功管理中心编写的传统功法权威教材。",
+    "risk_level": "high"
+  },
+  {
+    "source_id": "SRC-032",
+    "title": "CCTV《八段锦完整教学》视频",
+    "organization": "央视网 / 国家体育总局健身气功管理中心相关推广资源",
+    "official_url": "https://tv.cctv.com/2025/02/20/VIDEbtQYkNlKHm9cWihyM9Y5250220.shtml",
+    "download_url": "在线视频，不建议下载；仅链接引用/人工授权后使用",
+    "document_type": "official_video",
+    "version": "2025-02-20 页面",
+    "published_date": "2025-02-20",
+    "language": "zh-CN",
+    "scope": [
+      "八段锦",
+      "传统功法教学",
+      "用户教育"
+    ],
+    "knowledge_tags": [
+      "传统功法库",
+      "动作素材规划"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "只存元数据",
+    "copyright_note": "视频版权归央视/权利方；不得抓取或转存视频。",
+    "why_useful": "可作为前端动作素材风格和官方示范链接参考。",
+    "risk_level": "high"
+  },
+  {
+    "source_id": "SRC-033",
+    "title": "WHO School Physical Activity Policy resources / school-based physical activity guidance",
+    "organization": "World Health Organization / UNESCO related school health resources",
+    "official_url": "https://www.who.int/publications/i/item/9789240015128",
+    "download_url": "需按 WHO 学校体育/健康促进学校资料逐项确认下载链接",
+    "document_type": "school_health_guidance",
+    "version": "various",
+    "published_date": "various",
+    "language": "zh-CN/en",
+    "scope": [
+      "学校体育",
+      "儿童青少年",
+      "健康促进学校"
+    ],
+    "knowledge_tags": [
+      "学校体育",
+      "体质测试与评价库",
+      "用户报告免责声明"
+    ],
+    "license_status": "开放许可/授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "WHO/UNESCO 资料多为开放或公开资料，但需逐项确认具体许可。",
+    "why_useful": "补足学校体育和儿童青少年健康促进模块。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-034",
+    "title": "中国儿童青少年身体活动指南",
+    "organization": "中国循证儿科杂志 / 专家组",
+    "official_url": "https://www.cjebp.net/CN/Y2017/V12/I6/401",
+    "download_url": "期刊页面为准；第三方 PDF 授权待确认",
+    "document_type": "guideline_article",
+    "version": "2017",
+    "published_date": "2017",
+    "language": "zh-CN",
+    "scope": [
+      "儿童青少年",
+      "学校体育",
+      "身体活动"
+    ],
+    "knowledge_tags": [
+      "学校体育",
+      "运动处方原则库",
+      "体质测试与评价库"
+    ],
+    "license_status": "授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "期刊文章版权需确认。",
+    "why_useful": "中国儿童青少年运动量和学校体育建议的本土来源。",
+    "risk_level": "medium"
+  },
+  {
+    "source_id": "SRC-035",
+    "title": "成人肥胖食养指南（2024年版）",
+    "organization": "国家卫生健康委员会",
+    "official_url": "https://www.nhc.gov.cn/sps/s7885/202402/759424309dd34047a18840f30f1f4024/files/3269d569ed61484f867668f62c5d5c37.pdf",
+    "download_url": "https://www.nhc.gov.cn/sps/s7885/202402/759424309dd34047a18840f30f1f4024/files/3269d569ed61484f867668f62c5d5c37.pdf",
+    "document_type": "government_guidance_pdf",
+    "version": "2024年版",
+    "published_date": "2024-02",
+    "language": "zh-CN",
+    "scope": [
+      "成人肥胖",
+      "体重管理",
+      "营养为主"
+    ],
+    "knowledge_tags": [
+      "慢病运动干预库",
+      "肥胖",
+      "报告免责声明"
+    ],
+    "license_status": "免费公开/授权待确认",
+    "ingestion_recommendation": "摘要入库",
+    "copyright_note": "官方公开 PDF；主要是食养指南，运动相关有限，全文入库需确认。",
+    "why_useful": "补充肥胖管理背景和免责声明，但不是运动处方核心依据。",
+    "risk_level": "medium"
+  }
+]

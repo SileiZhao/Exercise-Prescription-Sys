@@ -1,0 +1,56 @@
+[
+  {
+    "name": "R0基础健康维持模板",
+    "risk_level": "R0",
+    "cluster_tags": ["普通健康型", "初级运动水平"],
+    "goal_tags": ["体质提升", "增强心肺"],
+    "fitt_vp": {
+      "frequency": "每周3-5次",
+      "intensity": "低到中等强度，RPE 11-13",
+      "time": "每次30-45分钟",
+      "type": ["快走", "慢跑准备", "弹力带抗阻", "柔韧练习"],
+      "volume": "每周150分钟左右中等强度身体活动",
+      "progression": "每2-4周根据完成率和疲劳反馈小幅增加总量"
+    },
+    "precautions": ["循序渐进", "运动中胸闷头晕应立即停止"],
+    "contraindications": ["带病硬撑", "突然大幅增加强度"],
+    "evidence_refs": ["FITT-VP处方结构要求"],
+    "status": "APPROVED"
+  },
+  {
+    "name": "R1减脂改善型基础模板",
+    "risk_level": "R1",
+    "cluster_tags": ["肥胖代谢风险型", "久坐低活动型", "初级运动水平"],
+    "goal_tags": ["减脂", "增强心肺", "体质提升"],
+    "fitt_vp": {
+      "frequency": "每周4次",
+      "intensity": "低到中等强度，RPE 11-13",
+      "time": "每次30分钟",
+      "type": ["快走", "低冲击有氧", "弹力带划船", "坐姿提踵"],
+      "volume": "每周120分钟起步",
+      "progression": "每2-4周根据反馈增加5-10分钟或增加1次低强度训练"
+    },
+    "precautions": ["监测RPE和膝踝疼痛", "运动中胸闷头晕应立即停止"],
+    "contraindications": ["高强度冲刺", "大体重跳跃", "一次性大幅增加跑量"],
+    "evidence_refs": ["FITT-VP处方结构要求"],
+    "status": "APPROVED"
+  },
+  {
+    "name": "R2高血压谨慎型模板",
+    "risk_level": "R2",
+    "cluster_tags": ["心肺功能不足型", "肥胖代谢风险型", "慢病稳定期"],
+    "goal_tags": ["降血压", "增强心肺", "体重管理"],
+    "fitt_vp": {
+      "frequency": "每周3次",
+      "intensity": "低强度起步，RPE 10-12",
+      "time": "每次20-30分钟",
+      "type": ["快走", "功率车", "八段锦"],
+      "volume": "每周90分钟起步",
+      "progression": "每2-4周根据血压、RPE和专家意见调整"
+    },
+    "precautions": ["运动前后记录血压", "避免憋气", "出现胸闷头晕立即停止"],
+    "contraindications": ["高强度间歇", "大重量抗阻", "憋气发力", "冲刺跑"],
+    "evidence_refs": ["R2高血压运动干预原则", "R3红色风险安全边界"],
+    "status": "APPROVED"
+  }
+]

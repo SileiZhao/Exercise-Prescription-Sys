@@ -1,0 +1,26 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+postgres_data/
+redis_data/
+qdrant_data/
+minio_data/
+
+# 本地 RAG 原始资料保留在工作区；大型 PDF/Word 不直接提交到 GitHub。
+rag_data/**/*.pdf
+rag_data/**/*.doc
+rag_data/**/*.docx
+rag_data/90_web_archives/
+rag_data_excluded_not_for_rag/

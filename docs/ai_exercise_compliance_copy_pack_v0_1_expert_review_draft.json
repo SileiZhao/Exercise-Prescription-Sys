@@ -1,0 +1,585 @@
+{
+  "version": "v0.1",
+  "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+  "draft_label": "专家审核草案",
+  "documents": [
+    {
+      "doc_code": "COMPLIANCE_A_INFORMED_CONSENT",
+      "title": "A. 用户知情同意书｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "注册、首次风险筛查、生成运动处方、专家审核、阶段评估、科研授权弹窗或独立页面",
+      "text": "请在使用 AI 个性化运动处方平台前仔细阅读并确认。本平台提供运动健康指导、风险提示、运动处方建议、专家审核辅助、运动反馈记录和阶段评估服务。本平台不是医疗机构诊断文书，不替代医疗诊断、药物治疗、急救处置、康复治疗或医生面对面判断，也不承诺任何疾病治疗效果、减重效果、降压降糖效果或康复结果。\n\n1. 服务性质：平台基于您主动填写或授权导入的个人资料、体测结果、身体成分、血压、血糖、血脂、尿酸、血氧、疾病和用药自述、PAR-Q+ 等信息，进行运动风险提示和处方建议。平台输出仅作为运动健康管理参考。\n2. 风险分级：R0 为普通健康型，可自动生成基础处方；R1 为低风险改善型，可自动生成改善处方并建议抽查；R2 为中风险干预型，仅生成谨慎型 AI 初稿，必须经专家审核后发布；R3 为高风险转介型，不生成训练处方，只输出安全提醒和医学评估/转介建议。\n3. 安全边界：出现胸痛/胸闷、晕厥/黑蒙、严重或异常气短、明显心悸、严重疼痛、血压/血糖/血氧异常、急性损伤或医生限制运动等情形时，应立即停止运动，并根据症状严重程度寻求医学评估、急救或转介。 平台提示不能代替急救电话、线下就诊或医生医嘱。\n4. 慢病和用药：如您有高血压、糖尿病、冠心病、脑卒中、慢性肾病、呼吸疾病、骨质疏松、关节疼痛、近期损伤，或正在使用 β受体阻滞剂、胰岛素、降糖药、抗凝药、止痛药、降压药等，请如实填写。用药信息可能影响心率、血糖、出血风险、疼痛感知和训练安全；平台不会建议您自行调整药物。\n5. 信息准确性：您理解并同意，平台建议依赖您提供信息的完整性和准确性。如信息缺失、错误、过期或隐瞒风险，平台输出可能不适合您。\n6. 数据处理：为提供服务，平台可能处理您的账号信息、运动健康信息、体测数据、运动反馈、专家审核记录和系统日志。医疗健康相关信息属于敏感个人信息，平台应在具有特定目的、充分必要性和严格保护措施的前提下处理，并在必要时取得您的单独同意。\n7. 科研授权：科研、模型评估、质量改进或论文/报告使用仅能在合法合规、最小必要、脱敏/匿名化、审批通过后进行。未经您授权或法定依据，不应将可识别身份的信息用于科研导出。\n8. 用户权利：您可申请查看、复制、更正、补充、撤回授权、删除或匿名化您的个人信息；法律法规另有保存要求、风控审计或争议处理需要的，平台可依法仅保留必要记录并停止非必要处理。\n9. 自愿确认：您确认已理解平台能力边界、R2/R3 发布限制、安全停练信号、数据处理目的和您的权利。您可拒绝非必要授权；拒绝或撤回非必要授权不影响基础服务，但可能影响个性化功能或科研参与。",
+      "checkbox_text": "我已阅读并理解《用户知情同意书》，知悉平台不替代医疗诊断或治疗；R2 必须专家审核后发布，R3 不生成训练处方；出现红色预警信号应停止运动并寻求医学评估；我同意平台按本说明处理必要信息。",
+      "short_notice": "本平台提供运动健康建议，不替代诊断和治疗；R2 需专家审核，R3 不生成训练处方；出现胸痛、晕厥、严重气短等请立即停止运动并寻求医学评估。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_B_PRIVACY_SUMMARY",
+      "title": "B. 隐私政策摘要｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "注册页、设置页、授权弹窗、隐私中心、报告导出前提示",
+      "text": "本摘要帮助您快速了解平台如何处理个人信息，完整规则以正式《隐私政策》为准。本摘要为专家审核草案，正式版本须经法务确认。\n\n1. 我们处理哪些信息：账号与联系方式、基础资料、运动目标和习惯、体测与身体成分数据、血压/血糖/血脂/尿酸/血氧等健康指标、疾病和用药自述、疼痛与损伤信息、PAR-Q+ 结果、运动处方、专家审核意见、运动反馈、阶段评估、设备和日志信息。医疗健康信息、精确定位、未成年人信息等可能构成敏感个人信息。\n2. 使用目的：用于身份验证、风险筛查、处方生成、专家审核、运动反馈、阶段评估、安全预警、客服支持、质量改进、合规审计和经授权的科研脱敏分析。\n3. 最小必要：平台应仅收集实现上述目的所必需的信息，并以清晰方式告知处理目的、方式、种类、保存期限和权利行使路径。\n4. 自动化与专家审核：平台可能使用算法生成风险提示和处方初稿。R2 处方必须专家审核后发布；R3 不生成训练处方，仅提供安全提醒和医学评估/转介建议。您有权要求对重要自动化决策结果进行说明。\n5. 共享和委托处理：如需云服务、短信、客服、专家审核或科研协作，平台应与受托方约定处理目的、期限、方式、种类、保护措施和责任，不得超范围使用。涉及对外提供或出境，应依法取得单独同意并完成必要评估、备案或审批。\n6. 科研导出：科研导出必须完成脱敏/匿名化、最小必要字段选择、审批记录、访问控制和用途限制；可识别身份信息默认不导出。\n7. 安全措施：平台应采取分类分级、访问控制、加密、去标识化、日志审计、权限审批、员工培训和安全事件应急措施。\n8. 您的权利：您可申请查看、复制、更正、补充、撤回授权、删除或匿名化数据；可拒绝非必要授权；可对隐私处理规则要求解释说明。\n9. 安全提醒：出现胸痛/胸闷、晕厥/黑蒙、严重或异常气短、明显心悸、严重疼痛、血压/血糖/血氧异常、急性损伤或医生限制运动等情形时，应立即停止运动，并根据症状严重程度寻求医学评估、急救或转介。",
+      "checkbox_text": "我已阅读并理解《隐私政策摘要》，同意平台为提供运动健康服务处理必要信息，并知悉我可申请查看、更正、撤回授权或删除/匿名化数据。",
+      "short_notice": "我们仅为运动健康服务、安全预警、专家审核和经授权科研处理必要数据；健康数据属于敏感信息，将采取严格保护措施。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_C_DISCLAIMER",
+      "title": "C. 用户免责声明｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "注册确认、处方生成页、训练开始页、报告页、客服解释场景",
+      "text": "本平台提供运动健康指导、风险提示、运动处方建议、专家审核辅助、运动反馈和阶段评估，不构成医疗诊断、医疗咨询、药物治疗建议、临床处置建议、急救指导或康复治疗处方。平台输出不应被理解为医生医嘱、诊断证明、病历、处方药建议或医疗机构诊断文书。\n\n1. 您应根据自身实际情况、医生建议和平台风险提示审慎运动。任何慢病、用药、疼痛、损伤、妊娠、术后、急性疾病或医生限制运动情况，均应优先遵循医生或合格专业人员意见。\n2. 平台风险分级仅用于运动健康管理：R0/R1 可生成相应运动处方；R2 仅生成 AI 初稿且必须专家审核后发布；R3 不生成训练处方，只提供安全提醒和医学评估/转介建议。\n3. 平台不承诺运动后一定获得减重、降压、降糖、降脂、疼痛改善、体能提升或疾病改善。运动效果受个体差异、执行情况、基础疾病、药物、睡眠、营养和环境等因素影响。\n4. 您在运动中如出现胸痛/胸闷、晕厥/黑蒙、严重或异常气短、明显心悸、严重疼痛、关节明显肿胀/卡锁/不稳、疑似低血糖、血压/血糖/血氧异常、急性损伤或其他危险不适，应立即停止运动，并寻求医学评估或紧急救助。\n5. 您应如实提供个人健康和运动信息，并及时更新。平台基于不完整或不准确数据生成的提示可能不适合您。\n6. 科研或质量改进导出必须进行脱敏/匿名化和审批，且不得将可识别身份的信息用于未经授权目的。您可依法申请查看、更正、撤回授权或删除/匿名化个人信息。",
+      "checkbox_text": "我已阅读并理解免责声明，知悉平台不替代医疗诊断、药物治疗或临床处置，不承诺疗效；R2 必须专家审核，R3 不生成训练处方。",
+      "short_notice": "本平台不是医疗服务或急救工具；出现红色预警信号请停止运动并寻求医学评估。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_D_REFERRAL_NOTICE",
+      "title": "D. 医学评估/转介提示话术｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "R3 命中、训练中红色预警、PAR-Q+ 阳性/不完整、专家退回处方、客服安全提示",
+      "text": "系统检测到您可能存在需要优先评估的运动安全风险。基于保守原则，当前不为您生成训练处方，也不建议您开始、增加或自行调整训练强度。\n\n请您暂停运动，并根据情况尽快咨询医生、运动医学/康复医学/心血管/内分泌/呼吸/骨科等相关专业人员。若您正在出现胸痛或胸闷、晕厥或黑蒙、严重或异常气短、明显心悸、意识异常、严重疼痛、疑似低血糖、血压/血糖/血氧明显异常、急性损伤、肢体无力或语言不清等情况，请不要等待平台反馈，应立即寻求线下医学评估或紧急救助。\n\n本平台不能判断您是否患有某种疾病，也不能替代诊断、药物治疗、急救处置或医生医嘱。待您完成医学评估并获得适合运动的建议后，可更新平台资料，由平台重新进行风险分级；若分级为 R2，处方仍必须经专家审核后发布；若仍为 R3，平台将继续仅提供安全提醒和转介建议。\n\n如需继续使用平台，请补充或更新：近期症状、医生运动限制、用药信息、血压/血糖/血氧记录、疼痛部位和评分、近期损伤情况、PAR-Q+ 结果及医生建议摘要。请勿上传无关的身份证件、完整病历影像或其他非必要个人信息；确需上传时应先进行遮挡或脱敏，待专家确认上传范围。",
+      "checkbox_text": "我已知悉当前存在运动安全风险，平台不会生成训练处方；我将暂停运动，并根据提示寻求医学评估或紧急救助。",
+      "short_notice": "当前不生成训练处方。请暂停运动并优先完成医学评估；急性危险症状请立即求助。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_E_RESEARCH_EXPORT_RULES",
+      "title": "E. 科研脱敏导出规则｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "科研项目、模型评估、质量改进、论文报告、合作机构数据申请、数据导出审批流",
+      "text": "科研脱敏导出必须遵循合法、正当、必要、最小化、目的限定、可追溯和安全可控原则。本规则为专家审核草案，不替代伦理委员会、法务、数据安全负责人或科研管理部门审批。\n\n1. 导出前置条件：科研目的、数据范围、样本量、字段清单、保存期限、访问人员、分析环境、成果发布方式、风险控制措施和退出机制应形成书面申请。涉及以人为研究参与者、个人信息数据、生命健康或人工智能伦理风险的科研活动，应按规定完成伦理审查或备案。\n2. 默认不导出直接身份标识：姓名、手机号、邮箱、身份证件、详细地址、人脸、照片、视频、语音、原始定位、IP、设备唯一标识、医生姓名、专家真实姓名、完整病历或自由文本中的可识别内容默认不得导出。\n3. 最小必要字段：仅导出与研究问题直接相关的字段。年龄优先分组，时间优先按月/季度或相对时间处理，地区优先聚合至省/市级，健康指标优先使用区间、分层或必要精度。\n4. 脱敏方式：可采用删除、泛化、区间化、截断、哈希化、随机研究编号、去标识化、匿名化、自由文本人工审核、极端值处理、低频组合抑制等方式。匿名化应达到无法识别特定自然人且不能复原的要求；去标识化仍属于个人信息处理，应继续受控管理。\n5. 敏感字段：疾病、用药、血压、血糖、血脂、尿酸、血氧、疼痛、损伤、处方、专家审核意见等属于高敏感运动健康数据，导出应由数据负责人、项目负责人、法务/合规和伦理/专家审核共同审批，必要时进行个人信息保护影响评估。\n6. 使用限制：导出数据只能用于批准目的，不得再识别用户，不得二次共享，不得用于商业营销、保险定价、就业筛选、歧视性评价或未经批准的模型训练。\n7. 安全控制：导出文件应加密存储和传输，限制访问权限，记录下载、访问、复制、删除日志，约定保存期限，到期删除或匿名化。发生泄露、丢失、越权访问等风险时应立即启动安全事件处置。\n8. 用户权利：用户可申请查看、更正、撤回科研授权或删除/匿名化其可识别个人信息。已完成不可逆匿名化且无法定位至个人的数据，原则上不再属于可识别个人信息，但仍应在科研管理制度下受控使用。\n9. 运动安全边界：科研导出或模型评估不得绕过平台 R2/R3 安全规则。R2 输出仍必须专家审核后发布；R3 不生成训练处方。",
+      "checkbox_text": "我已阅读科研脱敏导出规则，知悉科研使用须经授权、脱敏/匿名化和审批；我可依法申请查看、更正、撤回授权或删除/匿名化数据。",
+      "short_notice": "科研导出默认不含身份标识，必须脱敏/匿名化、最小必要和审批留痕。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_F_EXPERT_REVIEW_BOUNDARY",
+      "title": "F. 专家审核责任边界说明｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "专家工作台、审核任务页、审核协议、平台内部 SOP、合作专家入驻协议附件",
+      "text": "专家审核的目标是对 AI 生成的运动风险分级、处方初稿、动作选择、强度上限、禁忌提示、监测指标和复评建议进行专业性、合理性和安全性审阅。专家审核不等同于线下医疗诊断、药物治疗、急救处置、康复治疗或医患关系建立；除平台另有合法资质和服务协议外，专家不得将平台审核意见表述为诊断结论、处方药建议或医疗机构诊断文书。\n\n1. R2 规则：所有 R2 慢病、用药、疼痛、功能下降、跌倒风险、糖代谢异常、血压/血糖/血氧异常边界等处方，必须专家审核后发布。专家应重点核查 FITT-VP、强度上限、禁忌动作、监测指标、停练信号和复评周期。\n2. R3 规则：任何 R3 命中均覆盖 R0/R1/R2，不生成训练处方。专家可审核安全提醒与医学评估/转介文案，但不得在未完成医学评估前发布训练处方。\n3. 信息不足：当用户资料不完整、PAR-Q+ 不完整、症状描述不清、用药不明、近期急性损伤或医生限制运动信息缺失时，专家应退回补充资料或建议医学评估，不应为了完成审核而推测。\n4. 保守原则：涉及胸痛/胸闷、晕厥/黑蒙、严重气短、明显心悸、严重疼痛、急性损伤、血压/血糖/血氧异常、抗凝药、胰岛素、β受体阻滞剂、骨质疏松、老年跌倒风险等，应采用更保守的强度、动作和转介策略。\n5. 审核留痕：专家应记录审核结论、修改点、风险说明、建议复评周期和必要的转介提示。所有审核记录应纳入平台审计，不得私自导出用户可识别信息。\n6. 不承诺疗效：专家审核意见不得承诺降压、降糖、减重、康复或治疗效果；不得建议用户自行停药、换药或调整剂量。\n7. 科研和数据：专家参与科研或质量改进使用数据时，应遵守脱敏导出、伦理审批、最小必要和保密要求。用户可依法申请查看、更正、撤回授权或删除/匿名化数据。",
+      "checkbox_text": "我已阅读专家审核责任边界，确认 R2 必须审核后发布，R3 不生成训练处方；审核意见不替代诊断、治疗或急救处置。",
+      "short_notice": "专家审核是运动处方安全审阅，不是医疗诊断；R2 必须审核，R3 只做安全提醒与转介。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_G_RED_ALERT",
+      "title": "G. 运动中红色预警提示｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "训练开始页、训练中弹窗、可穿戴异常提示、用户主动上报不适、教练/专家工作台",
+      "text": "红色预警：请立即停止运动。\n\n如果您正在出现以下任一情况，请不要继续训练：胸痛、胸闷、胸部压迫感或放射痛；晕厥、黑蒙、明显头晕或站立不稳；严重或异常气短、喘憋、静息后不能缓解；明显心悸、心跳不规则并伴不适；严重疼痛或疼痛快速加重；关节肿胀、卡锁、明显不稳；疑似低血糖，如出冷汗、手抖、饥饿感明显、意识模糊；血压、血糖或血氧达到平台红色阈值；急性损伤；医生限制运动；或任何您认为异常、危险、无法解释的不适。\n\n请立即坐下或采取安全体位，避免独自离开，必要时请身边人员协助。若症状严重、持续不缓解或涉及胸痛、晕厥、严重气短、意识异常、肢体无力、语言不清等情况，请立即寻求线下医学评估或紧急救助。\n\n本平台不能进行急救处置、疾病诊断或药物调整。当前状态下，系统将暂停训练流程：R3 不生成训练处方；若后续重新进入 R2，也必须专家审核后发布。请在完成医学评估并更新资料后，再由平台重新分级。",
+      "checkbox_text": "我已知悉红色预警信号，出现上述情况将立即停止运动并寻求医学评估或紧急救助。",
+      "short_notice": "红色预警：立即停止运动。胸痛、晕厥、严重气短、明显心悸、严重疼痛或血压/血糖异常时请优先就医。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "doc_code": "COMPLIANCE_H_REPORT_FOOTER",
+      "title": "H. 报告页脚免责声明｜专家审核草案",
+      "version": "v0.1",
+      "effective_date": "2026-06-01（专家审核草案；正式生效日期待法务确认）",
+      "applicable_scope": "用户报告、专家审核报告、阶段评估报告、导出 PDF、分享页面页脚",
+      "text": "本报告为 AI 运动处方平台生成的运动健康指导和风险提示材料，仅供用户、专家审核人员和授权服务人员参考。报告内容不构成医疗诊断、药物治疗建议、急救处置建议、康复治疗处方或医疗机构诊断文书，不替代医生或合格专业人员的面对面评估。\n\n平台风险分级用于运动健康管理：R0/R1 可生成相应运动处方；R2 处方必须专家审核后发布；R3 不生成训练处方，仅输出安全提醒和医学评估/转介建议。用户如出现胸痛/胸闷、晕厥/黑蒙、严重或异常气短、明显心悸、严重疼痛、急性损伤、血压/血糖/血氧异常或医生限制运动等情况，应停止运动并寻求医学评估或紧急救助。\n\n报告基于用户提交或授权导入的数据生成。若数据不完整、不准确或已过期，结论可能不适用。科研、质量改进或对外报告使用本报告数据时，必须进行脱敏/匿名化、最小必要处理和审批。用户可依法申请查看、更正、撤回授权或删除/匿名化个人信息。\n\n版本：v0.1 专家审核草案。正式发布前须经运动医学/临床专家、法务、隐私合规和伦理/科研管理审核确认。",
+      "checkbox_text": "我已阅读报告页脚免责声明，知悉本报告不替代医疗诊断或治疗；R2 必须专家审核，R3 不生成训练处方。",
+      "short_notice": "本报告仅供运动健康参考，不替代诊断或治疗；R2 必须专家审核，R3 不生成训练处方。",
+      "evidence_refs": [
+        "《中华人民共和国个人信息保护法》",
+        "《中华人民共和国数据安全法》",
+        "《科技伦理审查办法（试行）》",
+        "WHO Guidelines on physical activity and sedentary behaviour, 2020",
+        "PAR-Q+ / ePARmed-X+",
+        "Exercise is Medicine / ACSM Exercise Preparticipation Screening"
+      ],
+      "pending_confirmation": [
+        "待法务确认具体主体名称、联系方式、数据保存期限、争议处理路径",
+        "待运动医学/临床专家确认风险阈值和转介边界",
+        "待伦理委员会/科研管理部门确认科研导出流程"
+      ],
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    }
+  ],
+  "deidentification_field_rules": [
+    {
+      "field_name": "user_id / account_id",
+      "export_allowed": "条件导出",
+      "deidentification_method": "替换为随机 research_subject_id；禁止导出原始账号ID",
+      "example": "U12345 → RS-2026-000001",
+      "approval_requirement": "数据负责人+项目负责人审批；科研需伦理/科研审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "name",
+      "export_allowed": "否",
+      "deidentification_method": "删除，不导出",
+      "example": "张三 → 不导出",
+      "approval_requirement": "原则禁止；特殊法定场景需法务审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "phone / email",
+      "export_allowed": "否",
+      "deidentification_method": "删除；如确需随访，单独名单加密保存并与研究数据分离",
+      "example": "138****0000 → 不导出",
+      "approval_requirement": "单独同意+法务+数据安全审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "id_card / passport / certificate_no",
+      "export_allowed": "否",
+      "deidentification_method": "删除，不导出",
+      "example": "身份证号 → 不导出",
+      "approval_requirement": "原则禁止",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.age",
+      "export_allowed": "是",
+      "deidentification_method": "默认分组；确需精确年龄时说明必要性",
+      "example": "43 → 40-44岁",
+      "approval_requirement": "项目负责人审批；精确年龄需额外说明",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.sex",
+      "export_allowed": "是",
+      "deidentification_method": "枚举值导出；低频组合场景合并",
+      "example": "男/女/未说明",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.bmi",
+      "export_allowed": "是",
+      "deidentification_method": "保留1位小数或分层",
+      "example": "27.36 → 27.4 或 超重",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.waist_cm",
+      "export_allowed": "条件导出",
+      "deidentification_method": "保留整数或分层；与小样本地区/年龄组合时抑制",
+      "example": "96.4 → 96 或 腰围偏高",
+      "approval_requirement": "项目负责人+数据负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.sedentary_hours",
+      "export_allowed": "是",
+      "deidentification_method": "分组或保留1位小数",
+      "example": "9.5 → 8-10小时/日",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.exercise_goal",
+      "export_allowed": "是",
+      "deidentification_method": "枚举标签；删除自由文本身份信息",
+      "example": "减脂/控糖/增肌",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.exercise_habit",
+      "export_allowed": "是",
+      "deidentification_method": "枚举标签",
+      "example": "不规律/每周1-2次",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "profile.exercise_experience",
+      "export_allowed": "是",
+      "deidentification_method": "枚举标签",
+      "example": "新手/初级/中级",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.resting_hr",
+      "export_allowed": "是",
+      "deidentification_method": "保留整数或分层",
+      "example": "78 → 78 或 70-79",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.sbp / dbp",
+      "export_allowed": "条件导出",
+      "deidentification_method": "优先分层；必要时保留整数；极端值单独风险评估",
+      "example": "152/94 → 140-159/90-99",
+      "approval_requirement": "数据负责人+项目负责人审批；慢病研究需专家确认",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.vital_capacity",
+      "export_allowed": "是",
+      "deidentification_method": "保留整数或按性别年龄标准分层（待专家确认）",
+      "example": "2800ml → 2500-2999ml",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.grip_left / grip_right",
+      "export_allowed": "是",
+      "deidentification_method": "保留1位小数或分层",
+      "example": "24.6kg → 24.6 或 低/中/高",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.sit_reach",
+      "export_allowed": "是",
+      "deidentification_method": "保留整数或分层",
+      "example": "-2cm → ≤0cm",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.single_leg_stand",
+      "export_allowed": "是",
+      "deidentification_method": "分层优先",
+      "example": "4秒 → ≤5秒",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.step_test_index",
+      "export_allowed": "是",
+      "deidentification_method": "保留整数或分层",
+      "example": "54 → 46-60",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.six_mwt",
+      "export_allowed": "是",
+      "deidentification_method": "保留整数或分层",
+      "example": "420m → 301-450m",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.pain_score",
+      "export_allowed": "条件导出",
+      "deidentification_method": "保留0-10评分或分层；不得导出可识别病史文本",
+      "example": "6 → 中度疼痛",
+      "approval_requirement": "项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "fitness_test.rpe_baseline",
+      "export_allowed": "是",
+      "deidentification_method": "保留整数或分层",
+      "example": "13 → 11-13",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "body_composition.body_fat_pct",
+      "export_allowed": "是",
+      "deidentification_method": "保留1位小数或分层",
+      "example": "31.2% → 31.2 或 偏高",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "body_composition.skeletal_muscle_kg",
+      "export_allowed": "是",
+      "deidentification_method": "保留1位小数或分层",
+      "example": "22.8kg → 22.8 或 偏低",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "body_composition.visceral_fat_level",
+      "export_allowed": "是",
+      "deidentification_method": "保留等级或分层",
+      "example": "12 → ≥10",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "body_composition.bmr",
+      "export_allowed": "条件导出",
+      "deidentification_method": "保留整数或分层；如非研究必要则不导出",
+      "example": "1420kcal → 1400-1499",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "biochemical_index.fbg",
+      "export_allowed": "条件导出",
+      "deidentification_method": "优先分层；必要时保留1位小数",
+      "example": "7.2 → ≥7.0",
+      "approval_requirement": "数据负责人+项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "biochemical_index.pbg_2h",
+      "export_allowed": "条件导出",
+      "deidentification_method": "优先分层；必要时保留1位小数",
+      "example": "11.4 → 11.1-13.8",
+      "approval_requirement": "数据负责人+项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "biochemical_index.hba1c",
+      "export_allowed": "条件导出",
+      "deidentification_method": "优先分层；必要时保留1位小数",
+      "example": "8.1% → 6.5-8.9%",
+      "approval_requirement": "数据负责人+项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "biochemical_index.tc/tg/hdl_c/ldl_c",
+      "export_allowed": "条件导出",
+      "deidentification_method": "优先分层；必要时保留1-2位小数",
+      "example": "LDL-C 4.3 → ≥4.1",
+      "approval_requirement": "数据负责人+项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "biochemical_index.uric_acid",
+      "export_allowed": "条件导出",
+      "deidentification_method": "优先分层；必要时保留整数",
+      "example": "480 → ≥420",
+      "approval_requirement": "项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "biochemical_index.spo2",
+      "export_allowed": "条件导出",
+      "deidentification_method": "分层优先；低值需专家复核",
+      "example": "93% → 89-94%",
+      "approval_requirement": "项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.has_* disease flags",
+      "export_allowed": "条件导出",
+      "deidentification_method": "仅导出布尔或疾病大类；不导出详细病历",
+      "example": "has_diabetes=true",
+      "approval_requirement": "数据负责人+项目负责人+专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.pain_location",
+      "export_allowed": "条件导出",
+      "deidentification_method": "粗粒度部位；删除自由文本可识别内容",
+      "example": "右膝内侧 → 膝部",
+      "approval_requirement": "专家审批；自由文本需人工审核",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.recent_injury",
+      "export_allowed": "条件导出",
+      "deidentification_method": "布尔或粗类；不导出事故详情",
+      "example": "true / 下肢损伤",
+      "approval_requirement": "专家审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.medication",
+      "export_allowed": "条件导出",
+      "deidentification_method": "仅导出药物类别；不导出商品名、剂量、处方医生",
+      "example": "二甲双胍0.5g bid → 降糖药",
+      "approval_requirement": "专家+法务/合规审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.chest_pain/syncope/abnormal_dyspnea/palpitation",
+      "export_allowed": "条件导出",
+      "deidentification_method": "仅导出布尔或风险标签；不导出详细描述",
+      "example": "chest_pain=true → 红色信号",
+      "approval_requirement": "专家审批；小样本需抑制",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.doctor_restriction",
+      "export_allowed": "条件导出",
+      "deidentification_method": "仅导出是否存在限制；不导出医生姓名/机构/原文",
+      "example": "true",
+      "approval_requirement": "专家+法务审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_screening.parq_result",
+      "export_allowed": "是",
+      "deidentification_method": "枚举值",
+      "example": "NEGATIVE/POSITIVE/INCOMPLETE",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "risk_level / severity / template_code",
+      "export_allowed": "是",
+      "deidentification_method": "枚举/编码；不含身份",
+      "example": "R2 / TPL_R2_001",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "prescription_detail / expert_comment",
+      "export_allowed": "条件导出",
+      "deidentification_method": "导出处方编码、动作编码和参数；专家自由文本需去标识化/人工复核",
+      "example": "快走20分钟 → ACT_AER_001 + time=20",
+      "approval_requirement": "专家+数据负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "created_at / assessment_date",
+      "export_allowed": "条件导出",
+      "deidentification_method": "日期泛化为月份、季度或相对天数",
+      "example": "2026-06-01 → 2026-Q2 或 第0天",
+      "approval_requirement": "项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "location / GPS / address",
+      "export_allowed": "否/严格条件",
+      "deidentification_method": "默认删除；如需区域研究，仅导出省/市级并抑制小样本",
+      "example": "具体地址 → 上海市",
+      "approval_requirement": "法务+伦理/科研+数据安全审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "ip_address / device_id / advertising_id",
+      "export_allowed": "否",
+      "deidentification_method": "删除；仅保留安全审计内部使用，不进入科研集",
+      "example": "IP → 不导出",
+      "approval_requirement": "原则禁止",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "photo / video / voice / gait raw media",
+      "export_allowed": "否/严格条件",
+      "deidentification_method": "默认不导出；确需算法研究须单独同意、伦理审批、去标识化和受控环境",
+      "example": "步态视频 → 不导出",
+      "approval_requirement": "单独同意+伦理+法务+数据安全审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "free_text_notes",
+      "export_allowed": "条件导出",
+      "deidentification_method": "NLP+人工双重去标识化；小样本和罕见事件抑制",
+      "example": "我在XX医院... → 删除机构和姓名",
+      "approval_requirement": "人工复核+数据负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "expert_id / reviewer_name",
+      "export_allowed": "条件导出",
+      "deidentification_method": "替换为 reviewer_pseudo_id；不导出真实姓名",
+      "example": "Dr.Wang → REV-001",
+      "approval_requirement": "专家管理负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    },
+    {
+      "field_name": "institution / clinic_name",
+      "export_allowed": "条件导出",
+      "deidentification_method": "泛化为机构类型或区域；不导出可识别机构名",
+      "example": "某某医院 → 三级医院/社区机构",
+      "approval_requirement": "法务+项目负责人审批",
+      "review_status": "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+# v0.2 下载报告
+
+- 生成时间：2026-06-01T08:09:12.542093+00:00
+- Catalog：/Users/zhaosilei/Documents/Exercise Prescription Sys/docs/knowledge_source_catalog_v0_2.json
+
+- SRC2-001 [skipped_existing] ACSM Position Stands /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-001_ACSM_Position_Stands.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-001_ACSM_Position_Stands_summary.md
+- SRC2-002 [skipped_existing] ACSM Physical Activity Guidelines and Recommendations /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-002_ACSM_Physical_Activity_Guidelines_and_Recommendations.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-002_ACSM_Physical_Activity_Guidelines_and_Recommendations_summary.md
+- SRC2-003 [metadata_only] ACSM’s Guidelines for Exercise Testing and Prescription, 12th Edition
+- SRC2-004 [skipped_existing] Exercise Preparticipation Screening Questionnaire for Exercise Professionals /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-004_EIM_exercise_preparticipation_screening.pdf
+- SRC2-005 [metadata_only] Exercise is Medicine Rx for Health Series
+- SRC2-006 [skipped_existing] PAR-Q+ and ePARmed-X+ Official Printable Forms /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-006_PAR_Q_and_ePARmed_X_Official_Printable_Forms.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-006_PAR_Q_and_ePARmed_X_Official_Printable_Forms_summary.md
+- SRC2-007 [deduped_existing] PAR-Q+ 2025 Fillable PDF /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-011_PARQPlus_2025_fillable.pdf same sha256 as SRC-011_PARQPlus_2025_fillable.pdf
+- SRC2-008 [deduped_existing] WHO Guidelines on Physical Activity and Sedentary Behaviour /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-012_WHO_physical_activity_sedentary_behaviour.pdf same sha256 as SRC-012_WHO_physical_activity_sedentary_behaviour.pdf
+- SRC2-009 [deduped_existing] Physical Activity Guidelines for Americans, 2nd Edition /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-013_US_physical_activity_guidelines_2nd_edition.pdf same sha256 as SRC-013_US_physical_activity_guidelines_2nd_edition.pdf
+- SRC2-010 [skipped_existing] CDC Physical Activity Basics: Older Adults /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-010_CDC_Physical_Activity_Basics_Older_Adults.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-010_CDC_Physical_Activity_Basics_Older_Adults_summary.md
+- SRC2-011 [skipped_existing] 中国人群身体活动指南（2021） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-011_2021.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-011_2021_summary.md
+- SRC2-012 [deduped_existing] 国民体质测定标准（2023 年修订） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-016_national_physical_fitness_measurement_standard_2023.pdf same sha256 as SRC-016_national_physical_fitness_measurement_standard_2023.pdf
+- SRC2-013 [deduped_existing] 国家学生体质健康标准（2014 年修订） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-017_national_student_physical_health_standard_2014.docx same sha256 as SRC-017_national_student_physical_health_standard_2014.docx
+- SRC2-014 [skipped_existing] 成人高血压食养指南（2024 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-014_NHC_adult_hypertension_nutrition_exercise_2024.pdf
+- SRC2-015 [skipped_existing] 成人高血糖食养指南（2024 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-015_NHC_adult_hyperglycemia_nutrition_exercise_2024.pdf
+- SRC2-016 [skipped_existing] 成人高脂血症食养指南（2024 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-016_NHC_adult_hyperlipidemia_nutrition_exercise_2024.pdf
+- SRC2-017 [skipped_existing] 成人高尿酸血症与痛风食养指南（2024 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-017_NHC_adult_hyperuricemia_gout_nutrition_exercise_2024.pdf
+- SRC2-018 [deduped_existing] 中国 2 型糖尿病运动治疗指南（2024 版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-020_china_type2_diabetes_exercise_treatment_guideline_2024.pdf same sha256 as SRC-020_china_type2_diabetes_exercise_treatment_guideline_2024.pdf
+- SRC2-019 [deduped_existing] 中国高血压防治指南（2024 年修订版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-019_china_hypertension_guideline_2024_revision.pdf same sha256 as SRC-019_china_hypertension_guideline_2024_revision.pdf
+- SRC2-020 [deduped_existing] 中国血脂管理指南（2023 年） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-021_china_blood_lipid_management_guideline_2023.pdf same sha256 as SRC-021_china_blood_lipid_management_guideline_2023.pdf
+- SRC2-021 [deduped_existing] 体重管理指导原则（2024 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-022_weight_management_guiding_principles_2024.pdf same sha256 as SRC-022_weight_management_guiding_principles_2024.pdf
+- SRC2-022 [deduped_existing] 成人肥胖食养指南（2024 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-035_adult_obesity_food_nutrition_guideline_2024.pdf same sha256 as SRC-035_adult_obesity_food_nutrition_guideline_2024.pdf
+- SRC2-023 [deduped_existing] 慢性阻塞性肺疾病临床康复循证实践指南 /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-026_COPD_clinical_rehab_evidence_based_guideline.pdf same sha256 as SRC-026_COPD_clinical_rehab_evidence_based_guideline.pdf
+- SRC2-024 [skipped_existing] 冠心病心脏康复基层指南（2020 年） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-024_2020.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-024_2020_summary.md
+- SRC2-025 [skipped_existing] 中国脑卒中防治指导规范（2021 年版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-025_china_stroke_prevention_control_standard_2021.pdf
+- SRC2-026 [skipped_existing] AHA/ASA Guidelines for Adult Stroke Rehabilitation and Recovery Slide Set /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-026_AHA_ASA_adult_stroke_rehab_recovery_slide_set.pdf
+- SRC2-027 [deduped_existing] 老年人失能预防运动干预临床实践指南（2023 版） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-028_older_adult_disability_prevention_exercise_guideline_2023.pdf same sha256 as SRC-028_older_adult_disability_prevention_exercise_guideline_2023.pdf
+- SRC2-028 [deduped_existing] 原发性骨质疏松症诊疗指南（2022） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-029_primary_osteoporosis_diagnosis_treatment_guideline_2022.pdf same sha256 as SRC-029_primary_osteoporosis_diagnosis_treatment_guideline_2022.pdf
+- SRC2-029 [deduped_existing] 社区老年人跌倒预防控制技术标准 WS/T 887—2026 /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-027_WST_887_2026_older_adult_fall_prevention_standard.pdf same sha256 as SRC-027_WST_887_2026_older_adult_fall_prevention_standard.pdf
+- SRC2-030 [skipped_existing] Step safely: strategies for preventing and managing falls across the life-course /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-030_WHO_step_safely_fall_prevention.pdf
+- SRC2-031 [skipped_existing] 通过学校促进身体活动：工具包 /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-031_WHO_promoting_physical_activity_through_schools_toolkit_zh.pdf
+- SRC2-032 [deduped_existing] Making every school a health-promoting school: global standards and indicators /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-033_WHO_UNESCO_health_promoting_school_global_standards.pdf same sha256 as SRC-033_WHO_UNESCO_health_promoting_school_global_standards.pdf
+- SRC2-033 [metadata_only] 中国儿童青少年身体活动指南
+- SRC2-034 [deduped_existing] 团体标准《八段锦》（征求意见稿） /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-030_baduanjin_group_standard_draft.pdf same sha256 as SRC-030_baduanjin_group_standard_draft.pdf
+- SRC2-035 [deduped_existing] 团体标准《八段锦》（征求意见稿）编制说明 /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-030_baduanjin_group_standard_explanation.pdf same sha256 as SRC-030_baduanjin_group_standard_explanation.pdf
+- SRC2-036 [skipped_existing] 健身气功运动处方研制指南 /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC2-036_fitness_qigong_exercise_prescription_development_guide.doc
+- SRC2-037 [skipped_existing] 打造具有中国特色的全民健身运动处方库 /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-037_.html; /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/web_archives_v0_2/SRC2-037__summary.md
+- SRC2-038 [deduped_existing] ACSM Resistance Training Position Stand Slide Deck /Users/zhaosilei/Documents/Exercise Prescription Sys/rag_data/SRC-001_ACSM_position_stands_resistance_training_slide_deck.pdf same sha256 as SRC-001_ACSM_position_stands_resistance_training_slide_deck.pdf
+- SRC2-039 [metadata_only] 成人慢性肾脏病患者运动康复专家共识
+- SRC2-040 [metadata_only] 健康中国行动（2019—2030 年）

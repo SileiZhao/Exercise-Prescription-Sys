@@ -1,0 +1,114 @@
+[
+  {
+    "source_id": "SRC-012",
+    "title": "WHO Guidelines on Physical Activity and Sedentary Behaviour",
+    "organization": "World Health Organization (WHO)",
+    "official_url": "https://www.who.int/publications/i/item/9789240015128",
+    "download_url": "https://iris.who.int/server/api/core/bitstreams/faa83413-d89e-4be9-bb01-b24671aef7ca/content",
+    "document_type": "guideline_pdf",
+    "version": "2020；ISBN 9789240015128",
+    "published_date": "2020-11-25",
+    "language": "en",
+    "scope": [
+      "儿童青少年",
+      "成年人",
+      "老年人",
+      "孕产期",
+      "慢病患者",
+      "残障人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "久坐行为",
+      "老年平衡",
+      "慢病活动建议"
+    ],
+    "license_status": "开放许可",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "WHO 页面标注 Creative Commons 许可；入库前记录具体 CC 条款并保留来源署名。",
+    "why_useful": "第一版知识库 P0 基准资料，覆盖活动频率、强度、持续时间和久坐行为建议。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-013",
+    "title": "Physical Activity Guidelines for Americans, 2nd Edition",
+    "organization": "U.S. Department of Health and Human Services / Office of Disease Prevention and Health Promotion",
+    "official_url": "https://odphp.health.gov/our-work/nutrition-physical-activity/physical-activity-guidelines/current-guidelines",
+    "download_url": "https://odphp.health.gov/sites/default/files/2019-09/Physical_Activity_Guidelines_2nd_edition.pdf",
+    "document_type": "guideline_pdf",
+    "version": "2nd Edition",
+    "published_date": "2018",
+    "language": "en",
+    "scope": [
+      "3岁及以上人群",
+      "成年人",
+      "老年人",
+      "慢病/残障人群"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "FITT-VP",
+      "老年平衡",
+      "健康促进"
+    ],
+    "license_status": "明确公开",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "美国政府公开指南；仍建议在入库说明中保留来源和免责声明。",
+    "why_useful": "与 WHO 建议交叉验证，可用于 R0/R1 处方基础剂量和老年多成分训练。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-014",
+    "title": "CDC Physical Activity Basics / Older Adults Recommendations",
+    "organization": "U.S. Centers for Disease Control and Prevention (CDC)",
+    "official_url": "https://www.cdc.gov/physical-activity-basics/guidelines/older-adults.html",
+    "download_url": "网页资料；可归档 HTML 摘要，不是 PDF",
+    "document_type": "government_web_guidance",
+    "version": "current webpage",
+    "published_date": "not clearly stated; accessed 2026-06-01",
+    "language": "en",
+    "scope": [
+      "成年人",
+      "老年人",
+      "跌倒风险"
+    ],
+    "knowledge_tags": [
+      "运动处方原则库",
+      "老年功能下降",
+      "跌倒风险",
+      "用户教育"
+    ],
+    "license_status": "明确公开",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "CDC 政府网页；建议保留访问日期和来源链接。",
+    "why_useful": "适合作为用户端通俗解释和老年平衡/力量建议的补充来源。",
+    "risk_level": "low"
+  },
+  {
+    "source_id": "SRC-017",
+    "title": "国家学生体质健康标准（2014年修订）",
+    "organization": "教育部等；中国学生体质健康网",
+    "official_url": "https://www.csh.moe.edu.cn/wtzx/zcwj/20141226/2c909e854a8490a4014a84fda9b4001d.html",
+    "download_url": "官方页面附件下载",
+    "document_type": "national_student_standard",
+    "version": "2014年修订",
+    "published_date": "2014-07-07/2014-07-28发布页面",
+    "language": "zh-CN",
+    "scope": [
+      "学校体育",
+      "学生体质健康",
+      "体测评价"
+    ],
+    "knowledge_tags": [
+      "体质测试与评价库",
+      "学校体育",
+      "阶段评估"
+    ],
+    "license_status": "明确公开",
+    "ingestion_recommendation": "全文入库",
+    "copyright_note": "官方政策文件页面；建议保留来源和版本，不作商业包装转载。",
+    "why_useful": "学校体质健康模块和未成年人测试评价的官方标准依据。",
+    "risk_level": "low"
+  }
+]

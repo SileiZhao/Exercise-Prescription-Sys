@@ -1,0 +1,29 @@
+# 上线检查清单
+
+- [ ] `.env` 已替换生产密钥。
+- [ ] `docker compose up -d --build` 成功。
+- [ ] `alembic upgrade head` 成功。
+- [ ] `python scripts/seed_initial_data.py` 成功，默认机构、账号、动作库、知识库、处方模板已初始化。
+- [ ] Qdrant 可访问，知识库「重建向量索引」返回 indexed/skipped 结果。
+- [ ] 默认账号密码已修改或禁用默认账号。
+- [ ] 大模型 API Key 仅通过 `.env` 或部署密钥注入，未写入仓库。
+- [ ] 阿里云百炼 / DashScope 生产变量已设置：`LLM_PROVIDER=aliyun`、`DASHSCOPE_API_KEY` 或 `ALIYUN_API_KEY`、`LLM_MODEL=qwen3.7-max`、`LLM_MULTIMODAL_MODEL=qwen3.6-plus`。
+- [ ] 后端容器已收到 `LLM_*`、`QDRANT_*`、`RAG_*`、`MINIO_*`、`BACKEND_CORS_ORIGINS` 环境变量。
+- [ ] `/health` 返回 `{"status":"ok"}`。
+- [ ] `/ready` 返回 `{"status":"ok"}`，且 database、redis、qdrant、minio、llm 均为 `ok`。
+- [ ] `/api/v1/openapi.json` 可访问。
+- [ ] 前端首页可访问。
+- [ ] R3 测试用户不会生成训练处方。
+- [ ] R2 测试用户处方进入专家审核队列。
+- [ ] 聚类模型已训练并启用，且分型结果不覆盖风险等级。
+- [ ] 科研导出结果已脱敏。
+- [ ] 处方报告 DOCX/PDF 可下载，包含风险、命中规则、FITT-VP、专家审核和免责声明。
+- [ ] 阶段评估报告 DOCX/PDF 可下载，包含打卡汇总、调整建议和免责声明。
+- [ ] PDF 报告正文可直接显示中文内容。
+- [ ] 报告导出行为已写入审计日志，管理员可追踪导出人、资源、格式和时间。
+- [ ] `scripts/backup_data.sh` 已在生产同等环境执行成功。
+- [ ] `backup_manifest.sha256` 校验通过。
+- [ ] PostgreSQL、Redis、MinIO、Qdrant 数据卷已纳入备份。
+- [ ] 执行一次备份恢复演练：`CONFIRM_RESTORE=yes scripts/restore_data.sh backups/<timestamp>`。
+- [ ] `LOG_FORMAT=json` 已开启，容器日志已接入日志平台。
+- [ ] 错误告警 Webhook 已配置并完成一次测试触发。

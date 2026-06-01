@@ -1,0 +1,179 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #172033;
+  background: #f5f7fb;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6eaf2;
+}
+
+.app-title {
+  margin: 0;
+}
+
+.app-content {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.auth-shell {
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f5f7fb;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  border-radius: 8px;
+}
+
+.form-alert {
+  margin-bottom: 16px;
+}
+
+.auth-link {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.native-select {
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 11px;
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.entry-card {
+  min-height: 230px;
+  border-radius: 8px;
+}
+
+.entry-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #0958d9;
+  background: #e6f4ff;
+  border-radius: 8px;
+  font-size: 22px;
+}
+
+.onboarding-content {
+  width: min(1080px, calc(100% - 32px));
+}
+
+.onboarding-panel {
+  border-radius: 8px;
+}
+
+.onboarding-steps {
+  margin-bottom: 24px;
+}
+
+.onboarding-section {
+  width: 100%;
+}
+
+.onboarding-form .ant-input-number,
+.onboarding-form .ant-picker {
+  width: 100%;
+}
+
+.full-width-control {
+  width: 100%;
+}
+
+.onboarding-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.admin-workspace {
+  border-radius: 8px;
+}
+
+.dashboard-panel {
+  height: 100%;
+  border-radius: 8px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.phenotype-card {
+  border-radius: 8px;
+}
+
+.prescription-card {
+  border-radius: 8px;
+}
+
+.expert-review-content {
+  width: min(1320px, calc(100% - 32px));
+}
+
+.expert-panel {
+  min-height: 280px;
+  border-radius: 8px;
+}
+
+.review-list-item {
+  cursor: pointer;
+}
+
+.back-button {
+  margin-top: 16px;
+}
+
+@media (max-width: 960px) {
+  .entry-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .entry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

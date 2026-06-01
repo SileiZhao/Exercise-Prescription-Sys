@@ -1,0 +1,52 @@
+[
+  {
+    "name": "快走",
+    "category": "有氧",
+    "suitable_tags": ["肥胖代谢风险型", "心肺功能不足型", "初级运动水平"],
+    "contraindication_tags": ["急性下肢损伤", "严重气短", "胸痛"],
+    "risk_level": "R1",
+    "body_parts": ["下肢", "心肺"],
+    "intensity": "低-中",
+    "instructions": "保持可交谈强度，运动前后记录主观疲劳和不适。"
+  },
+  {
+    "name": "功率车",
+    "category": "有氧",
+    "suitable_tags": ["高血压", "关节友好", "肥胖代谢风险型"],
+    "contraindication_tags": ["严重血压异常", "急性膝痛", "胸痛"],
+    "risk_level": "R2",
+    "body_parts": ["下肢", "心肺"],
+    "intensity": "低",
+    "instructions": "从低阻力开始，避免屏气和冲刺，R2 用户需专家审核后执行。"
+  },
+  {
+    "name": "八段锦",
+    "category": "传统功法",
+    "suitable_tags": ["慢病", "老年功能下降型", "柔韧平衡不足型"],
+    "contraindication_tags": ["急性损伤", "严重气短", "医生限制运动"],
+    "risk_level": "R1",
+    "body_parts": ["全身"],
+    "intensity": "低",
+    "instructions": "动作缓慢连贯，以舒适呼吸为准，避免疼痛部位过度牵拉。"
+  },
+  {
+    "name": "弹力带划船",
+    "category": "抗阻",
+    "suitable_tags": ["肌力不足型", "初级运动水平", "久坐低活动型"],
+    "contraindication_tags": ["急性肩痛", "严重心悸", "医生限制运动"],
+    "risk_level": "R1",
+    "body_parts": ["背部", "肩", "上肢"],
+    "intensity": "低",
+    "instructions": "保持躯干稳定，拉带时呼气，禁止憋气或突然发力。"
+  },
+  {
+    "name": "坐姿提踵",
+    "category": "抗阻",
+    "suitable_tags": ["老年功能下降型", "肌力不足型", "平衡训练准备"],
+    "contraindication_tags": ["急性踝关节损伤", "疼痛评分7以上"],
+    "risk_level": "R1",
+    "body_parts": ["小腿", "踝"],
+    "intensity": "低",
+    "instructions": "坐姿完成，缓慢抬起脚跟后控制下放，可作为低风险力量入门动作。"
+  }
+]

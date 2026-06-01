@@ -1,0 +1,118 @@
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-exercise}
+      POSTGRES_USER: ${POSTGRES_USER:-exercise}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-exercise}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-exercise} -d ${POSTGRES_DB:-exercise}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: ${REDIS_IMAGE:-redis:7-alpine}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qdrant:
+    image: ${QDRANT_IMAGE:-qdrant/qdrant:v1.12.1}
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  minio:
+    image: ${MINIO_IMAGE:-minio/minio:RELEASE.2024-10-13T13-34-11Z}
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        PYTHON_BASE_IMAGE: ${PYTHON_BASE_IMAGE:-python:3.12-slim}
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-["http://localhost:5173"]}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://exercise:exercise@postgres:5432/exercise}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
+      QDRANT_COLLECTION: ${QDRANT_COLLECTION:-exercise_prescription_knowledge}
+      RAG_VECTOR_SEARCH_ENABLED: ${RAG_VECTOR_SEARCH_ENABLED:-true}
+      RAG_EMBEDDING_DIMENSION: ${RAG_EMBEDDING_DIMENSION:-64}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-minio:9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-exercise-platform}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+      ALIYUN_API_KEY: ${ALIYUN_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-qwen3.7-max}
+      LLM_MULTIMODAL_MODEL: ${LLM_MULTIMODAL_MODEL:-qwen3.6-plus}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT: ${LOG_FORMAT:-plain}
+      ERROR_ALERT_WEBHOOK_URL: ${ERROR_ALERT_WEBHOOK_URL:-}
+      PROJECT_ROOT: ${PROJECT_ROOT:-/workspace}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      minio:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/ready >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    volumes:
+      - ./backend:/app
+      - .:/workspace:ro
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NODE_BASE_IMAGE: ${NODE_BASE_IMAGE:-node:22-alpine}
+        NGINX_BASE_IMAGE: ${NGINX_BASE_IMAGE:-nginx:1.27-alpine}
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000/api/v1}
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
+  qdrant_data:
+  minio_data:
