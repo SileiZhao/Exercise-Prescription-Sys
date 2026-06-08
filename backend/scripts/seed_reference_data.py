@@ -61,6 +61,8 @@ def seed_reference_data(
     strict: bool = False,
     skip_rag: bool = False,
     only: str | None = None,
+    rag_profile: str = "full",
+    rag_max_chunks_per_document: int | None = None,
 ) -> dict[str, dict]:
     if only is not None and only not in STAGES:
         raise ValueError(f"only 必须是以下之一：{', '.join(STAGES)}")
@@ -136,6 +138,8 @@ def seed_reference_data(
                     catalog_path=docs_path / "knowledge_source_catalog_v0_2.json",
                     build_index=build_rag_index,
                     strict=strict,
+                    profile=rag_profile,
+                    max_chunks_per_document=rag_max_chunks_per_document,
                 )
             )
         if strict:
@@ -168,6 +172,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--strict", action="store_true", help="任一阶段出现 errors 时以非 0 状态退出。")
     parser.add_argument("--skip-rag", action="store_true", help="跳过 RAG 文档导入。")
     parser.add_argument("--only", choices=STAGES, help="只执行指定导入阶段。")
+    parser.add_argument(
+        "--rag-profile",
+        choices=("full", "lightweight"),
+        default=os.environ.get("RAG_IMPORT_PROFILE", "full"),
+        help="RAG 导入策略：full 处理完整 allowlist；lightweight 仅导入轻量文本资料，延后 PDF/图片/OCR。",
+    )
+    parser.add_argument(
+        "--rag-max-chunks-per-document",
+        type=int,
+        default=None,
+        help="限制单个 RAG 文档导入切片数量；lightweight 默认已有保护限制。",
+    )
     return parser
 
 
@@ -181,6 +197,8 @@ def main() -> None:
             strict=args.strict,
             skip_rag=args.skip_rag,
             only=args.only,
+            rag_profile=args.rag_profile,
+            rag_max_chunks_per_document=args.rag_max_chunks_per_document,
         )
     except RuntimeError as exc:
         parser.exit(status=1, message=f"{exc}\n")

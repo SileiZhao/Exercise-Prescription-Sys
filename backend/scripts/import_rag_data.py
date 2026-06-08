@@ -132,6 +132,10 @@ def _extract_pdf_text(path: Path) -> tuple[str, list[tuple[int | None, int | Non
 
 
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff"}
+LIGHTWEIGHT_SUFFIXES = {".md", ".txt", ".csv", ".html", ".htm", ".json"}
+LIGHTWEIGHT_DEFERRED_PATH_PARTS = {"80_reference_books_limited"}
+RAG_IMPORT_PROFILES = {"full", "lightweight"}
+DEFAULT_LIGHTWEIGHT_MAX_CHUNKS_PER_DOCUMENT = 120
 
 
 def _extract_text(path: Path, ocr_enabled: bool | None = None) -> tuple[str, list[tuple[int | None, int | None]]]:
@@ -162,6 +166,18 @@ def _extract_text(path: Path, ocr_enabled: bool | None = None) -> tuple[str, lis
     raise RuntimeError(f"暂不支持解析文件类型：{suffix}")
 
 
+def _defer_reason_for_profile(path: Path, profile: str) -> str | None:
+    if profile == "full":
+        return None
+    if profile != "lightweight":
+        raise ValueError(f"profile 必须是以下之一：{', '.join(sorted(RAG_IMPORT_PROFILES))}")
+    if any(part in LIGHTWEIGHT_DEFERRED_PATH_PARTS for part in path.parts):
+        return "lightweight profile defers large reference books"
+    if path.suffix.lower() not in LIGHTWEIGHT_SUFFIXES:
+        return f"lightweight profile defers {path.suffix.lower() or 'unknown'} files"
+    return None
+
+
 def _title_for(path: Path, metadata: dict[str, Any]) -> str:
     return str(metadata.get("title") or path.stem).strip()
 
@@ -182,12 +198,15 @@ def _upsert_document(
     page_ranges: list[tuple[int | None, int | None]],
     created_by: int | None,
     import_batch_id: str,
+    max_chunks_per_document: int | None = None,
 ) -> tuple[int, int, int]:
     title = _title_for(path, metadata)
     document = db.scalar(select(KnowledgeDocument).where(KnowledgeDocument.file_path == str(path)))
     created = 0
     updated = 0
     chunks = _chunk_text(content, max_chars=900)
+    if max_chunks_per_document is not None:
+        chunks = chunks[:max_chunks_per_document]
     tags = _tags_for(path, metadata)
     if document is None:
         document = KnowledgeDocument(title=title, category=path.parent.name, file_path=str(path), created_by=created_by)
@@ -292,14 +311,24 @@ def import_rag_data(
     build_index: bool = True,
     created_by: int | None = None,
     strict: bool = False,
+    profile: str = "full",
+    max_chunks_per_document: int | None = None,
 ) -> dict[str, int | str]:
+    if profile not in RAG_IMPORT_PROFILES:
+        raise ValueError(f"profile 必须是以下之一：{', '.join(sorted(RAG_IMPORT_PROFILES))}")
+    if profile == "lightweight" and max_chunks_per_document is None:
+        max_chunks_per_document = DEFAULT_LIGHTWEIGHT_MAX_CHUNKS_PER_DOCUMENT
     root = Path(rag_root)
     allowlist = Path(allowlist_path) if allowlist_path else root / "_manifests" / "rag_ingest_allowlist.txt"
     catalog = _load_catalog(Path(catalog_path) if catalog_path else None)
     import_batch_id = _new_import_batch_id()
-    created = updated = skipped = errors = chunks = 0
+    created = updated = skipped = errors = chunks = deferred = 0
     for raw_entry, path, is_absolute in _read_allowlist(allowlist, root):
         metadata = catalog.get(_source_id_from_path(path) or "", {})
+        defer_reason = _defer_reason_for_profile(path, profile)
+        if defer_reason is not None:
+            deferred += 1
+            continue
         if is_absolute and strict:
             errors += 1
             skipped += 1
@@ -328,7 +357,14 @@ def import_rag_data(
             if not content.strip():
                 raise RuntimeError("文件未解析出文本；如为扫描件，请启用 PaddleOCR 后重建索引。")
             was_created, was_updated, chunk_count = _upsert_document(
-                db, path, content, metadata, page_ranges, created_by, import_batch_id
+                db,
+                path,
+                content,
+                metadata,
+                page_ranges,
+                created_by,
+                import_batch_id,
+                max_chunks_per_document=max_chunks_per_document,
             )
             created += was_created
             updated += was_updated
@@ -358,6 +394,8 @@ def import_rag_data(
         "skipped": skipped,
         "errors": errors,
         "chunks": chunks,
+        "deferred": deferred,
+        "profile": profile,
         "import_batch_id": import_batch_id,
     }
     if strict and (skipped > 0 or errors > 0 or chunks == 0):
@@ -372,6 +410,18 @@ def main() -> None:
     parser.add_argument("--catalog", default="../docs/knowledge_source_catalog_v0_2.json", help="知识来源清单 JSON。")
     parser.add_argument("--no-index", action="store_true", help="只导入数据库切片，不重建向量索引。")
     parser.add_argument("--strict", action="store_true", help="存在 skipped/errors 或未生成 chunks 时以非 0 状态退出。")
+    parser.add_argument(
+        "--profile",
+        choices=sorted(RAG_IMPORT_PROFILES),
+        default="full",
+        help="full 处理完整 allowlist；lightweight 只导入轻量文本资料，延后 PDF/图片/OCR。",
+    )
+    parser.add_argument(
+        "--max-chunks-per-document",
+        type=int,
+        default=None,
+        help="限制单个文档导入切片数量；lightweight 默认限制以保护演示环境。",
+    )
     args = parser.parse_args()
     db = SessionLocal()
     try:
@@ -382,11 +432,14 @@ def main() -> None:
             catalog_path=Path(args.catalog).resolve() if args.catalog else None,
             build_index=not args.no_index,
             strict=args.strict,
+            profile=args.profile,
+            max_chunks_per_document=args.max_chunks_per_document,
         )
         print(
             "Imported RAG data: "
             f"created={result['created']}, updated={result['updated']}, skipped={result['skipped']}, "
-            f"errors={result['errors']}, chunks={result['chunks']}"
+            f"errors={result['errors']}, chunks={result['chunks']}, deferred={result['deferred']}, "
+            f"profile={result['profile']}"
         )
     finally:
         db.close()

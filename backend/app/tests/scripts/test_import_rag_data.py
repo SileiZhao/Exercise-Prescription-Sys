@@ -117,6 +117,53 @@ def test_import_rag_data_uses_ocr_when_pdf_text_is_empty(db_session, tmp_path, m
     assert document.status == "ACTIVE"
 
 
+def test_import_rag_data_lightweight_profile_defers_pdf_without_ocr(db_session, tmp_path, monkeypatch):
+    rag_root = tmp_path / "rag_data"
+    source_dir = rag_root / "90_web_archives"
+    source_dir.mkdir(parents=True)
+    summary = source_dir / "SRC2-010_CDC_Physical_Activity_Basics_Older_Adults_summary.md"
+    summary.write_text("老年人运动建议从低强度开始，监测 RPE。", encoding="utf-8")
+    pdf_dir = rag_root / "00_core_guidelines"
+    pdf_dir.mkdir(parents=True)
+    pdf = pdf_dir / "WHO_2020_physical_activity_sedentary_behaviour_guidelines.pdf"
+    pdf.write_bytes(b"%PDF fake")
+    allowlist = rag_root / "_manifests" / "rag_ingest_allowlist.txt"
+    allowlist.parent.mkdir(parents=True)
+    allowlist.write_text(
+        "\n".join(
+            [
+                "90_web_archives/SRC2-010_CDC_Physical_Activity_Basics_Older_Adults_summary.md",
+                "00_core_guidelines/WHO_2020_physical_activity_sedentary_behaviour_guidelines.pdf",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        rag_import,
+        "_extract_pdf_text",
+        lambda path: pytest.fail("lightweight profile must not parse PDFs"),
+    )
+
+    result = import_rag_data(
+        db_session,
+        rag_root=rag_root,
+        allowlist_path=allowlist,
+        build_index=False,
+        strict=True,
+        profile="lightweight",
+    )
+
+    active = db_session.scalars(select(KnowledgeDocument).where(KnowledgeDocument.status == "ACTIVE")).all()
+    assert result["created"] == 1
+    assert result["deferred"] == 1
+    assert result["skipped"] == 0
+    assert result["errors"] == 0
+    assert result["chunks"] >= 1
+    assert result["profile"] == "lightweight"
+    assert [document.file_path for document in active] == [str(summary)]
+
+
 def test_import_rag_data_preserves_indexed_chunks_when_content_is_unchanged(db_session, tmp_path):
     rag_root = tmp_path / "rag_data"
     source_dir = rag_root / "00_core_guidelines"

@@ -28,6 +28,40 @@ def test_seed_reference_data_strict_fails_when_rag_skipped(monkeypatch, db_sessi
     assert captured["strict"] is True
 
 
+def test_seed_reference_data_passes_lightweight_rag_profile(monkeypatch, db_session, tmp_path):
+    captured: dict[str, object] = {}
+
+    def fake_import_rag_data(*args, strict=False, profile="full", max_chunks_per_document=None, **kwargs):
+        captured["strict"] = strict
+        captured["profile"] = profile
+        captured["max_chunks_per_document"] = max_chunks_per_document
+        return {
+            "created": 1,
+            "updated": 0,
+            "skipped": 0,
+            "errors": 0,
+            "chunks": 2,
+            "deferred": 4,
+            "profile": profile,
+        }
+
+    monkeypatch.setattr(reference_seed, "import_rag_data", fake_import_rag_data)
+
+    result = reference_seed.seed_reference_data(
+        db=db_session,
+        docs_dir=tmp_path / "docs",
+        rag_root=tmp_path / "rag_data",
+        build_rag_index=True,
+        strict=True,
+        only="rag",
+        rag_profile="lightweight",
+        rag_max_chunks_per_document=80,
+    )
+
+    assert captured == {"strict": True, "profile": "lightweight", "max_chunks_per_document": 80}
+    assert result["rag_data"]["deferred"] == 4
+
+
 def test_seed_reference_data_imports_ai_generated_split_files(db_session, tmp_path):
     ai_dir = tmp_path / "ai_generated"
     ai_dir.mkdir()
