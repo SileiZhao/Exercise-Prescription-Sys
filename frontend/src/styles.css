@@ -3251,18 +3251,13 @@ body {
   }
 
   .research-privacy-kpis {
-    display: flex;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scroll-snap-type: x proximity;
   }
 
   .research-privacy-kpis > div {
-    flex: 0 0 94px;
     min-height: 54px;
     padding: 8px;
-    scroll-snap-align: start;
   }
 
   .research-privacy-kpis strong {
