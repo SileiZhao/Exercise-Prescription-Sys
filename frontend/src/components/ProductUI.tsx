@@ -184,12 +184,14 @@ export function AppShell({
       <Layout className="product-main">
         <Layout.Header className="product-header">
           {role !== "public" ? (
-            <Button
-              aria-label="打开角色导航"
-              className="mobile-nav-button"
-              icon={<Menu />}
-              onClick={() => setMobileNavOpen(true)}
-            />
+            <Tooltip title="打开角色导航">
+              <Button
+                aria-label="打开角色导航"
+                className="mobile-nav-button"
+                icon={<Menu />}
+                onClick={() => setMobileNavOpen(true)}
+              />
+            </Tooltip>
           ) : null}
           <PageHeader role={role} title={title} subtitle={subtitle} actions={actions} />
         </Layout.Header>
@@ -213,7 +215,7 @@ export function AppShell({
 
 export function RoleSidebar({ role }: { role: AppRole }) {
   return (
-    <Layout.Sider className="role-sidebar" breakpoint="lg" collapsedWidth={0} width={188}>
+    <Layout.Sider className="role-sidebar" width={188}>
       <Typography.Title level={5} className="role-brand">
         AI 运动处方
       </Typography.Title>
