@@ -78,7 +78,7 @@ def test_production_readiness_fails_when_secret_key_is_default(monkeypatch) -> N
     service = ReadinessService(
         settings=Settings(
             ENVIRONMENT="production",
-            SECRET_KEY="test-secret-key-for-tests",
+            SECRET_KEY="change-me-in-production",
             LLM_PROVIDER="aliyun",
             DASHSCOPE_API_KEY="test-dashscope-api-key",
         )

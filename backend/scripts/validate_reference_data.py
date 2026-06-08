@@ -28,6 +28,8 @@ AI_GENERATED_JSON_FILES = {
     "manifest": "ai_generated_reference_manifest.json",
 }
 RAG_ALLOWLIST_PATH = "rag_data/_manifests/rag_ingest_allowlist.txt"
+VALIDATION_LIGHTWEIGHT_DEFERRED_PATH_PARTS = {"80_reference_books_limited", "90_web_archives"}
+VALIDATION_LIGHTWEIGHT_DEFERRED_SUFFIXES = {".pdf", ".doc", ".docx", ".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff"}
 FORMAL_MINIMUM_COUNTS = {
     "contraindications": 60,
     "actions": 120,
@@ -137,7 +139,9 @@ def _read_allowlist(
     missing_files: list[str],
     blocking_errors: list[str],
     absolute_allowlist_paths: list[str],
+    deferred_files: list[dict[str, str]],
     *,
+    rag_profile: str,
     strict: bool,
 ) -> list[str]:
     allowlist_path = rag_root / "_manifests" / "rag_ingest_allowlist.txt"
@@ -159,9 +163,25 @@ def _read_allowlist(
                 blocking_errors.append(f"rag_allowlist: allowlist contains absolute path {line}")
         candidate = _resolve_allowlist_entry(project_root, rag_root, line)
         if not candidate.exists():
+            defer_reason = _validation_defer_reason(candidate, rag_profile)
+            if defer_reason is not None:
+                deferred_files.append({"path": str(candidate), "source": line, "reason": defer_reason})
+                continue
             missing_files.append(str(candidate))
             blocking_errors.append(f"rag_allowlist: missing referenced file {line}")
     return entries
+
+
+def _validation_defer_reason(path: Path, rag_profile: str) -> str | None:
+    if rag_profile == "full":
+        return None
+    if rag_profile != "lightweight":
+        raise ValueError("rag_profile must be 'full' or 'lightweight'")
+    if any(part in VALIDATION_LIGHTWEIGHT_DEFERRED_PATH_PARTS for part in path.parts):
+        return "lightweight validation defers external archived or reference-book files"
+    if path.suffix.lower() in VALIDATION_LIGHTWEIGHT_DEFERRED_SUFFIXES:
+        return f"lightweight validation defers {path.suffix.lower()} files"
+    return None
 
 
 def _resolve_allowlist_entry(project_root: Path, rag_root: Path, line: str) -> Path:
@@ -188,6 +208,7 @@ def validate_reference_data(
     rag_root: str | Path | None = None,
     ai_bundle_dir: str | Path | None = None,
     strict: bool = False,
+    rag_profile: str | None = None,
     database_url: str | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve() if project_root is not None else _default_project_root()
@@ -197,6 +218,8 @@ def validate_reference_data(
     missing_files: list[str] = []
     blocking_errors: list[str] = []
     absolute_allowlist_paths: list[str] = []
+    deferred_files: list[dict[str, str]] = []
+    resolved_rag_profile = (rag_profile or os.environ.get("RAG_IMPORT_PROFILE") or "lightweight").strip().lower()
 
     loaded = {
         key: _load_json(docs_path / Path(relative_path).name, key, missing_files, blocking_errors)
@@ -209,6 +232,8 @@ def validate_reference_data(
         missing_files,
         blocking_errors,
         absolute_allowlist_paths,
+        deferred_files,
+        rag_profile=resolved_rag_profile,
         strict=strict,
     )
     knowledge_index_errors = _validate_knowledge_index_state(
@@ -233,6 +258,8 @@ def validate_reference_data(
         "compliance_documents_count": _count_items(loaded["compliance"], ("documents",)),
         "knowledge_sources_count": _count_items(loaded["knowledge_catalog"], ("sources", "items")),
         "rag_allowlist_count": len(allowlist_entries),
+        "rag_profile": resolved_rag_profile,
+        "deferred_files": deferred_files,
         "ai_generated_reference": ai_generated_reference,
         "formal_reference_coverage": formal_reference_coverage,
         "absolute_allowlist_paths": absolute_allowlist_paths,

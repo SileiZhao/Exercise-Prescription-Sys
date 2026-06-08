@@ -1,5 +1,5 @@
 from io import BytesIO
-from datetime import date
+from datetime import date, timedelta
 from zipfile import ZipFile
 
 from fastapi.testclient import TestClient
@@ -250,10 +250,11 @@ def test_phase_assessment_report_docx_export_contains_feedback_summary(client: T
     )
     db_session.add(prescription)
     db_session.flush()
+    today = date.today()
     for exercise_date, rpe, completion_rate, discomfort, pain_score_after in [
-        (date(2026, 5, 10), 8, 70, ["疼痛"], 5),
-        (date(2026, 5, 17), 9, 65, [], 4),
-        (date(2026, 5, 24), 7, 80, [], 3),
+        (today - timedelta(days=21), 8, 70, ["疼痛"], 5),
+        (today - timedelta(days=14), 9, 65, [], 4),
+        (today - timedelta(days=7), 7, 80, [], 3),
     ]:
         db_session.add(
             ExerciseFeedback(

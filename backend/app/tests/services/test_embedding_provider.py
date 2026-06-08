@@ -110,7 +110,7 @@ def test_openai_compatible_embedding_provider_uses_base_url_and_api_key():
 
     assert vector == [0.4, 0.5, 0.6]
     assert http_client.calls[0]["url"] == "https://example.test/v1/embeddings"
-    assert http_client.calls[0]["headers"]["Authorization"] == "Bearer test-key"
+    assert http_client.calls[0]["headers"]["Authorization"] == "Bearer test-embedding-api-key"
     assert http_client.calls[0]["json"]["model"] == "text-embedding-v1"
 
 
@@ -131,7 +131,7 @@ def test_dashscope_embedding_provider_uses_default_base_url_and_key_alias():
 
     assert vector == [0.4, 0.5, 0.6]
     assert http_client.calls[0]["url"] == f"{DASHSCOPE_COMPATIBLE_BASE_URL}/embeddings"
-    assert http_client.calls[0]["headers"]["Authorization"] == "Bearer dashscope-key"
+    assert http_client.calls[0]["headers"]["Authorization"] == "Bearer test-dashscope-api-key"
     assert http_client.calls[0]["json"]["model"] == "text-embedding-v4"
 
 

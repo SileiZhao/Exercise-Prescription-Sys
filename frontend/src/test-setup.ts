@@ -98,3 +98,8 @@ Object.defineProperty(window, "getComputedStyle", {
     overflowY: "hidden"
   })
 });
+
+Object.defineProperty(HTMLAnchorElement.prototype, "click", {
+  configurable: true,
+  value: vi.fn()
+});
