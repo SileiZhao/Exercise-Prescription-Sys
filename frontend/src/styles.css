@@ -348,6 +348,47 @@ body {
   min-height: 60vh;
 }
 
+.clinical-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 168px;
+  padding: 18px;
+  background: #f8fbff;
+  border: 1px solid var(--eps-border);
+  border-radius: 8px;
+}
+
+.clinical-empty-state .ant-empty {
+  margin: 0;
+}
+
+.clinical-empty-state .ant-empty-description {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.clinical-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--eps-primary);
+  background: #edf6ff;
+  border: 1px solid #cfe7ff;
+  border-radius: 8px;
+}
+
+.clinical-empty-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.clinical-empty-action {
+  margin-top: 2px;
+}
+
 .risk-badge {
   max-width: 100%;
   white-space: normal;

@@ -339,7 +339,20 @@ export function UserDashboardPage() {
               {(summary?.monitoring_reminders ?? []).length ? (
                 <List dataSource={summary?.monitoring_reminders ?? []} renderItem={(item) => <List.Item>{item}</List.Item>} />
               ) : (
-                <EmptyState description="暂无监测提醒" />
+                <EmptyState
+                  title="暂无监测提醒"
+                  description="当前没有需要补充记录的血压、血糖或运动反馈提醒。"
+                  action={
+                    <Space wrap>
+                      <Link to="/user/today">
+                        <Button>记录今日反馈</Button>
+                      </Link>
+                      <Link to="/user/onboarding">
+                        <Button>更新健康数据</Button>
+                      </Link>
+                    </Space>
+                  }
+                />
               )}
             </Card>
           </Col>

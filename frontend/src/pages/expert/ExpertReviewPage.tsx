@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Checkbox, Col, DatePicker, Empty, Input, List, Modal, Row, Select, Space, Switch, Tabs, Tag, Typography } from "antd";
+import { Alert, Button, Card, Checkbox, Col, DatePicker, Input, List, Modal, Row, Select, Space, Switch, Tabs, Tag, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { AlertTriangle, FileText, Stethoscope } from "lucide-react";
@@ -6,6 +6,7 @@ import { AlertTriangle, FileText, Stethoscope } from "lucide-react";
 import {
   AppShell,
   AuditTrail,
+  EmptyState,
   EvidenceTimeline,
   EvidenceCard,
   MetricCard,
@@ -378,6 +379,11 @@ export function ExpertReviewPage() {
     await refreshQueue(cleaned);
   }
 
+  async function clearQueueFilters() {
+    setFilters({});
+    await refreshQueue({});
+  }
+
   async function handleAction(action: "approve" | "reject" | "refer" | "requestInfo" | "pause") {
     if (!selected) {
       return;
@@ -673,7 +679,16 @@ export function ExpertReviewPage() {
                   )}
                 />
               ) : (
-                <Empty description="暂无待审核处方" />
+                <EmptyState
+                  title="暂无待审核处方"
+                  description="当前筛选条件下没有需要处理的 R2/R3 审核任务。"
+                  action={
+                    <Space wrap>
+                      <Button type="primary" onClick={clearQueueFilters}>清空筛选</Button>
+                      <Button onClick={() => refreshQueue(filters)}>刷新队列</Button>
+                    </Space>
+                  }
+                />
               )}
             </Card>
             <Card title="用户画像" className="expert-panel">

@@ -724,8 +724,39 @@ export function ChartCard({
   );
 }
 
-export function EmptyState({ description }: { description: string }) {
-  return <Empty description={description} />;
+export function EmptyState({
+  description,
+  title,
+  action,
+  icon
+}: {
+  description: ReactNode;
+  title?: ReactNode;
+  action?: ReactNode;
+  icon?: ReactNode;
+}) {
+  return (
+    <div className="clinical-empty-state">
+      <Empty
+        image={
+          icon ? (
+            <span className="clinical-empty-icon" aria-hidden="true">
+              {icon}
+            </span>
+          ) : (
+            Empty.PRESENTED_IMAGE_SIMPLE
+          )
+        }
+        description={
+          <Space direction="vertical" size={8} align="center">
+            {title ? <Typography.Text strong>{title}</Typography.Text> : null}
+            <Typography.Text type="secondary">{description}</Typography.Text>
+            {action ? <div className="clinical-empty-action">{action}</div> : null}
+          </Space>
+        }
+      />
+    </div>
+  );
 }
 
 export function UnitTextInput({ unit }: { unit: string }) {

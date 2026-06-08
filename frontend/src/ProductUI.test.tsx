@@ -7,6 +7,7 @@ import {
   ChartCard,
   ClinicalScopePanel,
   DemoDataBanner,
+  EmptyState,
   EvidenceTimeline,
   MetricCard,
   RiskStatusPanel,
@@ -143,6 +144,22 @@ describe("Product UI system", () => {
     expect(screen.queryByText("不会展示")).not.toBeInTheDocument();
     expect(screen.getByText("RAG 证据")).toBeInTheDocument();
     expect(screen.getByText("规则命中")).toBeInTheDocument();
+  });
+
+  it("renders clinical empty states with a next action", () => {
+    render(
+      <MemoryRouter>
+        <EmptyState
+          title="暂无待审核处方"
+          description="当前筛选条件下没有需要处理的审核任务。"
+          action={<button type="button">刷新队列</button>}
+        />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("暂无待审核处方")).toBeInTheDocument();
+    expect(screen.getByText("当前筛选条件下没有需要处理的审核任务。")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "刷新队列" })).toBeInTheDocument();
   });
 
   it("keeps the complete evidence chain available behind an explicit expansion", () => {

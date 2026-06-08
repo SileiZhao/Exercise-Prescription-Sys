@@ -244,7 +244,18 @@ export function PrescriptionPage() {
                 </Card>
               </>
             ) : (
-              <EmptyState description="暂无处方。完成六类数据、风险筛查和人群分型后，可生成结构化 FITT-VP 处方。" />
+              <EmptyState
+                title="尚未生成处方"
+                description="完成六类数据、风险筛查和人群分型后，可生成结构化 FITT-VP 处方。"
+                action={
+                  <Space wrap>
+                    <Link to="/user/onboarding">
+                      <Button type="primary">继续建档</Button>
+                    </Link>
+                    <Button loading={loading} onClick={runGenerate}>尝试生成处方</Button>
+                  </Space>
+                }
+              />
             )}
             <Typography.Title level={4}>报告导出审计</Typography.Title>
             {exportRecords.length ? (
@@ -265,7 +276,22 @@ export function PrescriptionPage() {
                 )}
               />
             ) : (
-              <EmptyState description="暂无报告导出记录" />
+              <EmptyState
+                title="暂无报告导出记录"
+                description={canExportReport ? "当前处方已发布，可导出首份 Word 或 PDF 报告。" : "处方发布前不会生成训练报告导出记录。"}
+                action={
+                  canExportReport ? (
+                    <Space wrap>
+                      <Button onClick={() => runExportReport("docx")}>导出 Word 报告</Button>
+                      <Button onClick={() => runExportReport("pdf")}>导出 PDF 报告</Button>
+                    </Space>
+                  ) : (
+                    <Link to="/user/dashboard">
+                      <Button>查看今日安全状态</Button>
+                    </Link>
+                  )
+                }
+              />
             )}
           </Space>
         </MotionCard>

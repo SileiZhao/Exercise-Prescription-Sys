@@ -16,7 +16,7 @@ import {
   type ResearchExportRequest,
   type ResearchSummary
 } from "../../api/researchExport";
-import { AppShell, ChartCard, MetricCard, PageHero } from "../../components/ProductUI";
+import { AppShell, ChartCard, EmptyState, MetricCard, PageHero } from "../../components/ProductUI";
 import {
   BloodGlucoseTrendChart,
   BloodPressureTrendChart,
@@ -789,7 +789,20 @@ export function ResearchExportPage() {
               ) : null}
             </Space>
           ) : (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无导出申请" />
+            <EmptyState
+              title="暂无导出申请"
+              description={isAdminMode ? "当前没有待审批或可追溯的科研导出申请。" : "提交导出申请后，审批、过期时间、下载状态都会在这里留痕。"}
+              action={
+                <Space wrap>
+                  {!isAdminMode ? (
+                    <Link to="/research/export">
+                      <Button type="primary">新建导出申请</Button>
+                    </Link>
+                  ) : null}
+                  <Button onClick={refreshRequests}>刷新申请</Button>
+                </Space>
+              }
+            />
           )}
         </Card>
       </section>
