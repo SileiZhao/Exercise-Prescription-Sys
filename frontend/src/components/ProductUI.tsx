@@ -13,6 +13,7 @@ import {
   Row,
   Slider,
   Space,
+  Spin,
   Steps,
   Tag,
   Tooltip,
@@ -709,7 +710,9 @@ export function ChartCard({
   return (
     <Card title={title} className="chart-card">
       {loading ? (
-        <div role="status" className="chart-state chart-loading">图表加载中</div>
+        <div role="status" className="chart-state chart-loading">
+          <Spin size="small" /> 图表加载中
+        </div>
       ) : error ? (
         <Alert type="error" showIcon message={error} />
       ) : empty ? (

@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Descriptions, List, Row, Space, Spin, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Descriptions, List, Row, Space, Skeleton, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -155,8 +155,8 @@ export function PhaseReportPage() {
         <Space direction="vertical" size={16} className="onboarding-section">
           <Typography.Text type="secondary">阶段报告</Typography.Text>
           {loading ? (
-            <Card>
-              <Spin />
+            <Card aria-label="阶段评估报告加载中">
+              <Skeleton active paragraph={{ rows: 4 }} />
             </Card>
           ) : null}
           {error ? <Alert type="error" showIcon message={error} /> : null}

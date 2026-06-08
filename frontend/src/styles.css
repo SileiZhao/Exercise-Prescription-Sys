@@ -334,6 +334,20 @@ body {
   min-height: 220px;
 }
 
+.chart-state,
+.route-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--eps-muted);
+  font-size: 13px;
+}
+
+.route-loading {
+  min-height: 60vh;
+}
+
 .risk-badge {
   max-width: 100%;
   white-space: normal;

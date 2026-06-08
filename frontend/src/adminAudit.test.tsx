@@ -44,7 +44,7 @@ describe("admin audit log page", () => {
     expect(await screen.findByText("审计日志")).toBeInTheDocument();
     expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
     expect(screen.getByText("审计监控总览")).toBeInTheDocument();
-    expect(screen.getByText("筛选后 2 / 全部 2")).toBeInTheDocument();
+    expect(await screen.findByText("筛选后 2 / 全部 2")).toBeInTheDocument();
     expect(screen.getByText("每页 12 条，详情在抽屉中查看")).toBeInTheDocument();
     expect((await screen.findAllByText("FEEDBACK_ADJUST_PRESCRIPTION")).length).toBeGreaterThan(0);
     expect(screen.getAllByText("PrescriptionRecord")[0]).toBeInTheDocument();

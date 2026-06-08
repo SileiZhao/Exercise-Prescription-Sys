@@ -77,8 +77,9 @@ export function ProtectedRoute({
 
   if (loading) {
     return (
-      <div className="route-loading">
-        <Spin />
+      <div className="route-loading" role="status" aria-live="polite">
+        <Spin size="small" />
+        <span>正在校验登录状态</span>
       </div>
     );
   }
