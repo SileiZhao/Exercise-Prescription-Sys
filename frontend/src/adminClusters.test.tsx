@@ -22,18 +22,29 @@ const listClusterModelsMock = vi.hoisted(() =>
   vi.fn().mockResolvedValue([
     {
       id: 1,
-      name: "KMeans 分型 v1",
-      algorithm: "KMeans",
+      name: "DBSCAN 分型 v1",
+      algorithm: "DBSCAN",
       n_clusters: 2,
       status: "ACTIVE",
-      metrics: { silhouette_score: 0.31 },
+      model_origin: "bootstrap_rule_calibrated",
+      model_params: {
+        predict_strategy: "density_approximation",
+        predict_strategy_label: "密度近似分类，不确定时需专家解释",
+        noise_label: "未归类/需专家解释"
+      },
+      metrics: { silhouette_score: 0.31, davies_bouldin_score: 1.8, cluster_stability: 0.82, noise_rate: 0.12, evaluation_passed: 1 },
       feature_names: ["bmi", "sbp"],
       cluster_profiles: [
         {
           cluster_id: 0,
           size: 12,
-          suggested_labels: ["肥胖代谢风险型"],
-          explanation: "该类样本主要表现为肥胖代谢风险型。"
+          suggested_labels: ["代谢风险", "体重管理"],
+          explanation: "该类样本主要表现为代谢风险。",
+          core_risks: ["中心型肥胖或糖脂代谢风险"],
+          exercise_goals: ["改善体重、腰围与糖脂代谢"],
+          fitt_range: { frequency: "每周3-5次", intensity: "低至中等强度" },
+          contraindications: ["避免突然大强度冲刺"],
+          review_recommendation: "R2、R3 或出现异常反馈时需专家复核。"
         }
       ],
       created_at: "2026-05-30T10:00:00"
@@ -44,7 +55,9 @@ const listClusterModelsMock = vi.hoisted(() =>
       algorithm: "KMeans",
       n_clusters: 3,
       status: "TRAINED",
-      metrics: { silhouette_score: 0.42 },
+      model_origin: "bootstrap_rule_calibrated",
+      model_params: { predict_strategy: "nearest_center", predict_strategy_label: "最近中心分类" },
+      metrics: { silhouette_score: 0.42, davies_bouldin_score: 1.4, cluster_stability: 0.86, evaluation_passed: 1 },
       feature_names: ["bmi", "sbp"],
       cluster_profiles: [],
       created_at: "2026-05-30T11:00:00"
@@ -61,6 +74,7 @@ vi.mock("./api/clusters", () => ({
 describe("admin cluster model page", () => {
   it("renders cluster models and activates a trained model", async () => {
     localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "ADMIN");
 
     render(
       <MemoryRouter
@@ -71,8 +85,18 @@ describe("admin cluster model page", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("聚类模型管理")).toBeInTheDocument();
-    expect(await screen.findByText("KMeans 分型 v1")).toBeInTheDocument();
+    expect(await screen.findByText("聚类模型管理")).toBeInTheDocument();
+    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
+    expect(await screen.findByText("DBSCAN 分型 v1")).toBeInTheDocument();
+    expect(screen.getAllByText("BOOTSTRAP_V1").length).toBeGreaterThan(0);
+    expect(screen.getByText("冷启动规则校准模型，仅用于试运行人群画像和模板匹配，不作为正式科研聚类结论。")).toBeInTheDocument();
+    expect(screen.getByTestId("ClusterScatterChart-echart")).toBeInTheDocument();
+    expect(screen.getByText("密度近似分类，不确定时需专家解释")).toBeInTheDocument();
+    expect(screen.getByText("未归类/需专家解释")).toBeInTheDocument();
+    expect(screen.getByText("最近中心分类")).toBeInTheDocument();
+    expect(screen.getAllByText("通过").length).toBeGreaterThan(0);
+    expect(screen.getByText("0.12")).toBeInTheDocument();
+    expect(screen.getByText("中心型肥胖或糖脂代谢风险")).toBeInTheDocument();
     expect(screen.getByText("0.42")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "启用模型 KMeans 分型 v2" }));
 
@@ -86,6 +110,7 @@ describe("admin cluster model page", () => {
 
   it("trains a cluster model from the management form", async () => {
     localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "ADMIN");
     trainClusterModelMock.mockClear();
 
     render(
@@ -97,14 +122,18 @@ describe("admin cluster model page", () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByLabelText("模型名称"), { target: { value: "KMeans 新模型" } });
+    expect(await screen.findByText("聚类模型管理")).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("模型名称"), { target: { value: "GMM 新模型" } });
+    fireEvent.mouseDown(screen.getAllByRole("combobox", { name: "算法" })[0]);
+    fireEvent.click(screen.getByText("GaussianMixture"));
     fireEvent.change(screen.getByLabelText("聚类数"), { target: { value: 4 } });
     fireEvent.click(screen.getByRole("button", { name: "训练模型" }));
 
     await waitFor(() =>
       expect(trainClusterModelMock).toHaveBeenCalledWith({
-        name: "KMeans 新模型",
-        n_clusters: 4
+        name: "GMM 新模型",
+        n_clusters: 4,
+        algorithm: "GaussianMixture"
       })
     );
     expect(await screen.findByText("聚类模型训练完成，可在列表中启用。")).toBeInTheDocument();

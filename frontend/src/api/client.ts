@@ -1,7 +1,19 @@
 import axios from "axios";
 
+type ApiLocation = Pick<Location, "protocol" | "hostname">;
+
+export function resolveApiBaseUrl(configuredUrl = import.meta.env.VITE_API_BASE_URL, location: ApiLocation = window.location) {
+  if (configuredUrl?.trim()) {
+    return configuredUrl;
+  }
+  if (location.protocol === "http:" || location.protocol === "https:") {
+    return "/api/v1";
+  }
+  return "/api/v1";
+}
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1",
+  baseURL: resolveApiBaseUrl(),
   timeout: 30000
 });
 
@@ -18,6 +30,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       window.location.href = "/login";
     }
     return Promise.reject(error);

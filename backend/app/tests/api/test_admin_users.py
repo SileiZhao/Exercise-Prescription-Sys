@@ -3,20 +3,11 @@ from sqlalchemy import select
 
 from app.models.audit import AuditLog
 from app.models.user import Organization, User
+from app.tests.helpers import auth_headers_for_role
 
 
 def login(client: TestClient, email: str, role: str) -> dict[str, str]:
-    client.post(
-        "/api/v1/auth/register",
-        json={
-            "email": email,
-            "password": "StrongPass123",
-            "full_name": email,
-            "role": role,
-        },
-    )
-    response = client.post("/api/v1/auth/login", json={"username": email, "password": "StrongPass123"})
-    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+    return auth_headers_for_role(client, email, role)
 
 
 def test_admin_can_manage_organization_user_and_expert_profile(client: TestClient, db_session):
@@ -134,6 +125,98 @@ def test_org_admin_user_list_is_limited_to_own_organization(client: TestClient, 
     emails = {item["email"] for item in response.json()["items"]}
     assert "scoped-user@example.com" in emails
     assert "other-user@example.com" not in emails
+
+
+def test_org_admin_cannot_promote_users_or_move_them_between_organizations(client: TestClient, db_session):
+    admin_headers = login(client, "org-privilege-admin@example.com", "ADMIN")
+    org_a = client.post(
+        "/api/v1/users/organizations",
+        headers=admin_headers,
+        json={"name": "权限机构A", "type": "COMMUNITY"},
+    ).json()
+    org_b = client.post(
+        "/api/v1/users/organizations",
+        headers=admin_headers,
+        json={"name": "权限机构B", "type": "SCHOOL"},
+    ).json()
+    login(client, "privilege-org-admin@example.com", "ORG_ADMIN")
+    login(client, "privilege-user@example.com", "USER")
+    org_admin = db_session.scalar(select(User).where(User.email == "privilege-org-admin@example.com"))
+    org_user = db_session.scalar(select(User).where(User.email == "privilege-user@example.com"))
+    org_admin.organization_id = org_a["id"]
+    org_user.organization_id = org_a["id"]
+    db_session.commit()
+
+    org_admin_headers = client.post(
+        "/api/v1/auth/login",
+        json={"username": "privilege-org-admin@example.com", "password": "StrongPass123"},
+    ).json()
+    headers = {"Authorization": f"Bearer {org_admin_headers['access_token']}"}
+
+    promote_response = client.patch(
+        f"/api/v1/users/{org_user.id}",
+        headers=headers,
+        json={"role": "ADMIN"},
+    )
+    move_response = client.patch(
+        f"/api/v1/users/{org_user.id}",
+        headers=headers,
+        json={"organization_id": org_b["id"]},
+    )
+    self_promote_response = client.patch(
+        f"/api/v1/users/{org_admin.id}",
+        headers=headers,
+        json={"role": "ADMIN"},
+    )
+
+    assert promote_response.status_code == 403
+    assert move_response.status_code == 403
+    assert self_promote_response.status_code == 403
+    db_session.refresh(org_user)
+    db_session.refresh(org_admin)
+    assert org_user.role == "USER" or org_user.role.value == "USER"
+    assert org_user.organization_id == org_a["id"]
+    assert org_admin.role == "ORG_ADMIN" or org_admin.role.value == "ORG_ADMIN"
+
+
+def test_org_admin_cannot_create_expert_profile_for_other_organization_user(client: TestClient, db_session):
+    admin_headers = login(client, "profile-scope-admin@example.com", "ADMIN")
+    org_a = client.post(
+        "/api/v1/users/organizations",
+        headers=admin_headers,
+        json={"name": "专家机构A", "type": "COMMUNITY"},
+    ).json()
+    org_b = client.post(
+        "/api/v1/users/organizations",
+        headers=admin_headers,
+        json={"name": "专家机构B", "type": "SCHOOL"},
+    ).json()
+    login(client, "profile-org-admin@example.com", "ORG_ADMIN")
+    login(client, "other-org-expert@example.com", "EXPERT")
+    org_admin = db_session.scalar(select(User).where(User.email == "profile-org-admin@example.com"))
+    expert = db_session.scalar(select(User).where(User.email == "other-org-expert@example.com"))
+    org_admin.organization_id = org_a["id"]
+    expert.organization_id = org_b["id"]
+    db_session.commit()
+
+    org_admin_headers = client.post(
+        "/api/v1/auth/login",
+        json={"username": "profile-org-admin@example.com", "password": "StrongPass123"},
+    ).json()
+    response = client.post(
+        "/api/v1/users/expert-profiles",
+        headers={"Authorization": f"Bearer {org_admin_headers['access_token']}"},
+        json={
+            "user_id": expert.id,
+            "title": "副教授",
+            "specialty": "慢病运动干预",
+            "certificate_no": "CERT-OTHER",
+            "bio": "外机构专家",
+            "review_capacity_per_day": 20,
+        },
+    )
+
+    assert response.status_code == 403
 
 
 def test_admin_can_filter_and_paginate_users(client: TestClient):

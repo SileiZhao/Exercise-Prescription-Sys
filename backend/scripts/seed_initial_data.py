@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 try:
@@ -22,7 +23,14 @@ DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 DEFAULT_ACTIONS_PATH = DATA_DIR / "seed_actions.json"
 DEFAULT_KNOWLEDGE_PATH = DATA_DIR / "seed_knowledge.json"
 DEFAULT_TEMPLATES_PATH = DATA_DIR / "seed_templates.json"
-DEFAULT_PASSWORD = "Password123"
+INITIAL_SEED_PASSWORD_ENV = "INITIAL_SEED_PASSWORD"
+
+
+def _initial_seed_password() -> str:
+    password = os.getenv(INITIAL_SEED_PASSWORD_ENV)
+    if not password:
+        raise RuntimeError(f"{INITIAL_SEED_PASSWORD_ENV} must be set before seeding initial users.")
+    return password
 
 
 def ensure_user(db: Session, email: str, full_name: str, role: UserRole) -> tuple[User, bool]:
@@ -32,11 +40,12 @@ def ensure_user(db: Session, email: str, full_name: str, role: UserRole) -> tupl
 
     user = User(
         email=email,
-        hashed_password=get_password_hash(DEFAULT_PASSWORD),
+        hashed_password=get_password_hash(_initial_seed_password()),
         full_name=full_name,
         role=role,
         is_active=True,
         is_verified=True,
+        must_change_password=True,
     )
     db.add(user)
     db.flush()
@@ -120,7 +129,7 @@ def main() -> None:
             f"knowledge_updated={result['knowledge']['updated']}, "
             f"templates_created={result['templates']['created']}, "
             f"templates_updated={result['templates']['updated']}. "
-            f"Default password: {DEFAULT_PASSWORD}"
+            "initial seed password is provided by environment and users require first-login password change."
         )
     finally:
         db.close()

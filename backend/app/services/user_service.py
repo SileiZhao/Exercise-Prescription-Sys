@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
@@ -48,6 +49,13 @@ class UserService:
         if actor.role == UserRole.ORG_ADMIN and user.organization_id != actor.organization_id:
             return None
         updates = payload.model_dump(exclude_unset=True)
+        if actor.role == UserRole.ORG_ADMIN:
+            forbidden_fields = {"role", "organization_id"}.intersection(updates)
+            if forbidden_fields:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="机构管理员无权修改用户角色或机构归属",
+                )
         for key, value in updates.items():
             setattr(user, key, value)
         AuditService(self.db).record(
@@ -79,7 +87,14 @@ class UserService:
             query = query.where(Organization.id == current_user.organization_id)
         return list(self.db.scalars(query))
 
-    def create_expert_profile(self, payload: ExpertProfileCreate, actor_id: int | None = None) -> ExpertProfile:
+    def create_expert_profile(self, payload: ExpertProfileCreate, actor: User) -> ExpertProfile:
+        target_user = self.db.get(User, payload.user_id)
+        if target_user is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="用户不存在")
+        if actor.role == UserRole.ORG_ADMIN and target_user.organization_id != actor.organization_id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="无权维护外机构专家资料")
+        if target_user.role != UserRole.EXPERT:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="只能为专家用户维护专家资料")
         existing = self.db.scalar(select(ExpertProfile).where(ExpertProfile.user_id == payload.user_id))
         if existing is not None:
             for key, value in payload.model_dump().items():
@@ -91,7 +106,7 @@ class UserService:
         AuditService(self.db).record(
             action="UPSERT_EXPERT_PROFILE",
             resource_type="ExpertProfile",
-            actor_id=actor_id,
+            actor_id=actor.id,
             resource_id=str(payload.user_id),
             metadata={"specialty": payload.specialty, "capacity": payload.review_capacity_per_day},
         )

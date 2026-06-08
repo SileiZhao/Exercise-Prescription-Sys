@@ -15,6 +15,6 @@ export interface AuditLogList {
   items: AuditLogItem[];
 }
 
-export function listAuditLogs() {
-  return apiClient.get<AuditLogList>("/admin/audit-logs", { params: { limit: 50 } }).then((response) => response.data);
+export function listAuditLogs(params: Record<string, unknown> = {}) {
+  return apiClient.get<AuditLogList>("/admin/audit-logs", { params: { limit: 50, ...params } }).then((response) => response.data);
 }

@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from app.core.config import Settings
 from app.core.exceptions import register_exception_handlers
-from app.core.logging import ErrorAlertService, JsonLogFormatter
+from app.core.logging import ErrorAlertService, JsonLogFormatter, log_runtime_provider_summary
 
 
 def test_json_log_formatter_includes_operational_fields() -> None:
@@ -75,6 +75,28 @@ def test_error_alert_service_posts_webhook_payload(monkeypatch) -> None:
             "timeout": 3,
         }
     ]
+
+
+def test_startup_runtime_provider_log_is_masked(caplog) -> None:
+    runtime_settings = Settings(
+        ENVIRONMENT="production",
+        LLM_PROVIDER="aliyun",
+        LLM_MODEL="qwen-prod",
+        DASHSCOPE_API_KEY="test-dashscope-api-key",
+        EMBEDDING_PROVIDER="dashscope",
+        EMBEDDING_MODEL="text-embedding-v4",
+        OCR_ENABLED=True,
+    )
+
+    with caplog.at_level(logging.INFO):
+        log_runtime_provider_summary(runtime_settings)
+
+    assert "runtime provider status" in caplog.text
+    assert "aliyun" in caplog.text
+    assert "qwen-prod" in caplog.text
+    assert "api_key" not in caplog.text
+    assert "DASHSCOPE_API_KEY" not in caplog.text
+    assert "dashscope-secret-123456" not in caplog.text
 
 
 def test_unhandled_exception_returns_uniform_500_and_sends_alert(monkeypatch) -> None:

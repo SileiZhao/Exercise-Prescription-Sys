@@ -41,8 +41,12 @@ export function generatePrescription() {
   return apiClient.post<PrescriptionRecord>("/prescriptions/generate").then((response) => response.data);
 }
 
-export function listMyPrescriptions() {
-  return apiClient.get<PrescriptionRecord[]>("/prescriptions/me").then((response) => response.data);
+export function listMyPrescriptions(includeHistory = false) {
+  return apiClient
+    .get<PrescriptionRecord[]>("/prescriptions/me", {
+      params: includeHistory ? { include_history: true } : undefined
+    })
+    .then((response) => response.data);
 }
 
 export function exportPrescriptionReport(prescriptionId: number) {

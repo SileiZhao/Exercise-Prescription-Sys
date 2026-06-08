@@ -199,6 +199,23 @@ class ExerciseFeedbackRead(ExerciseFeedbackCreate):
     model_config = ConfigDict(from_attributes=True)
 
 
+class HealthCompletionSuggestion(BaseModel):
+    category: str
+    title: str
+    fields: list[str]
+
+
+class HealthCompletionStatus(BaseModel):
+    minimum_required_complete: bool
+    prescription_generation_blocked: bool
+    completed_categories: list[str]
+    missing_categories: list[str]
+    missing_required_fields: dict[str, list[str]]
+    blocking_reasons: list[str]
+    suggestions: list[HealthCompletionSuggestion]
+    summary: str
+
+
 class HealthSnapshot(BaseModel):
     profile: dict[str, Any] | None
     fitness_test: dict[str, Any] | None
@@ -206,3 +223,4 @@ class HealthSnapshot(BaseModel):
     biochemical_index: dict[str, Any] | None
     risk_screening: dict[str, Any] | None
     exercise_feedback: dict[str, Any] | None
+    completion_status: HealthCompletionStatus

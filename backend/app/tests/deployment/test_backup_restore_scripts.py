@@ -47,6 +47,15 @@ def test_backup_and_restore_scripts_cover_all_persistent_stores() -> None:
     assert "export COMPOSE_PROJECT_NAME" in restore_source
 
 
+def test_backup_and_restore_scripts_do_not_source_dotenv() -> None:
+    backup_source = (SCRIPTS_DIR / "backup_data.sh").read_text(encoding="utf-8")
+    restore_source = (SCRIPTS_DIR / "restore_data.sh").read_text(encoding="utf-8")
+
+    for source in (backup_source, restore_source):
+        assert '. ".env"' not in source
+        assert "load_dotenv_value" in source
+
+
 def test_deployment_docs_include_backup_and_restore_runbook() -> None:
     deployment_doc = (PROJECT_ROOT / "docs" / "08_deployment.md").read_text(encoding="utf-8")
     checklist_doc = (PROJECT_ROOT / "docs" / "10_online_checklist.md").read_text(encoding="utf-8")

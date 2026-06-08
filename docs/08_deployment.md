@@ -14,6 +14,7 @@ cp .env.example .env
 docker compose up -d --build
 docker compose exec backend alembic upgrade head
 docker compose exec backend python scripts/seed_initial_data.py
+docker compose exec backend python scripts/seed_reference_data.py --strict
 ```
 
 如部署网络访问 Docker Hub 不稳定，可在 `.env` 中把基础镜像切到企业或云厂商镜像仓库，无需修改 Dockerfile：
@@ -66,7 +67,7 @@ curl http://localhost:8000/ready
 curl http://localhost:8000/api/v1/openapi.json
 ```
 
-`/health` 只表示后端进程可响应；`/ready` 会检查 database、redis、qdrant、minio、llm 组件。任一必要组件不可用时，`/ready` 返回 HTTP 503，并在响应体中列出具体组件状态。Docker Compose 的 backend healthcheck 使用 `/ready`，frontend 会等待 backend 健康后再启动。
+`/health` 只表示后端进程可响应；`/ready` 会检查 secret_key、database、redis、qdrant、minio、llm 组件。任一必要组件不可用时，`/ready` 返回 HTTP 503，并在响应体中列出具体组件状态。Docker Compose 的 backend healthcheck 使用 `/ready`，frontend 会等待 backend 健康后再启动。
 
 ## 备份与恢复
 
@@ -114,7 +115,9 @@ CONFIRM_RESTORE=yes COMPOSE_PROJECT_NAME=exercise-prod BACKUP_HELPER_IMAGE=regis
 ## 生产建议
 
 - 修改 `.env` 中 `SECRET_KEY`、数据库密码、MinIO 密钥。
-- 不要把大模型 API Key 写入仓库；通过 `.env` 注入 OpenAI-compatible 或阿里云兼容配置。
+- 生产环境设置 `ENVIRONMENT=production`；此时 `/ready` 会拒绝默认 `SECRET_KEY`、mock LLM 和缺失 API Key 的非 mock Provider。
+- 开发和自动化测试可以使用 `LLM_PROVIDER=mock`；生产必须使用 `LLM_PROVIDER=aliyun` 或其他 OpenAI-compatible Provider。
+- 不要把大模型 API Key 写入仓库；通过 `.env`、部署平台密钥或环境变量注入 OpenAI-compatible 或阿里云兼容配置。
 - 接入阿里云百炼 / DashScope 兼容模式时，推荐使用环境变量注入：
 
 ```env

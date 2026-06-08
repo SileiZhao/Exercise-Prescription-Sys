@@ -45,6 +45,7 @@ class User(Base):
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
+    must_change_password: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=utcnow, onupdate=utcnow
@@ -55,6 +56,18 @@ class User(Base):
         back_populates="user", uselist=False
     )
     consents: Mapped[list["UserConsent"]] = relationship(back_populates="user")
+
+
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    revoked: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
 class UserConsent(Base):

@@ -14,6 +14,8 @@ class KnowledgeDocumentCreate(BaseModel):
     version: str | None = None
     published_year: str | None = None
     file_path: str | None = None
+    import_batch_id: str | None = None
+    credibility_level: str | None = None
 
 
 class KnowledgeDocumentRead(BaseModel):
@@ -25,6 +27,9 @@ class KnowledgeDocumentRead(BaseModel):
     version: str | None = None
     published_year: str | None = None
     file_path: str | None = None
+    import_batch_id: str | None = None
+    credibility_level: str | None = None
+    skipped_reason: str | None = None
     status: str
     created_at: datetime
 
@@ -52,11 +57,16 @@ class KnowledgeEvidence(BaseModel):
     content: str
     tags: list[str]
     score: float
+    retrieval_mode: Literal["vector", "keyword", "keyword_fallback"] = "keyword"
+    fallback_reason: str | None = None
+    document_status: str
+    document_skipped_reason: str | None = None
     source_type: str | None = None
     version: str | None = None
     section: str | None = None
     page_start: int | None = None
     page_end: int | None = None
+    credibility_level: str | None = None
 
 
 class KnowledgeSearchRequest(BaseModel):

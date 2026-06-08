@@ -12,6 +12,7 @@ from app.models.health_data import (
     FitnessTest,
     RiskScreening,
     UserProfile,
+    UserProfileMeasurement,
     model_to_dict,
 )
 from app.models.user import UserConsent
@@ -25,6 +26,7 @@ from app.schemas.health_data import (
     UserProfileCreate,
 )
 from app.services.audit_service import AuditService
+from app.services.prescription_safety_service import require_executable_prescription
 
 T = TypeVar("T")
 
@@ -99,6 +101,17 @@ class HealthProfileService:
         else:
             for key, value in data.items():
                 setattr(profile, key, value)
+        self.db.add(
+            UserProfileMeasurement(
+                user_id=user_id,
+                height_cm=data["height_cm"],
+                weight_kg=data["weight_kg"],
+                bmi=data["bmi"],
+                waist_cm=data["waist_cm"],
+                hip_cm=data["hip_cm"],
+                whr=data["whr"],
+            )
+        )
         self.db.commit()
         self.db.refresh(profile)
         return profile
@@ -147,6 +160,11 @@ class HealthProfileService:
         self, user_id: int, payload: ExerciseFeedbackCreate
     ) -> ExerciseFeedback:
         self.require_consent(user_id)
+        require_executable_prescription(
+            self.db,
+            user_id=user_id,
+            prescription_id=payload.prescription_id,
+        )
         record = ExerciseFeedback(user_id=user_id, **payload.model_dump())
         self.db.add(record)
         self.db.commit()
@@ -161,22 +179,140 @@ class HealthProfileService:
                 detail="请先完成基础档案",
             )
 
+        fitness_test = self._latest(FitnessTest, user_id, FitnessTest.measured_at)
+        body_composition = self._latest(BodyComposition, user_id, BodyComposition.measured_at)
+        biochemical_index = self._latest(BiochemicalIndex, user_id, BiochemicalIndex.measured_at)
+        risk_screening = self._latest(RiskScreening, user_id, RiskScreening.created_at)
+        exercise_feedback = self._latest(ExerciseFeedback, user_id, ExerciseFeedback.created_at)
+
         return {
             "profile": model_to_dict(profile),
-            "fitness_test": model_to_dict(self._latest(FitnessTest, user_id, FitnessTest.measured_at)),
-            "body_composition": model_to_dict(
-                self._latest(BodyComposition, user_id, BodyComposition.measured_at)
-            ),
-            "biochemical_index": model_to_dict(
-                self._latest(BiochemicalIndex, user_id, BiochemicalIndex.measured_at)
-            ),
-            "risk_screening": model_to_dict(
-                self._latest(RiskScreening, user_id, RiskScreening.created_at)
-            ),
-            "exercise_feedback": model_to_dict(
-                self._latest(ExerciseFeedback, user_id, ExerciseFeedback.created_at)
+            "fitness_test": model_to_dict(fitness_test),
+            "body_composition": model_to_dict(body_composition),
+            "biochemical_index": model_to_dict(biochemical_index),
+            "risk_screening": model_to_dict(risk_screening),
+            "exercise_feedback": model_to_dict(exercise_feedback),
+            "completion_status": self._completion_status(
+                profile=profile,
+                fitness_test=fitness_test,
+                body_composition=body_composition,
+                biochemical_index=biochemical_index,
+                risk_screening=risk_screening,
+                exercise_feedback=exercise_feedback,
             ),
         }
+
+    def _completion_status(
+        self,
+        *,
+        profile: UserProfile | None,
+        fitness_test: FitnessTest | None,
+        body_composition: BodyComposition | None,
+        biochemical_index: BiochemicalIndex | None,
+        risk_screening: RiskScreening | None,
+        exercise_feedback: ExerciseFeedback | None,
+    ) -> dict:
+        records = {
+            "profile": profile,
+            "fitness_test": fitness_test,
+            "body_composition": body_composition,
+            "biochemical_index": biochemical_index,
+            "risk_screening": risk_screening,
+            "exercise_feedback": exercise_feedback,
+        }
+        completed_categories = [key for key, value in records.items() if value is not None]
+
+        missing_required_fields: dict[str, list[str]] = {}
+        if profile is None:
+            missing_required_fields["profile"] = [
+                "name",
+                "sex",
+                "birth_date",
+                "height_cm",
+                "weight_kg",
+                "exercise_goal",
+                "exercise_habit",
+                "exercise_experience",
+            ]
+        if fitness_test is None:
+            missing_required_fields["fitness_test"] = ["resting_hr", "sbp", "dbp", "pain_score"]
+        if risk_screening is None:
+            missing_required_fields["risk_screening"] = ["risk_screening"]
+
+        missing_categories = [key for key in ["profile", "fitness_test", "risk_screening"] if key in missing_required_fields]
+        minimum_required_complete = not missing_required_fields
+        blocking_reasons = []
+        if not minimum_required_complete:
+            blocking_reasons.append(f"缺少最小必填集：{self._category_labels(missing_categories)}")
+
+        suggestions = []
+        if fitness_test is None:
+            suggestions.append(
+                {
+                    "category": "fitness_test",
+                    "title": "补充体质测试",
+                    "fields": ["静息心率", "血压", "疼痛评分"],
+                }
+            )
+        if risk_screening is None:
+            suggestions.append(
+                {
+                    "category": "risk_screening",
+                    "title": "完成风险问卷",
+                    "fields": ["PAR-Q+", "红旗症状", "慢病史"],
+                }
+            )
+        if body_composition is None:
+            suggestions.append(
+                {
+                    "category": "body_composition",
+                    "title": "建议补充身体成分",
+                    "fields": ["体脂率", "骨骼肌量", "内脏脂肪等级"],
+                }
+            )
+        if biochemical_index is None:
+            suggestions.append(
+                {
+                    "category": "biochemical_index",
+                    "title": "建议补充生化指标",
+                    "fields": ["血糖", "血脂", "血氧"],
+                }
+            )
+        if exercise_feedback is None:
+            suggestions.append(
+                {
+                    "category": "exercise_feedback",
+                    "title": "发布处方后采集运动反馈",
+                    "fields": ["RPE", "完成率", "不适反应"],
+                }
+            )
+
+        summary = (
+            "最小必填集已完成，仍会保留未提供字段为空。"
+            if minimum_required_complete
+            else "当前缺少最小必填集，AI 不会编造用户没有提供的数据。"
+        )
+        return {
+            "minimum_required_complete": minimum_required_complete,
+            "prescription_generation_blocked": not minimum_required_complete,
+            "completed_categories": completed_categories,
+            "missing_categories": missing_categories,
+            "missing_required_fields": missing_required_fields,
+            "blocking_reasons": blocking_reasons,
+            "suggestions": suggestions,
+            "summary": summary,
+        }
+
+    def _category_labels(self, categories: list[str]) -> str:
+        labels = {
+            "profile": "基础信息",
+            "fitness_test": "体质测试",
+            "risk_screening": "风险问卷",
+            "body_composition": "身体成分",
+            "biochemical_index": "生化指标",
+            "exercise_feedback": "运动反馈",
+        }
+        return "、".join(labels.get(item, item) for item in categories)
 
     def _latest(self, model: type[T], user_id: int, order_column) -> T | None:
         return self.db.scalar(

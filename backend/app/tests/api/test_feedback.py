@@ -93,6 +93,182 @@ def test_feedback_adjustment_api_red_alert(client: TestClient, db_session):
     assert prescription.fitt_vp is None
 
 
+def test_feedback_creation_rejects_unpublished_and_superseded_prescriptions(client: TestClient, db_session):
+    headers = auth_headers(client)
+    records = [
+        PrescriptionRecord(
+            user_id=1,
+            risk_level="R2",
+            goals=["控压"],
+            fitt_vp={"type": ["快走"]},
+            precautions=[],
+            contraindications=[],
+            evidence_refs=[],
+            llm_payload={},
+            status="PENDING_REVIEW",
+            expert_review_required=True,
+            version=1,
+        ),
+        PrescriptionRecord(
+            user_id=1,
+            risk_level="R3",
+            goals=["医学评估"],
+            fitt_vp=None,
+            precautions=[],
+            contraindications=[],
+            evidence_refs=[],
+            llm_payload={},
+            status="REFERRED",
+            expert_review_required=True,
+            version=2,
+        ),
+        PrescriptionRecord(
+            user_id=1,
+            risk_level="R1",
+            goals=["增强心肺"],
+            fitt_vp={"type": ["快走"]},
+            precautions=[],
+            contraindications=[],
+            evidence_refs=[],
+            llm_payload={},
+            status="SUPERSEDED",
+            expert_review_required=False,
+            version=3,
+        ),
+        PrescriptionRecord(
+            user_id=1,
+            risk_level="R3",
+            goals=["医学评估"],
+            fitt_vp={"type": ["快走"], "intensity": "低"},
+            precautions=[],
+            contraindications=[],
+            evidence_refs=[],
+            llm_payload={},
+            status="PUBLISHED",
+            expert_review_required=True,
+            version=4,
+        ),
+        PrescriptionRecord(
+            user_id=1,
+            risk_level="R1",
+            goals=["增强心肺"],
+            fitt_vp=None,
+            precautions=[],
+            contraindications=[],
+            evidence_refs=[],
+            llm_payload={},
+            status="PUBLISHED",
+            expert_review_required=False,
+            version=5,
+        ),
+    ]
+    db_session.add_all(records)
+    db_session.commit()
+
+    for record in records:
+        response = client.post(
+            "/api/v1/health-data/exercise-feedback",
+            headers=headers,
+            json={
+                "prescription_id": record.id,
+                "pre_exercise_confirmed": True,
+                "exercise_date": "2026-05-28",
+                "exercise_type": "快走",
+                "frequency_week": 1,
+                "duration_min": 20,
+                "intensity_level": "低",
+                "rpe": 6,
+                "completion_rate": 80,
+                "discomfort": [],
+            },
+        )
+
+        assert response.status_code == 409
+        assert (
+            "已发布" in response.json()["detail"]
+            or "最新有效" in response.json()["detail"]
+            or "R3" in response.json()["detail"]
+            or "FITT" in response.json()["detail"]
+        )
+
+
+def test_feedback_creation_requires_bound_latest_executable_prescription(client: TestClient, db_session):
+    headers = auth_headers(client)
+    prescription = PrescriptionRecord(
+        user_id=1,
+        risk_level="R1",
+        goals=["增强心肺"],
+        fitt_vp={"type": ["快走"], "intensity": "低"},
+        precautions=[],
+        contraindications=[],
+        evidence_refs=[],
+        llm_payload={},
+        status="PUBLISHED",
+        expert_review_required=False,
+        version=1,
+    )
+    db_session.add(prescription)
+    db_session.commit()
+
+    response = client.post(
+        "/api/v1/health-data/exercise-feedback",
+        headers=headers,
+        json={
+            "pre_exercise_confirmed": True,
+            "exercise_date": "2026-05-28",
+            "exercise_type": "快走",
+            "frequency_week": 1,
+            "duration_min": 20,
+            "intensity_level": "低",
+            "rpe": 6,
+            "completion_rate": 80,
+            "discomfort": [],
+        },
+    )
+
+    assert response.status_code == 409
+    assert "处方" in response.json()["detail"]
+
+
+def test_feedback_creation_rejects_other_users_prescription_with_forbidden(client: TestClient, db_session):
+    headers = auth_headers(client)
+    other_user_prescription = PrescriptionRecord(
+        user_id=999,
+        risk_level="R1",
+        goals=["增强心肺"],
+        fitt_vp={"type": ["快走"], "intensity": "低"},
+        precautions=[],
+        contraindications=[],
+        evidence_refs=[],
+        llm_payload={},
+        status="PUBLISHED",
+        expert_review_required=False,
+        version=1,
+    )
+    db_session.add(other_user_prescription)
+    db_session.commit()
+
+    response = client.post(
+        "/api/v1/health-data/exercise-feedback",
+        headers=headers,
+        json={
+            "prescription_id": other_user_prescription.id,
+            "pre_exercise_confirmed": True,
+            "exercise_date": "2026-05-28",
+            "exercise_type": "快走",
+            "frequency_week": 1,
+            "duration_min": 20,
+            "intensity_level": "低",
+            "rpe": 6,
+            "completion_rate": 80,
+            "discomfort": [],
+        },
+    )
+
+    assert response.status_code == 403
+    assert "不属于当前用户" in response.json()["detail"]
+
+
 def test_phase_assessment_summarizes_feedback_and_recommends_review(client: TestClient, db_session):
     headers = auth_headers(client)
     user_id = 1
@@ -175,3 +351,108 @@ def test_phase_assessment_summarizes_feedback_and_recommends_review(client: Test
     assert body["discomfort_events"] == 1
     assert body["decision"] == "REVIEW_REQUIRED"
     assert "疼痛或RPE偏高，进入专家复核" in body["recommendations"]
+
+
+def test_phase_assessment_includes_measurement_changes_and_structured_null_reasons(
+    client: TestClient, db_session
+):
+    headers = auth_headers(client)
+    user_id = 1
+
+    first_profile = {
+        "name": "反馈用户",
+        "sex": "男",
+        "birth_date": "1980-01-01",
+        "height_cm": 170,
+        "weight_kg": 86,
+        "waist_cm": 98,
+        "hip_cm": 104,
+        "occupation_type": "企业职工",
+        "sedentary_hours": 8,
+        "sleep_hours": 7,
+        "exercise_goal": ["减脂", "控压"],
+        "exercise_habit": "无规律运动",
+        "exercise_experience": "初级",
+    }
+    second_profile = {**first_profile, "weight_kg": 82, "waist_cm": 93}
+    assert client.put("/api/v1/health-data/profile", headers=headers, json=first_profile).status_code == 200
+    assert client.put("/api/v1/health-data/profile", headers=headers, json=second_profile).status_code == 200
+
+    for payload in [
+        {"resting_hr": 76, "sbp": 142, "dbp": 92, "pain_score": 2, "six_mwt": 480},
+        {"resting_hr": 70, "sbp": 132, "dbp": 84, "pain_score": 1, "six_mwt": 540},
+    ]:
+        assert client.post("/api/v1/health-data/fitness-tests", headers=headers, json=payload).status_code == 200
+
+    for payload in [
+        {"body_fat_pct": 31.5, "skeletal_muscle_kg": 25.2},
+        {"body_fat_pct": 28.0, "skeletal_muscle_kg": 26.1},
+    ]:
+        assert client.post("/api/v1/health-data/body-compositions", headers=headers, json=payload).status_code == 200
+
+    assert (
+        client.post(
+            "/api/v1/health-data/biochemical-indexes",
+            headers=headers,
+            json={"fbg": 6.8, "tc": 5.8, "tg": 2.2, "hdl_c": 1.0, "ldl_c": 3.8},
+        ).status_code
+        == 200
+    )
+
+    prescription = PrescriptionRecord(
+        user_id=user_id,
+        risk_level="R1",
+        cluster_label="代谢改善型",
+        goals=["改善代谢"],
+        fitt_vp={"type": ["快走"], "intensity": "低"},
+        precautions=[],
+        contraindications=[],
+        evidence_refs=[],
+        llm_payload={},
+        status="PUBLISHED",
+        expert_review_required=False,
+        version=1,
+    )
+    db_session.add(prescription)
+    db_session.commit()
+    db_session.refresh(prescription)
+
+    response = client.post(
+        "/api/v1/health-data/exercise-feedback",
+        headers=headers,
+        json={
+            "prescription_id": prescription.id,
+            "pre_exercise_confirmed": True,
+            "exercise_date": date.today().isoformat(),
+            "exercise_type": "快走",
+            "frequency_week": 1,
+            "duration_min": 30,
+            "intensity_level": "低",
+            "rpe": 5,
+            "completion_rate": 90,
+            "discomfort": [],
+            "pain_score_after": 1,
+        },
+    )
+    assert response.status_code == 200
+
+    response = client.get(
+        f"/api/v1/feedback/phase-assessment?prescription_id={prescription.id}&weeks=4",
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+    changes = response.json()["measurement_changes"]
+    assert changes["profile"]["weight_kg"] == {"before": 86.0, "after": 82.0, "delta": -4.0}
+    assert changes["profile"]["bmi"]["delta"] == -1.39
+    assert changes["profile"]["waist_cm"] == {"before": 98.0, "after": 93.0, "delta": -5.0}
+    assert changes["fitness_test"]["sbp"] == {"before": 142, "after": 132, "delta": -10.0}
+    assert changes["fitness_test"]["dbp"] == {"before": 92, "after": 84, "delta": -8.0}
+    assert changes["body_composition"]["body_fat_pct"] == {"before": 31.5, "after": 28.0, "delta": -3.5}
+    assert changes["body_composition"]["skeletal_muscle_kg"] == {
+        "before": 25.2,
+        "after": 26.1,
+        "delta": 0.9,
+    }
+    assert changes["biochemical_index"]["fbg"]["value"] is None
+    assert "BiochemicalIndex 记录不足 2 条" in changes["biochemical_index"]["fbg"]["null_reason"]

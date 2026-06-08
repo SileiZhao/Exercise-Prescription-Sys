@@ -12,11 +12,11 @@ from app.api.v1.endpoints import (
     expert_reviews,
     feedback,
     health_data,
-    not_implemented,
     prescriptions,
     research_export,
     reports,
     risk,
+    user_dashboard,
     users,
 )
 
@@ -36,5 +36,5 @@ api_router.include_router(prescriptions.router)
 api_router.include_router(research_export.router)
 api_router.include_router(reports.router)
 api_router.include_router(risk.router)
+api_router.include_router(user_dashboard.router)
 api_router.include_router(users.router)
-api_router.include_router(not_implemented.router)

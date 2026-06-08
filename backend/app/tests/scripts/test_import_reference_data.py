@@ -3,6 +3,7 @@ from datetime import date
 
 from sqlalchemy import select
 
+from app.models.audit import AuditLog
 from app.models.enums import UserRole
 from app.models.health_data import RiskScreening, UserProfile
 from app.models.risk import RiskRuleConfig
@@ -23,12 +24,18 @@ def test_import_risk_rules_skips_r0_and_runtime_uses_configured_rules(db_session
                     "rule_name": "PAR-Q 阳性",
                     "risk_level": "R3",
                     "severity": "RED",
+                    "priority": 5,
+                    "rule_type": "RISK_LEVEL",
                     "field_path": "risk_screening.parq_result",
                     "operator": "eq",
                     "value": "positive",
                     "user_message": "PAR-Q+ 阳性，需医学评估。",
                     "contraindications": ["不生成训练处方"],
                     "intensity_cap": "暂停训练",
+                    "evidence_source": "PAR-Q+",
+                    "applicable_population": ["adult"],
+                    "expert_review_status": "EXPERT_REVIEW_DRAFT",
+                    "version": "v0.1-test",
                 },
                 {
                     "rule_code": "DOC_R0_DEFAULT",
@@ -46,10 +53,27 @@ def test_import_risk_rules_skips_r0_and_runtime_uses_configured_rules(db_session
         encoding="utf-8",
     )
 
-    result = import_risk_rules(db_session, path)
+    result = import_risk_rules(db_session, path, confirm=True, actor_id=9)
 
-    assert result == {"created": 1, "updated": 0, "skipped": 1, "errors": 0}
+    assert result["created"] == 1
+    assert result["updated"] == 0
+    assert result["skipped_r0"] == 1
+    assert result["errors"] == 0
+    assert result["imported"] == 1
+    assert result["deactivated_old"] == 0
     assert db_session.scalar(select(RiskRuleConfig).where(RiskRuleConfig.code == "DOC_R0_DEFAULT")) is None
+    rule = db_session.scalar(select(RiskRuleConfig).where(RiskRuleConfig.code == "DOC_R3_PARQ"))
+    assert rule.priority == 5
+    assert rule.rule_type == "RISK_LEVEL"
+    assert rule.source_ref == "PAR-Q+"
+    assert rule.applies_to == ["adult"]
+    assert rule.review_status == "EXPERT_CONFIRMED"
+    assert rule.condition["version"] == "v0.1-test"
+    audit = db_session.scalar(select(AuditLog).where(AuditLog.action == "IMPORT_RISK_RULES"))
+    assert audit is not None
+    assert audit.actor_id == 9
+    assert audit.metadata_json["confirm"] is True
+    assert audit.metadata_json["review_status"] == "EXPERT_CONFIRMED"
 
     user = User(
         email="risk-config@example.com",
@@ -83,6 +107,53 @@ def test_import_risk_rules_skips_r0_and_runtime_uses_configured_rules(db_session
     assert "DOC_R3_PARQ" in [rule.code for rule in evaluated.matched_rules]
 
 
+def test_import_risk_rules_generates_stable_code_and_deactivates_removed_rules(db_session, tmp_path):
+    db_session.add(
+        RiskRuleConfig(
+            code="OLD_DOC_RULE",
+            name="旧规则",
+            severity="YELLOW",
+            message="旧规则",
+            condition={"path": "profile.bmi", "op": "gte", "value": 30},
+            contraindications=[],
+            is_active=True,
+            source_ref="旧资料",
+        )
+    )
+    db_session.commit()
+    path = tmp_path / "rules.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "rule_name": "缺少 code 的规则",
+                    "risk_level": "R2",
+                    "severity": "YELLOW",
+                    "field_path": "profile.bmi",
+                    "operator": "gte",
+                    "value": 28,
+                    "user_message": "BMI 达到肥胖风险。",
+                    "clinical_logic_cn": "BMI 达到肥胖风险。",
+                    "evidence_source": "专家规则表",
+                    "version": "v0.1-test",
+                }
+            ],
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    result = import_risk_rules(db_session, path)
+
+    generated = db_session.scalar(select(RiskRuleConfig).where(RiskRuleConfig.code.like("DOC_YELLOW_%")))
+    old_rule = db_session.scalar(select(RiskRuleConfig).where(RiskRuleConfig.code == "OLD_DOC_RULE"))
+    assert result["created"] == 1
+    assert result["deactivated_old"] == 1
+    assert generated is not None
+    assert generated.code == "DOC_YELLOW_缺少-code-的规则_1"
+    assert old_rule.is_active is False
+
+
 def test_import_compliance_materials_is_idempotent(db_session, tmp_path):
     path = tmp_path / "compliance.json"
     path.write_text(
@@ -109,8 +180,8 @@ def test_import_compliance_materials_is_idempotent(db_session, tmp_path):
     first = import_compliance_materials(db_session, path)
     second = import_compliance_materials(db_session, path)
 
-    assert first == {"created": 1, "updated": 0, "skipped": 0, "errors": 0}
-    assert second == {"created": 0, "updated": 1, "skipped": 0, "errors": 0}
+    assert first == {"created": 1, "updated": 0, "skipped": 0, "errors": 0, "confirmed": 0}
+    assert second == {"created": 0, "updated": 1, "skipped": 0, "errors": 0, "confirmed": 0}
 
 
 def test_import_exercise_actions_preserves_extended_fields(db_session, tmp_path):
@@ -142,7 +213,7 @@ def test_import_exercise_actions_preserves_extended_fields(db_session, tmp_path)
     result = import_exercise_actions(db_session, path)
     action = db_session.scalar(select(ExerciseAction).where(ExerciseAction.name == "扶椅深蹲"))
 
-    assert result == {"created": 1, "updated": 0}
+    assert result == {"created": 1, "updated": 0, "approved": 0, "pending": 1}
     assert action is not None
     assert action.status.value == "PENDING_REVIEW"
     assert action.instructions == "保持膝盖对齐\n不憋气"

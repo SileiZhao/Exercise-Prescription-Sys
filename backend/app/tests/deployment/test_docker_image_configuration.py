@@ -50,3 +50,14 @@ def test_qdrant_client_version_is_pinned_to_server_compatibility() -> None:
 
     assert "qdrant/qdrant:v1.12.1" in compose
     assert '"qdrant-client>=1.11.3,<1.14"' in pyproject
+
+
+def test_paddleocr_runtime_includes_paddlepaddle_engine() -> None:
+    pyproject = (PROJECT_ROOT / "backend" / "pyproject.toml").read_text(encoding="utf-8")
+    compose = (PROJECT_ROOT / "docker-compose.yml").read_text(encoding="utf-8")
+
+    assert '"paddleocr>=2.8.1"' in pyproject
+    assert '"paddlepaddle>=3.0.0,<3.1"' in pyproject
+    assert '"numpy>=1.24,<2.4"' in pyproject
+    assert '"protobuf>=6.33.5,<7.0.0"' in pyproject
+    assert "FLAGS_use_mkldnn: ${FLAGS_use_mkldnn:-false}" in compose

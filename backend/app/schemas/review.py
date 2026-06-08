@@ -24,8 +24,11 @@ class ExpertReviewRead(BaseModel):
 class ExpertReviewQueueItem(BaseModel):
     prescription_id: int
     user_id: int
+    organization_id: int | None = None
     risk_level: str
     status: str
+    prescription_type: str = "training"
+    abnormal_feedback_count: int = 0
     version: int
     created_at: datetime
     review_id: int | None = None
@@ -50,3 +53,11 @@ class ExpertReviewDetail(BaseModel):
     evidence_refs: list[dict[str, Any]]
     template: dict[str, Any] | None
     candidate_actions: list[dict[str, Any]]
+    versions: list[dict[str, Any]]
+    trends: dict[str, Any]
+
+
+class ExpertReviewStats(BaseModel):
+    average_review_hours: float
+    r2_pending_count: int
+    timeout_count: int

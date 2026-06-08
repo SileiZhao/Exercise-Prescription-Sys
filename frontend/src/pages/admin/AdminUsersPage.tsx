@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Form, Input, InputNumber, Layout, Row, Select, Space, Table, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Form, Input, InputNumber, Row, Select, Space, Table, Tag } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -18,6 +18,7 @@ import {
   type UserRole,
   type UserUpdatePayload
 } from "../../api/adminUsers";
+import { AppShell } from "../../components/ProductUI";
 
 const roleOptions: { label: string; value: UserRole }[] = [
   { label: "普通用户", value: "USER" },
@@ -147,13 +148,7 @@ export function AdminUsersPage() {
   }
 
   return (
-    <Layout className="app-shell">
-      <Layout.Header className="app-header">
-        <Typography.Title level={3} className="app-title">
-          用户与专家管理
-        </Typography.Title>
-      </Layout.Header>
-      <Layout.Content className="app-content">
+    <AppShell role="admin" title="用户与专家管理">
         <Space direction="vertical" size={16} className="onboarding-section">
           {notice ? <Alert type={notice.includes("失败") ? "error" : "success"} showIcon message={notice} /> : null}
           <Space wrap>
@@ -295,8 +290,7 @@ export function AdminUsersPage() {
             </Col>
           </Row>
         </Space>
-      </Layout.Content>
-    </Layout>
+    </AppShell>
   );
 }
 

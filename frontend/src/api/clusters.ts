@@ -16,7 +16,9 @@ export function classifyMe() {
   return apiClient.post<ClusterAssignment>("/clusters/classify/me").then((response) => response.data);
 }
 
-export function trainClusterModel(payload: { name: string; n_clusters: number }) {
+export type ClusterAlgorithm = "KMeans" | "DBSCAN" | "GaussianMixture" | "AgglomerativeClustering";
+
+export function trainClusterModel(payload: { name: string; n_clusters: number; algorithm?: ClusterAlgorithm }) {
   return apiClient.post("/clusters/train", payload).then((response) => response.data);
 }
 

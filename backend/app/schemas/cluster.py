@@ -16,6 +16,11 @@ class ClusterProfile(BaseModel):
     center: dict[str, float]
     suggested_labels: list[str]
     explanation: str
+    core_risks: list[str] = Field(default_factory=list)
+    exercise_goals: list[str] = Field(default_factory=list)
+    fitt_range: dict[str, str] = Field(default_factory=dict)
+    contraindications: list[str] = Field(default_factory=list)
+    review_recommendation: str = ""
 
 
 class TrainedClusterModel(BaseModel):
@@ -25,6 +30,9 @@ class TrainedClusterModel(BaseModel):
     feature_names: list[str]
     cluster_profiles: list[ClusterProfile]
     metrics: dict[str, float] = Field(default_factory=dict)
+    scaler_params: dict = Field(default_factory=dict)
+    model_params: dict = Field(default_factory=dict)
+    model_origin: str = "bootstrap_rule_calibrated"
 
 
 class ClusterModelRead(BaseModel):
@@ -35,6 +43,9 @@ class ClusterModelRead(BaseModel):
     feature_names: list[str]
     cluster_profiles: list[dict]
     metrics: dict
+    scaler_params: dict = Field(default_factory=dict)
+    model_params: dict = Field(default_factory=dict)
+    model_origin: str = "bootstrap_rule_calibrated"
     status: str
     created_at: datetime
 
@@ -44,6 +55,7 @@ class ClusterModelRead(BaseModel):
 class ClusterTrainRequest(BaseModel):
     name: str = "KMeans 人群分型模型"
     n_clusters: int = Field(default=3, ge=2, le=8)
+    algorithm: Literal["KMeans", "DBSCAN", "GaussianMixture", "AgglomerativeClustering"] = "KMeans"
 
 
 class ClusterModelStatusUpdate(BaseModel):

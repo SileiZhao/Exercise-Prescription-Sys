@@ -2,12 +2,20 @@ import { Alert, Button, Card, Form, Input, Layout, Typography } from "antd";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { login } from "../api/auth";
-import { setAccessToken } from "../auth/token";
+import { getCurrentUser, login, type UserRole } from "../api/auth";
+import { setAccessToken, setCurrentUserId, setCurrentUserRole, setRefreshToken } from "../auth/token";
 
 type LoginFormValues = {
   username: string;
   password: string;
+};
+
+const defaultRouteByRole: Record<UserRole, string> = {
+  USER: "/user/dashboard",
+  EXPERT: "/expert/reviews",
+  ADMIN: "/admin/dashboard",
+  ORG_ADMIN: "/admin/dashboard",
+  RESEARCHER: "/research/dashboard"
 };
 
 export function LoginPage() {
@@ -23,7 +31,12 @@ export function LoginPage() {
     try {
       const token = await login(values);
       setAccessToken(token.access_token);
-      navigate(from, { replace: true });
+      setRefreshToken(token.refresh_token);
+      const currentUser = await getCurrentUser();
+      setCurrentUserRole(currentUser.role);
+      setCurrentUserId(currentUser.id);
+      const next = from === "/" ? defaultRouteByRole[currentUser.role] : from;
+      navigate(token.must_change_password ? "/auth/change-password" : next, { replace: true });
     } catch {
       setError("登录失败，请检查邮箱和密码。");
     } finally {

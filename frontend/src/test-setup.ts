@@ -1,6 +1,72 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import type { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import React from "react";
+import { afterEach, vi } from "vitest";
+
+import { apiClient } from "./api/client";
+
+vi.mock("framer-motion", () => {
+  const stripMotionProps = (props: Record<string, unknown>) => {
+    const domProps = { ...props };
+    delete domProps.initial;
+    delete domProps.animate;
+    delete domProps.transition;
+    return domProps;
+  };
+
+  const componentCache = new Map<string, React.ForwardRefExoticComponent<Record<string, unknown> & { children?: React.ReactNode } & React.RefAttributes<HTMLElement>>>();
+  const motion = new Proxy(
+    {},
+    {
+      get: (_target, tag: string) => {
+        if (!componentCache.has(tag)) {
+          componentCache.set(
+            tag,
+            React.forwardRef<HTMLElement, Record<string, unknown> & { children?: React.ReactNode }>(
+              ({ children, ...props }, ref) => React.createElement(tag, { ...stripMotionProps(props), ref }, children)
+            )
+          );
+        }
+        return componentCache.get(tag);
+      }
+    }
+  );
+  return { motion };
+});
+
+vi.mock("echarts", () => ({
+  init: vi.fn(() => ({
+    setOption: vi.fn(),
+    dispose: vi.fn(),
+    resize: vi.fn()
+  }))
+}));
+
+apiClient.defaults.adapter = async (config): Promise<AxiosResponse> => {
+  const url = config.url ?? "";
+  if (url === "/users/me" || url.endsWith("/users/me")) {
+    const role = localStorage.getItem("current_user_role") ?? "USER";
+    const userId = localStorage.getItem("current_user_id") ?? "1";
+    return {
+      data: {
+        id: Number(userId),
+        email: `${role.toLowerCase()}@example.com`,
+        full_name: "测试账号",
+        role,
+        organization_id: role === "USER" ? null : 1,
+        is_active: true,
+        is_verified: true,
+        must_change_password: false
+      },
+      status: 200,
+      statusText: "OK",
+      headers: {},
+      config: config as InternalAxiosRequestConfig
+    };
+  }
+  throw new Error(`Unhandled apiClient request in test: ${String(config.method ?? "GET").toUpperCase()} ${url}`);
+};
 
 afterEach(() => {
   cleanup();

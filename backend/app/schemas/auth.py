@@ -1,15 +1,10 @@
 from pydantic import BaseModel, Field, field_validator
 
-from app.models.enums import UserRole
-
-
 class UserRegister(BaseModel):
     email: str = Field(max_length=255)
     phone: str | None = Field(default=None, max_length=32)
     password: str = Field(min_length=8, max_length=128)
     full_name: str = Field(min_length=1, max_length=64)
-    role: UserRole = UserRole.USER
-    organization_id: int | None = None
 
     @field_validator("email")
     @classmethod
@@ -33,4 +28,23 @@ class LoginRequest(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str = "bearer"
+    must_change_password: bool = False
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str = Field(min_length=32, max_length=512)
+
+
+class LogoutRequest(BaseModel):
+    refresh_token: str = Field(min_length=32, max_length=512)
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str = Field(min_length=8, max_length=128)
+    new_password: str = Field(min_length=8, max_length=128)
+
+
+class ChangePasswordResponse(BaseModel):
+    must_change_password: bool

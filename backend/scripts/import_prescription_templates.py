@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal
 from app.models.template import PrescriptionTemplate, TemplateStatus
+from app.services.audit_service import AuditService
 
 REQUIRED_FITT_VP_KEYS = {"frequency", "intensity", "time", "type", "volume", "progression"}
 
@@ -40,7 +41,7 @@ def _clean_list(value: Any) -> list[str]:
 
 def _clean_status(value: Any) -> TemplateStatus:
     if value is None:
-        return TemplateStatus.DRAFT
+        return TemplateStatus.APPROVED
     try:
         return TemplateStatus(str(value).strip())
     except ValueError as exc:
@@ -70,7 +71,8 @@ def import_prescription_templates(
     increment_version_on_update: bool = True,
     approve_drafts: bool = False,
 ) -> dict[str, int]:
-    items = _load_items(Path(path))
+    source_path = Path(path)
+    items = _load_items(source_path)
     created = 0
     updated = 0
 
@@ -82,10 +84,23 @@ def import_prescription_templates(
         if risk_level not in {"R0", "R1", "R2", "R3"}:
             raise ValueError(f"第 {index} 个模板 risk_level 必须是单一 R0/R1/R2/R3。")
 
-        template = db.scalar(select(PrescriptionTemplate).where(PrescriptionTemplate.name == name))
+        template_code = str(item.get("template_code") or item.get("code") or "").strip() or None
+        template = (
+            db.scalar(select(PrescriptionTemplate).where(PrescriptionTemplate.template_code == template_code))
+            if template_code
+            else None
+        )
+        if template is None:
+            template = db.scalar(select(PrescriptionTemplate).where(PrescriptionTemplate.name == name))
         fitt_vp = _validate_fitt_vp(item.get("fitt_vp"), index, risk_level)
         if template is None:
-            template = PrescriptionTemplate(name=name, risk_level=risk_level, fitt_vp=fitt_vp, created_by=created_by)
+            template = PrescriptionTemplate(
+                template_code=template_code,
+                name=name,
+                risk_level=risk_level,
+                fitt_vp=fitt_vp,
+                created_by=created_by,
+            )
             db.add(template)
             created += 1
         else:
@@ -93,7 +108,9 @@ def import_prescription_templates(
                 template.version += 1
             updated += 1
 
+        template.template_code = template_code
         template.risk_level = risk_level
+        template.name = name
         template.cluster_tags = _clean_list(item.get("cluster_tags"))
         template.goal_tags = _clean_list(item.get("goal_tags"))
         template.fitt_vp = fitt_vp
@@ -102,9 +119,29 @@ def import_prescription_templates(
         template.evidence_refs = _clean_list(item.get("evidence_refs"))
         status = _clean_status(item.get("status"))
         template.status = TemplateStatus.APPROVED if approve_drafts and status == TemplateStatus.DRAFT else status
+        template.source_version = item.get("version") or item.get("source_version")
+        template.review_status = (
+            "EXPERT_APPROVED"
+            if approve_drafts and template.status == TemplateStatus.APPROVED
+            else str(item.get("review_status") or item.get("expert_review_status") or "EXPERT_REVIEW_DRAFT")
+        )
         if created_by is not None and template.created_by is None:
             template.created_by = created_by
+        if approve_drafts and template.status == TemplateStatus.APPROVED:
+            template.approved_by = created_by
 
+    AuditService(db).record(
+        action="IMPORT_PRESCRIPTION_TEMPLATES",
+        resource_type="PrescriptionTemplate",
+        actor_id=created_by,
+        metadata={
+            "source_path": str(source_path),
+            "approve_drafts": approve_drafts,
+            "review_status": "EXPERT_APPROVED" if approve_drafts else "SOURCE_STATUS",
+            "created": created,
+            "updated": updated,
+        },
+    )
     db.commit()
     return {"created": created, "updated": updated}
 

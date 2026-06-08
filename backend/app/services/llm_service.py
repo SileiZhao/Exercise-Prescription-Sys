@@ -4,7 +4,7 @@ from typing import Any, Protocol
 import httpx
 from pydantic import ValidationError
 
-from app.core.config import Settings, settings
+from app.core.config import Settings, llm_api_key, settings
 from app.schemas.prescription import PrescriptionDraft
 
 
@@ -142,6 +142,59 @@ class OpenAICompatibleProvider:
         return parsed
 
 
+class OllamaProvider:
+    def __init__(
+        self,
+        *,
+        base_url: str,
+        model: str,
+        http_client: Any | None = None,
+        timeout: float = 60.0,
+    ):
+        self.base_url = base_url.rstrip("/")
+        self.model = model
+        self.http_client = http_client or httpx.Client()
+        self.timeout = timeout
+        self._openai_parser = OpenAICompatibleProvider(
+            base_url="http://unused.local",
+            api_key="unused",
+            model=model,
+            http_client=http_client,
+            timeout=timeout,
+        )
+
+    def generate_prescription(self, payload: dict) -> PrescriptionDraft:
+        response = self.http_client.post(
+            f"{self.base_url}/api/chat",
+            json={
+                "model": self.model,
+                "messages": self._openai_parser._build_messages(payload),
+                "stream": False,
+                "format": "json",
+                "options": {"temperature": 0.2},
+            },
+            timeout=self.timeout,
+        )
+        response.raise_for_status()
+        content = self._extract_content(response.json())
+        draft_payload = self._openai_parser._parse_json_content(content)
+        try:
+            return PrescriptionDraft.model_validate(draft_payload)
+        except ValidationError as exc:
+            raise ValueError(f"Ollama/Gemma 输出未通过处方 JSON Schema 校验: {exc}") from exc
+
+    def _extract_content(self, response_payload: dict) -> str:
+        content = None
+        message = response_payload.get("message")
+        if isinstance(message, dict):
+            content = message.get("content")
+        if content is None:
+            content = response_payload.get("response")
+        if not isinstance(content, str) or not content.strip():
+            raise ValueError("Ollama 响应内容为空")
+        return content
+
+
 def build_llm_provider(config: Settings = settings) -> LLMProvider:
     provider = config.LLM_PROVIDER.strip().lower()
     if provider in {"mock", "local-mock"}:
@@ -151,10 +204,15 @@ def build_llm_provider(config: Settings = settings) -> LLMProvider:
         api_key = config.LLM_API_KEY
         if provider in {"qwen", "dashscope", "aliyun"}:
             base_url = base_url or DASHSCOPE_COMPATIBLE_BASE_URL
-            api_key = api_key or config.DASHSCOPE_API_KEY or config.ALIYUN_API_KEY
+            api_key, _ = llm_api_key(config)
         return OpenAICompatibleProvider(
             base_url=base_url,
             api_key=api_key,
             model=config.LLM_MODEL,
+        )
+    if provider in {"ollama", "gemma", "local"}:
+        return OllamaProvider(
+            base_url=config.OLLAMA_BASE_URL,
+            model=config.LOCAL_LLM_MODEL or config.LLM_MODEL,
         )
     raise ValueError(f"不支持的 LLM_PROVIDER: {config.LLM_PROVIDER}")

@@ -7,6 +7,11 @@ export type RiskRuleItem = {
   code: string;
   name: string;
   severity: "GREEN" | "YELLOW" | "RED";
+  priority?: number;
+  rule_type?: string;
+  source_ref?: string | null;
+  applies_to?: string[];
+  review_status?: string;
   message: string;
   condition: Record<string, unknown>;
   contraindications: string[];
@@ -23,6 +28,10 @@ export function listRiskRules(): Promise<RiskRuleItem[]> {
 
 export function createRiskRule(payload: RiskRulePayload) {
   return apiClient.post("/admin/rules", payload).then((response) => response.data);
+}
+
+export function updateRiskRule(ruleId: number, payload: RiskRulePayload) {
+  return apiClient.patch(`/admin/rules/${ruleId}`, payload).then((response) => response.data);
 }
 
 export function testRiskRules(payload: RiskRulePayload) {

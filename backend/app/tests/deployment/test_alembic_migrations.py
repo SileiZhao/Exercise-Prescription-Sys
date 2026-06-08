@@ -17,10 +17,14 @@ PROJECT_ROOT = resolve_project_root()
 MIGRATIONS_DIR = PROJECT_ROOT / "backend" / "alembic" / "versions"
 
 
+def migration_files() -> list[Path]:
+    return [path for path in MIGRATIONS_DIR.glob("*.py") if not path.name.startswith("._")]
+
+
 def test_postgres_enums_are_not_created_twice_by_table_columns() -> None:
     migration_sources = {
         migration.name: migration.read_text(encoding="utf-8")
-        for migration in MIGRATIONS_DIR.glob("*.py")
+        for migration in migration_files()
     }
 
     enum_migrations = {
@@ -36,7 +40,7 @@ def test_postgres_enums_are_not_created_twice_by_table_columns() -> None:
 
 
 def test_migration_revision_ids_fit_default_alembic_version_column() -> None:
-    for migration in MIGRATIONS_DIR.glob("*.py"):
+    for migration in migration_files():
         source = migration.read_text(encoding="utf-8")
         match = re.search(r'^revision: str = "([^"]+)"', source, re.MULTILINE)
         assert match, migration.name

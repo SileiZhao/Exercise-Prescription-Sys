@@ -27,13 +27,14 @@ def classify_current_user(
 @router.post("/train", response_model=ClusterModelRead)
 def train_cluster_model(
     payload: ClusterTrainRequest,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.RESEARCHER, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     try:
         return ClusterPersistenceService(db).train_from_database(
             name=payload.name,
             n_clusters=payload.n_clusters,
+            algorithm=payload.algorithm,
             created_by=current_user.id,
         )
     except ValueError as exc:
@@ -52,15 +53,18 @@ def list_cluster_models(
 def update_cluster_model_status(
     model_id: int,
     payload: ClusterModelStatusUpdate,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.RESEARCHER, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    model = ClusterPersistenceService(db).update_model_status(
-        model_id=model_id,
-        status=payload.status,
-        actor_id=current_user.id,
-        reason=payload.reason,
-    )
+    try:
+        model = ClusterPersistenceService(db).update_model_status(
+            model_id=model_id,
+            status=payload.status,
+            actor_id=current_user.id,
+            reason=payload.reason,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     if model is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="聚类模型不存在")
     return model

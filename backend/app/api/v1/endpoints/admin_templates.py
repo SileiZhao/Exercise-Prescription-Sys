@@ -9,8 +9,10 @@ from app.schemas.template import (
     ExerciseActionCreate,
     ExerciseActionRead,
     ExerciseActionReview,
+    ExerciseActionUpdate,
     PrescriptionTemplateCreate,
     PrescriptionTemplateRead,
+    PrescriptionTemplateUpdate,
     TemplateMatchRequest,
 )
 from app.services.template_service import (
@@ -25,7 +27,7 @@ router = APIRouter(prefix="/admin", tags=["admin-templates"])
 @router.post("/actions", response_model=ExerciseActionRead)
 def import_action(
     payload: ExerciseActionCreate,
-    _: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT, UserRole.ORG_ADMIN)),
+    _: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     return ExerciseActionService(db).create_imported_action(payload)
@@ -39,11 +41,24 @@ def list_actions(
     return ExerciseActionService(db).list_actions()
 
 
+@router.patch("/actions/{action_id}", response_model=ExerciseActionRead)
+def update_action(
+    action_id: int,
+    payload: ExerciseActionUpdate,
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    action = ExerciseActionService(db).update_action(action_id, payload, actor_id=current_user.id)
+    if action is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="动作不存在")
+    return action
+
+
 @router.post("/actions/{action_id}/review", response_model=ExerciseActionRead)
 def review_action(
     action_id: int,
     payload: ExerciseActionReview,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT)),
     db: Session = Depends(get_db),
 ):
     action = ExerciseActionService(db).review_action(action_id, payload, reviewer_id=current_user.id)
@@ -55,7 +70,7 @@ def review_action(
 @router.post("/templates", response_model=PrescriptionTemplateRead)
 def create_template(
     payload: PrescriptionTemplateCreate,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     return PrescriptionTemplateService(db).create_template(payload, created_by=current_user.id)
@@ -67,6 +82,22 @@ def list_templates(
     db: Session = Depends(get_db),
 ):
     return PrescriptionTemplateService(db).list_templates()
+
+
+@router.patch("/templates/{template_id}", response_model=PrescriptionTemplateRead)
+def update_template(
+    template_id: int,
+    payload: PrescriptionTemplateUpdate,
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    try:
+        template = PrescriptionTemplateService(db).update_template(template_id, payload, actor_id=current_user.id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    if template is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="模板不存在")
+    return template
 
 
 @router.post("/templates/match", response_model=PrescriptionTemplateRead)

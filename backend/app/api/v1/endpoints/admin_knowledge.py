@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, File, Form, Query, UploadFile
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/admin/knowledge", tags=["admin-knowledge"])
 @router.post("/documents", response_model=KnowledgeDocumentRead)
 def create_document(
     payload: KnowledgeDocumentCreate,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     return KnowledgeIngestionService(db).ingest_text(
@@ -35,6 +35,8 @@ def create_document(
         version=payload.version,
         published_year=payload.published_year,
         file_path=payload.file_path,
+        import_batch_id=payload.import_batch_id,
+        credibility_level=payload.credibility_level,
         created_by=current_user.id,
     )
 
@@ -59,11 +61,46 @@ def list_documents(
     return {"items": items, "total": total}
 
 
+@router.post("/documents/upload", response_model=KnowledgeDocumentRead)
+async def upload_document(
+    title: str = Form(...),
+    category: str = Form(...),
+    tags: str = Form(default=""),
+    source: str | None = Form(default=None),
+    source_type: str | None = Form(default=None),
+    version: str | None = Form(default=None),
+    published_year: str | None = Form(default=None),
+    import_batch_id: str | None = Form(default=None),
+    credibility_level: str | None = Form(default=None),
+    file: UploadFile = File(...),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    raw = await file.read()
+    content = raw.decode("utf-8-sig")
+    parsed_tags = [item.strip() for item in tags.replace("，", ",").split(",") if item.strip()]
+    filename = file.filename or "uploaded-knowledge.txt"
+    return KnowledgeIngestionService(db).ingest_text(
+        title=title,
+        category=category,
+        content=content,
+        tags=parsed_tags,
+        source=source or filename,
+        source_type=source_type,
+        version=version,
+        published_year=published_year,
+        file_path=f"upload://{filename}",
+        import_batch_id=import_batch_id,
+        credibility_level=credibility_level,
+        created_by=current_user.id,
+    )
+
+
 @router.patch("/documents/{document_id}", response_model=KnowledgeDocumentRead)
 def update_document_status(
     document_id: int,
     payload: KnowledgeDocumentStatusUpdate,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     document = KnowledgeIngestionService(db).update_status(
@@ -94,7 +131,7 @@ def search_knowledge(
 
 @router.post("/reindex", response_model=KnowledgeReindexResponse)
 def rebuild_knowledge_vector_index(
-    _: User = Depends(require_roles(UserRole.ADMIN, UserRole.EXPERT, UserRole.ORG_ADMIN)),
+    _: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     return KnowledgeVectorIndexService(db).index_all()

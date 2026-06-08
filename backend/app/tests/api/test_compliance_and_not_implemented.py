@@ -26,14 +26,10 @@ def test_public_compliance_document_endpoint_returns_active_material(client, db_
     assert response.json()["review_status"] == "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW"
 
 
-def test_not_implemented_modules_return_501_and_clear_message(client):
+def test_non_launch_modules_are_not_exposed_as_placeholder_routes(client):
     response = client.post("/api/v1/device-integrations/sync")
 
-    assert response.status_code == 501
-    assert response.json() == {
-        "code": "NOT_IMPLEMENTED",
-        "message": "暂未实现，当前版本暂不支持该功能。",
-    }
+    assert response.status_code == 404
 
 
 def test_admin_can_list_compliance_materials(client, db_session):

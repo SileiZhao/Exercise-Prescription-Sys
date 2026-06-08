@@ -20,21 +20,32 @@ fi
 
 cd "${PROJECT_ROOT}"
 
-if [ -f ".env" ]; then
-  set -a
-  # shellcheck disable=SC1091
-  . ".env"
-  set +a
-fi
+load_dotenv_value() {
+  local key="$1"
+  local default_value="$2"
+  local value=""
+  if [ -f ".env" ]; then
+    value="$(grep -E "^${key}=" ".env" | tail -n 1 | sed -E "s/^${key}=//" || true)"
+    value="${value%\"}"
+    value="${value#\"}"
+    value="${value%\'}"
+    value="${value#\'}"
+  fi
+  if [ -n "${value}" ]; then
+    printf "%s" "${value}"
+  else
+    printf "%s" "${default_value}"
+  fi
+}
 
-POSTGRES_DB="${POSTGRES_DB:-exercise}"
-POSTGRES_USER="${POSTGRES_USER:-exercise}"
+POSTGRES_DB="${POSTGRES_DB:-$(load_dotenv_value POSTGRES_DB exercise)}"
+POSTGRES_USER="${POSTGRES_USER:-$(load_dotenv_value POSTGRES_USER exercise)}"
 
 default_project_name() {
   basename "${PROJECT_ROOT}" | tr "[:upper:]" "[:lower:]" | tr -cd "[:alnum:]_-"
 }
 
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-$(default_project_name)}"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-$(load_dotenv_value COMPOSE_PROJECT_NAME "$(default_project_name)")}"
 export COMPOSE_PROJECT_NAME
 
 volume_name() {

@@ -17,6 +17,11 @@ class AdminRiskRuleService:
         if existing is not None:
             existing.name = payload.name
             existing.severity = payload.severity
+            existing.priority = payload.priority
+            existing.rule_type = payload.rule_type
+            existing.source_ref = payload.source_ref
+            existing.applies_to = payload.applies_to
+            existing.review_status = payload.review_status
             existing.message = payload.message
             existing.condition = payload.condition.model_dump()
             existing.contraindications = payload.contraindications
@@ -77,7 +82,9 @@ class AdminRiskRuleService:
 
     def runtime_rules(self) -> tuple[RiskRule, ...]:
         configured = self.db.scalars(
-            select(RiskRuleConfig).where(RiskRuleConfig.is_active.is_(True)).order_by(RiskRuleConfig.id)
+            select(RiskRuleConfig)
+            .where(RiskRuleConfig.is_active.is_(True))
+            .order_by(RiskRuleConfig.priority.asc(), RiskRuleConfig.id.asc())
         ).all()
         return (*BUILTIN_RULES, *(self._to_runtime_rule(rule) for rule in configured))
 

@@ -8,8 +8,10 @@ from app.models.health_data import (
     FitnessTest,
     RiskScreening,
     UserProfile,
+    UserProfileMeasurement,
 )
-from app.models.prescription import PrescriptionRecord, PrescriptionVersion, ReportExportRecord
+from app.models.prescription import PrescriptionEvidence, PrescriptionRecord, PrescriptionVersion, ReportExportRecord
+from app.models.research import ResearchExportRequest
 from app.models.review import ExpertReview
 from app.models.risk import RiskRuleConfig
 from app.models.template import (
@@ -19,7 +21,7 @@ from app.models.template import (
     KnowledgeDocument,
     PrescriptionTemplate,
 )
-from app.models.user import ExpertProfile, Organization, User, UserConsent
+from app.models.user import ExpertProfile, Organization, RefreshToken, User, UserConsent
 
 __all__ = [
     "AuditLog",
@@ -36,9 +38,12 @@ __all__ = [
     "KnowledgeChunk",
     "KnowledgeDocument",
     "Organization",
+    "RefreshToken",
     "PrescriptionRecord",
+    "PrescriptionEvidence",
     "PrescriptionVersion",
     "ReportExportRecord",
+    "ResearchExportRequest",
     "PrescriptionTemplate",
     "RiskScreening",
     "RiskRuleConfig",
@@ -46,4 +51,5 @@ __all__ = [
     "UserConsent",
     "UserClusterAssignment",
     "UserProfile",
+    "UserProfileMeasurement",
 ]

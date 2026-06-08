@@ -47,8 +47,16 @@ def _evaluate_condition(snapshot: dict[str, Any], condition: RuleCondition) -> b
     actual = _get_path(snapshot, condition.path)
     if condition.op == "eq":
         return actual == condition.value
+    if condition.op == "neq":
+        return actual != condition.value
+    if condition.op == "gt":
+        return actual is not None and actual > condition.value
     if condition.op == "gte":
         return actual is not None and actual >= condition.value
+    if condition.op == "lt":
+        return actual is not None and actual < condition.value
+    if condition.op == "lte":
+        return actual is not None and actual <= condition.value
     if condition.op == "between":
         if actual is None:
             return False
@@ -57,9 +65,19 @@ def _evaluate_condition(snapshot: dict[str, Any], condition: RuleCondition) -> b
     if condition.op == "in_any":
         if not actual:
             return False
+        if isinstance(actual, str):
+            return any(str(item).lower() in actual.lower() for item in condition.value)
         return any(item in actual for item in condition.value)
+    if condition.op == "contains":
+        if actual is None:
+            return False
+        if isinstance(actual, list):
+            return condition.value in actual
+        return str(condition.value).lower() in str(actual).lower()
     if condition.op == "not_empty_restriction":
         return _is_restriction(actual)
+    if condition.op == "exists":
+        return actual is not None
     return False
 
 

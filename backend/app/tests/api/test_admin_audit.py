@@ -1,9 +1,12 @@
 from fastapi.testclient import TestClient
 
 from app.models.audit import AuditLog
+from app.tests.helpers import auth_headers_for_role
 
 
 def login(client: TestClient, email: str, role: str) -> dict[str, str]:
+    if role != "USER":
+        return auth_headers_for_role(client, email, role)
     client.post(
         "/api/v1/auth/register",
         json={

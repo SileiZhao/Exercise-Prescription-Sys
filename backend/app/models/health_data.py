@@ -33,6 +33,22 @@ class UserProfile(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, onupdate=utcnow)
 
 
+class UserProfileMeasurement(Base):
+    __tablename__ = "user_profile_measurements"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    height_cm: Mapped[float] = mapped_column(Float)
+    weight_kg: Mapped[float] = mapped_column(Float)
+    bmi: Mapped[float] = mapped_column(Float)
+    waist_cm: Mapped[float | None] = mapped_column(Float, nullable=True)
+    hip_cm: Mapped[float | None] = mapped_column(Float, nullable=True)
+    whr: Mapped[float | None] = mapped_column(Float, nullable=True)
+    source: Mapped[str] = mapped_column(String(32), default="profile_upsert")
+    measured_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
 class FitnessTest(Base):
     __tablename__ = "fitness_test"
 

@@ -7,6 +7,14 @@ export interface FeedbackAdjustment {
   version_id: number | null;
 }
 
+export interface MeasurementChangeValue {
+  before?: number | string | null;
+  after?: number | string | null;
+  delta?: number | null;
+  value?: null;
+  null_reason?: string;
+}
+
 export interface PhaseAssessment {
   prescription_id: number | null;
   weeks: number;
@@ -18,6 +26,7 @@ export interface PhaseAssessment {
   red_alert_events: number;
   decision: "NO_DATA" | "RED_ALERT" | "REVIEW_REQUIRED" | "DEGRADE" | "PROGRESS" | "MAINTAIN";
   summary: string;
+  measurement_changes: Record<string, Record<string, MeasurementChangeValue>>;
   recommendations: string[];
 }
 

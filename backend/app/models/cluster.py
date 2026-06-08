@@ -19,6 +19,7 @@ class ClusterModel(Base):
     model_params: Mapped[dict] = mapped_column(JSON, default=dict)
     cluster_profiles: Mapped[list[dict]] = mapped_column(JSON, default=list)
     metrics: Mapped[dict] = mapped_column(JSON, default=dict)
+    model_origin: Mapped[str] = mapped_column(String(64), default="bootstrap_rule_calibrated")
     status: Mapped[str] = mapped_column(String(32), default="TRAINED", index=True)
     created_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

@@ -20,7 +20,7 @@ router = APIRouter(prefix="/admin/rules", tags=["admin-rules"])
 @router.post("", response_model=RiskRuleConfigRead)
 def create_rule(
     payload: RiskRuleConfigCreate,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     return AdminRiskRuleService(db).create_rule(payload, actor_id=current_user.id)
@@ -38,7 +38,7 @@ def list_rules(
 def update_rule(
     rule_id: int,
     payload: RiskRuleConfigUpdate,
-    current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.ORG_ADMIN)),
+    current_user: User = Depends(require_roles(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
     rule = AdminRiskRuleService(db).update_rule(rule_id, payload, actor_id=current_user.id)

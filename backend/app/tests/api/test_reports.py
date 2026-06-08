@@ -9,6 +9,7 @@ from app.models.audit import AuditLog
 from app.models.health_data import ExerciseFeedback
 from app.models.prescription import PrescriptionRecord
 from app.models.review import ExpertReview
+from app.tests.helpers import auth_headers_for_role
 
 
 def auth_headers(client: TestClient) -> dict[str, str]:
@@ -38,6 +39,8 @@ def auth_headers(client: TestClient) -> dict[str, str]:
 
 
 def login_as(client: TestClient, email: str, role: str) -> dict[str, str]:
+    if role != "USER":
+        return auth_headers_for_role(client, email, role)
     client.post(
         "/api/v1/auth/register",
         json={

@@ -1,9 +1,12 @@
+from typing import Any
+
 from pydantic import BaseModel
 
 
 class FeedbackAdjustmentRead(BaseModel):
     action: str
     reasons: list[str]
+    triggered_rules: list[str] = []
     new_prescription_id: int | None
     version_id: int | None
 
@@ -19,4 +22,5 @@ class PhaseAssessmentRead(BaseModel):
     red_alert_events: int
     decision: str
     summary: str
+    measurement_changes: dict[str, Any]
     recommendations: list[str]

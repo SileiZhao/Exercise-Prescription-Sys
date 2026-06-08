@@ -3,6 +3,10 @@ from collections.abc import Generator
 
 os.environ["DATABASE_URL"] = "sqlite+pysqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key"
+os.environ["ENVIRONMENT"] = "test"
+os.environ["LLM_PROVIDER"] = "mock"
+os.environ["EMBEDDING_PROVIDER"] = "hash"
+os.environ["OCR_ENABLED"] = "false"
 
 import pytest
 from fastapi.testclient import TestClient

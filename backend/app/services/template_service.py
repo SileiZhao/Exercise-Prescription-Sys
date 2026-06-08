@@ -8,8 +8,92 @@ from app.models.template import (
     TemplateStatus,
 )
 from app.models.user import utcnow
-from app.schemas.template import ExerciseActionCreate, ExerciseActionReview, PrescriptionTemplateCreate
+from app.schemas.template import (
+    ExerciseActionCreate,
+    ExerciseActionReview,
+    ExerciseActionUpdate,
+    PrescriptionTemplateCreate,
+    PrescriptionTemplateUpdate,
+)
 from app.services.audit_service import AuditService
+
+
+CONTRAINDICATION_ALIASES = {
+    "大重量": ("大重量", "大负荷", "大负重", "高负荷", "负重"),
+    "憋气": ("憋气", "屏气", "瓦氏", "Valsalva"),
+    "跳跃": ("跳跃", "跳", "高冲击"),
+    "疼痛": ("疼痛", "疼痛加重", "痛"),
+    "长跑": ("长跑", "持续跑", "跑步"),
+    "快速扭转": ("快速扭转", "扭转", "快速变向"),
+}
+
+
+def _normalise_text(values: list[str] | None) -> str:
+    return " ".join(str(value).strip().lower() for value in values or [] if str(value).strip())
+
+
+def _contraindication_terms(tag: str) -> tuple[str, ...]:
+    tag = str(tag).strip()
+    if not tag:
+        return ()
+    return (tag, *CONTRAINDICATION_ALIASES.get(tag, ()))
+
+
+def _has_contraindication_conflict(action: ExerciseAction, risk_contraindications: list[str] | None) -> bool:
+    risk_text = _normalise_text(risk_contraindications)
+    if not risk_text:
+        return False
+    for tag in action.contraindication_tags or []:
+        for term in _contraindication_terms(tag):
+            if term.lower() in risk_text:
+                return True
+    return False
+
+
+def _action_text(action: ExerciseAction) -> str:
+    values = [
+        action.name,
+        action.name_en,
+        action.category,
+        action.exercise_type,
+        action.impact_level,
+        action.joint_stress_level,
+        action.equipment,
+        action.intensity,
+        action.difficulty,
+        *(action.suitable_tags or []),
+        *(action.contraindication_tags or []),
+        *(action.body_parts or []),
+        *(action.primary_muscles or []),
+    ]
+    if action.requires_equipment:
+        values.append("器械")
+    return _normalise_text([str(value) for value in values if value])
+
+
+def _has_forbidden_category_conflict(action: ExerciseAction, forbidden_categories: list[str] | None) -> bool:
+    if not forbidden_categories:
+        return False
+    text = _action_text(action)
+    for category in forbidden_categories:
+        normalised = str(category).strip().lower()
+        if normalised and normalised in text:
+            return True
+    return False
+
+
+def _json_value(value):
+    return value.value if hasattr(value, "value") else value
+
+
+def _collect_changes(instance, updates: dict) -> dict:
+    changes = {}
+    for field, value in updates.items():
+        before = getattr(instance, field)
+        after = value
+        if before != after:
+            changes[field] = {"before": _json_value(before), "after": _json_value(after)}
+    return changes
 
 
 class ExerciseActionService:
@@ -22,6 +106,31 @@ class ExerciseActionService:
             status=ActionReviewStatus.PENDING_REVIEW,
         )
         self.db.add(action)
+        self.db.commit()
+        self.db.refresh(action)
+        return action
+
+    def update_action(
+        self,
+        action_id: int,
+        payload: ExerciseActionUpdate,
+        actor_id: int,
+    ) -> ExerciseAction | None:
+        action = self.db.get(ExerciseAction, action_id)
+        if action is None:
+            return None
+        updates = payload.model_dump(exclude_unset=True)
+        changes = _collect_changes(action, updates)
+        for field, value in updates.items():
+            setattr(action, field, value)
+        if changes:
+            AuditService(self.db).record(
+                action="UPDATE_EXERCISE_ACTION",
+                resource_type="ExerciseAction",
+                actor_id=actor_id,
+                resource_id=str(action.id),
+                metadata={"changes": changes},
+            )
         self.db.commit()
         self.db.refresh(action)
         return action
@@ -60,8 +169,47 @@ class PrescriptionTemplateService:
     def create_template(
         self, payload: PrescriptionTemplateCreate, created_by: int | None = None
     ) -> PrescriptionTemplate:
-        template = PrescriptionTemplate(**payload.model_dump(), created_by=created_by)
+        data = payload.model_dump()
+        data["status"] = TemplateStatus.DRAFT
+        data["review_status"] = "EXPERT_REVIEW_DRAFT"
+        template = PrescriptionTemplate(**data, created_by=created_by)
         self.db.add(template)
+        self.db.commit()
+        self.db.refresh(template)
+        return template
+
+    def update_template(
+        self,
+        template_id: int,
+        payload: PrescriptionTemplateUpdate,
+        actor_id: int,
+    ) -> PrescriptionTemplate | None:
+        template = self.db.get(PrescriptionTemplate, template_id)
+        if template is None:
+            return None
+        updates = payload.model_dump(exclude_unset=True)
+        merged_risk_level = updates.get("risk_level", template.risk_level)
+        merged_fitt_vp = updates.get("fitt_vp", template.fitt_vp)
+        if merged_risk_level == "R3" and merged_fitt_vp is not None:
+            raise ValueError("R3 安全提醒模板不能包含 FITT-VP 对象。")
+
+        changes = _collect_changes(template, updates)
+        version_before = template.version
+        for field, value in updates.items():
+            setattr(template, field, value)
+        if changes:
+            template.version = version_before + 1
+            AuditService(self.db).record(
+                action="UPDATE_PRESCRIPTION_TEMPLATE",
+                resource_type="PrescriptionTemplate",
+                actor_id=actor_id,
+                resource_id=str(template.id),
+                metadata={
+                    "version_before": version_before,
+                    "version_after": template.version,
+                    "changes": changes,
+                },
+            )
         self.db.commit()
         self.db.refresh(template)
         return template
@@ -80,6 +228,8 @@ class TemplateMatchingService:
         cluster_labels: list[str],
         goals: list[str],
     ) -> PrescriptionTemplate | None:
+        if risk_level == "R3":
+            return None
         candidates = list(
             self.db.scalars(
                 select(PrescriptionTemplate).where(
@@ -100,3 +250,62 @@ class TemplateMatchingService:
             return cluster_score + goal_score, goal_score, template.version
 
         return max(candidates, key=score)
+
+    def candidate_actions(
+        self,
+        risk_level: str,
+        cluster_labels: list[str],
+        goals: list[str],
+        *,
+        risk_contraindications: list[str] | None = None,
+        forbidden_action_categories: list[str] | None = None,
+    ) -> list[dict]:
+        rows = list(
+            self.db.scalars(
+                select(ExerciseAction)
+                .where(ExerciseAction.status == ActionReviewStatus.APPROVED)
+                .order_by(ExerciseAction.id.asc())
+            )
+        )
+        tags = {risk_level, *cluster_labels, *goals}
+        candidates: list[tuple[int, ExerciseAction]] = []
+        for action in rows:
+            if _has_contraindication_conflict(action, risk_contraindications):
+                continue
+            if _has_forbidden_category_conflict(action, forbidden_action_categories):
+                continue
+            risk_match = action.risk_level == risk_level or risk_level in (action.risk_level or "").split("/")
+            tag_score = len(tags.intersection(set(action.suitable_tags or [])))
+            if not risk_match and tag_score <= 0:
+                continue
+            candidates.append((tag_score + int(risk_match), action))
+        candidates.sort(key=lambda item: item[0], reverse=True)
+        return [
+            {
+                "id": action.id,
+                "source": action.source,
+                "source_exercise_id": action.source_exercise_id,
+                "name": action.name,
+                "name_en": action.name_en,
+                "category": action.category,
+                "exercise_type": action.exercise_type,
+                "image_url": action.image_url,
+                "joint_stress_level": action.joint_stress_level,
+                "impact_level": action.impact_level,
+                "requires_equipment": action.requires_equipment,
+                "is_traditional_exercise": action.is_traditional_exercise,
+                "risk_level": action.risk_level,
+                "suitable_tags": action.suitable_tags or [],
+                "contraindication_tags": action.contraindication_tags or [],
+                "body_parts": action.body_parts or [],
+                "primary_muscles": action.primary_muscles or [],
+                "equipment": action.equipment,
+                "intensity": action.intensity,
+                "difficulty": action.difficulty,
+                "instructions": action.instructions,
+                "alternatives": action.alternatives or [],
+                "monitoring_tips": action.monitoring_tips or [],
+                "stop_signals": action.stop_signals or [],
+            }
+            for _, action in candidates[:8]
+        ]

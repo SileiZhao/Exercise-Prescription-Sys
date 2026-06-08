@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.v1.router import api_router
-from app.core.config import settings
+from app.core.config import runtime_provider_summary, settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
 from app.core.readiness import ReadinessService
@@ -37,7 +37,13 @@ def create_app() -> FastAPI:
     def readiness_check() -> JSONResponse:
         report = ReadinessService().run_checks()
         status_code = 200 if report.status == "ok" else 503
-        return JSONResponse(status_code=status_code, content=report.model_dump())
+        return JSONResponse(
+            status_code=status_code,
+            content={
+                **report.model_dump(),
+                "runtime": runtime_provider_summary(settings),
+            },
+        )
 
     return application
 

@@ -1,12 +1,12 @@
-import logging
 import json
+import logging
 from datetime import datetime, timezone
 from logging import LogRecord
 from typing import Any
 
 import httpx
 
-from app.core.config import Settings, settings
+from app.core.config import Settings, runtime_provider_summary, settings
 
 
 class JsonLogFormatter(logging.Formatter):
@@ -74,3 +74,11 @@ def configure_logging() -> None:
         handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s"))
 
     logging.basicConfig(level=level, handlers=[handler], force=True)
+    log_runtime_provider_summary(settings)
+
+
+def log_runtime_provider_summary(runtime_settings: Settings = settings) -> None:
+    logging.getLogger("app.runtime").info(
+        "runtime provider status %s",
+        json.dumps(runtime_provider_summary(runtime_settings), ensure_ascii=False, sort_keys=True),
+    )

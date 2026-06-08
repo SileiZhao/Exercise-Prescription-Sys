@@ -7,15 +7,23 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.audit import utcnow
-from app.models.health_data import ExerciseFeedback
+from app.models.health_data import (
+    BiochemicalIndex,
+    BodyComposition,
+    ExerciseFeedback,
+    FitnessTest,
+    UserProfileMeasurement,
+)
 from app.models.prescription import PrescriptionRecord, PrescriptionVersion
 from app.services.audit_service import AuditService
+from app.services.prescription_safety_service import require_executable_prescription
 
 
 @dataclass(slots=True)
 class FeedbackAdjustmentDecision:
     action: str
     reasons: list[str] = field(default_factory=list)
+    triggered_rules: list[str] = field(default_factory=list)
     new_prescription_id: int | None = None
     version_id: int | None = None
 
@@ -32,6 +40,7 @@ class PhaseAssessment:
     red_alert_events: int
     decision: str
     summary: str
+    measurement_changes: dict[str, Any] = field(default_factory=dict)
     recommendations: list[str] = field(default_factory=list)
 
 
@@ -48,8 +57,9 @@ class FeedbackAdjustmentService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="运动反馈不存在")
 
         prescription = self._resolve_prescription(feedback)
-        reasons = self._decision_reasons(feedback)
-        action = self._decision_action(reasons)
+        before_snapshot = self._prescription_state(prescription)
+        reasons, triggered_rules = self._decision_reasons(feedback)
+        action = self._decision_action(reasons, triggered_rules)
 
         if action == "RED_ALERT":
             self._apply_red_alert(prescription, reasons)
@@ -67,7 +77,7 @@ class FeedbackAdjustmentService:
         version = PrescriptionVersion(
             prescription_id=prescription.id,
             version=prescription.version,
-            snapshot=self._version_snapshot(prescription, feedback, action, reasons),
+            snapshot=self._version_snapshot(prescription, feedback, action, reasons, triggered_rules, before_snapshot),
             change_reason="FEEDBACK_ADJUSTMENT",
             actor_id=actor_id,
         )
@@ -77,7 +87,13 @@ class FeedbackAdjustmentService:
             resource_type="PrescriptionRecord",
             resource_id=str(prescription.id),
             actor_id=actor_id or feedback.user_id,
-            metadata={"feedback_id": feedback.id, "decision": action, "reasons": reasons},
+            metadata={
+                "feedback_id": feedback.id,
+                "decision": action,
+                "reasons": reasons,
+                "triggered_rules": triggered_rules,
+                "before_after_diff": self._before_after_diff(before_snapshot, self._prescription_state(prescription)),
+            },
         )
         self.db.commit()
         self.db.refresh(version)
@@ -85,6 +101,7 @@ class FeedbackAdjustmentService:
         return FeedbackAdjustmentDecision(
             action=action,
             reasons=reasons,
+            triggered_rules=triggered_rules,
             new_prescription_id=prescription.id,
             version_id=version.id,
         )
@@ -124,6 +141,7 @@ class FeedbackAdjustmentService:
                 red_alert_events=0,
                 decision="NO_DATA",
                 summary="当前评估周期内暂无运动打卡记录。",
+                measurement_changes=self._measurement_changes(user_id),
                 recommendations=["继续按处方执行并完成运动打卡"],
             )
 
@@ -159,51 +177,150 @@ class FeedbackAdjustmentService:
             red_alert_events=red_alert_events,
             decision=decision,
             summary=summary,
+            measurement_changes=self._measurement_changes(user_id),
             recommendations=recommendations,
         )
 
-    def _resolve_prescription(self, feedback: ExerciseFeedback) -> PrescriptionRecord:
-        prescription: PrescriptionRecord | None = None
-        if feedback.prescription_id is not None:
-            prescription = self.db.get(PrescriptionRecord, feedback.prescription_id)
-        if prescription is None:
-            prescription = self.db.scalar(
-                select(PrescriptionRecord)
-                .where(PrescriptionRecord.user_id == feedback.user_id)
-                .order_by(PrescriptionRecord.created_at.desc())
-            )
-        if prescription is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="未找到可调整处方")
-        if prescription.user_id != feedback.user_id:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="反馈与处方用户不一致")
-        return prescription
+    def _measurement_changes(self, user_id: int) -> dict[str, Any]:
+        return {
+            "profile": self._profile_change(user_id),
+            "fitness_test": self._measurement_change(
+                FitnessTest,
+                user_id,
+                FitnessTest.measured_at,
+                ["sbp", "dbp"],
+                "FitnessTest 记录不足 2 条，无法计算最早与最新差值",
+            ),
+            "body_composition": self._measurement_change(
+                BodyComposition,
+                user_id,
+                BodyComposition.measured_at,
+                ["body_fat_pct", "skeletal_muscle_kg"],
+                "BodyComposition 记录不足 2 条，无法计算最早与最新差值",
+            ),
+            "biochemical_index": self._measurement_change(
+                BiochemicalIndex,
+                user_id,
+                BiochemicalIndex.measured_at,
+                ["fbg", "tc", "tg", "hdl_c", "ldl_c"],
+                "BiochemicalIndex 记录不足 2 条，无法计算最早与最新差值",
+            ),
+        }
 
-    def _decision_reasons(self, feedback: ExerciseFeedback) -> list[str]:
+    def _profile_change(self, user_id: int) -> dict[str, dict[str, Any]]:
+        records = list(
+            self.db.scalars(
+                select(UserProfileMeasurement)
+                .where(UserProfileMeasurement.user_id == user_id)
+                .order_by(UserProfileMeasurement.measured_at.asc(), UserProfileMeasurement.id.asc())
+            )
+        )
+        return self._delta_map(
+            records,
+            ["weight_kg", "bmi", "waist_cm"],
+            "UserProfileMeasurement 记录不足 2 条，无法计算最早与最新差值",
+        )
+
+    def _measurement_change(
+        self,
+        model: Any,
+        user_id: int,
+        order_column: Any,
+        fields: list[str],
+        null_reason: str,
+    ) -> dict[str, dict[str, Any]]:
+        records = list(
+            self.db.scalars(
+                select(model).where(model.user_id == user_id).order_by(order_column.asc(), model.id.asc())
+            )
+        )
+        return self._delta_map(records, fields, null_reason)
+
+    def _delta_map(self, records: list[Any], fields: list[str], null_reason: str) -> dict[str, dict[str, Any]]:
+        if len(records) < 2:
+            return {field: {"value": None, "null_reason": null_reason} for field in fields}
+        earliest = records[0]
+        latest = records[-1]
+        result: dict[str, dict[str, Any]] = {}
+        for field in fields:
+            before = getattr(earliest, field, None)
+            after = getattr(latest, field, None)
+            if before is None or after is None:
+                result[field] = {
+                    "value": None,
+                    "null_reason": f"{field} 最早或最新记录为空，无法计算差值",
+                }
+            else:
+                result[field] = {
+                    "before": before,
+                    "after": after,
+                    "delta": round(float(after) - float(before), 4),
+                }
+        return result
+
+    def _resolve_prescription(self, feedback: ExerciseFeedback) -> PrescriptionRecord:
+        return require_executable_prescription(
+            self.db,
+            user_id=feedback.user_id,
+            prescription_id=feedback.prescription_id,
+        )
+
+    def _decision_reasons(self, feedback: ExerciseFeedback) -> tuple[list[str], list[str]]:
         reasons: list[str] = []
+        triggered_rules: list[str] = []
         discomfort = set(feedback.discomfort or [])
         red_hits = sorted(discomfort & self.red_alert_terms)
         if red_hits:
             reasons.append("红色预警：" + "、".join(red_hits))
+            triggered_rules.append("RED_FLAG_SYMPTOMS")
+        if (feedback.pre_ex_bp_sbp is not None and feedback.pre_ex_bp_sbp >= 180) or (
+            feedback.pre_ex_bp_dbp is not None and feedback.pre_ex_bp_dbp >= 110
+        ):
+            reasons.append("血压达到停止运动阈值")
+            triggered_rules.append("BP_STOP_180_110")
+        if feedback.pre_glucose is not None and (feedback.pre_glucose < 3.9 or feedback.pre_glucose > 16.7):
+            reasons.append("空腹血糖超出当日运动安全范围")
+            triggered_rules.append("GLUCOSE_PAUSE_3_9_16_7")
+        if feedback.max_hr is not None and feedback.max_hr >= 200:
+            reasons.append("异常心率")
+            triggered_rules.append("ABNORMAL_HEART_RATE_REVIEW")
         if feedback.pain_score_after is not None and feedback.pain_score_after >= 7:
             reasons.append("疼痛达到红色阈值")
+            triggered_rules.append("PAIN_RED_7")
         elif feedback.pain_score_after is not None and feedback.pain_score_after >= 4:
             reasons.append("疼痛加重")
+            triggered_rules.append("PAIN_WORSEN_REVIEW")
         elif "疼痛" in discomfort:
             reasons.append("疼痛加重")
-        if feedback.rpe >= 8:
+            triggered_rules.append("PAIN_WORSEN_REVIEW")
+        if feedback.rpe >= 17 and self._previous_high_rpe_count(feedback) >= 1:
+            reasons.append("RPE连续两次达到高阈值")
+            triggered_rules.append("RPE_CONSECUTIVE_HIGH_17")
+        elif feedback.rpe >= 17:
             reasons.append("RPE偏高")
+            triggered_rules.append("RPE_HIGH_REVIEW")
+        elif feedback.rpe >= 8:
+            reasons.append("RPE偏高")
+            triggered_rules.append("RPE_HIGH_REVIEW")
         if feedback.completion_rate < 60:
             reasons.append("完成率偏低")
+            triggered_rules.append("COMPLETION_LOW_60")
         if feedback.completion_rate >= 85 and not discomfort and feedback.rpe <= 6:
             reasons.append("完成率高且无不适")
+            triggered_rules.append("ADAPTATION_GOOD_PROGRESS")
         if not reasons:
             reasons.append("反馈稳定")
-        return reasons
+            triggered_rules.append("FEEDBACK_STABLE")
+        return reasons, list(dict.fromkeys(triggered_rules))
 
-    def _decision_action(self, reasons: list[str]) -> str:
-        if any(reason.startswith("红色预警") or reason == "疼痛达到红色阈值" for reason in reasons):
+    def _decision_action(self, reasons: list[str], triggered_rules: list[str]) -> str:
+        if any(rule in triggered_rules for rule in ["RED_FLAG_SYMPTOMS", "BP_STOP_180_110", "PAIN_RED_7"]):
             return "RED_ALERT"
-        if "疼痛加重" in reasons or "RPE偏高" in reasons:
+        if "RPE_CONSECUTIVE_HIGH_17" in triggered_rules or "COMPLETION_LOW_60" in triggered_rules:
+            return "DEGRADE"
+        if "GLUCOSE_PAUSE_3_9_16_7" in triggered_rules:
+            return "REVIEW_REQUIRED"
+        if "疼痛加重" in reasons or "RPE偏高" in reasons or "异常心率" in reasons:
             return "REVIEW_REQUIRED"
         if "完成率偏低" in reasons:
             return "DEGRADE"
@@ -308,7 +425,10 @@ class FeedbackAdjustmentService:
         feedback: ExerciseFeedback,
         action: str,
         reasons: list[str],
+        triggered_rules: list[str],
+        before_snapshot: dict[str, Any],
     ) -> dict[str, Any]:
+        after_snapshot = self._prescription_state(prescription)
         return {
             "risk_level": prescription.risk_level,
             "cluster_label": prescription.cluster_label,
@@ -326,7 +446,48 @@ class FeedbackAdjustmentService:
                 "rpe": feedback.rpe,
                 "discomfort": feedback.discomfort,
                 "pain_score_after": feedback.pain_score_after,
+                "pre_ex_bp_sbp": feedback.pre_ex_bp_sbp,
+                "pre_ex_bp_dbp": feedback.pre_ex_bp_dbp,
+                "pre_glucose": feedback.pre_glucose,
+                "max_hr": feedback.max_hr,
             },
-            "adjustment": {"action": action, "reasons": reasons},
+            "adjustment": {
+                "action": action,
+                "reasons": reasons,
+                "triggered_rules": triggered_rules,
+                "before_after_diff": self._before_after_diff(before_snapshot, after_snapshot),
+            },
             "updated_at": utcnow().isoformat(),
         }
+
+    def _previous_high_rpe_count(self, feedback: ExerciseFeedback) -> int:
+        items = self.db.scalars(
+            select(ExerciseFeedback)
+            .where(
+                ExerciseFeedback.user_id == feedback.user_id,
+                ExerciseFeedback.id != feedback.id,
+                ExerciseFeedback.prescription_id == feedback.prescription_id,
+            )
+            .order_by(ExerciseFeedback.exercise_date.desc(), ExerciseFeedback.id.desc())
+            .limit(1)
+        ).all()
+        return sum(1 for item in items if item.rpe >= 17)
+
+    def _prescription_state(self, prescription: PrescriptionRecord) -> dict[str, Any]:
+        return {
+            "risk_level": prescription.risk_level,
+            "fitt_vp": prescription.fitt_vp,
+            "status": prescription.status,
+            "expert_review_required": prescription.expert_review_required,
+            "safety_notice": prescription.safety_notice,
+            "precautions": prescription.precautions,
+            "contraindications": prescription.contraindications,
+        }
+
+    def _before_after_diff(self, before: dict[str, Any], after: dict[str, Any]) -> dict[str, dict[str, Any]]:
+        diff: dict[str, dict[str, Any]] = {}
+        for key, before_value in before.items():
+            after_value = after.get(key)
+            if before_value != after_value:
+                diff[key] = {"before": before_value, "after": after_value}
+        return diff

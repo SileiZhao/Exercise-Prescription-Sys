@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
@@ -24,8 +24,17 @@ class ExerciseAction(Base):
     __tablename__ = "exercise_actions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    source: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    source_exercise_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
     name: Mapped[str] = mapped_column(String(128), unique=True, index=True)
+    name_en: Mapped[str | None] = mapped_column(String(128), nullable=True)
     category: Mapped[str] = mapped_column(String(64), index=True)
+    exercise_type: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    image_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    joint_stress_level: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    impact_level: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    requires_equipment: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_traditional_exercise: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     suitable_tags: Mapped[list[str]] = mapped_column(JSON, default=list)
     contraindication_tags: Mapped[list[str]] = mapped_column(JSON, default=list)
     risk_level: Mapped[str] = mapped_column(String(16), default="R1", index=True)
@@ -51,6 +60,7 @@ class PrescriptionTemplate(Base):
     __tablename__ = "prescription_templates"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    template_code: Mapped[str | None] = mapped_column(String(96), nullable=True, index=True)
     name: Mapped[str] = mapped_column(String(128), index=True)
     risk_level: Mapped[str] = mapped_column(String(16), index=True)
     cluster_tags: Mapped[list[str]] = mapped_column(JSON, default=list)
@@ -61,6 +71,8 @@ class PrescriptionTemplate(Base):
     evidence_refs: Mapped[list[str]] = mapped_column(JSON, default=list)
     status: Mapped[TemplateStatus] = mapped_column(default=TemplateStatus.DRAFT, index=True)
     version: Mapped[int] = mapped_column(Integer, default=1)
+    source_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    review_status: Mapped[str] = mapped_column(String(64), default="EXPERT_REVIEW_DRAFT", index=True)
     created_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     approved_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -78,6 +90,9 @@ class KnowledgeDocument(Base):
     version: Mapped[str | None] = mapped_column(String(64), nullable=True)
     published_year: Mapped[str | None] = mapped_column(String(16), nullable=True)
     file_path: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    import_batch_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    credibility_level: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    skipped_reason: Mapped[str | None] = mapped_column(String(500), nullable=True)
     status: Mapped[str] = mapped_column(String(32), default="ACTIVE", index=True)
     created_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

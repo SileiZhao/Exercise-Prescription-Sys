@@ -36,7 +36,12 @@ def _clean_list(value: Any) -> list[str]:
     return [str(value).strip()]
 
 
-def upsert_compliance_document(db: Session, item: dict[str, Any]) -> tuple[ComplianceDocument, bool]:
+def upsert_compliance_document(
+    db: Session,
+    item: dict[str, Any],
+    *,
+    confirmed: bool = False,
+) -> tuple[ComplianceDocument, bool]:
     code = str(item.get("doc_code") or item.get("code") or "").strip()
     title = str(item.get("title") or "").strip()
     text = str(item.get("text") or "").strip()
@@ -57,39 +62,53 @@ def upsert_compliance_document(db: Session, item: dict[str, Any]) -> tuple[Compl
     document.short_notice = str(item["short_notice"]).strip() if item.get("short_notice") else None
     document.checkbox_text = str(item["checkbox_text"]).strip() if item.get("checkbox_text") else None
     document.evidence_refs = _clean_list(item.get("evidence_refs"))
-    document.pending_confirmation = _clean_list(item.get("pending_confirmation"))
-    document.review_status = str(item.get("review_status") or "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW").strip()
-    document.status = str(item.get("status") or "ACTIVE").strip()
+    if confirmed:
+        document.pending_confirmation = []
+        document.review_status = "CONFIRMED"
+        document.status = "ACTIVE"
+    else:
+        document.pending_confirmation = _clean_list(item.get("pending_confirmation"))
+        document.review_status = str(item.get("review_status") or "DRAFT_PENDING_LEGAL_AND_EXPERT_REVIEW").strip()
+        document.status = str(item.get("status") or "ACTIVE").strip()
     return document, created
 
 
-def import_compliance_materials(db: Session, path: str | Path) -> dict[str, int]:
-    created = updated = skipped = errors = 0
+def import_compliance_materials(db: Session, path: str | Path, confirmed: bool = False) -> dict[str, int]:
+    created = updated = skipped = errors = confirmed_count = 0
     for item in _load_documents(Path(path)):
         try:
-            _, was_created = upsert_compliance_document(db, item)
+            _, was_created = upsert_compliance_document(db, item, confirmed=confirmed)
         except ValueError:
             errors += 1
             continue
+        if confirmed:
+            confirmed_count += 1
         if was_created:
             created += 1
         else:
             updated += 1
     db.commit()
-    return {"created": created, "updated": updated, "skipped": skipped, "errors": errors}
+    return {
+        "created": created,
+        "updated": updated,
+        "skipped": skipped,
+        "errors": errors,
+        "confirmed": confirmed_count,
+    }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="导入合规材料 JSON。")
     parser.add_argument("path", help="合规材料 JSON 文件路径。")
+    parser.add_argument("--confirmed", action="store_true", help="按法务、伦理、运动医学专家已确认版本导入。")
     args = parser.parse_args()
     db = SessionLocal()
     try:
-        result = import_compliance_materials(db, args.path)
+        result = import_compliance_materials(db, args.path, confirmed=args.confirmed)
         print(
             "Imported compliance materials: "
             f"created={result['created']}, updated={result['updated']}, "
-            f"skipped={result['skipped']}, errors={result['errors']}"
+            f"skipped={result['skipped']}, errors={result['errors']}, confirmed={result['confirmed']}"
         )
     finally:
         db.close()

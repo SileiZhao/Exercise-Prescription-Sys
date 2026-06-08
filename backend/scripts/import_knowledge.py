@@ -10,7 +10,7 @@ except ImportError:
 
 ensure_project_root_on_path()
 
-from sqlalchemy import delete, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal
@@ -68,7 +68,13 @@ def import_knowledge_documents(db: Session, path: str | Path, created_by: int | 
             document.category = category
             document.source = source
             document.status = "ACTIVE"
-            db.execute(delete(KnowledgeChunk).where(KnowledgeChunk.document_id == document.id))
+            old_chunks = db.scalars(
+                select(KnowledgeChunk).where(KnowledgeChunk.document_id == document.id)
+            ).all()
+            for old_chunk in old_chunks:
+                db.delete(old_chunk)
+            if old_chunks:
+                db.flush()
             updated += 1
 
         chunks = _chunk_text(content)

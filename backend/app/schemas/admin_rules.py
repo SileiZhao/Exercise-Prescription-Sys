@@ -8,7 +8,7 @@ from app.schemas.risk import RiskEvaluationResult
 
 class RuleConditionPayload(BaseModel):
     path: str = Field(min_length=1)
-    op: Literal["eq", "gte", "between", "in_any", "not_empty_restriction"]
+    op: Literal["eq", "neq", "gt", "gte", "lt", "lte", "between", "in_any", "contains", "not_empty_restriction", "exists"]
     value: Any = None
 
 
@@ -16,6 +16,11 @@ class RiskRuleConfigCreate(BaseModel):
     code: str = Field(min_length=1, max_length=64)
     name: str = Field(min_length=1, max_length=128)
     severity: Literal["GREEN", "YELLOW", "RED"]
+    priority: int = 100
+    rule_type: str = Field(default="RISK_LEVEL", min_length=1, max_length=64)
+    source_ref: str | None = None
+    applies_to: list[str] = Field(default_factory=list)
+    review_status: str = Field(default="EXPERT_REVIEW_DRAFT", min_length=1, max_length=64)
     message: str = Field(min_length=1)
     condition: RuleConditionPayload
     contraindications: list[str] = Field(default_factory=list)
@@ -26,6 +31,11 @@ class RiskRuleConfigCreate(BaseModel):
 class RiskRuleConfigUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=128)
     severity: Literal["GREEN", "YELLOW", "RED"] | None = None
+    priority: int | None = None
+    rule_type: str | None = Field(default=None, min_length=1, max_length=64)
+    source_ref: str | None = None
+    applies_to: list[str] | None = None
+    review_status: str | None = Field(default=None, min_length=1, max_length=64)
     message: str | None = Field(default=None, min_length=1)
     condition: RuleConditionPayload | None = None
     contraindications: list[str] | None = None
@@ -38,6 +48,11 @@ class RiskRuleConfigRead(BaseModel):
     code: str
     name: str
     severity: str
+    priority: int
+    rule_type: str
+    source_ref: str | None
+    applies_to: list[str]
+    review_status: str
     message: str
     condition: dict[str, Any]
     contraindications: list[str]

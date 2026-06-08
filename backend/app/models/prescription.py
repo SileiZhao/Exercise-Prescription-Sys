@@ -43,6 +43,23 @@ class PrescriptionVersion(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
+class PrescriptionEvidence(Base):
+    __tablename__ = "prescription_evidence"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    prescription_id: Mapped[int] = mapped_column(ForeignKey("prescription_records.id"), unique=True, index=True)
+    risk_rules: Mapped[list[dict]] = mapped_column(JSON, default=list)
+    template_ref: Mapped[dict] = mapped_column(JSON, default=dict)
+    action_refs: Mapped[list[dict]] = mapped_column(JSON, default=list)
+    rag_chunks: Mapped[list[dict]] = mapped_column(JSON, default=list)
+    llm_provider: Mapped[str] = mapped_column(String(64))
+    llm_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    schema_validation: Mapped[dict] = mapped_column(JSON, default=dict)
+    safety_validation: Mapped[dict] = mapped_column(JSON, default=dict)
+    object_refs: Mapped[list[dict]] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
+
+
 class ReportExportRecord(Base):
     __tablename__ = "report_export_records"
 

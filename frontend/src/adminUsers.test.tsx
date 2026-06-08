@@ -80,6 +80,7 @@ vi.mock("./api/adminUsers", () => ({
 describe("admin users page", () => {
   it("renders users, organizations and expert profiles", async () => {
     localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "ADMIN");
 
     render(
       <MemoryRouter initialEntries={["/admin/users"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
@@ -88,15 +89,17 @@ describe("admin users page", () => {
     );
 
     expect(await screen.findByText("用户与专家管理")).toBeInTheDocument();
-    expect(screen.getByText("user@example.com")).toBeInTheDocument();
-    expect(screen.getByText("社区示范中心")).toBeInTheDocument();
-    expect(screen.getByText("慢病运动干预")).toBeInTheDocument();
+    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
+    expect(await screen.findByText("user@example.com")).toBeInTheDocument();
+    expect(await screen.findByText("社区示范中心")).toBeInTheDocument();
+    expect(await screen.findByText("慢病运动干预")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "保存机构" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "保存专家资料" })).toBeInTheDocument();
   });
 
   it("filters users by keyword and role", async () => {
     localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "ADMIN");
     listUsersMock.mockClear();
 
     render(

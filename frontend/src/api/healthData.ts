@@ -2,6 +2,23 @@ import { apiClient } from "./client";
 
 export type HealthPayload = Record<string, unknown>;
 
+export interface HealthCompletionSuggestion {
+  category: string;
+  title: string;
+  fields: string[];
+}
+
+export interface HealthCompletionStatus {
+  minimum_required_complete: boolean;
+  prescription_generation_blocked: boolean;
+  completed_categories: string[];
+  missing_categories: string[];
+  missing_required_fields: Record<string, string[]>;
+  blocking_reasons: string[];
+  suggestions: HealthCompletionSuggestion[];
+  summary: string;
+}
+
 export interface HealthSnapshot {
   profile: HealthPayload | null;
   fitness_test: HealthPayload | null;
@@ -9,6 +26,7 @@ export interface HealthSnapshot {
   biochemical_index: HealthPayload | null;
   risk_screening: HealthPayload | null;
   exercise_feedback: HealthPayload | null;
+  completion_status?: HealthCompletionStatus;
 }
 
 export function acceptConsent(payload: { consent_version: string; consent_text: string }) {

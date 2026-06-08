@@ -80,3 +80,13 @@ def test_acceptance_evidence_covers_required_tests_and_commands() -> None:
         "npm run build",
     ]:
         assert command in content
+
+
+def test_acceptance_evidence_uses_current_formal_reference_counts() -> None:
+    content = EVIDENCE_DOC.read_text(encoding="utf-8")
+
+    assert "python scripts/validate_reference_data.py --strict" in content
+    assert "python scripts/seed_reference_data.py --strict" in content
+    assert "动作 154" in content or "actions 154" in content or "actions_count\": 154" in content
+    assert "动作 98" not in content
+    assert "actions approved=98" not in content

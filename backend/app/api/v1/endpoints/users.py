@@ -84,7 +84,7 @@ def create_expert_profile(
     current_user: User = Depends(require_roles(UserRole.ADMIN, UserRole.ORG_ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return UserService(db).create_expert_profile(payload, actor_id=current_user.id)
+    return UserService(db).create_expert_profile(payload, actor=current_user)
 
 
 @router.get("/expert-profiles", response_model=list[ExpertProfileWithUser])

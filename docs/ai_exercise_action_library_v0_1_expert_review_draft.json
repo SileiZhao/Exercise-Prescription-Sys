@@ -88,7 +88,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_002",
@@ -182,7 +192,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_003",
@@ -273,7 +293,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_004",
@@ -365,7 +395,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_005",
@@ -460,7 +500,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_006",
@@ -546,7 +596,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_AER_007",
@@ -632,7 +692,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_008",
@@ -723,7 +793,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_009",
@@ -811,7 +891,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_010",
@@ -899,7 +989,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_011",
@@ -984,7 +1084,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_012",
@@ -1069,7 +1179,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_AER_013",
@@ -1160,7 +1280,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_014",
@@ -1250,7 +1380,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_015",
@@ -1330,7 +1470,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_AER_016",
@@ -1423,7 +1573,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_001",
@@ -1513,7 +1673,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_002",
@@ -1598,7 +1768,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_003",
@@ -1679,7 +1859,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_004",
@@ -1763,7 +1953,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_005",
@@ -1843,7 +2043,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_006",
@@ -1921,7 +2131,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_007",
@@ -1999,7 +2219,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_008",
@@ -2079,7 +2309,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_009",
@@ -2160,7 +2400,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_010",
@@ -2242,7 +2492,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_011",
@@ -2327,7 +2587,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_012",
@@ -2416,7 +2686,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_013",
@@ -2505,7 +2785,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_014",
@@ -2594,7 +2884,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_015",
@@ -2676,7 +2976,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_016",
@@ -2754,7 +3064,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_017",
@@ -2834,7 +3154,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_018",
@@ -2912,7 +3242,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_019",
@@ -2995,7 +3335,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_020",
@@ -3081,7 +3431,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_021",
@@ -3156,7 +3516,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_RES_022",
@@ -3236,7 +3606,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_001",
@@ -3311,7 +3691,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_FLEX_002",
@@ -3385,7 +3775,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_FLEX_003",
@@ -3459,7 +3859,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_004",
@@ -3541,7 +3951,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_005",
@@ -3619,7 +4039,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_006",
@@ -3697,7 +4127,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_007",
@@ -3779,7 +4219,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_008",
@@ -3852,7 +4302,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_FLEX_009",
@@ -3929,7 +4389,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_FLEX_010",
@@ -4006,7 +4476,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_001",
@@ -4087,7 +4567,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_002",
@@ -4169,7 +4659,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_003",
@@ -4250,7 +4750,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_004",
@@ -4334,7 +4844,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_005",
@@ -4416,7 +4936,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_006",
@@ -4498,7 +5028,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_007",
@@ -4571,7 +5111,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_008",
@@ -4651,7 +5201,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_009",
@@ -4733,7 +5293,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_BAL_010",
@@ -4818,7 +5388,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_001",
@@ -4901,7 +5481,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_002",
@@ -4984,7 +5574,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_003",
@@ -5065,7 +5665,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_004",
@@ -5141,7 +5751,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_005",
@@ -5228,7 +5848,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_006",
@@ -5308,7 +5938,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_007",
@@ -5393,7 +6033,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_008",
@@ -5474,7 +6124,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_009",
@@ -5550,7 +6210,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_TCM_010",
@@ -5629,7 +6299,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_001",
@@ -5706,7 +6386,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_002",
@@ -5786,7 +6476,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_003",
@@ -5863,7 +6563,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_004",
@@ -5943,7 +6653,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_005",
@@ -6025,7 +6745,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_006",
@@ -6100,7 +6830,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_007",
@@ -6174,7 +6914,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_008",
@@ -6252,7 +7002,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_009",
@@ -6328,7 +7088,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_010",
@@ -6400,7 +7170,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_011",
@@ -6473,7 +7253,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_012",
@@ -6557,7 +7347,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_013",
@@ -6638,7 +7438,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_REHAB_014",
@@ -6721,7 +7531,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_WARM_001",
@@ -6810,7 +7630,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_WARM_002",
@@ -6883,7 +7713,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_WARM_003",
@@ -6962,7 +7802,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_WARM_004",
@@ -7047,7 +7897,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_WARM_005",
@@ -7129,7 +7989,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_WARM_006",
@@ -7215,7 +8085,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_WARM_007",
@@ -7293,7 +8173,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_WARM_008",
@@ -7370,7 +8260,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_COOL_001",
@@ -7459,7 +8359,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_COOL_002",
@@ -7535,7 +8445,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_COOL_003",
@@ -7612,7 +8532,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_COOL_004",
@@ -7693,7 +8623,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_COOL_005",
@@ -7764,7 +8704,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_COOL_006",
@@ -7837,7 +8787,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
   },
   {
     "action_code": "ACT_COOL_007",
@@ -7908,7 +8868,17 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
-    "status": "PENDING_REVIEW"
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": false
   },
   {
     "action_code": "ACT_COOL_008",
@@ -7984,6 +8954,3893 @@
       "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
     ],
     "version": "v0.1",
+    "status": "PENDING_REVIEW",
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "evidence_refs": [
+      "WHO 2020《身体活动与久坐行为指南》：身体活动频率、强度、持续时间、肌力与老年平衡训练框架",
+      "Exercise is Medicine/ACSM 运动前筛查：劳力性胸部不适、异常气短、晕厥/黑蒙、明显心悸等为STOP信号，需医学许可",
+      "PAR-Q+ / ePARmed-X+：未完成自我清除或需进一步评估时，避免增加活动量、高强度运动和正式体测",
+      "ADA 运动与血糖资料：胰岛素或促泌剂使用者运动相关低血糖风险需关注血糖监测",
+      "低风险动作库原则：低冲击、可回退、可监测、避免高风险器械；具体适应证与剂量待专家确认"
+    ],
+    "requires_equipment": true
+  },
+  {
+    "action_code": "AERO_MARCH_IN_PLACE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "原地踏步",
+    "name_en": "Marching in Place",
+    "category": "有氧训练",
+    "exercise_type": "有氧",
+    "suitable_tags": [
+      "低冲击",
+      "居家",
+      "久坐人群",
+      "心肺耐力",
+      "控压",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "急性心衰",
+      "严重下肢关节疼痛"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "下肢",
+      "心肺"
+    ],
+    "primary_muscles": [
+      "下肢",
+      "心肺"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "低冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "保持躯干直立，核心微收。双臂自然摆动，双腿交替抬起，膝盖抬至舒适高度。保持均匀呼吸，不要憋气。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体过度前倾",
+      "憋气",
+      "膝盖抬得过高导致失去平衡"
+    ],
+    "alternatives": [
+      "坐姿踏步",
+      "原地小碎步"
+    ],
+    "monitoring_tips": [
+      "监测心率在目标范围内",
+      "观察呼吸频率",
+      "注意步态稳定性"
+    ],
+    "stop_signals": [
+      "胸痛",
+      "严重气喘",
+      "头晕",
+      "关节锐痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "WHO Guidelines on physical activity and sedentary behaviour"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "WHO Guidelines on physical activity and sedentary behaviour"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SEATED_THORACIC_EXT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿胸椎伸展",
+    "name_en": "Seated Thoracic Extension",
+    "category": "柔韧训练",
+    "exercise_type": "柔韧",
+    "suitable_tags": [
+      "居家",
+      "久坐人群",
+      "柔韧"
+    ],
+    "contraindication_tags": [
+      "胸椎骨折",
+      "严重骨质疏松"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "胸椎",
+      "背部"
+    ],
+    "primary_muscles": [
+      "胸椎",
+      "背部"
+    ],
+    "equipment": "带靠背的椅子",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "坐在有靠背的椅子上，靠背上缘位于肩胛骨下角。双手交叉抱于脑后，吸气准备，呼气时胸部向后上方伸展，感受胸椎和胸肌的拉伸。保持15-30秒，缓慢还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "腰椎过度代偿伸展",
+      "颈部过度后仰",
+      "拉伸时憋气"
+    ],
+    "alternatives": [
+      "泡沫轴胸椎伸展",
+      "猫牛式"
+    ],
+    "monitoring_tips": [
+      "确保腰椎稳定",
+      "观察呼吸是否顺畅",
+      "评估胸椎活动度改善"
+    ],
+    "stop_signals": [
+      "脊柱锐痛",
+      "手臂麻木",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "办公室人群运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "办公室人群运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_SINGLE_LEG_CHAIR_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "单腿站立（扶椅）",
+    "name_en": "Single Leg Stance with Chair Support",
+    "category": "平衡训练",
+    "exercise_type": "平衡",
+    "suitable_tags": [
+      "平衡",
+      "老年友好",
+      "老年防跌倒",
+      "居家"
+    ],
+    "contraindication_tags": [
+      "急性下肢骨折",
+      "严重前庭功能障碍",
+      "无法独立站立"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "下肢",
+      "核心",
+      "前庭系统"
+    ],
+    "primary_muscles": [
+      "下肢",
+      "核心",
+      "前庭系统"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "站在稳固的椅子后方，双手轻扶椅背。将重心移至左腿，缓慢抬起右腿，膝盖微屈。保持躯干直立，目光平视前方。保持10-30秒，换腿重复。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体过度倾斜",
+      "支撑腿膝盖锁死",
+      "低头看脚"
+    ],
+    "alternatives": [
+      "双脚并拢站立",
+      "串联站立"
+    ],
+    "monitoring_tips": [
+      "确保环境安全无绊脚物",
+      "保护者站在侧后方",
+      "观察身体晃动幅度"
+    ],
+    "stop_signals": [
+      "严重眩晕",
+      "下肢关节疼痛",
+      "失去平衡无法恢复"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BREATH_DIAPHRAGMATIC_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "腹式呼吸",
+    "name_en": "Diaphragmatic Breathing",
+    "category": "呼吸训练",
+    "exercise_type": "呼吸",
+    "suitable_tags": [
+      "呼吸训练",
+      "居家",
+      "控压",
+      "心肺耐力"
+    ],
+    "contraindication_tags": [
+      "急性呼吸衰竭",
+      "严重腹主动脉瘤"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "膈肌",
+      "核心",
+      "呼吸系统"
+    ],
+    "primary_muscles": [
+      "膈肌",
+      "核心",
+      "呼吸系统"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "无",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "仰卧或舒适坐姿，一手放于胸前，一手放于腹部。用鼻缓慢吸气，感受腹部隆起，胸部尽量不动。用口缓慢呼气，感受腹部回落。吸呼比约为1:2。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "胸部起伏过大",
+      "呼吸频率过快",
+      "吸气时腹部内收"
+    ],
+    "alternatives": [
+      "缩唇呼吸",
+      "节律呼吸"
+    ],
+    "monitoring_tips": [
+      "监测血氧饱和度",
+      "观察呼吸频率",
+      "评估主观疲劳度"
+    ],
+    "stop_signals": [
+      "头晕",
+      "过度换气症状",
+      "胸闷加重"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "慢性阻塞性肺疾病康复指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "慢性阻塞性肺疾病康复指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "AERO_STATIONARY_CYCLING_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "固定自行车骑行",
+    "name_en": "Stationary Cycling",
+    "category": "有氧训练",
+    "exercise_type": "有氧",
+    "suitable_tags": [
+      "低冲击",
+      "器械",
+      "减脂",
+      "心肺耐力",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "严重膝关节骨性关节炎急性期",
+      "未控制的高血压",
+      "急性心梗"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "下肢",
+      "心肺"
+    ],
+    "primary_muscles": [
+      "下肢",
+      "心肺"
+    ],
+    "equipment": "固定自行车",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "初中级",
+    "instructions": "调整座椅高度，使踏板在最低点时膝盖微屈（约15度）。保持躯干直立或微前倾，核心收紧。以平稳的踏频骑行，保持均匀呼吸。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "座椅过低导致膝盖压力过大",
+      "身体过度左右摇晃",
+      "阻力设置过大导致踏频过低"
+    ],
+    "alternatives": [
+      "椭圆机",
+      "游泳"
+    ],
+    "monitoring_tips": [
+      "持续监测心率和血压",
+      "观察面色和出汗情况",
+      "定期询问RPE"
+    ],
+    "stop_signals": [
+      "胸痛",
+      "严重气喘",
+      "膝关节疼痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国心血管病一级预防指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国心血管病一级预防指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_WALL_SIT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "靠墙静蹲",
+    "name_en": "Wall Sit",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "抗阻",
+      "居家",
+      "肌力提升",
+      "老年友好",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "严重髌骨软骨软化症",
+      "未控制的高血压",
+      "急性心力衰竭"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "股四头肌",
+      "臀大肌",
+      "核心"
+    ],
+    "primary_muscles": [
+      "股四头肌",
+      "臀大肌",
+      "核心"
+    ],
+    "equipment": "平整的墙面",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "中级",
+    "instructions": "背部紧贴墙面，双脚向前迈出约半米，与肩同宽。缓慢下蹲，直到大腿与地面平行或处于舒适角度。膝盖不要超过脚尖，保持均匀呼吸，不要憋气。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "膝盖内扣",
+      "憋气导致血压升高",
+      "下蹲过深引起膝盖疼痛"
+    ],
+    "alternatives": [
+      "坐姿腿屈伸",
+      "浅蹲"
+    ],
+    "monitoring_tips": [
+      "密切监测血压反应（等长收缩易升压）",
+      "观察膝盖位置",
+      "控制静蹲时间"
+    ],
+    "stop_signals": [
+      "膝关节锐痛",
+      "头晕",
+      "胸闷",
+      "肌肉力竭导致姿势变形"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国高血压患者健康管理指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国高血压患者健康管理指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_BAND_LATERAL_WALK_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "弹力带侧向行走",
+    "name_en": "Resistance Band Lateral Walk",
+    "category": "平衡与抗阻训练",
+    "exercise_type": "平衡/抗阻",
+    "suitable_tags": [
+      "平衡",
+      "抗阻",
+      "器械",
+      "老年防跌倒",
+      "肌力提升"
+    ],
+    "contraindication_tags": [
+      "严重膝关节不稳",
+      "急性髋关节病变",
+      "近期下肢手术"
+    ],
+    "risk_level": "R2",
+    "body_parts": [
+      "臀中肌",
+      "下肢",
+      "核心"
+    ],
+    "primary_muscles": [
+      "臀中肌",
+      "下肢",
+      "核心"
+    ],
+    "equipment": "环形弹力带",
+    "requires_equipment": true,
+    "impact_level": "低冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "中高级",
+    "instructions": "将弹力带套在膝盖上方或脚踝处。双脚分开与肩同宽，微屈膝呈半蹲姿势。保持核心收紧，向一侧横向迈步，另一脚跟随，保持弹力带张力。每侧行走10-15步。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "膝盖内扣",
+      "身体上下起伏过大",
+      "脚步并拢导致张力消失"
+    ],
+    "alternatives": [
+      "自重侧向行走",
+      "蚌式开合"
+    ],
+    "monitoring_tips": [
+      "专家审核初稿：需评估患者下肢关节稳定性",
+      "观察膝盖与脚尖方向一致",
+      "监测心率及疲劳度"
+    ],
+    "stop_signals": [
+      "膝关节外侧疼痛",
+      "髋部锐痛",
+      "失去平衡",
+      "下背部疼痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "AERO_ELLIPTICAL_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "椭圆机训练",
+    "name_en": "Elliptical Trainer",
+    "category": "有氧训练",
+    "exercise_type": "有氧",
+    "suitable_tags": [
+      "低冲击",
+      "器械",
+      "减脂",
+      "心肺耐力",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "严重平衡障碍",
+      "急性下肢关节损伤",
+      "未控制的心律失常"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "全身",
+      "心肺"
+    ],
+    "primary_muscles": [
+      "全身",
+      "心肺"
+    ],
+    "equipment": "椭圆机",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "初中级",
+    "instructions": "踏上椭圆机，双手握住活动把手或固定把手。保持躯干直立，核心微收。双脚全脚掌踩实踏板，平稳发力。配合手臂推拉，保持均匀节奏。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "脚跟抬起导致小腿过度紧张",
+      "身体过度前倾或后仰",
+      "利用惯性而非肌肉发力"
+    ],
+    "alternatives": [
+      "固定自行车",
+      "划船机"
+    ],
+    "monitoring_tips": [
+      "监测心率和RPE",
+      "观察步态对称性",
+      "注意患者是否出现眩晕"
+    ],
+    "stop_signals": [
+      "胸痛",
+      "严重气喘",
+      "关节疼痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国2型糖尿病防治指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国2型糖尿病防治指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BREATH_PURSED_LIP_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "缩唇呼吸",
+    "name_en": "Pursed-Lip Breathing",
+    "category": "呼吸训练",
+    "exercise_type": "呼吸",
+    "suitable_tags": [
+      "呼吸训练",
+      "居家",
+      "心肺耐力",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "面部神经麻痹",
+      "急性呼吸窘迫"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "呼吸肌",
+      "肺部"
+    ],
+    "primary_muscles": [
+      "呼吸肌",
+      "肺部"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "无",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "放松肩颈，用鼻缓慢吸气2秒。将嘴唇缩成吹口哨状，缓慢呼气4-6秒。呼气时间应为吸气时间的两倍。感受气流缓慢呼出。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "呼气时用力过猛",
+      "吸气时间过长",
+      "肩部代偿上抬"
+    ],
+    "alternatives": [
+      "腹式呼吸",
+      "深呼吸"
+    ],
+    "monitoring_tips": [
+      "监测血氧饱和度",
+      "观察呼吸节律",
+      "评估主观呼吸困难评分(mMRC)"
+    ],
+    "stop_signals": [
+      "头晕",
+      "过度换气",
+      "胸闷加重"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "慢性阻塞性肺疾病康复指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "慢性阻塞性肺疾病康复指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_DB_PRESS_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "哑铃坐姿推举",
+    "name_en": "Seated Dumbbell Shoulder Press",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "器械",
+      "抗阻",
+      "肌力提升",
+      "减脂"
+    ],
+    "contraindication_tags": [
+      "肩峰下撞击综合征",
+      "未控制的高血压",
+      "颈椎病急性期"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "三角肌",
+      "肱三头肌",
+      "核心"
+    ],
+    "primary_muscles": [
+      "三角肌",
+      "肱三头肌",
+      "核心"
+    ],
+    "equipment": "哑铃, 靠背椅",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "中级",
+    "instructions": "坐在有靠背的椅子上，背部贴紧。双手各持一哑铃，举至肩部两侧，掌心向前。呼气时，将哑铃向上推举至手臂微屈，吸气时缓慢下放至肩部高度。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "腰椎过度伸展代偿",
+      "手肘过度向后",
+      "推举时憋气"
+    ],
+    "alternatives": [
+      "弹力带坐姿推举",
+      "器械推举"
+    ],
+    "monitoring_tips": [
+      "监测血压反应",
+      "观察肩胛骨稳定性",
+      "确保重量选择合适"
+    ],
+    "stop_signals": [
+      "肩部刺痛",
+      "颈部疼痛",
+      "头晕",
+      "下背部疼痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_NECK_ROTATION_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "颈部轻柔旋转",
+    "name_en": "Gentle Neck Rotation",
+    "category": "柔韧训练",
+    "exercise_type": "柔韧",
+    "suitable_tags": [
+      "柔韧",
+      "居家",
+      "久坐人群",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "严重颈椎病",
+      "颈动脉斑块不稳定",
+      "颈椎骨折"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "颈部肌肉",
+      "颈椎"
+    ],
+    "primary_muscles": [
+      "颈部肌肉",
+      "颈椎"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "保持坐姿或站姿，躯干挺直。缓慢将头部转向左侧，目光看向左肩后方，感受颈部侧面拉伸。保持10-15秒，缓慢回正，换右侧重复。动作需极其缓慢轻柔。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "动作过快",
+      "过度拉伸导致疼痛",
+      "耸肩代偿"
+    ],
+    "alternatives": [
+      "颈部侧屈",
+      "颈部前屈后伸"
+    ],
+    "monitoring_tips": [
+      "询问是否有头晕症状",
+      "观察动作幅度",
+      "确保肩部放松"
+    ],
+    "stop_signals": [
+      "颈部锐痛",
+      "手臂放射痛或麻木",
+      "头晕或眩晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "办公室人群运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "办公室人群运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_TANDEM_WALK_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "脚跟接脚尖走",
+    "name_en": "Tandem Walking",
+    "category": "平衡训练",
+    "exercise_type": "平衡",
+    "suitable_tags": [
+      "平衡",
+      "居家",
+      "老年防跌倒",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "严重下肢关节病变",
+      "急性前庭疾病",
+      "无法独立行走"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "下肢",
+      "核心",
+      "前庭系统"
+    ],
+    "primary_muscles": [
+      "下肢",
+      "核心",
+      "前庭系统"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "低冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "中级",
+    "instructions": "在平坦且无障碍物的地面上，沿直线行走。每一步将后脚的脚尖紧贴前脚的脚跟。双臂可平举以协助平衡。目光平视前方，缓慢行走10-20步。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "低头看脚",
+      "步幅过大",
+      "身体过度摇晃"
+    ],
+    "alternatives": [
+      "单腿站立",
+      "直线行走"
+    ],
+    "monitoring_tips": [
+      "保护者需在侧后方跟随",
+      "确保环境安全",
+      "观察步态稳定性"
+    ],
+    "stop_signals": [
+      "严重眩晕",
+      "失去平衡",
+      "下肢关节疼痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "AERO_SEATED_LEG_RAISE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿抬腿交替",
+    "name_en": "Seated Alternating Leg Raises",
+    "category": "有氧与肌力训练",
+    "exercise_type": "有氧/肌力",
+    "suitable_tags": [
+      "低冲击",
+      "居家",
+      "久坐人群",
+      "心肺耐力",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "急性膝关节损伤",
+      "严重下背部疼痛"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "股四头肌",
+      "髂腰肌",
+      "心肺"
+    ],
+    "primary_muscles": [
+      "股四头肌",
+      "髂腰肌",
+      "心肺"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "坐在稳固的椅子上，背部挺直，双手扶住椅子边缘。交替将双腿伸直抬起，与地面平行，脚尖回勾。保持1-2秒后缓慢放下，配合呼吸，保持连续节奏。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体后仰代偿",
+      "动作过快失去控制",
+      "憋气"
+    ],
+    "alternatives": [
+      "坐姿踏步",
+      "仰卧直腿抬高"
+    ],
+    "monitoring_tips": [
+      "监测心率",
+      "观察腰椎是否离开椅背",
+      "评估肌肉疲劳度"
+    ],
+    "stop_signals": [
+      "下背部疼痛",
+      "膝关节疼痛",
+      "严重气喘"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "WHO Guidelines on physical activity and sedentary behaviour"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "WHO Guidelines on physical activity and sedentary behaviour"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_WALL_PUSHUP_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "改良俯卧撑（推墙）",
+    "name_en": "Wall Push-Up",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "抗阻",
+      "居家",
+      "肌力提升",
+      "控糖",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "严重肩关节病变",
+      "腕管综合征急性期",
+      "未控制的高血压"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "胸大肌",
+      "肱三头肌",
+      "三角肌前束",
+      "核心"
+    ],
+    "primary_muscles": [
+      "胸大肌",
+      "肱三头肌",
+      "三角肌前束",
+      "核心"
+    ],
+    "equipment": "平整的墙面",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "面对墙壁站立，距离墙面约一臂远。双手平放于墙上，与肩同宽或略宽。保持身体呈一条直线，屈肘使胸部靠近墙面，然后用力推起至手臂伸直。保持均匀呼吸。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "臀部撅起",
+      "腰部塌陷",
+      "手肘过度外展"
+    ],
+    "alternatives": [
+      "上斜俯卧撑",
+      "跪姿俯卧撑"
+    ],
+    "monitoring_tips": [
+      "观察核心是否收紧",
+      "监测血压反应",
+      "确保墙面防滑"
+    ],
+    "stop_signals": [
+      "肩部或手腕疼痛",
+      "头晕",
+      "下背部塌陷疼痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国2型糖尿病防治指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国2型糖尿病防治指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_FOAM_ROLLER_CALF_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "泡沫轴小腿放松",
+    "name_en": "Foam Roller Calf Release",
+    "category": "柔韧与恢复训练",
+    "exercise_type": "柔韧/恢复",
+    "suitable_tags": [
+      "器械",
+      "柔韧",
+      "居家",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "下肢深静脉血栓",
+      "严重下肢静脉曲张",
+      "小腿急性拉伤"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "腓肠肌",
+      "比目鱼肌"
+    ],
+    "primary_muscles": [
+      "腓肠肌",
+      "比目鱼肌"
+    ],
+    "equipment": "泡沫轴",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "坐在瑜伽垫上，将泡沫轴置于小腿下方。双手在身后撑地，抬起臀部。利用手臂力量前后滚动，使泡沫轴在小腿肚区域来回按摩。在痛点处可停留15-20秒。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "滚动速度过快",
+      "在关节骨骼处按压",
+      "憋气"
+    ],
+    "alternatives": [
+      "按摩球小腿放松",
+      "站姿小腿拉伸"
+    ],
+    "monitoring_tips": [
+      "评估疼痛耐受度",
+      "观察是否有静脉曲张加重",
+      "确保呼吸平稳"
+    ],
+    "stop_signals": [
+      "剧烈疼痛",
+      "腿部麻木",
+      "皮肤破损"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "运动恢复与再生专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "运动恢复与再生专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_CHAIR_CALF_RAISE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "扶椅踮脚尖",
+    "name_en": "Chair-Supported Calf Raises",
+    "category": "平衡与抗阻训练",
+    "exercise_type": "平衡/抗阻",
+    "suitable_tags": [
+      "平衡",
+      "抗阻",
+      "居家",
+      "老年防跌倒",
+      "肌力提升"
+    ],
+    "contraindication_tags": [
+      "严重足底筋膜炎急性期",
+      "跟腱断裂",
+      "严重平衡障碍无法站立"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "小腿三头肌",
+      "踝关节",
+      "前庭系统"
+    ],
+    "primary_muscles": [
+      "小腿三头肌",
+      "踝关节",
+      "前庭系统"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": true,
+    "impact_level": "低冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "站在稳固的椅子后方，双手轻扶椅背。双脚与肩同宽，缓慢踮起脚尖至最高点，感受小腿收缩。在最高点停留1-2秒，然后缓慢下放，脚跟轻触地面。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体过度前倾",
+      "动作过快利用惯性",
+      "脚踝内外翻"
+    ],
+    "alternatives": [
+      "坐姿提踵",
+      "单腿提踵"
+    ],
+    "monitoring_tips": [
+      "观察踝关节稳定性",
+      "确保椅子稳固",
+      "监测心率及疲劳度"
+    ],
+    "stop_signals": [
+      "跟腱或足底锐痛",
+      "失去平衡",
+      "小腿抽筋"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "中国老年人跌倒干预指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "AERO_WATER_WALKING_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "水中漫步",
+    "name_en": "Water Walking",
+    "category": "有氧训练",
+    "exercise_type": "有氧",
+    "suitable_tags": [
+      "低冲击",
+      "有氧",
+      "减脂",
+      "心肺耐力",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "严重心功能不全",
+      "未控制的癫痫",
+      "开放性伤口或传染性皮肤病"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "全身",
+      "心肺"
+    ],
+    "primary_muscles": [
+      "全身",
+      "心肺"
+    ],
+    "equipment": "游泳池",
+    "requires_equipment": true,
+    "impact_level": "极低冲击",
+    "joint_stress_level": "极低",
+    "intensity": "中",
+    "difficulty": "初中级",
+    "instructions": "在齐胸或齐腰深的温水池中，保持躯干直立，核心微收。像在地面上一样向前行走，双臂自然摆动。可利用水的阻力增加强度，保持均匀呼吸。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体过度前倾",
+      "步幅过大导致滑倒",
+      "忽视水温对血压的影响"
+    ],
+    "alternatives": [
+      "固定自行车",
+      "椭圆机"
+    ],
+    "monitoring_tips": [
+      "监测水下运动心率（通常比陆地低）",
+      "注意防滑",
+      "观察患者面色和体温反应"
+    ],
+    "stop_signals": [
+      "胸痛",
+      "严重气喘",
+      "头晕",
+      "水温不适导致寒战"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "骨关节炎运动治疗指南"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "骨关节炎运动治疗指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BREATH_RHYTHMIC_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "节律呼吸",
+    "name_en": "Rhythmic Breathing",
+    "category": "呼吸训练",
+    "exercise_type": "呼吸",
+    "suitable_tags": [
+      "呼吸训练",
+      "居家",
+      "控压",
+      "心肺耐力",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "严重心律失常",
+      "急性呼吸窘迫"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "呼吸肌",
+      "自主神经系统"
+    ],
+    "primary_muscles": [
+      "呼吸肌",
+      "自主神经系统"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "无",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "采取舒适坐姿或仰卧。吸气3秒，屏气2秒，呼气4秒。保持呼吸平稳连贯，不要用力过猛。将注意力集中在呼吸的节奏上，帮助放松神经系统。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "屏气时间过长导致憋气",
+      "呼吸节奏混乱",
+      "肩部紧张"
+    ],
+    "alternatives": [
+      "腹式呼吸",
+      "4-7-8呼吸法"
+    ],
+    "monitoring_tips": [
+      "监测血压和心率变化",
+      "观察呼吸是否顺畅",
+      "评估主观放松程度"
+    ],
+    "stop_signals": [
+      "头晕",
+      "胸闷",
+      "过度换气症状"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "高血压非药物干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM's Guidelines for Exercise Testing and Prescription",
+      "高血压非药物干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_CHEST_PRESS_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带推胸",
+    "name_en": "Seated Resistance Band Chest Press",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "肩关节急性损伤",
+      "严重心血管疾病"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "胸大肌",
+      "三角肌前束",
+      "肱三头肌"
+    ],
+    "primary_muscles": [
+      "胸大肌",
+      "三角肌前束",
+      "肱三头肌"
+    ],
+    "equipment": "弹力带",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "坐在稳固的椅子上，将弹力带绕过椅背或背部。双手握住弹力带两端，屈肘90度。呼气时，双手向前推直手臂，感受胸部发力；吸气时，缓慢控制还原至起始位置。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "推起时憋气",
+      "耸肩",
+      "弹力带未固定牢固"
+    ],
+    "alternatives": [
+      "哑铃卧推",
+      "器械推胸"
+    ],
+    "monitoring_tips": [
+      "观察呼吸节奏",
+      "检查弹力带磨损情况",
+      "确保座椅稳固"
+    ],
+    "stop_signals": [
+      "胸部或肩部刺痛",
+      "头晕",
+      "呼吸困难",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SUPINE_GLUTE_BRIDGE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧臀桥",
+    "name_en": "Supine Glute Bridge",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "久坐人群",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "严重高血压未控制",
+      "孕晚期"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "臀大肌",
+      "腘绳肌",
+      "核心肌群"
+    ],
+    "primary_muscles": [
+      "臀大肌",
+      "腘绳肌",
+      "核心肌群"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "初级-中级",
+    "instructions": "仰卧于瑜伽垫上，双膝屈曲，双脚平放于地面，与肩同宽。收紧核心，呼气时臀部发力将骨盆抬起，使膝、髋、肩呈一条直线；吸气时缓慢下放臀部至接近地面。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "过度挺腰",
+      "颈部发力",
+      "双脚距离过宽或过窄"
+    ],
+    "alternatives": [
+      "单腿臀桥",
+      "器械腿弯举"
+    ],
+    "monitoring_tips": [
+      "观察骨盆是否水平",
+      "询问下背部感受",
+      "确保呼吸顺畅"
+    ],
+    "stop_signals": [
+      "下背部疼痛",
+      "颈部不适",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_QUADRUPED_BIRD_DOG_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "四足支撑鸟狗式",
+    "name_en": "Quadruped Bird Dog",
+    "category": "平衡与核心训练",
+    "exercise_type": "Balance/Core",
+    "suitable_tags": [
+      "平衡",
+      "肌力提升",
+      "居家",
+      "老年防跌倒"
+    ],
+    "contraindication_tags": [
+      "腕管综合征急性期",
+      "严重肩袖损伤",
+      "急性腰痛"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "核心肌群",
+      "竖脊肌",
+      "臀大肌",
+      "三角肌"
+    ],
+    "primary_muscles": [
+      "核心肌群",
+      "竖脊肌",
+      "臀大肌",
+      "三角肌"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "中级",
+    "instructions": "四足跪姿，双手在肩正下方，双膝在髋正下方。收紧核心，同时伸直右臂和左腿，保持身体平稳不晃动，停留2秒后缓慢还原，换另一侧。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "骨盆旋转",
+      "塌腰",
+      "憋气"
+    ],
+    "alternatives": [
+      "仰卧死虫式",
+      "站姿单腿硬拉"
+    ],
+    "monitoring_tips": [
+      "观察骨盆和躯干稳定性",
+      "确保手腕无不适",
+      "控制动作速度"
+    ],
+    "stop_signals": [
+      "下背部疼痛",
+      "手腕疼痛",
+      "失去平衡",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "核心稳定性训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "核心稳定性训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_STANDING_BAND_HIP_ABDUCTION_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿弹力带髋外展",
+    "name_en": "Standing Resistance Band Hip Abduction",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "老年防跌倒",
+      "居家",
+      "平衡"
+    ],
+    "contraindication_tags": [
+      "髋关节置换术后早期",
+      "急性坐骨神经痛",
+      "严重膝骨关节炎"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "臀中肌",
+      "臀小肌",
+      "阔筋膜张肌"
+    ],
+    "primary_muscles": [
+      "臀中肌",
+      "臀小肌",
+      "阔筋膜张肌"
+    ],
+    "equipment": "弹力带, 稳固的椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "初级-中级",
+    "instructions": "站立，将弹力带一端固定在稳固的桌腿上，另一端套在靠近固定点一侧的脚踝上。手扶椅背保持平衡，支撑腿微屈。发力腿向外侧抬起，感受臀部侧面发力，缓慢还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体向对侧倾斜",
+      "发力腿过度外旋",
+      "动作过快"
+    ],
+    "alternatives": [
+      "侧卧蚌式开合",
+      "器械髋外展"
+    ],
+    "monitoring_tips": [
+      "观察躯干是否保持直立",
+      "确保支撑物稳固",
+      "检查弹力带固定点"
+    ],
+    "stop_signals": [
+      "髋关节刺痛",
+      "下背部代偿疼痛",
+      "失去平衡"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人防跌倒运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人防跌倒运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SUPINE_KNEE_TO_CHEST_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧抱膝拉伸",
+    "name_en": "Supine Knee to Chest Stretch",
+    "category": "柔韧训练",
+    "exercise_type": "Flexibility",
+    "suitable_tags": [
+      "柔韧",
+      "居家",
+      "老年友好",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "髋关节置换术后禁忌屈髋者",
+      "孕晚期"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "下背部",
+      "臀大肌",
+      "竖脊肌"
+    ],
+    "primary_muscles": [
+      "下背部",
+      "臀大肌",
+      "竖脊肌"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "仰卧于垫上，双腿伸直。屈曲一侧髋关节和膝关节，双手抱住小腿前侧或大腿后侧，缓慢将膝盖拉向胸部，感受下背部和臀部的拉伸，保持15-30秒，换另一侧。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "过度用力拉扯",
+      "对侧腿弯曲离开地面",
+      "憋气"
+    ],
+    "alternatives": [
+      "仰卧双膝抱胸",
+      "坐姿体前屈"
+    ],
+    "monitoring_tips": [
+      "观察对侧腿是否平放",
+      "询问拉伸感是否舒适",
+      "确保呼吸平稳"
+    ],
+    "stop_signals": [
+      "下背部放射痛",
+      "髋关节前侧挤压痛",
+      "呼吸困难"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_BICEP_CURL_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带二头弯举",
+    "name_en": "Seated Resistance Band Bicep Curl",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "肱二头肌长头腱炎急性期",
+      "严重肩袖损伤"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "肱二头肌",
+      "肱肌"
+    ],
+    "primary_muscles": [
+      "肱二头肌",
+      "肱肌"
+    ],
+    "equipment": "弹力带",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "坐在椅子上，双脚踩住弹力带中段。双手握住弹力带两端，掌心向上，大臂贴紧身体两侧。呼气时，屈肘将双手向上拉起至肩部前方；吸气时，缓慢控制下放。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "大臂离开身体",
+      "身体后仰借力",
+      "下放过快"
+    ],
+    "alternatives": [
+      "哑铃二头弯举",
+      "器械二头弯举"
+    ],
+    "monitoring_tips": [
+      "观察大臂是否固定",
+      "检查弹力带踩踏是否稳固",
+      "控制离心阶段"
+    ],
+    "stop_signals": [
+      "肘关节疼痛",
+      "肩部前侧疼痛",
+      "手腕不适"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_WALL_ANGEL_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "靠墙天使",
+    "name_en": "Wall Angel",
+    "category": "柔韧与姿态训练",
+    "exercise_type": "Flexibility/Mobility",
+    "suitable_tags": [
+      "柔韧",
+      "久坐人群",
+      "居家",
+      "肌力提升"
+    ],
+    "contraindication_tags": [
+      "严重肩周炎",
+      "急性颈椎间盘突出",
+      "胸椎后凸畸形严重"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "胸椎",
+      "肩胛骨周围肌群",
+      "胸大肌"
+    ],
+    "primary_muscles": [
+      "胸椎",
+      "肩胛骨周围肌群",
+      "胸大肌"
+    ],
+    "equipment": "平整的墙壁",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "中级",
+    "instructions": "背靠墙站立，脚跟离墙约10厘米。臀部、上背部、后脑勺贴墙。双臂屈肘90度，手背和手肘尽量贴墙。缓慢向上滑动双臂至伸直，再缓慢下拉至起始位置，全程保持身体贴墙。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "下背部离开墙壁",
+      "手肘无法贴墙时强行上推",
+      "头部前倾"
+    ],
+    "alternatives": [
+      "仰卧天使",
+      "弹力带面拉"
+    ],
+    "monitoring_tips": [
+      "观察下背部是否贴墙",
+      "评估肩关节活动度",
+      "避免代偿动作"
+    ],
+    "stop_signals": [
+      "肩部刺痛",
+      "颈部疼痛",
+      "下背部过度反弓"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_STANDING_WEIGHT_SHIFT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿重心转移",
+    "name_en": "Standing Weight Shift",
+    "category": "平衡训练",
+    "exercise_type": "Balance",
+    "suitable_tags": [
+      "平衡",
+      "老年防跌倒",
+      "居家",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "严重前庭功能障碍",
+      "下肢骨折未愈合",
+      "急性痛风发作"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "下肢肌群",
+      "核心肌群",
+      "前庭系统"
+    ],
+    "primary_muscles": [
+      "下肢肌群",
+      "核心肌群",
+      "前庭系统"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "双脚与肩同宽站立，双手轻扶椅背。缓慢将身体重心向左腿转移，右脚跟微微抬起，保持2-3秒；然后缓慢将重心转移至右腿，左脚跟微微抬起。交替进行。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体过度倾斜",
+      "转移速度过快",
+      "未扶稳支撑物"
+    ],
+    "alternatives": [
+      "单腿站立",
+      "脚跟接脚尖走"
+    ],
+    "monitoring_tips": [
+      "确保支撑物稳固",
+      "观察重心转移是否充分",
+      "询问是否有头晕感"
+    ],
+    "stop_signals": [
+      "头晕",
+      "失去平衡",
+      "下肢关节疼痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人防跌倒运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人防跌倒运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SUPINE_STRAIGHT_LEG_RAISE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧直腿抬高",
+    "name_en": "Supine Straight Leg Raise",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "严重髋关节骨关节炎",
+      "孕晚期"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "髂腰肌",
+      "股直肌",
+      "核心肌群"
+    ],
+    "primary_muscles": [
+      "髂腰肌",
+      "股直肌",
+      "核心肌群"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "初级-中级",
+    "instructions": "仰卧于垫上，一侧腿屈膝踩地，另一侧腿伸直。收紧核心，下背部贴紧垫子。呼气时，将伸直腿向上抬起至与对侧膝盖同高；吸气时，缓慢下放至接近地面。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "下背部拱起",
+      "抬腿过高导致骨盆后倾",
+      "憋气"
+    ],
+    "alternatives": [
+      "坐姿直腿抬高",
+      "悬垂举腿"
+    ],
+    "monitoring_tips": [
+      "观察下背部是否贴地",
+      "控制抬腿高度",
+      "确保呼吸顺畅"
+    ],
+    "stop_signals": [
+      "下背部疼痛或离开垫子",
+      "髋关节前侧刺痛",
+      "腹部抽筋"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SEATED_TRUNK_ROTATION_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿躯干旋转",
+    "name_en": "Seated Trunk Rotation",
+    "category": "柔韧训练",
+    "exercise_type": "Flexibility",
+    "suitable_tags": [
+      "柔韧",
+      "居家",
+      "老年友好",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "急性胸腰椎骨折",
+      "严重骨质疏松伴椎体压缩",
+      "急性腰扭伤"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "腹外斜肌",
+      "竖脊肌",
+      "胸椎"
+    ],
+    "primary_muscles": [
+      "腹外斜肌",
+      "竖脊肌",
+      "胸椎"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "坐在稳固的椅子上，双脚平放于地面。双手交叉抱于胸前或轻放于对侧肩膀。吸气准备，呼气时缓慢将躯干向右侧旋转至最大舒适幅度，保持2秒，吸气还原，换左侧。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "骨盆跟随旋转",
+      "过度扭转导致疼痛",
+      "耸肩"
+    ],
+    "alternatives": [
+      "仰卧躯干旋转",
+      "站姿躯干旋转"
+    ],
+    "monitoring_tips": [
+      "观察骨盆是否固定",
+      "确保动作在无痛范围内",
+      "控制旋转速度"
+    ],
+    "stop_signals": [
+      "脊柱刺痛",
+      "肋骨下缘疼痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人柔韧性训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人柔韧性训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_STANDING_BAND_ROW_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "弹力带站姿划船",
+    "name_en": "Standing Resistance Band Row",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "久坐人群",
+      "控压"
+    ],
+    "contraindication_tags": [
+      "急性肩袖损伤",
+      "严重胸椎后凸",
+      "未控制的高血压"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "背阔肌",
+      "菱形肌",
+      "肱二头肌"
+    ],
+    "primary_muscles": [
+      "背阔肌",
+      "菱形肌",
+      "肱二头肌"
+    ],
+    "equipment": "弹力带",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "初级-中级",
+    "instructions": "双脚与肩同宽站立，微屈膝。将弹力带固定在前方与胸部同高的稳固物体上。双手握住弹力带，手臂伸直。呼气时，背部发力将手肘向后拉，肩胛骨后缩；吸气时，缓慢还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体后仰借力",
+      "肩胛骨未后缩",
+      "手肘过度外展"
+    ],
+    "alternatives": [
+      "坐姿划船",
+      "哑铃俯身划船"
+    ],
+    "monitoring_tips": [
+      "观察躯干稳定性",
+      "检查弹力带固定点",
+      "强调肩胛骨收缩"
+    ],
+    "stop_signals": [
+      "肩部疼痛",
+      "下背部代偿疼痛",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SIDE_LYING_CLAM_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "侧卧蚌式开合",
+    "name_en": "Side Lying Clamshell",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年防跌倒",
+      "平衡"
+    ],
+    "contraindication_tags": [
+      "急性大转子滑囊炎",
+      "髋关节置换术后早期",
+      "严重膝骨关节炎"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "臀中肌",
+      "臀小肌"
+    ],
+    "primary_muscles": [
+      "臀中肌",
+      "臀小肌"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "侧卧于垫上，双腿屈膝约45度，双脚并拢。收紧核心，保持骨盆稳定。呼气时，上方膝盖向上抬起，感受臀部侧面发力；吸气时，缓慢下放膝盖至接触下方膝盖。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "骨盆向后翻转",
+      "双脚分开",
+      "抬腿过高导致代偿"
+    ],
+    "alternatives": [
+      "站姿髋外展",
+      "弹力带侧向行走"
+    ],
+    "monitoring_tips": [
+      "观察骨盆是否垂直",
+      "确保双脚始终接触",
+      "控制动作速度"
+    ],
+    "stop_signals": [
+      "髋关节外侧刺痛",
+      "下背部疼痛",
+      "骨盆向后翻转"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "髋关节骨关节炎运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "髋关节骨关节炎运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_STANDING_CHAIR_HIP_EXTENSION_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿扶椅单腿后伸",
+    "name_en": "Standing Chair Hip Extension",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "老年防跌倒",
+      "居家",
+      "平衡"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "严重髋关节骨关节炎",
+      "急性坐骨神经痛"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "臀大肌",
+      "腘绳肌",
+      "竖脊肌"
+    ],
+    "primary_muscles": [
+      "臀大肌",
+      "腘绳肌",
+      "竖脊肌"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "初级-中级",
+    "instructions": "站立，双手轻扶椅背。收紧核心，保持躯干直立。呼气时，一侧腿向后伸直抬起，感受臀部发力；吸气时，缓慢控制下放至脚尖轻触地面。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "躯干前倾",
+      "过度挺腰",
+      "抬腿过高"
+    ],
+    "alternatives": [
+      "俯卧腿弯举",
+      "器械腿后伸"
+    ],
+    "monitoring_tips": [
+      "观察躯干是否直立",
+      "确保支撑物稳固",
+      "限制后伸幅度"
+    ],
+    "stop_signals": [
+      "下背部疼痛",
+      "髋关节前侧挤压痛",
+      "失去平衡"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人防跌倒运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人防跌倒运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BREATH_SUPINE_PELVIC_TILT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧腹式呼吸伴骨盆后倾",
+    "name_en": "Supine Diaphragmatic Breathing with Pelvic Tilt",
+    "category": "呼吸与核心训练",
+    "exercise_type": "Breathing/Core",
+    "suitable_tags": [
+      "呼吸训练",
+      "居家",
+      "老年友好",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "严重慢性阻塞性肺疾病急性加重期",
+      "急性腹部手术术后"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "膈肌",
+      "腹横肌",
+      "骨盆底肌"
+    ],
+    "primary_muscles": [
+      "膈肌",
+      "腹横肌",
+      "骨盆底肌"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "仰卧于垫上，双膝屈曲，双脚平放。双手轻放于下腹部。吸气时，腹部隆起，骨盆保持中立；呼气时，腹部内收，同时轻微将下背部压向垫子（骨盆后倾），感受核心收紧。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "胸部起伏过大",
+      "骨盆后倾幅度过大",
+      "憋气"
+    ],
+    "alternatives": [
+      "坐姿腹式呼吸",
+      "四足支撑呼吸训练"
+    ],
+    "monitoring_tips": [
+      "观察腹部起伏",
+      "确保呼吸节奏平稳",
+      "避免过度用力压床"
+    ],
+    "stop_signals": [
+      "头晕",
+      "下背部疼痛",
+      "呼吸困难"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性呼吸系统疾病肺康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性呼吸系统疾病肺康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_SHOULDER_EXT_ROT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带肩外旋",
+    "name_en": "Seated Resistance Band Shoulder External Rotation",
+    "category": "抗阻训练",
+    "exercise_type": "Resistance",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "急性肩袖撕裂",
+      "肩关节脱位史未康复"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "冈下肌",
+      "小圆肌",
+      "三角肌后束"
+    ],
+    "primary_muscles": [
+      "冈下肌",
+      "小圆肌",
+      "三角肌后束"
+    ],
+    "equipment": "弹力带",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "坐在椅子上，将弹力带一端固定在身体侧方。单手握住弹力带，大臂贴紧身体，屈肘90度。呼气时，以肘关节为轴，将前臂向外侧旋转拉开；吸气时，缓慢控制还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "大臂离开身体",
+      "躯干跟随旋转",
+      "动作过快"
+    ],
+    "alternatives": [
+      "哑铃侧卧肩外旋",
+      "器械肩外旋"
+    ],
+    "monitoring_tips": [
+      "观察大臂是否贴紧身体",
+      "确保躯干稳定",
+      "检查弹力带固定点"
+    ],
+    "stop_signals": [
+      "肩关节内部刺痛",
+      "肘关节疼痛",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "肩袖损伤运动康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "肩袖损伤运动康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_STANDING_SIDE_BEND_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿体侧屈",
+    "name_en": "Standing Side Bend",
+    "category": "柔韧训练",
+    "exercise_type": "Flexibility",
+    "suitable_tags": [
+      "柔韧",
+      "居家",
+      "久坐人群",
+      "控压"
+    ],
+    "contraindication_tags": [
+      "急性腰扭伤",
+      "严重骨质疏松伴椎体压缩",
+      "腰椎间盘突出急性期"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "腹外斜肌",
+      "腰方肌",
+      "竖脊肌"
+    ],
+    "primary_muscles": [
+      "腹外斜肌",
+      "腰方肌",
+      "竖脊肌"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "双脚与肩同宽站立，微屈膝。一手叉腰，另一手向上伸直。吸气准备，呼气时身体向叉腰一侧侧屈，感受对侧腰部的拉伸，保持15-30秒，换另一侧。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体前倾或后仰",
+      "过度侧屈导致疼痛",
+      "骨盆侧移"
+    ],
+    "alternatives": [
+      "坐姿体侧屈",
+      "仰卧躯干旋转"
+    ],
+    "monitoring_tips": [
+      "观察身体是否在同一冠状面",
+      "确保动作在无痛范围内",
+      "保持呼吸平稳"
+    ],
+    "stop_signals": [
+      "脊柱刺痛",
+      "肋骨下缘疼痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "AERO_LOW_STEP_UPS_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "低台阶上下",
+    "name_en": "Low Step Ups",
+    "category": "有氧训练",
+    "exercise_type": "Aerobic",
+    "suitable_tags": [
+      "有氧",
+      "心肺耐力",
+      "减脂",
+      "居家"
+    ],
+    "contraindication_tags": [
+      "严重膝骨关节炎",
+      "急性踝关节扭伤",
+      "未控制的心力衰竭"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "股四头肌",
+      "臀大肌",
+      "小腿三头肌",
+      "心肺系统"
+    ],
+    "primary_muscles": [
+      "股四头肌",
+      "臀大肌",
+      "小腿三头肌",
+      "心肺系统"
+    ],
+    "equipment": "稳固的低台阶或踏板",
+    "requires_equipment": true,
+    "impact_level": "低冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "初级-中级",
+    "instructions": "面对高度约10-15厘米的稳固台阶或踏板。右脚先踏上台阶，左脚跟上；然后右脚先下，左脚跟上。保持躯干直立，交替进行，保持平稳的呼吸节奏。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "身体过度前倾",
+      "下台阶时脚跟重重砸地",
+      "膝盖内扣"
+    ],
+    "alternatives": [
+      "原地踏步",
+      "固定自行车骑行"
+    ],
+    "monitoring_tips": [
+      "确保台阶防滑且稳固",
+      "观察膝关节对线",
+      "监测心率和主观疲劳度"
+    ],
+    "stop_signals": [
+      "膝关节疼痛",
+      "胸痛",
+      "严重气喘",
+      "失去平衡"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "心血管疾病运动康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "心血管疾病运动康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BREATH_SEATED_ARM_RAISE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿深呼吸与手臂上举",
+    "name_en": "Seated Deep Breathing with Arm Raise",
+    "category": "呼吸与柔韧训练",
+    "exercise_type": "Breathing/Flexibility",
+    "suitable_tags": [
+      "呼吸训练",
+      "居家",
+      "老年友好",
+      "心肺耐力"
+    ],
+    "contraindication_tags": [
+      "严重肩周炎",
+      "慢性阻塞性肺疾病急性加重期",
+      "未控制的严重高血压"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "膈肌",
+      "肋间肌",
+      "三角肌",
+      "胸大肌"
+    ],
+    "primary_muscles": [
+      "膈肌",
+      "肋间肌",
+      "三角肌",
+      "胸大肌"
+    ],
+    "equipment": "稳固的椅子",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "坐在稳固的椅子上，双脚平放。吸气时，双臂从身体两侧缓慢向上举起至头顶，感受胸腔扩张；呼气时，双臂缓慢下放至起始位置，感受胸腔收缩。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "耸肩",
+      "手臂上举时憋气",
+      "下背部过度反弓"
+    ],
+    "alternatives": [
+      "仰卧深呼吸",
+      "站姿扩胸呼吸"
+    ],
+    "monitoring_tips": [
+      "观察呼吸与动作的协调",
+      "确保肩部放松",
+      "避免过度挺腰"
+    ],
+    "stop_signals": [
+      "肩部疼痛",
+      "头晕",
+      "呼吸困难",
+      "胸闷"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性呼吸系统疾病肺康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性呼吸系统疾病肺康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_LEG_EXT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带腿屈伸",
+    "name_en": "Seated Band Leg Extension",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "久坐人群",
+      "肌力提升",
+      "老年友好",
+      "居家",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "急性膝关节损伤",
+      "严重髌骨软化症"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "大腿前侧",
+      "膝关节"
+    ],
+    "primary_muscles": [
+      "大腿前侧",
+      "膝关节"
+    ],
+    "equipment": "弹力带, 稳固椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "坐在稳固椅子上，将弹力带一端固定在椅腿，另一端套在脚踝。缓慢伸直膝关节至小腿与地面平行，顶峰收缩1秒，然后缓慢控制下放。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "利用惯性甩腿",
+      "腰部离开椅背代偿",
+      "下放速度过快"
+    ],
+    "alternatives": [
+      "自重坐姿抬腿",
+      "踝部沙袋腿屈伸"
+    ],
+    "monitoring_tips": [
+      "观察膝关节是否出现弹响伴疼痛",
+      "确认弹力带固定端牢固"
+    ],
+    "stop_signals": [
+      "膝关节前侧锐痛",
+      "弹力带断裂或滑脱",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SUPINE_HEEL_SLIDE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧交替滑跟",
+    "name_en": "Supine Heel Slides",
+    "category": "柔韧与核心",
+    "exercise_type": "柔韧/核心",
+    "suitable_tags": [
+      "居家",
+      "低冲击",
+      "久坐人群",
+      "老年友好",
+      "心肺耐力"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "严重下腰痛"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "核心",
+      "髋关节",
+      "大腿"
+    ],
+    "primary_muscles": [
+      "核心",
+      "髋关节",
+      "大腿"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "仰卧于瑜伽垫，双膝屈曲。保持骨盆稳定，缓慢将一侧脚跟沿垫面滑动伸直，再缓慢收回，交替进行。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "骨盆随腿部移动而晃动",
+      "腰部悬空代偿",
+      "滑动速度过快"
+    ],
+    "alternatives": [
+      "仰卧单腿屈膝",
+      "坐姿交替伸腿"
+    ],
+    "monitoring_tips": [
+      "观察骨盆是否保持中立位",
+      "询问腰部是否有不适感"
+    ],
+    "stop_signals": [
+      "下腰部疼痛加剧",
+      "坐骨神经放射痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "慢性腰痛运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_STANDING_CHAIR_HIP_FLEXION_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿扶椅前抬腿",
+    "name_en": "Standing Chair Hip Flexion",
+    "category": "平衡与防跌倒",
+    "exercise_type": "平衡/抗阻",
+    "suitable_tags": [
+      "老年防跌倒",
+      "平衡",
+      "居家",
+      "肌力提升"
+    ],
+    "contraindication_tags": [
+      "严重髋关节骨性关节炎",
+      "急性髋部骨折术后未愈合"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "髋屈肌",
+      "核心",
+      "支撑腿"
+    ],
+    "primary_muscles": [
+      "髋屈肌",
+      "核心",
+      "支撑腿"
+    ],
+    "equipment": "稳固椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "双手轻扶稳固椅背，保持躯干直立。缓慢将一侧大腿向前抬起至舒适高度，停留1秒后缓慢放下，交替进行。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "躯干后仰代偿",
+      "抬腿时弯曲支撑腿",
+      "动作速度过快"
+    ],
+    "alternatives": [
+      "仰卧直腿抬高",
+      "坐姿抬腿"
+    ],
+    "monitoring_tips": [
+      "确保椅子靠墙固定防滑",
+      "观察躯干是否保持直立"
+    ],
+    "stop_signals": [
+      "髋关节前侧夹击痛",
+      "支撑腿膝关节疼痛",
+      "失去平衡感"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_FACE_PULL_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带面拉",
+    "name_en": "Seated Band Face Pull",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "久坐人群",
+      "肌力提升",
+      "居家",
+      "控压"
+    ],
+    "contraindication_tags": [
+      "急性肩袖损伤",
+      "严重肩峰下撞击综合征"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "三角肌后束",
+      "菱形肌",
+      "肩袖肌群"
+    ],
+    "primary_muscles": [
+      "三角肌后束",
+      "菱形肌",
+      "肩袖肌群"
+    ],
+    "equipment": "弹力带, 固定点",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "中级",
+    "instructions": "坐姿，将弹力带固定在前方与面部同高处。双手握住弹力带两端，向面部方向拉动，同时肩胛骨后缩，肘部向外展开。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "耸肩代偿",
+      "头部前伸",
+      "拉动幅度不足"
+    ],
+    "alternatives": [
+      "站姿弹力带面拉",
+      "哑铃俯身飞鸟"
+    ],
+    "monitoring_tips": [
+      "观察肩胛骨是否有效后缩",
+      "确认固定点高度正确"
+    ],
+    "stop_signals": [
+      "肩关节前侧或外侧锐痛",
+      "颈部代偿性前伸",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SUPINE_PELVIC_CLOCK_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧骨盆时钟",
+    "name_en": "Supine Pelvic Clock",
+    "category": "柔韧与活动度",
+    "exercise_type": "柔韧/活动度",
+    "suitable_tags": [
+      "居家",
+      "低冲击",
+      "久坐人群",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "急性骨盆骨折",
+      "严重骶髂关节紊乱"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "骨盆",
+      "下腰部",
+      "核心"
+    ],
+    "primary_muscles": [
+      "骨盆",
+      "下腰部",
+      "核心"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "极低",
+    "difficulty": "初级",
+    "instructions": "仰卧屈膝，想象骨盆下方有一个时钟。缓慢将骨盆向12点（头部方向）和6点（脚部方向）倾斜，再向3点和9点方向轻微滚动。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "利用腿部发力推动骨盆",
+      "幅度过大导致腰部悬空",
+      "憋气"
+    ],
+    "alternatives": [
+      "仰卧骨盆后倾",
+      "四足支撑骨盆倾斜"
+    ],
+    "monitoring_tips": [
+      "观察动作是否由核心和骨盆周围肌肉主导",
+      "保持自然呼吸"
+    ],
+    "stop_signals": [
+      "下腰部刺痛",
+      "骶髂关节疼痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "慢性腰痛运动干预专家共识",
+      "核心稳定性训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "慢性腰痛运动干预专家共识",
+      "核心稳定性训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_CHAIR_SIT_TO_STAND_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿起立训练",
+    "name_en": "Chair Sit to Stand",
+    "category": "抗阻与功能训练",
+    "exercise_type": "抗阻/功能",
+    "suitable_tags": [
+      "老年防跌倒",
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "严重膝关节骨性关节炎急性期",
+      "体位性低血压未控制"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "股四头肌",
+      "臀大肌",
+      "核心"
+    ],
+    "primary_muscles": [
+      "股四头肌",
+      "臀大肌",
+      "核心"
+    ],
+    "equipment": "稳固椅子",
+    "requires_equipment": true,
+    "impact_level": "低冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "初级",
+    "instructions": "坐在稳固椅子上，双脚平放于地面。身体微前倾，发力站起至完全直立，然后缓慢控制身体坐回椅子上。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "完全靠手臂拉拽扶手站起",
+      "坐下时自由落体",
+      "膝盖严重内扣"
+    ],
+    "alternatives": [
+      "扶椅起立",
+      "高箱深蹲"
+    ],
+    "monitoring_tips": [
+      "监测起立后的血压和心率反应",
+      "确保椅子稳固不滑动"
+    ],
+    "stop_signals": [
+      "膝关节剧痛",
+      "起立时严重头晕或黑蒙",
+      "失去平衡"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_STANDING_BAND_SHOULDER_PRESS_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿弹力带肩推",
+    "name_en": "Standing Band Shoulder Press",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "控压",
+      "减脂"
+    ],
+    "contraindication_tags": [
+      "未控制的高血压",
+      "严重肩袖撕裂",
+      "颈椎病急性期"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "三角肌",
+      "肱三头肌",
+      "核心"
+    ],
+    "primary_muscles": [
+      "三角肌",
+      "肱三头肌",
+      "核心"
+    ],
+    "equipment": "弹力带",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "中",
+    "intensity": "中",
+    "difficulty": "中级",
+    "instructions": "双脚踩住弹力带中段，双手握住两端至肩部高度。核心收紧，将弹力带向上推举至手臂伸直，然后缓慢下放。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "腰部过度反弓代偿",
+      "头部前伸",
+      "下放速度过快"
+    ],
+    "alternatives": [
+      "坐姿哑铃肩推",
+      "弹力带前平举"
+    ],
+    "monitoring_tips": [
+      "监测血压反应，避免憋气",
+      "观察腰椎是否保持中立位"
+    ],
+    "stop_signals": [
+      "肩关节疼痛",
+      "腰部过度反弓",
+      "头晕或头痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "高血压患者运动干预专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "高血压患者运动干预专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_QUADRUPED_CAT_COW_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "四足支撑猫牛式",
+    "name_en": "Quadruped Cat-Cow",
+    "category": "柔韧与活动度",
+    "exercise_type": "柔韧/活动度",
+    "suitable_tags": [
+      "居家",
+      "低冲击",
+      "久坐人群",
+      "柔韧"
+    ],
+    "contraindication_tags": [
+      "严重腕管综合征",
+      "急性腰椎间盘突出伴下肢放射痛"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "脊柱",
+      "核心",
+      "肩关节",
+      "髋关节"
+    ],
+    "primary_muscles": [
+      "脊柱",
+      "核心",
+      "肩关节",
+      "髋关节"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "四足跪姿，双手在肩正下方，双膝在髋正下方。吸气时塌腰抬头（牛式），呼气时拱背低头（猫式），缓慢交替。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "动作仅发生在颈椎和腰椎，胸椎僵硬",
+      "手肘超伸",
+      "憋气"
+    ],
+    "alternatives": [
+      "坐姿脊柱屈伸",
+      "站姿骨盆倾斜"
+    ],
+    "monitoring_tips": [
+      "观察脊柱是否逐节运动",
+      "询问手腕是否有压迫痛"
+    ],
+    "stop_signals": [
+      "手腕剧痛",
+      "下腰部或颈部刺痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "慢性腰痛运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "慢性腰痛运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_STANDING_BAND_FRONT_RAISE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿弹力带前平举",
+    "name_en": "Standing Band Front Raise",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "肩峰下撞击综合征",
+      "急性肩前束拉伤"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "三角肌前束",
+      "核心"
+    ],
+    "primary_muscles": [
+      "三角肌前束",
+      "核心"
+    ],
+    "equipment": "弹力带",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "双脚踩住弹力带，双手握住两端自然下垂。保持手臂微屈，将弹力带向前平举至与肩同高，缓慢下放。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "利用身体后仰惯性甩起",
+      "耸肩",
+      "手臂完全伸直锁死"
+    ],
+    "alternatives": [
+      "哑铃前平举",
+      "弹力带肩推"
+    ],
+    "monitoring_tips": [
+      "观察躯干是否保持直立",
+      "确认肩胛骨稳定"
+    ],
+    "stop_signals": [
+      "肩关节前侧疼痛",
+      "躯干后仰代偿",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_SUPINE_DEAD_BUG_BASIC_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧死虫式基础版",
+    "name_en": "Supine Dead Bug Basic",
+    "category": "核心与平衡",
+    "exercise_type": "核心/平衡",
+    "suitable_tags": [
+      "居家",
+      "低冲击",
+      "久坐人群",
+      "核心"
+    ],
+    "contraindication_tags": [
+      "严重腹直肌分离",
+      "急性下腰痛"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "核心",
+      "髋屈肌",
+      "肩关节"
+    ],
+    "primary_muscles": [
+      "核心",
+      "髋屈肌",
+      "肩关节"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "中级",
+    "instructions": "仰卧，双臂伸直指向天花板，双腿屈膝90度抬起。保持下背部紧贴地面，缓慢将一侧手臂和对侧腿下放至接近地面，然后收回。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "下背部拱起离开垫面",
+      "下放速度过快",
+      "憋气"
+    ],
+    "alternatives": [
+      "仰卧单腿下放",
+      "仰卧骨盆后倾"
+    ],
+    "monitoring_tips": [
+      "将手垫在用户下背部，监测是否产生空隙",
+      "观察呼吸节奏"
+    ],
+    "stop_signals": [
+      "下背部离开地面且无法控制",
+      "腰部疼痛",
+      "颈部代偿性紧张"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "核心稳定性训练专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "核心稳定性训练专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_CHEST_FLY_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带夹胸",
+    "name_en": "Seated Band Chest Fly",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "急性胸大肌拉伤",
+      "严重肩关节不稳"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "胸大肌",
+      "三角肌前束"
+    ],
+    "primary_muscles": [
+      "胸大肌",
+      "三角肌前束"
+    ],
+    "equipment": "弹力带, 稳固椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "坐姿，将弹力带固定在身后。双手握住两端，手臂微屈，从两侧向胸前环抱夹胸，顶峰收缩后缓慢还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "手臂过度伸直",
+      "利用躯干扭转借力",
+      "还原时肩部过度后伸"
+    ],
+    "alternatives": [
+      "站姿弹力带夹胸",
+      "哑铃仰卧飞鸟"
+    ],
+    "monitoring_tips": [
+      "观察肩胛骨是否保持后缩下沉",
+      "确认固定点高度与肩同高"
+    ],
+    "stop_signals": [
+      "肩关节前侧疼痛",
+      "胸骨处锐痛",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_STANDING_CHAIR_WEIGHT_SHIFT_AP_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿扶椅重心前后转移",
+    "name_en": "Standing Chair Weight Shift AP",
+    "category": "平衡训练",
+    "exercise_type": "平衡",
+    "suitable_tags": [
+      "老年防跌倒",
+      "平衡",
+      "居家",
+      "老年友好"
+    ],
+    "contraindication_tags": [
+      "严重前庭功能障碍",
+      "急性下肢骨折"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "踝关节",
+      "小腿",
+      "核心"
+    ],
+    "primary_muscles": [
+      "踝关节",
+      "小腿",
+      "核心"
+    ],
+    "equipment": "稳固椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "双手轻扶椅背，双脚与肩同宽。缓慢将身体重心向前转移至脚尖，再向后转移至脚跟，保持躯干直立。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "躯干前倾或后仰代偿",
+      "转移幅度不足",
+      "速度过快"
+    ],
+    "alternatives": [
+      "站姿重心左右转移",
+      "扶椅提踵"
+    ],
+    "monitoring_tips": [
+      "观察重心转移时躯干是否保持直立",
+      "确保椅子稳固"
+    ],
+    "stop_signals": [
+      "严重头晕或眩晕",
+      "踝关节疼痛",
+      "失去平衡"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SIDE_LYING_STRAIGHT_LEG_RAISE_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "侧卧直腿侧抬",
+    "name_en": "Side Lying Straight Leg Raise",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "急性大转子滑囊炎",
+      "严重髋关节骨性关节炎"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "臀中肌",
+      "阔筋膜张肌",
+      "核心"
+    ],
+    "primary_muscles": [
+      "臀中肌",
+      "阔筋膜张肌",
+      "核心"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "侧卧，下侧腿屈曲稳定身体，上侧腿伸直。缓慢将上侧腿向上抬起至舒适高度，然后缓慢下放，不触地。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "骨盆向后翻转",
+      "抬腿时腿向前伸",
+      "利用惯性甩腿"
+    ],
+    "alternatives": [
+      "站姿弹力带髋外展",
+      "侧卧蚌式开合"
+    ],
+    "monitoring_tips": [
+      "观察骨盆是否垂直于地面",
+      "确认上侧腿在身体正侧方"
+    ],
+    "stop_signals": [
+      "髋关节外侧疼痛",
+      "下腰部代偿性扭转",
+      "大腿外侧麻木"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SEATED_NECK_SIDE_BEND_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿颈部侧屈拉伸",
+    "name_en": "Seated Neck Side Bend Stretch",
+    "category": "柔韧训练",
+    "exercise_type": "柔韧",
+    "suitable_tags": [
+      "久坐人群",
+      "柔韧",
+      "居家",
+      "低冲击"
+    ],
+    "contraindication_tags": [
+      "严重颈椎病",
+      "颈椎动脉斑块不稳定",
+      "急性颈部扭伤"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "颈部侧面",
+      "斜方肌上束"
+    ],
+    "primary_muscles": [
+      "颈部侧面",
+      "斜方肌上束"
+    ],
+    "equipment": "无",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "极低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "坐姿挺直，右手绕过头顶轻放于左耳上方。缓慢将头部向右侧拉，感受左侧颈部拉伸，保持15-30秒，换边。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "用力过猛导致颈部疼痛",
+      "对侧肩膀耸起",
+      "躯干侧倾代偿"
+    ],
+    "alternatives": [
+      "站姿颈部侧屈",
+      "斜方肌上束自我按摩"
+    ],
+    "monitoring_tips": [
+      "观察对侧肩膀是否下沉",
+      "询问是否有神经放射症状"
+    ],
+    "stop_signals": [
+      "颈部神经放射痛",
+      "头晕或恶心",
+      "手臂麻木"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "上交叉综合征运动康复专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "上交叉综合征运动康复专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_STANDING_BAND_KICKBACK_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿弹力带后踢腿",
+    "name_en": "Standing Band Kickback",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年防跌倒",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "严重髋关节前侧撞击"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "臀大肌",
+      "腘绳肌",
+      "核心"
+    ],
+    "primary_muscles": [
+      "臀大肌",
+      "腘绳肌",
+      "核心"
+    ],
+    "equipment": "弹力带, 固定点, 稳固支撑物",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中",
+    "difficulty": "中级",
+    "instructions": "将弹力带一端固定在低处，另一端套在脚踝。面向固定点，双手扶墙或椅背。缓慢将腿向后伸直抬起，顶峰收缩后缓慢还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "腰部过度反弓代偿",
+      "膝关节弯曲",
+      "利用惯性甩腿"
+    ],
+    "alternatives": [
+      "俯卧垫上后踢腿",
+      "站姿自重后踢腿"
+    ],
+    "monitoring_tips": [
+      "观察腰椎是否保持中立位",
+      "确认支撑物稳固"
+    ],
+    "stop_signals": [
+      "下腰部疼痛",
+      "膝关节后侧锐痛",
+      "失去平衡"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_PRONE_THORACIC_EXT_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "俯卧垫上胸椎伸展",
+    "name_en": "Prone Thoracic Extension",
+    "category": "柔韧与活动度",
+    "exercise_type": "柔韧/活动度",
+    "suitable_tags": [
+      "久坐人群",
+      "柔韧",
+      "居家",
+      "低冲击"
+    ],
+    "contraindication_tags": [
+      "严重胸椎后凸畸形",
+      "急性胸椎骨折",
+      "严重骨质疏松"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "胸椎",
+      "竖脊肌",
+      "肩关节"
+    ],
+    "primary_muscles": [
+      "胸椎",
+      "竖脊肌",
+      "肩关节"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "中级",
+    "instructions": "俯卧于垫上，双手放在肩膀两侧。吸气准备，呼气时胸部缓慢抬离地面，保持骨盆和下肋骨贴地，感受胸椎伸展。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "利用腰椎过度后伸代偿",
+      "颈部过度后仰",
+      "耸肩"
+    ],
+    "alternatives": [
+      "泡沫轴胸椎伸展",
+      "四足支撑胸椎旋转"
+    ],
+    "monitoring_tips": [
+      "观察下肋骨是否离开地面",
+      "询问腰部是否有挤压感"
+    ],
+    "stop_signals": [
+      "下腰部挤压痛",
+      "胸椎刺痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "上交叉综合征运动康复专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "上交叉综合征运动康复专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_LAT_PULLDOWN_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带下拉",
+    "name_en": "Seated Band Lat Pulldown",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "久坐人群",
+      "控压"
+    ],
+    "contraindication_tags": [
+      "急性肩袖损伤",
+      "严重肩关节不稳"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "背阔肌",
+      "大圆肌",
+      "肱二头肌"
+    ],
+    "primary_muscles": [
+      "背阔肌",
+      "大圆肌",
+      "肱二头肌"
+    ],
+    "equipment": "弹力带, 高位固定点",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "坐姿，将弹力带固定在头顶上方。双手宽握弹力带，从头顶上方缓慢向下拉至锁骨高度，肩胛骨下沉，缓慢还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "躯干过度后仰借力",
+      "耸肩",
+      "下拉幅度不足"
+    ],
+    "alternatives": [
+      "站姿弹力带下拉",
+      "高位下拉器械"
+    ],
+    "monitoring_tips": [
+      "观察肩胛骨是否有效下沉",
+      "确认固定点牢固"
+    ],
+    "stop_signals": [
+      "肩关节疼痛",
+      "颈部代偿性前伸",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动康复专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "上交叉综合征运动康复专家共识"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "FLEX_SUPINE_SPINAL_TWIST_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "仰卧脊柱扭转",
+    "name_en": "Supine Spinal Twist",
+    "category": "柔韧训练",
+    "exercise_type": "柔韧",
+    "suitable_tags": [
+      "居家",
+      "柔韧",
+      "低冲击",
+      "久坐人群"
+    ],
+    "contraindication_tags": [
+      "急性腰椎间盘突出",
+      "严重骨质疏松",
+      "脊柱手术后未愈合"
+    ],
+    "risk_level": "R1",
+    "body_parts": [
+      "脊柱",
+      "胸廓",
+      "髋关节"
+    ],
+    "primary_muscles": [
+      "脊柱",
+      "胸廓",
+      "髋关节"
+    ],
+    "equipment": "瑜伽垫",
+    "requires_equipment": false,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低",
+    "difficulty": "初级",
+    "instructions": "仰卧，双臂平举呈T字。双膝屈曲并拢，缓慢将双膝倒向一侧，头部转向对侧，感受脊柱扭转，保持15-30秒，换边。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "对侧肩膀离开地面",
+      "强行将膝盖压向地面",
+      "憋气"
+    ],
+    "alternatives": [
+      "坐姿脊柱扭转",
+      "四足支撑胸椎旋转"
+    ],
+    "monitoring_tips": [
+      "观察对侧肩膀是否贴地",
+      "询问是否有神经放射症状"
+    ],
+    "stop_signals": [
+      "下腰部或胸椎刺痛",
+      "神经放射痛",
+      "头晕"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "慢性腰痛运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "慢性腰痛运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "BAL_STANDING_CHAIR_SINGLE_LEG_EYES_CLOSED_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "站姿扶椅单腿站立闭眼",
+    "name_en": "Standing Chair Single Leg Eyes Closed",
+    "category": "平衡训练",
+    "exercise_type": "平衡",
+    "suitable_tags": [
+      "老年防跌倒",
+      "平衡",
+      "居家",
+      "进阶"
+    ],
+    "contraindication_tags": [
+      "严重前庭功能障碍",
+      "未控制的体位性低血压",
+      "急性下肢损伤"
+    ],
+    "risk_level": "R2",
+    "body_parts": [
+      "踝关节",
+      "小腿",
+      "核心",
+      "前庭系统"
+    ],
+    "primary_muscles": [
+      "踝关节",
+      "小腿",
+      "核心",
+      "前庭系统"
+    ],
+    "equipment": "稳固椅子",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "中-高",
+    "difficulty": "高级",
+    "instructions": "双手轻扶椅背，单腿站立。在保持平衡的前提下，缓慢闭上双眼，维持10-15秒。若失去平衡立即睁眼并双脚落地。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "闭眼后身体剧烈晃动",
+      "支撑腿膝盖弯曲",
+      "手部紧握椅背"
+    ],
+    "alternatives": [
+      "睁眼单腿站立",
+      "双脚闭眼站立"
+    ],
+    "monitoring_tips": [
+      "专家审核初稿：必须在专业人员近距离保护下进行",
+      "密切观察用户面色和平衡状态"
+    ],
+    "stop_signals": [
+      "严重眩晕或恶心",
+      "失去平衡且无法恢复",
+      "支撑腿关节疼痛"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "evidence_or_rationale": [
+      "老年人防跌倒运动干预专家共识",
+      "ACSM运动测试与运动处方指南"
+    ],
+    "version": "v0.1-ai-increment",
+    "status": "PENDING_REVIEW"
+  },
+  {
+    "action_code": "RES_SEATED_BAND_TRICEP_PUSHDOWN_01",
+    "draft_label": "AI生成增量专家审核草案",
+    "name": "坐姿弹力带三头下压",
+    "name_en": "Seated Band Tricep Pushdown",
+    "category": "抗阻训练",
+    "exercise_type": "抗阻",
+    "suitable_tags": [
+      "肌力提升",
+      "居家",
+      "老年友好",
+      "控糖"
+    ],
+    "contraindication_tags": [
+      "急性肘关节损伤",
+      "严重肩袖撕裂"
+    ],
+    "risk_level": "R0",
+    "body_parts": [
+      "肱三头肌",
+      "肘关节"
+    ],
+    "primary_muscles": [
+      "肱三头肌",
+      "肘关节"
+    ],
+    "equipment": "弹力带, 高位固定点",
+    "requires_equipment": true,
+    "impact_level": "无冲击",
+    "joint_stress_level": "低",
+    "intensity": "低-中",
+    "difficulty": "初级",
+    "instructions": "坐姿，将弹力带固定在头顶上方。双手握住两端，大臂贴紧身体两侧，屈肘90度。缓慢将弹力带向下压至手臂伸直，控制还原。",
+    "dosage_suggestion": "5-30分钟/次，2-5次/周；按RPE 9-13和症状反馈保守进阶；R2人群必须专家审核后发布。",
+    "common_mistakes": [
+      "大臂离开身体两侧",
+      "利用躯干下压借力",
+      "手腕过度屈曲"
+    ],
+    "alternatives": [
+      "站姿弹力带三头下压",
+      "哑铃颈后臂屈伸"
+    ],
+    "monitoring_tips": [
+      "观察大臂是否保持固定",
+      "确认固定点牢固"
+    ],
+    "stop_signals": [
+      "肘关节后侧锐痛",
+      "肩关节代偿性前屈",
+      "弹力带滑脱"
+    ],
+    "image_asset_requirement": "需提供正面/侧面关键姿势图；标注安全支撑、关节对线、错误示范、禁忌标签和停练信号。",
+    "video_asset_requirement": "需提供慢速标准示范、低难度替代、常见错误、RPE提示和停练信号；不得暗示适合所有人。",
+    "review_status": "PENDING_REVIEW",
+    "evidence_refs": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "evidence_or_rationale": [
+      "ACSM运动测试与运动处方指南",
+      "老年人群抗阻训练专家共识"
+    ],
+    "version": "v0.1-ai-increment",
     "status": "PENDING_REVIEW"
   }
 ]
