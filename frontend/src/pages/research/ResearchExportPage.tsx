@@ -164,7 +164,7 @@ function ResearchPrivacyStrip({
   const expired = requests.filter((item) => isExportExpired(item)).length;
   const downloaded = requests.filter((item) => isExportDownloaded(item)).length;
   return (
-    <section className="research-privacy-strip" data-testid="research-privacy-strip">
+    <section className={`research-privacy-strip ${isAdminMode ? "is-admin-mode" : ""}`} data-testid="research-privacy-strip">
       <div>
         <Typography.Text className="page-hero-eyebrow">脱敏治理</Typography.Text>
         <Typography.Title level={4}>仅展示脱敏聚合数据</Typography.Title>
@@ -893,12 +893,13 @@ export function ResearchExportPage() {
               {isAdminMode ? "管理员预览仅展示 subject_id、年龄段和脱敏指标。" : "科研端仅展示脱敏聚合指标和本人导出申请。"}
             </Typography.Text>
           </Space>
+          {isAdminMode ? renderExportJobs() : null}
           {(mode === "dashboard" || mode === "export") && renderMetrics()}
           {!isAdminMode && (mode === "dashboard" || mode === "export") && renderResearchConsoleAnalytics()}
           {(mode === "dashboard" || mode === "export") && renderOverviewCharts()}
           {mode === "cluster" && renderClusterAnalysis()}
           {mode === "effects" && renderInterventionEffects()}
-          {(mode === "jobs" || mode === "export" || isAdminMode) && renderExportJobs()}
+          {!isAdminMode && (mode === "jobs" || mode === "export") && renderExportJobs()}
           {isAdminMode && (mode === "dashboard" || mode === "export") && renderDesensitizedTable("管理员脱敏预览")}
         </Space>
     </AppShell>
