@@ -561,8 +561,13 @@ export function ExpertReviewPage() {
         <ReviewWorkbench>
           <Col xs={24} lg={6} className="expert-left-column" data-testid="expert-left-column">
             <Card title="审核队列" className="expert-panel">
-              <div className="expert-filter-grid" data-testid="expert-filter-grid">
-                <div className="expert-filter-row expert-filter-primary-row" data-testid="expert-filter-primary-row">
+              <details className="expert-filter-details">
+                <summary>
+                  <span>筛选条件</span>
+                  <Tag>{filters.risk_level || filters.status || filters.prescription_type || filters.abnormal_feedback ? "已设置" : "全部队列"}</Tag>
+                </summary>
+                <div className="expert-filter-grid" data-testid="expert-filter-grid">
+                  <div className="expert-filter-row expert-filter-primary-row" data-testid="expert-filter-primary-row">
                   <div className="expert-filter-selects" data-testid="expert-filter-selects">
                   <div className="expert-filter-field">
                     <label htmlFor="review-risk-level">风险等级</label>
@@ -634,6 +639,7 @@ export function ExpertReviewPage() {
                   <Button aria-label="筛选" size="small" type="primary" onClick={applyFilters}>筛选</Button>
                 </div>
               </div>
+              </details>
               {queueError ? (
                 <Alert type="error" showIcon message="审核队列加载失败，请确认专家权限或稍后重试。" />
               ) : items.length ? (
