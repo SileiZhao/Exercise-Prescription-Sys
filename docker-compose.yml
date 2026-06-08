@@ -63,6 +63,7 @@ services:
       SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
       ENVIRONMENT: ${ENVIRONMENT:-development}
       BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-["http://localhost:5173","http://127.0.0.1:5173","http://192.168.2.15:5173"]}
+      RESEARCH_EXPORT_SALT: ${RESEARCH_EXPORT_SALT:-change-me-research-export-salt}
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://exercise:exercise@postgres:5432/exercise}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}

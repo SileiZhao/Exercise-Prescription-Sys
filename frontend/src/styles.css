@@ -2087,12 +2087,111 @@ body {
 }
 
 
+.admin-rules-page-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-rule-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin-rule-governance-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, auto);
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid var(--eps-border);
+  border-radius: 8px;
+  box-shadow: var(--eps-card-shadow);
+}
+
+.admin-rule-governance-heading {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.admin-rule-governance-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  color: var(--eps-deep-teal);
+  background: #eef8fb;
+  border: 1px solid #cfebf3;
+  border-radius: 8px;
+}
+
+.admin-rule-governance-heading h4.ant-typography {
+  margin: 0 0 2px;
+  color: var(--eps-deep-teal);
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.admin-rule-governance-heading .ant-typography-secondary {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.admin-rule-governance-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.admin-rule-workbench-title {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.admin-rule-workbench-title > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  color: var(--eps-primary);
+  background: #eef6ff;
+  border-radius: 8px;
+}
+
+.admin-rule-workbench-title > div {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.admin-rule-workbench-title .ant-typography-secondary {
+  font-size: 12px;
+  white-space: normal;
+}
+
 .admin-rules-workbench .ant-card {
   height: 100%;
 }
 
 .admin-rules-workbench textarea {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.admin-rule-mobile-tabs .ant-tabs-nav {
+  margin-bottom: 12px;
 }
 
 .admin-rule-library-card .ant-card-body {
@@ -2166,6 +2265,14 @@ body {
 }
 
 @media (max-width: 1100px) {
+  .admin-rule-governance-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-rule-governance-tags {
+    justify-content: flex-start;
+  }
+
   .admin-rule-library-summary,
   .admin-rule-library-toolbar {
     grid-template-columns: minmax(0, 1fr);
@@ -2176,9 +2283,57 @@ body {
   }
 }
 
+@media (max-width: 900px) {
+  .admin-rule-action-row {
+    order: 1;
+  }
+
+  .admin-rule-governance-panel {
+    order: 2;
+    padding: 12px;
+  }
+
+  .admin-rule-library-card {
+    order: 3;
+  }
+
+  .admin-rules-workbench {
+    order: 4;
+  }
+
+  .admin-rule-governance-heading {
+    gap: 8px;
+  }
+
+  .admin-rule-governance-tags {
+    gap: 4px;
+  }
+
+  .admin-rule-library-card .ant-card-body {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .admin-rule-library-summary {
+    padding: 12px;
+  }
+
+  .admin-rule-library-table .ant-table {
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 700px) {
   .admin-rule-library-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-rule-action-row .ant-btn {
+    flex: 1 1 140px;
+  }
+
+  .admin-rule-governance-tags .ant-tag {
+    margin-inline-end: 0;
   }
 }
 

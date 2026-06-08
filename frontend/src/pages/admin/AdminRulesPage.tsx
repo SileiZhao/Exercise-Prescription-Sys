@@ -1,7 +1,8 @@
-import { Alert, Button, Card, Col, Descriptions, Divider, Drawer, Form, Input, List, Row, Select, Space, Table, Tag, Tooltip, Typography } from "antd";
+import { Alert, Button, Card, Col, Descriptions, Divider, Drawer, Form, Input, List, Row, Select, Space, Table, Tabs, Tag, Tooltip, Typography } from "antd";
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye } from "lucide-react";
+import { Eye, FlaskConical, History, ListChecks, ShieldAlert } from "lucide-react";
 
 import { listAuditLogs, type AuditLogItem } from "../../api/adminAudit";
 import { createRiskRule, listRiskRules, testRiskRules, updateRiskRule, type RiskRuleItem, type RiskRulePayload } from "../../api/adminRules";
@@ -74,6 +75,28 @@ function countRulesBySeverity(rules: RiskRuleItem[]) {
   }, {});
 }
 
+function useCompactRuleWorkbench() {
+  const [isCompact, setIsCompact] = useState(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return false;
+    }
+    return window.matchMedia("(max-width: 900px)").matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return undefined;
+    }
+    const query = window.matchMedia("(max-width: 900px)");
+    const update = () => setIsCompact(query.matches);
+    update();
+    query.addEventListener?.("change", update);
+    return () => query.removeEventListener?.("change", update);
+  }, []);
+
+  return isCompact;
+}
+
 export function AdminRulesPage() {
   const [rules, setRules] = useState<RiskRuleItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,6 +107,7 @@ export function AdminRulesPage() {
   const [selectedRule, setSelectedRule] = useState<RiskRuleItem | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const ruleSeverity = countRulesBySeverity(rules);
+  const isCompactWorkbench = useCompactRuleWorkbench();
 
   const filteredRules = rules.filter((rule) => {
     const text = [
@@ -211,170 +235,245 @@ export function AdminRulesPage() {
     }
   }
 
+  const ruleTestPanel = (
+    <>
+      <RuleTestForm saving={saving} onFinish={runRuleTest} />
+      {testResult ? (
+        <Alert
+          className="form-alert"
+          type={(testResult.risk_level as string) === "R3" ? "error" : "info"}
+          showIcon
+          message={`测试结果：${testResult.risk_level}`}
+          description={
+            <Space direction="vertical" size={8}>
+              <Typography.Text strong>命中规则</Typography.Text>
+              {Array.isArray(testResult.matched_rules)
+                ? testResult.matched_rules.map((rule) => (
+                    <Space direction="vertical" size={4} key={String((rule as Record<string, unknown>).code)}>
+                      <RuleHitCard rule={rule as Record<string, unknown>} />
+                      <Typography.Text type="secondary">
+                        字段：{String((rule as Record<string, unknown>).path ?? "-")}
+                      </Typography.Text>
+                    </Space>
+                  ))
+                : <Typography.Text type="secondary">暂无命中规则</Typography.Text>}
+            </Space>
+          }
+        />
+      ) : null}
+    </>
+  );
+
+  const ruleLibraryCard = (
+    <Card className="admin-rule-library-card">
+      <section className="admin-rule-library-summary" aria-label="规则库概览">
+        <div>
+          <Typography.Title level={4}>规则库概览</Typography.Title>
+          <Typography.Text type="secondary">
+            筛选后 {filteredRules.length} / 全部 {rules.length}
+          </Typography.Text>
+        </div>
+        <div className="admin-rule-library-metrics">
+          <div>
+            <span>红色阻断</span>
+            <strong>{ruleSeverity.RED ?? 0}</strong>
+          </div>
+          <div>
+            <span>黄色审核</span>
+            <strong>{ruleSeverity.YELLOW ?? 0}</strong>
+          </div>
+          <div>
+            <span>绿色放行</span>
+            <strong>{ruleSeverity.GREEN ?? 0}</strong>
+          </div>
+          <div>
+            <span>停用规则</span>
+            <strong>{rules.filter((rule) => !rule.is_active).length}</strong>
+          </div>
+        </div>
+      </section>
+      <div className="admin-rule-library-toolbar">
+        <Input
+          aria-label="规则筛选"
+          placeholder="按编码、名称、字段、风险等级或来源筛选规则"
+          value={ruleFilter}
+          onChange={(event) => setRuleFilter(event.target.value)}
+        />
+        <Typography.Text type="secondary">每页 12 条，详情在抽屉中查看</Typography.Text>
+      </div>
+      <Table
+        rowKey="id"
+        className="admin-rule-library-table"
+        loading={loading}
+        dataSource={filteredRules}
+        pagination={{
+          pageSize: 12,
+          showSizeChanger: false,
+          showTotal: (total) => `共 ${total} 条规则`
+        }}
+        scroll={{ x: 1040 }}
+        locale={{ emptyText: "暂无自定义风险规则" }}
+        columns={[
+          {
+            title: "编码",
+            dataIndex: "code",
+            width: 190,
+            render: (value: string, record: RiskRuleItem) => (
+              <Space direction="vertical" size={0}>
+                <Typography.Text strong>{value}</Typography.Text>
+                <Typography.Text type="secondary">{record.source_ref || record.rule_type || "-"}</Typography.Text>
+              </Space>
+            )
+          },
+          {
+            title: "规则名称",
+            dataIndex: "name",
+            width: 230,
+            render: (value: string, record: RiskRuleItem) => (
+              <Space direction="vertical" size={0}>
+                <Typography.Text>{value}</Typography.Text>
+                <Typography.Text type="secondary">{record.message}</Typography.Text>
+              </Space>
+            )
+          },
+          {
+            title: "等级",
+            dataIndex: "severity",
+            width: 96,
+            render: (value: RiskRuleItem["severity"]) => <Tag color={value === "RED" ? "red" : value === "YELLOW" ? "orange" : "green"}>{value}</Tag>
+          },
+          {
+            title: "条件",
+            dataIndex: "condition",
+            width: 220,
+            render: (value: Record<string, unknown>) => formatCondition(value)
+          },
+          {
+            title: "禁忌与强度",
+            width: 220,
+            render: (_: unknown, record: RiskRuleItem) => (
+              <Space size={[4, 4]} wrap>
+                <Tag color={(record.contraindications ?? []).length ? "red" : "default"}>
+                  禁忌 {(record.contraindications ?? []).length}
+                </Tag>
+                <Tag color={record.intensity_cap ? "orange" : "default"}>
+                  {record.intensity_cap ? "强度限制" : "无强度上限"}
+                </Tag>
+              </Space>
+            )
+          },
+          {
+            title: "状态",
+            dataIndex: "is_active",
+            width: 90,
+            render: (value: boolean) => (value ? <Tag color="green">启用</Tag> : <Tag>停用</Tag>)
+          },
+          { title: "版本", dataIndex: "version", width: 72 },
+          {
+            title: "操作",
+            width: 72,
+            fixed: "right",
+            render: (_: unknown, record: RiskRuleItem) => (
+              <Tooltip title="查看规则详情">
+                <Button aria-label="查看规则详情" size="small" icon={<Eye size={14} />} onClick={() => void openRuleDetail(record)} />
+              </Tooltip>
+            )
+          }
+        ]}
+      />
+    </Card>
+  );
+
   return (
     <AppShell role="admin" title="风险规则管理">
-        <Space direction="vertical" size={16} className="onboarding-section">
+        <div className="onboarding-section admin-rules-page-layout">
           {notice ? <Alert type={notice.includes("失败") || notice.includes("必须是合法 JSON") ? "error" : "success"} showIcon message={notice} /> : null}
-          <Space wrap>
+          <div className="admin-rule-action-row">
             <Link to="/admin/dashboard">
               <Button>返回看板</Button>
             </Link>
             <Link to="/admin/audit-logs">
-              <Button>全局审计日志</Button>
+              <Button icon={<History size={14} />}>全局审计日志</Button>
             </Link>
-          </Space>
-          <Row gutter={[16, 16]} className="admin-rules-workbench" data-testid="admin-rules-workbench">
-            <Col xs={24} lg={11}>
-              <Card title="规则基础配置">
-                <RuleForm saving={saving} onFinish={saveRule} />
-              </Card>
-            </Col>
-            <Col xs={24} lg={13}>
-              <Card title="JSON / 测试区">
-                <RuleTestForm saving={saving} onFinish={runRuleTest} />
-                {testResult ? (
-                  <Alert
-                    className="form-alert"
-                    type={(testResult.risk_level as string) === "R3" ? "error" : "info"}
-                    showIcon
-                    message={`测试结果：${testResult.risk_level}`}
-                    description={
-                      <Space direction="vertical" size={8}>
-                        <Typography.Text strong>命中规则</Typography.Text>
-                        {Array.isArray(testResult.matched_rules)
-                          ? testResult.matched_rules.map((rule) => (
-                              <Space direction="vertical" size={4} key={String((rule as Record<string, unknown>).code)}>
-                                <RuleHitCard rule={rule as Record<string, unknown>} />
-                                <Typography.Text type="secondary">
-                                  字段：{String((rule as Record<string, unknown>).path ?? "-")}
-                                </Typography.Text>
-                              </Space>
-                            ))
-                          : <Typography.Text type="secondary">暂无命中规则</Typography.Text>}
-                      </Space>
-                    }
-                  />
-                ) : null}
-              </Card>
-            </Col>
-          </Row>
-          <Card className="admin-rule-library-card">
-            <section className="admin-rule-library-summary" aria-label="规则库概览">
+          </div>
+          <section className="admin-rule-governance-panel" aria-label="规则治理状态">
+            <div className="admin-rule-governance-heading">
+              <span className="admin-rule-governance-icon"><ShieldAlert size={18} /></span>
               <div>
-                <Typography.Title level={4}>规则库概览</Typography.Title>
+                <Typography.Title level={4}>规则治理工作台</Typography.Title>
                 <Typography.Text type="secondary">
-                  筛选后 {filteredRules.length} / 全部 {rules.length}
+                  规则变更会影响风险分级、禁忌过滤、模板匹配与专家审核流。
                 </Typography.Text>
               </div>
-              <div className="admin-rule-library-metrics">
-                <div>
-                  <span>红色阻断</span>
-                  <strong>{ruleSeverity.RED ?? 0}</strong>
-                </div>
-                <div>
-                  <span>黄色审核</span>
-                  <strong>{ruleSeverity.YELLOW ?? 0}</strong>
-                </div>
-                <div>
-                  <span>绿色放行</span>
-                  <strong>{ruleSeverity.GREEN ?? 0}</strong>
-                </div>
-                <div>
-                  <span>停用规则</span>
-                  <strong>{rules.filter((rule) => !rule.is_active).length}</strong>
-                </div>
-              </div>
-            </section>
-            <div className="admin-rule-library-toolbar">
-              <Input
-                aria-label="规则筛选"
-                placeholder="按编码、名称、字段、风险等级或来源筛选规则"
-                value={ruleFilter}
-                onChange={(event) => setRuleFilter(event.target.value)}
-              />
-              <Typography.Text type="secondary">每页 12 条，详情在抽屉中查看</Typography.Text>
             </div>
-            <Table
-              rowKey="id"
-              className="admin-rule-library-table"
-              loading={loading}
-              dataSource={filteredRules}
-              pagination={{
-                pageSize: 12,
-                showSizeChanger: false,
-                showTotal: (total) => `共 ${total} 条规则`
-              }}
-              scroll={{ x: 1040 }}
-              locale={{ emptyText: "暂无自定义风险规则" }}
-              columns={[
-                {
-                  title: "编码",
-                  dataIndex: "code",
-                  width: 190,
-                  render: (value: string, record: RiskRuleItem) => (
-                    <Space direction="vertical" size={0}>
-                      <Typography.Text strong>{value}</Typography.Text>
-                      <Typography.Text type="secondary">{record.source_ref || record.rule_type || "-"}</Typography.Text>
-                    </Space>
-                  )
-                },
-                {
-                  title: "规则名称",
-                  dataIndex: "name",
-                  width: 230,
-                  render: (value: string, record: RiskRuleItem) => (
-                    <Space direction="vertical" size={0}>
-                      <Typography.Text>{value}</Typography.Text>
-                      <Typography.Text type="secondary">{record.message}</Typography.Text>
-                    </Space>
-                  )
-                },
-                {
-                  title: "等级",
-                  dataIndex: "severity",
-                  width: 96,
-                  render: (value: RiskRuleItem["severity"]) => <Tag color={value === "RED" ? "red" : value === "YELLOW" ? "orange" : "green"}>{value}</Tag>
-                },
-                {
-                  title: "条件",
-                  dataIndex: "condition",
-                  width: 220,
-                  render: (value: Record<string, unknown>) => formatCondition(value)
-                },
-                {
-                  title: "禁忌与强度",
-                  width: 220,
-                  render: (_: unknown, record: RiskRuleItem) => (
-                    <Space size={[4, 4]} wrap>
-                      <Tag color={(record.contraindications ?? []).length ? "red" : "default"}>
-                        禁忌 {(record.contraindications ?? []).length}
-                      </Tag>
-                      <Tag color={record.intensity_cap ? "orange" : "default"}>
-                        {record.intensity_cap ? "强度限制" : "无强度上限"}
-                      </Tag>
-                    </Space>
-                  )
-                },
-                {
-                  title: "状态",
-                  dataIndex: "is_active",
-                  width: 90,
-                  render: (value: boolean) => (value ? <Tag color="green">启用</Tag> : <Tag>停用</Tag>)
-                },
-                { title: "版本", dataIndex: "version", width: 72 },
-                {
-                  title: "操作",
-                  width: 72,
-                  fixed: "right",
-                  render: (_: unknown, record: RiskRuleItem) => (
-                    <Tooltip title="查看规则详情">
-                      <Button aria-label="查看规则详情" size="small" icon={<Eye size={14} />} onClick={() => void openRuleDetail(record)} />
-                    </Tooltip>
-                  )
-                }
-              ]}
-            />
-          </Card>
+            <div className="admin-rule-governance-tags">
+              <Tag color="blue">成人一般健康/慢病风险</Tag>
+              <Tag color="orange">R2 强制专家审核</Tag>
+              <Tag color="red">R3 不生成训练处方</Tag>
+              <Tag color="cyan">AI 仅组合与解释</Tag>
+            </div>
+          </section>
+          <Row gutter={[16, 16]} className="admin-rules-workbench" data-testid="admin-rules-workbench">
+            {isCompactWorkbench ? (
+              <Col span={24}>
+                <Card
+                  title={
+                    <WorkbenchCardTitle
+                      icon={<ListChecks size={16} />}
+                      title="规则配置与验证"
+                      description="新增规则和 JSON 测试分开处理，避免误改上线规则。"
+                    />
+                  }
+                >
+                  <Tabs
+                    className="admin-rule-mobile-tabs"
+                    items={[
+                      {
+                        key: "rule-form",
+                        label: "新增规则",
+                        children: <RuleForm saving={saving} onFinish={saveRule} />
+                      },
+                      {
+                        key: "rule-test",
+                        label: "JSON 测试",
+                        children: ruleTestPanel
+                      }
+                    ]}
+                  />
+                </Card>
+              </Col>
+            ) : (
+              <>
+                <Col xs={24} lg={11}>
+                  <Card
+                    title={
+                      <WorkbenchCardTitle
+                        icon={<ListChecks size={16} />}
+                        title="规则基础配置"
+                        description="以可审计 DSL 维护风险等级、适用人群和禁忌动作。"
+                      />
+                    }
+                  >
+                    <RuleForm saving={saving} onFinish={saveRule} />
+                  </Card>
+                </Col>
+                <Col xs={24} lg={13}>
+                  <Card
+                    title={
+                      <WorkbenchCardTitle
+                        icon={<FlaskConical size={16} />}
+                        title="JSON / 测试区"
+                        description="用六类数据快照验证命中规则和安全动作。"
+                      />
+                    }
+                  >
+                    {ruleTestPanel}
+                  </Card>
+                </Col>
+              </>
+            )}
+          </Row>
+          {ruleLibraryCard}
           <Drawer
             title="规则详情"
             width={760}
@@ -471,8 +570,20 @@ export function AdminRulesPage() {
               </Space>
             ) : null}
           </Drawer>
-        </Space>
+        </div>
     </AppShell>
+  );
+}
+
+function WorkbenchCardTitle({ icon, title, description }: { icon: ReactNode; title: string; description: string }) {
+  return (
+    <div className="admin-rule-workbench-title">
+      <span>{icon}</span>
+      <div>
+        <Typography.Text strong>{title}</Typography.Text>
+        <Typography.Text type="secondary">{description}</Typography.Text>
+      </div>
+    </div>
   );
 }
 
