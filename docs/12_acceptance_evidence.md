@@ -691,3 +691,89 @@ cd backend && python scripts/validate_reference_data.py --strict --json
 
 - `ERROR_ALERT_WEBHOOK_URL` 仍需生产平台提供真实告警接收地址并完成触发测试；当前仓库已保留配置门禁和记录方式，但不能伪造外部 webhook secret 或测试结果。
 - 生产域名、HTTPS 证书、真实短信/邮件/告警渠道属于部署平台配置，不由当前仓库代码单独闭环；本轮未把这些外部配置伪造为已完成。
+
+## 2026-06-09 Server UI Acceptance Update
+
+本节记录服务器主战场 `/home/zhaosilei/exercise-prescription-ui-current/source` 的最新线上验收。当前分支为 `codex/server-ui-productization`，最新提交为 `23f624e fix: add user completion trend chart`。本轮补齐了用户端“用户完成率趋势”独立 ECharts 组件，并完成部署、截图和多角色验收。
+
+### 备份与提交
+
+- 修改前备份：`backups/completion_trend_chart_20260609T170622`，覆盖 `frontend/src`、`frontend/package.json`、`backend/app`。
+- 最终验收文档更新前备份：`backups/final_ui_acceptance_20260609T194140`，覆盖 `frontend/src`、`frontend/package.json`、`backend/app` 和 `docs/12_acceptance_evidence.md`。
+- 已提交并推送：`23f624e fix: add user completion trend chart`。
+
+### 本轮前端图表补齐
+
+- 新增 `CompletionTrendChart`，使用绿色完成率平滑折线、蓝色虚线目标线、透明图表背景、白底中文 tooltip、移动端自适应高度，并复用统一 loading、empty、error 状态。
+- 用户端 `/user/dashboard` 的“计划完成趋势”更新为“用户完成率趋势”，解决验收清单中“用户完成率趋势”缺少独立组件和页面实装的问题。
+- 测试更新：`frontend/src/charts.test.tsx` 覆盖新图表 loading、empty、error、normal 和 ECharts option；`frontend/src/userDashboard.test.tsx` 覆盖用户看板新标题与 `CompletionTrendChart-echart`。
+
+### 最新验证命令与结果
+
+```bash
+cd /home/zhaosilei/exercise-prescription-ui-current/source/frontend
+PATH=/home/zhaosilei/.nvm/versions/node/v24.13.0/bin:$PATH CI=1 npm test -- --run --no-cache
+PATH=/home/zhaosilei/.nvm/versions/node/v24.13.0/bin:$PATH npm run build
+```
+
+结果：
+
+- 前端测试：20 个测试文件、127 个用例全部通过。
+- 前端构建：通过；仅保留 Vite chunk size warning。
+
+生产运行态：
+
+```bash
+curl -sS --max-time 10 http://127.0.0.1:8000/ready | python3 -m json.tool
+```
+
+结果：
+
+- `status=ok`
+- `runtime.environment=production`
+- LLM：`aliyun:qwen3.7-max`
+- Embedding：`dashscope:text-embedding-v4`
+- OCR：`paddleocr:enabled`
+
+参考资料严格校验：
+
+```bash
+sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T backend python scripts/validate_reference_data.py --strict --json
+```
+
+结果：
+
+- 动作库：154 条，要求 120 条以上。
+- 模板库：16 条，覆盖 R0/R1/R2/R3 和目标人群。
+- 风险规则：80 条。
+- 禁忌证：60 条，疾病、风险等级、绝对/相对禁忌、停止信号、转诊条件、禁用动作分类均通过覆盖校验。
+- `blocking_errors=[]`
+
+### 最新线上浏览器 UI 验收
+
+使用服务器上的 headless Chrome + CDP 访问生产前端 `http://127.0.0.1:5173`，在同一服务器内通过容器生成短期 demo token，仅用于截图验收，不输出、不保存登录凭据。验收报告与截图位于：
+
+```text
+/tmp/eps-full-ui-20260609T114017/report.json
+/tmp/eps-full-ui-20260609T114017/*.png
+```
+
+结果：
+
+- 总页面状态：26/26 `ok=true`
+- 控制台错误：0
+- 横向溢出：0
+- 空白页面：0
+
+覆盖页面：
+
+- 公共入口：`/`、`/login`
+- 用户端：`/user/dashboard` 桌面和移动端、`/user/health-data`、`/user/risk-result`、`/user/prescriptions`、`/user/today`、`/user/phase-report`
+- 安全边界状态：demo R2 `/user/prescriptions` 显示专家审核前不展示训练计划；demo R3 `/user/prescriptions` 显示不展示训练计划和医学评估/转介状态
+- 专家端：`/expert/dashboard`、`/expert/reviews` 桌面和移动端
+- 管理端：`/admin/dashboard`、`/admin/templates`、`/admin/exercises`、`/admin/knowledge`、`/admin/rules`、`/admin/clusters`、`/admin/users`、`/admin/audit-logs`
+- 科研端：`/research/dashboard`、`/research/cluster-analysis`、`/research/intervention-effects`、`/research/export-jobs`
+
+### 当前结论
+
+截至 2026-06-09，本服务器分支已具备可直接演示的医疗健康干预中台 UI：四端业务闭环、demo 数据、安全边界、真实 provider 状态、资料库校验、前端测试/构建和多角色线上截图验收均已有当前证据。外部生产域名、HTTPS 证书、真实短信/邮件/告警渠道仍属于部署平台配置，不在本仓库内伪造完成。
