@@ -4,12 +4,12 @@ services:
       sh -c "python scripts/verify_production_runtime.py
       && uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2"
     environment:
-      ENVIRONMENT: ${ENVIRONMENT:-production}
-      LLM_PROVIDER: ${LLM_PROVIDER:-aliyun}
-      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-dashscope}
-      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-v4}
-      OCR_ENABLED: ${OCR_ENABLED:-true}
-      LOG_FORMAT: ${LOG_FORMAT:-json}
+      ENVIRONMENT: production
+      LLM_PROVIDER: aliyun
+      EMBEDDING_PROVIDER: dashscope
+      EMBEDDING_MODEL: text-embedding-v4
+      OCR_ENABLED: "true"
+      LOG_FORMAT: json
     restart: unless-stopped
 
   frontend:

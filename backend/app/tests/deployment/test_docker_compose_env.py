@@ -87,16 +87,20 @@ def test_frontend_nginx_proxies_api_requests_to_backend() -> None:
     assert "proxy_pass http://backend:8000/api/" in nginx_conf
 
 
-def test_production_compose_overlay_enables_production_provider_defaults() -> None:
+def test_production_compose_overlay_pins_production_runtime_guards() -> None:
     compose = (PROJECT_ROOT / "docker-compose.prod.yml").read_text(encoding="utf-8")
     backend_section = compose.split("  backend:", maxsplit=1)[1].split("  frontend:", maxsplit=1)[0]
 
-    assert "ENVIRONMENT: ${ENVIRONMENT:-production}" in backend_section
-    assert "LLM_PROVIDER: ${LLM_PROVIDER:-aliyun}" in backend_section
-    assert "EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-dashscope}" in backend_section
-    assert "EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-v4}" in backend_section
-    assert "OCR_ENABLED: ${OCR_ENABLED:-true}" in backend_section
-    assert "LOG_FORMAT: ${LOG_FORMAT:-json}" in backend_section
+    assert "ENVIRONMENT: production" in backend_section
+    assert "LLM_PROVIDER: aliyun" in backend_section
+    assert "EMBEDDING_PROVIDER: dashscope" in backend_section
+    assert "EMBEDDING_MODEL: text-embedding-v4" in backend_section
+    assert 'OCR_ENABLED: "true"' in backend_section
+    assert "LOG_FORMAT: json" in backend_section
+    assert "ENVIRONMENT: ${ENVIRONMENT" not in backend_section
+    assert "LLM_PROVIDER: ${LLM_PROVIDER" not in backend_section
+    assert "EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER" not in backend_section
+    assert "OCR_ENABLED: ${OCR_ENABLED" not in backend_section
     assert "LLM_PROVIDER: ${LLM_PROVIDER:-mock}" not in backend_section
     assert "LLM_PROVIDER: ${LLM_PROVIDER:-ollama}" not in backend_section
     assert "EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-hash}" not in backend_section
