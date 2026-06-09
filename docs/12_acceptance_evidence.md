@@ -754,8 +754,8 @@ sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T bac
 使用服务器上的 headless Chrome + CDP 访问生产前端 `http://127.0.0.1:5173`，在同一服务器内通过容器生成短期 demo token，仅用于截图验收，不输出、不保存登录凭据。验收报告与截图位于：
 
 ```text
-/tmp/eps-full-ui-20260609T114017/report.json
-/tmp/eps-full-ui-20260609T114017/*.png
+/tmp/eps-full-ui-20260609T134749/report.json
+/tmp/eps-full-ui-20260609T134749/*.png
 ```
 
 结果：
@@ -777,3 +777,15 @@ sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T bac
 ### 当前结论
 
 截至 2026-06-09，本服务器分支已具备可直接演示的医疗健康干预中台 UI：四端业务闭环、demo 数据、安全边界、真实 provider 状态、资料库校验、前端测试/构建和多角色线上截图验收均已有当前证据。外部生产域名、HTTPS 证书、真实短信/邮件/告警渠道仍属于部署平台配置，不在本仓库内伪造完成。
+
+### 2026-06-09 最终审计复跑
+
+在文档证据提交前，服务器当前 HEAD `6681560` 基础上重新复跑关键门禁：
+
+- 前端测试：`CI=1 npm test -- --run --no-cache`，20 个测试文件、127 个用例通过。
+- 前端构建：`npm run build` 通过，仅保留 Vite chunk size warning。
+- 后端测试：`python -m pytest -q`，303 个用例通过，2 个 warnings。
+- 生产 readiness：`/ready` 返回 `status=ok`，`runtime.environment=production`，LLM 为 `aliyun:qwen3.7-max`，embedding 为 `dashscope:text-embedding-v4`，OCR 为 `paddleocr:enabled`。
+- 资料库 strict 校验：动作 154、模板 16、风险规则 80、禁忌证 60，`blocking_errors=[]`。
+- 真实 LLM smoke：`python scripts/smoke_real_llm_prescription.py` 返回 `llm_provider=aliyun`、`llm_model=qwen3.7-max`、`risk_level=R2`、`status=PENDING_REVIEW`，未出现 mock provider。
+- 最新线上 UI 截图验收：`/tmp/eps-full-ui-20260609T134749/report.json`，26/26 页面通过，无控制台错误、无横向溢出、无空白页。
