@@ -789,3 +789,4 @@ sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T bac
 - 资料库 strict 校验：动作 154、模板 16、风险规则 80、禁忌证 60，`blocking_errors=[]`。
 - 真实 LLM smoke：`python scripts/smoke_real_llm_prescription.py` 返回 `llm_provider=aliyun`、`llm_model=qwen3.7-max`、`risk_level=R2`、`status=PENDING_REVIEW`，未出现 mock provider。
 - 最新线上 UI 截图验收：`/tmp/eps-full-ui-20260609T134749/report.json`，26/26 页面通过，无控制台错误、无横向溢出、无空白页。
+- 运行库 demo 数据核对：47 个 `[DEMO]` 用户、1 个 demo 机构、46 条处方、22 条专家审核、44 条反馈、4 条科研导出申请；R0/R1 已发布且有 FITT-VP 22 条，R2 待审/审核态 7 条，R3 转介且无 FITT-VP 11 条；`mock_evidence_count=0`，最近 evidence provider 为 `aliyun`。
