@@ -16,7 +16,7 @@ import {
   RiskStatusPanel,
   SafetyBoundaryChecklist
 } from "../../components/ProductUI";
-import { AdherenceChart, FeedbackTrendChart, HealthRadarChart } from "../../components/charts";
+import { CompletionTrendChart, FeedbackTrendChart, HealthRadarChart } from "../../components/charts";
 
 function displayValue(value: string | number | null | undefined, fallback = "-") {
   return value === null || value === undefined || value === "" ? fallback : String(value);
@@ -357,8 +357,8 @@ export function UserDashboardPage() {
             </Card>
           </Col>
           <Col xs={24} lg={12}>
-            <ChartCard title="计划完成趋势">
-              <AdherenceChart data={adherenceData} loading={!summary && !error} />
+            <ChartCard title="用户完成率趋势">
+              <CompletionTrendChart data={adherenceData} loading={!summary && !error} />
             </ChartCard>
           </Col>
           <Col xs={24} lg={12}>

@@ -115,7 +115,8 @@ describe("user dashboard", () => {
     expect(screen.getByText("FITT-VP 处方结构")).toBeInTheDocument();
     expect(screen.getByText("频率")).toBeInTheDocument();
     expect(screen.getByText("每周4次")).toBeInTheDocument();
-    expect(screen.getByTestId("AdherenceChart-echart")).toBeInTheDocument();
+    expect(screen.getByText("用户完成率趋势")).toBeInTheDocument();
+    expect(screen.getByTestId("CompletionTrendChart-echart")).toBeInTheDocument();
     expect(screen.getByTestId("FeedbackTrendChart-echart")).toBeInTheDocument();
     expect(screen.getByTestId("HealthRadarChart-echart")).toBeInTheDocument();
     expect(screen.queryByText(/frequency/)).not.toBeInTheDocument();

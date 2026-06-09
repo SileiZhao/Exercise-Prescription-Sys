@@ -74,6 +74,11 @@ export type AdherenceDatum = {
   completionRate: number;
   targetRate?: number;
 };
+export type CompletionTrendDatum = {
+  label: string;
+  completionRate: number;
+  targetRate?: number;
+};
 export type HealthRadarDatum = {
   metric: string;
   value: number;
@@ -247,6 +252,49 @@ export function AdherenceChart(props: ChartStateProps<AdherenceDatum>) {
   return chartBase("AdherenceChart-echart", "依从性图", option, props);
 }
 AdherenceChart.displayName = "AdherenceChart";
+
+export function CompletionTrendChart(props: ChartStateProps<CompletionTrendDatum>) {
+  const data = props.data ?? [];
+  const option: EChartsOption = {
+    legend: { top: 0, textStyle: { color: axisTextColor } },
+    grid: { left: 44, right: 36, top: 48, bottom: 40, containLabel: true },
+    tooltip: {
+      ...baseTooltip,
+      formatter: (params: unknown) => {
+        const items = Array.isArray(params) ? params : [params];
+        return items
+          .map((item) => {
+            const point = item as { seriesName?: string; name?: string; value?: number };
+            return `${point.seriesName ?? "完成率"}：${point.value ?? 0}%`;
+          })
+          .join("<br/>");
+      }
+    },
+    xAxis: categoryAxis(data.map((item) => item.label)),
+    yAxis: { ...valueAxis("完成率%"), max: 100 },
+    series: [
+      {
+        name: "完成率",
+        type: "line",
+        smooth: true,
+        symbolSize: 7,
+        lineStyle: { color: "#0f766e", width: 2 },
+        itemStyle: { color: "#0f766e" },
+        areaStyle: { color: "rgba(15,118,110,.12)", opacity: 0.16 },
+        data: data.map((item) => item.completionRate)
+      },
+      {
+        name: "目标线",
+        type: "line",
+        symbol: "none",
+        lineStyle: { color: "#1677ff", width: 2, type: "dashed" },
+        data: data.map((item) => item.targetRate ?? 80)
+      }
+    ]
+  };
+  return chartBase("CompletionTrendChart-echart", "用户完成率趋势图", option, props);
+}
+CompletionTrendChart.displayName = "CompletionTrendChart";
 
 export function RuleHitRankChart(props: ChartStateProps<RuleHitRankDatum>) {
   const data = [...(props.data ?? [])].sort((left, right) => right.count - left.count).slice(0, 10);

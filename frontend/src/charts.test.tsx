@@ -7,6 +7,7 @@ import {
   BloodGlucoseTrendChart,
   BloodPressureTrendChart,
   ClusterScatterChart,
+  CompletionTrendChart,
   ExpertQueueChart,
   FeedbackTrendChart,
   HealthRadarChart,
@@ -62,6 +63,14 @@ const chartCases: ChartCase[] = [
     renderEmpty: () => <AdherenceChart data={[]} />,
     renderError: () => <AdherenceChart data={[{ label: "第1周", completionRate: 72, targetRate: 80 }]} error="加载失败" />,
     renderNormal: () => <AdherenceChart data={[{ label: "第1周", completionRate: 72, targetRate: 80 }]} />
+  },
+  {
+    name: "CompletionTrendChart",
+    testId: "CompletionTrendChart-echart",
+    renderLoading: () => <CompletionTrendChart data={[{ label: "第1周", completionRate: 72, targetRate: 80 }]} loading />,
+    renderEmpty: () => <CompletionTrendChart data={[]} />,
+    renderError: () => <CompletionTrendChart data={[{ label: "第1周", completionRate: 72, targetRate: 80 }]} error="加载失败" />,
+    renderNormal: () => <CompletionTrendChart data={[{ label: "第1周", completionRate: 72, targetRate: 80 }]} />
   },
   {
     name: "RuleHitRankChart",
@@ -235,6 +244,19 @@ describe("ECharts chart components", () => {
     expect(option.series.map((series: any) => series.name)).toEqual(["生成数", "发布数", "驳回数"]);
     expect(option.series[0]).toEqual(expect.objectContaining({ type: "line", smooth: true }));
     expect(option.series[0].areaStyle).toEqual(expect.objectContaining({ opacity: expect.any(Number) }));
+  });
+
+  it("renders user completion trend as a completion line with a dashed target line", async () => {
+    setOptionMock.mockClear();
+    render(<CompletionTrendChart data={[{ label: "第1周", completionRate: 72, targetRate: 80 }]} />);
+
+    await waitFor(() => expect(setOptionMock).toHaveBeenCalled());
+    const option = setOptionMock.mock.calls.at(-1)?.[0] as any;
+
+    expect(option.yAxis).toEqual(expect.objectContaining({ type: "value", name: "完成率%", max: 100 }));
+    expect(option.series.map((series: any) => series.name)).toEqual(["完成率", "目标线"]);
+    expect(option.series[0]).toEqual(expect.objectContaining({ type: "line", smooth: true }));
+    expect(option.series[1].lineStyle).toEqual(expect.objectContaining({ type: "dashed" }));
   });
 
   it("renders expert queue as R2/R3 stacked status columns", async () => {
