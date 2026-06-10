@@ -830,3 +830,4 @@ sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T bac
 - 前端构建：`npm run build` 通过，仅保留 Vite chunk size warning。
 - `/ready`：`status=ok`，`runtime.environment=production`，LLM 为 `aliyun:qwen3.7-max`，embedding 为 `dashscope:text-embedding-v4`，OCR 为 `paddleocr:enabled`。
 - 真实 LLM smoke：`python scripts/smoke_real_llm_prescription.py --json` 返回 `prescription_id=47`、`status=PENDING_REVIEW`、`risk_level=R2`、`llm_provider=aliyun`、`llm_model=qwen3.7-max`，未出现 mock provider。
+- 当前提交 UI 截图验收：`/tmp/eps-full-ui-20260610T014210/report.json`，`sourceHead=cdd88cc`，26/26 页面通过，无失败项。
