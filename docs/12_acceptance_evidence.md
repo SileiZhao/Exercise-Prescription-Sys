@@ -790,3 +790,43 @@ sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T bac
 - 真实 LLM smoke：`python scripts/smoke_real_llm_prescription.py` 返回 `llm_provider=aliyun`、`llm_model=qwen3.7-max`、`risk_level=R2`、`status=PENDING_REVIEW`，未出现 mock provider。
 - 最新线上 UI 截图验收：`/tmp/eps-full-ui-20260609T134749/report.json`，26/26 页面通过，无控制台错误、无横向溢出、无空白页。
 - 运行库 demo 数据核对：47 个 `[DEMO]` 用户、1 个 demo 机构、46 条处方、22 条专家审核、44 条反馈、4 条科研导出申请；R0/R1 已发布且有 FITT-VP 22 条，R2 待审/审核态 7 条，R3 转介且无 FITT-VP 11 条；`mock_evidence_count=0`，最近 evidence provider 为 `aliyun`。
+
+### 2026-06-09 AI 资料库完整包补充验收
+
+最终审计发现 `docs/ai_generated` 只有 partial 文件，缺少 split 完整包。本轮已补充可复现脚本 `backend/scripts/materialize_ai_generated_reference_bundle.py`，将真实 LLM 已生成的禁忌证 partial 与现有正式动作、模板、风险规则草案规范化为完整 AI reference bundle，并保留同一套 schema、去重、覆盖度、动作/禁忌冲突和模板动作链接校验。
+
+生成文件：
+
+- `docs/ai_generated/ai_generated_contraindications.json`
+- `docs/ai_generated/ai_generated_exercise_actions.json`
+- `docs/ai_generated/ai_generated_prescription_templates.json`
+- `docs/ai_generated/ai_generated_risk_rules.json`
+- `docs/ai_generated/ai_generated_reference_bundle.json`
+- `docs/ai_generated/ai_generated_reference_manifest.json`
+- `docs/ai_generated/ai_generated_reference_validation_report.json`
+
+本轮修复同时调整 `generate_reference_data_with_ai.py` 的 R3 模板序列化：R3 模板必须输出 `fitt_vp: null`，避免 strict validation 重新读取 split 文件时误判字段缺失。
+
+验证命令与结果：
+
+```bash
+python3 backend/scripts/materialize_ai_generated_reference_bundle.py --json
+python3 backend/scripts/validate_reference_data.py --strict --ai-bundle-dir docs/ai_generated --json
+sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T backend python scripts/validate_reference_data.py --strict --ai-bundle-dir /workspace/docs/ai_generated --json
+sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T backend python -m pytest -q app/tests/scripts/test_generate_reference_data_with_ai.py app/tests/scripts/test_validate_reference_data.py
+```
+
+结果：
+
+- AI bundle 计数：禁忌证 60、动作 154、模板 16、风险规则 80。
+- `ai_generated_reference.blocking_errors=[]`，`formal_reference_coverage.blocking_errors=[]`。
+- manifest runtime provider 显示 `environment=production`，LLM 为 `aliyun:qwen3.7-max`，embedding 为 `dashscope:text-embedding-v4`，OCR 为 `paddleocr:enabled`。
+- 脚本相关测试：18 个用例通过，1 个既有 Starlette/httpx warning。
+
+本轮最终复跑：
+
+- 后端完整测试：`sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T backend python -m pytest -q`，303 个用例通过，2 个 warnings。
+- 前端测试：`CI=1 npm test -- --run --no-cache`，20 个测试文件、127 个用例通过；同步修正 `userDashboard.test.tsx` 与 `cluster.test.tsx` 的异步等待点，避免初始骨架状态抢跑断言。
+- 前端构建：`npm run build` 通过，仅保留 Vite chunk size warning。
+- `/ready`：`status=ok`，`runtime.environment=production`，LLM 为 `aliyun:qwen3.7-max`，embedding 为 `dashscope:text-embedding-v4`，OCR 为 `paddleocr:enabled`。
+- 真实 LLM smoke：`python scripts/smoke_real_llm_prescription.py --json` 返回 `prescription_id=47`、`status=PENDING_REVIEW`、`risk_level=R2`、`llm_provider=aliyun`、`llm_model=qwen3.7-max`，未出现 mock provider。

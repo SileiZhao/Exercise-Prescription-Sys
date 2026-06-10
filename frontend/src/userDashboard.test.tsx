@@ -141,7 +141,8 @@ describe("user dashboard", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("今日不可运动")).toBeInTheDocument();
+    expect(await screen.findByText(/R2 风险 · 专家审核中 · 今日不可运动/)).toBeInTheDocument();
+    expect(screen.getByText("今日不可运动")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /查看审核状态/ })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /进入今日任务/ })).not.toBeInTheDocument();
     expect(screen.getByText(/R2 审核通过前不展示训练动作/)).toBeInTheDocument();

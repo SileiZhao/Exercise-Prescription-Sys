@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -72,7 +72,7 @@ describe("cluster pages", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.queryByTestId("risk-decision-report-card")).not.toBeNull());
+    expect(await screen.findByText("YELLOW_HYPERTENSION")).toBeInTheDocument();
     const pageHeader = screen.getByTestId("page-header-title-block");
     expect(within(pageHeader).getByText("判定报告")).toBeInTheDocument();
     expect(screen.getAllByText("判定报告").length).toBeGreaterThan(0);

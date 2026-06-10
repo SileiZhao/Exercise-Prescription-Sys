@@ -2,7 +2,7 @@ import argparse
 import hashlib
 import json
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal, Protocol
 
@@ -371,7 +371,7 @@ def generate_reference_libraries(
     _write_json(output_path / "ai_generated_reference_bundle.json", dumped)
 
     manifest = {
-        "generated_at": datetime.now(UTC).isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "generator": "scripts.generate_reference_data_with_ai",
         "runtime_provider": runtime_provider_summary(settings),
         "counts": report["counts"],
@@ -655,7 +655,7 @@ def _dump_bundle(bundle: ReferenceBundle) -> dict[str, list[dict[str, Any]]]:
     return {
         "contraindications": [item.model_dump(mode="json", exclude_none=True) for item in bundle.contraindications],
         "actions": [item.model_dump(mode="json", exclude_none=True) for item in bundle.actions],
-        "templates": [item.model_dump(mode="json", exclude_none=True) for item in bundle.templates],
+        "templates": [item.model_dump(mode="json", exclude_none=False) for item in bundle.templates],
         "risk_rules": [item.model_dump(mode="json", exclude_none=True) for item in bundle.risk_rules],
     }
 

@@ -203,7 +203,9 @@ def test_generate_reference_libraries_calls_ai_and_writes_split_files(tmp_path: 
         "risk_rules",
     ]
     assert json.loads((tmp_path / "ai_generated_exercise_actions.json").read_text(encoding="utf-8"))["items"][0]["name"] == "快走"
-    assert json.loads((tmp_path / "ai_generated_prescription_templates.json").read_text(encoding="utf-8"))["items"][1]["risk_level"] == "R3"
+    template_items = json.loads((tmp_path / "ai_generated_prescription_templates.json").read_text(encoding="utf-8"))["items"]
+    assert template_items[1]["risk_level"] == "R3"
+    assert template_items[1]["fitt_vp"] is None
     manifest = json.loads((tmp_path / "ai_generated_reference_manifest.json").read_text(encoding="utf-8"))
     assert manifest["counts"]["actions"] == 2
     assert manifest["schema_versions"]["actions"].startswith("pydantic-json-schema:")

@@ -1,0 +1,1860 @@
+{
+  "items": [
+    {
+      "rule_code": "RED_SYMPTOM_001",
+      "rule_name": "胸痛/胸闷/胸部不适",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.chest_pain",
+      "operator": "eq",
+      "value": true,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "任何形式的中高强度训练",
+        "抗阻憋气/瓦氏动作",
+        "远程无人监督训练"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "Exercise is Medicine/ACSM 运动前健康筛查问卷；症状 STOP、医学许可、慢病活动状态分层。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_SYMPTOM_002",
+      "rule_name": "晕厥/黑蒙/意识丧失史",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.syncope",
+      "operator": "eq",
+      "value": true,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "独自运动",
+        "高强度间歇训练",
+        "平衡挑战训练",
+        "游泳等溺水风险活动"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "Exercise is Medicine/ACSM 运动前健康筛查问卷；症状 STOP、医学许可、慢病活动状态分层。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_SYMPTOM_003",
+      "rule_name": "严重或异常气短",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.abnormal_dyspnea",
+      "operator": "eq",
+      "value": true,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "高强度有氧",
+        "长时间耐力训练",
+        "低氧环境训练"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "Exercise is Medicine/ACSM 运动前健康筛查问卷；症状 STOP、医学许可、慢病活动状态分层。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_SYMPTOM_004",
+      "rule_name": "明显心悸/快速或不规则心跳感",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.palpitation",
+      "operator": "eq",
+      "value": true,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "高强度有氧",
+        "冲刺",
+        "大重量抗阻",
+        "含刺激性补剂配合训练"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "Exercise is Medicine/ACSM 运动前健康筛查问卷；症状 STOP、医学许可、慢病活动状态分层。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_SYMPTOM_005",
+      "rule_name": "医生明确限制运动",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.doctor_restriction",
+      "operator": "not_empty_restriction",
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "任何未获医学许可的训练处方",
+        "自行增加运动强度"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_INJURY_001",
+      "rule_name": "近期急性损伤",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.recent_injury",
+      "operator": "eq",
+      "value": true,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "负重训练",
+        "冲击性训练",
+        "疼痛部位牵拉或抗阻",
+        "竞技性运动"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_PAIN_001",
+      "rule_name": "重度疼痛评分≥7/10",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "fitness_test.pain_score",
+      "operator": "gte",
+      "value": 7,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "疼痛诱发动作",
+        "冲击性训练",
+        "大重量抗阻",
+        "强行拉伸疼痛部位"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_BP_001",
+      "rule_name": "静息收缩压>200 mmHg",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "fitness_test.sbp",
+      "operator": "gte",
+      "value": 201,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "有氧训练",
+        "抗阻训练",
+        "高温环境训练"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_BP_002",
+      "rule_name": "静息舒张压>115 mmHg",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "fitness_test.dbp",
+      "operator": "gte",
+      "value": 116,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "有氧训练",
+        "抗阻训练",
+        "憋气用力动作"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_HR_001",
+      "rule_name": "静息心率≥120 bpm",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "fitness_test.resting_hr",
+      "operator": "gte",
+      "value": 120,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "高强度训练",
+        "冲刺训练",
+        "大强度抗阻"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_SPO2_001",
+      "rule_name": "静息血氧≤88%",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "biochemical_index.spo2",
+      "operator": "between",
+      "value": [
+        50,
+        88
+      ],
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "任何未监督运动",
+        "耐力训练",
+        "低氧/高海拔训练"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "心肺/呼吸康复氧饱和度安全资料；SpO2 88%-90% 作为保守边界，待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_GLU_001",
+      "rule_name": "血糖疑似低血糖≤3.9 mmol/L",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "biochemical_index.fbg",
+      "operator": "between",
+      "value": [
+        2.0,
+        3.9
+      ],
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "任何立即开始的运动",
+        "独自运动"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_GLU_002",
+      "rule_name": "餐后/随机血糖极高≥13.9 mmol/L",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "biochemical_index.pbg_2h",
+      "operator": "gte",
+      "value": 13.9,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "高强度运动",
+        "长时间耐力训练",
+        "无人监督训练"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "RED_CHD_001",
+      "rule_name": "冠心病合并安全边界未知",
+      "risk_level": "R3",
+      "severity": "RED",
+      "priority": 100,
+      "field_path": "risk_screening.has_chd",
+      "operator": "eq",
+      "value": true,
+      "user_message": "检测到可能影响运动安全的重要风险信号。平台不会为你生成训练处方，请先停止或暂缓运动，并尽快寻求医生/急诊或线下专业评估。若症状正在发生或加重，请立即就医。",
+      "contraindications": [
+        "高强度训练",
+        "竞技运动",
+        "大重量抗阻",
+        "无人监督进阶"
+      ],
+      "intensity_cap": "不适用；暂停或不启动运动训练。",
+      "evidence_source": "Exercise is Medicine/ACSM 运动前健康筛查问卷；症状 STOP、医学许可、慢病活动状态分层。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BP_001",
+      "rule_name": "静息收缩压180-200 mmHg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.sbp",
+      "operator": "between",
+      "value": [
+        180,
+        200
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度训练",
+        "最大力量测试",
+        "瓦氏动作"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BP_002",
+      "rule_name": "静息舒张压110-115 mmHg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.dbp",
+      "operator": "between",
+      "value": [
+        110,
+        115
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度训练",
+        "大重量抗阻",
+        "憋气用力"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_BP_001",
+      "rule_name": "静息收缩压130-159 mmHg",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.sbp",
+      "operator": "between",
+      "value": [
+        130,
+        159
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度",
+        "未热身直接训练"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BP_003",
+      "rule_name": "静息收缩压160-179 mmHg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.sbp",
+      "operator": "between",
+      "value": [
+        160,
+        179
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度间歇",
+        "重负荷抗阻",
+        "桑拿/高温训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_BP_002",
+      "rule_name": "静息舒张压80-99 mmHg",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.dbp",
+      "operator": "between",
+      "value": [
+        80,
+        99
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "屏气抗阻",
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BP_004",
+      "rule_name": "静息舒张压100-109 mmHg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.dbp",
+      "operator": "between",
+      "value": [
+        100,
+        109
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度训练",
+        "大重量抗阻",
+        "瓦氏动作"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BP_005",
+      "rule_name": "静息收缩压偏低≤90 mmHg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.sbp",
+      "operator": "between",
+      "value": [
+        70,
+        90
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "突然站立训练",
+        "高温训练",
+        "长时间站立训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_DISEASE_001",
+      "rule_name": "已报告高血压",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_hypertension",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "最大力量测试",
+        "屏气用力",
+        "未监测的高强度"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_DISEASE_002",
+      "rule_name": "已报告糖尿病",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_diabetes",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "空腹长时间运动",
+        "无人监督高强度",
+        "赤脚训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_DISEASE_003",
+      "rule_name": "已报告脑卒中史",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_stroke",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高跌倒风险训练",
+        "高速变向",
+        "无人保护平衡挑战"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_DISEASE_004",
+      "rule_name": "已报告慢性肾病",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_ckd",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度间歇",
+        "脱水风险训练",
+        "过度抗阻"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "Exercise is Medicine/ACSM 运动前健康筛查问卷；症状 STOP、医学许可、慢病活动状态分层。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_DISEASE_005",
+      "rule_name": "已报告呼吸系统疾病",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_respiratory_disease",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "低氧环境训练",
+        "长时间高强度耐力",
+        "诱发喘息环境"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "心肺/呼吸康复氧饱和度安全资料；SpO2 88%-90% 作为保守边界，待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_DISEASE_006",
+      "rule_name": "已报告骨质疏松",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_osteoporosis",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "跳跃冲击",
+        "脊柱快速屈曲扭转",
+        "高跌倒风险动作"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_PAIN_001",
+      "rule_name": "中度疼痛评分4-6/10",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.pain_score",
+      "operator": "between",
+      "value": [
+        4,
+        6
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "疼痛诱发动作",
+        "疼痛部位大负荷抗阻",
+        "强行拉伸"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_PAIN_001",
+      "rule_name": "轻度疼痛评分1-3/10",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.pain_score",
+      "operator": "between",
+      "value": [
+        1,
+        3
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "疼痛加重动作",
+        "忽略疼痛继续进阶"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "R0_PAIN_001",
+      "rule_name": "疼痛评分0/10",
+      "risk_level": "R0",
+      "severity": "GREEN",
+      "priority": 10,
+      "field_path": "fitness_test.pain_score",
+      "operator": "eq",
+      "value": 0,
+      "user_message": "当前未发现需要限制运动处方自动生成的高风险信息。平台将生成基础运动建议，并提醒你循序渐进。",
+      "contraindications": [],
+      "intensity_cap": "按基础处方；从低-中等强度开始，可按反馈进阶。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_PAIN_002",
+      "rule_name": "疼痛部位已填写",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.pain_location",
+      "operator": "not_empty_restriction",
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "疼痛部位直接负重或高冲击",
+        "强行拉伸"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_PAIN_003",
+      "rule_name": "有关节疼痛",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.has_joint_pain",
+      "operator": "eq",
+      "value": true,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "跑跳冲击",
+        "深蹲深屈膝大负荷",
+        "疼痛关节反复冲击"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_SPO2_001",
+      "rule_name": "静息血氧89-94%",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.spo2",
+      "operator": "between",
+      "value": [
+        89,
+        94
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度耐力",
+        "低氧训练",
+        "无人监督长时间训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "心肺/呼吸康复氧饱和度安全资料；SpO2 88%-90% 作为保守边界，待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_GLU_001",
+      "rule_name": "空腹血糖5.6-6.9 mmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.fbg",
+      "operator": "between",
+      "value": [
+        5.6,
+        6.9
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "空腹长时间高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_GLU_001",
+      "rule_name": "空腹血糖≥7.0 mmol/L",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.fbg",
+      "operator": "gte",
+      "value": 7.0,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "空腹高强度",
+        "无人监督长时间训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_GLU_002",
+      "rule_name": "餐后2小时血糖7.8-11.0 mmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.pbg_2h",
+      "operator": "between",
+      "value": [
+        7.8,
+        11.0
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "餐后立即高强度",
+        "空腹长时间训练"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_GLU_002",
+      "rule_name": "餐后2小时血糖11.1-13.8 mmol/L",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.pbg_2h",
+      "operator": "between",
+      "value": [
+        11.1,
+        13.8
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度运动",
+        "无人监督长时间训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_HBA1C_001",
+      "rule_name": "HbA1c 5.7%-6.4%",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.hba1c",
+      "operator": "between",
+      "value": [
+        5.7,
+        6.4
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_HBA1C_001",
+      "rule_name": "HbA1c ≥6.5%",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.hba1c",
+      "operator": "gte",
+      "value": 6.5,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "未评估用药的高强度",
+        "空腹长时间运动"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_HBA1C_002",
+      "rule_name": "HbA1c ≥9.0% 控制不佳提示",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.hba1c",
+      "operator": "gte",
+      "value": 9.0,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度训练",
+        "足部高冲击训练",
+        "无人监督耐力训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_LIPID_001",
+      "rule_name": "总胆固醇TC≥6.2 mmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.tc",
+      "operator": "gte",
+      "value": 6.2,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_LIPID_002",
+      "rule_name": "甘油三酯TG≥2.3 mmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.tg",
+      "operator": "gte",
+      "value": 2.3,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "餐后立即高强度",
+        "脱水环境训练"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_LIPID_001",
+      "rule_name": "甘油三酯TG≥5.6 mmol/L",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.tg",
+      "operator": "gte",
+      "value": 5.6,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度训练",
+        "长时间脱水训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_LIPID_003",
+      "rule_name": "HDL-C≤1.0 mmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.hdl_c",
+      "operator": "between",
+      "value": [
+        0.2,
+        1.0
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_LIPID_004",
+      "rule_name": "LDL-C≥4.1 mmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.ldl_c",
+      "operator": "gte",
+      "value": 4.1,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_LIPID_002",
+      "rule_name": "LDL-C≥4.9 mmol/L",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.ldl_c",
+      "operator": "gte",
+      "value": 4.9,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度训练自动推荐"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_UA_001",
+      "rule_name": "尿酸≥420 μmol/L",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "biochemical_index.uric_acid",
+      "operator": "gte",
+      "value": 420,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "脱水训练",
+        "过量高强度间歇"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_UA_001",
+      "rule_name": "尿酸≥540 μmol/L",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "biochemical_index.uric_acid",
+      "operator": "gte",
+      "value": 540,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "脱水训练",
+        "疼痛关节冲击训练",
+        "长时间高强度"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "常用心代谢实验室风险指标；非诊断用途，阈值与单位待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_MED_001",
+      "rule_name": "β受体阻滞剂用药",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.medication",
+      "operator": "in_any",
+      "value": [
+        "β受体阻滞剂",
+        "β阻滞剂",
+        "beta blocker",
+        "metoprolol",
+        "bisoprolol",
+        "atenolol",
+        "美托洛尔",
+        "比索洛尔",
+        "阿替洛尔"
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "单纯按最大心率公式进阶",
+        "突然高强度"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_MED_002",
+      "rule_name": "胰岛素用药",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.medication",
+      "operator": "in_any",
+      "value": [
+        "胰岛素",
+        "insulin"
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "空腹长时间训练",
+        "无人监督高强度",
+        "未携带快速糖的运动"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_MED_003",
+      "rule_name": "降糖药用药",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.medication",
+      "operator": "in_any",
+      "value": [
+        "降糖药",
+        "磺脲",
+        "格列",
+        "格列本脲",
+        "格列美脲",
+        "glipizide",
+        "glyburide",
+        "sulfonylurea"
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "空腹长时间训练",
+        "无人监督高强度"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ADA 糖尿病运动资料/立场声明；低血糖与高血糖运动安全边界；单位换算与本地阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_MED_004",
+      "rule_name": "抗凝药用药",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.medication",
+      "operator": "in_any",
+      "value": [
+        "抗凝",
+        "华法林",
+        "warfarin",
+        "利伐沙班",
+        "rivaroxaban",
+        "阿哌沙班",
+        "apixaban",
+        "达比加群",
+        "dabigatran"
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "对抗性运动",
+        "高跌倒风险训练",
+        "冲击性训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_MED_005",
+      "rule_name": "止痛药用药",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.medication",
+      "operator": "in_any",
+      "value": [
+        "止痛药",
+        "镇痛",
+        "NSAID",
+        "布洛芬",
+        "ibuprofen",
+        "双氯芬酸",
+        "diclofenac",
+        "塞来昔布",
+        "celecoxib",
+        "阿片",
+        "opioid"
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "在疼痛被药物掩盖时进阶",
+        "疼痛部位大负荷训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_MED_006",
+      "rule_name": "降压药/血管扩张相关用药",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.medication",
+      "operator": "in_any",
+      "value": [
+        "降压药",
+        "钙通道阻滞剂",
+        "硝酸酯",
+        "利尿剂",
+        "ACEI",
+        "ARB",
+        "amlodipine",
+        "nifedipine",
+        "nitroglycerin",
+        "furosemide"
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "突然停止运动",
+        "高温环境长时间训练",
+        "脱水训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "ACSM/EIM 高血压运动建议；静息 SBP>200 或 DBP>115 不运动；血压阈值本地化待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_AGE_001",
+      "rule_name": "年龄≥65岁",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "profile.age",
+      "operator": "gte",
+      "value": 65,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "无保护高跌倒风险训练",
+        "突然高冲击"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "WHO《身体活动和久坐行为指南》(2020)；适用于公共健康运动量建议。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BAL_001",
+      "rule_name": "单腿站立≤5秒",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.single_leg_stand",
+      "operator": "between",
+      "value": [
+        0,
+        5
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "单腿跳跃",
+        "闭眼平衡挑战",
+        "不扶支撑的复杂步法"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "WHO《身体活动和久坐行为指南》(2020)；适用于公共健康运动量建议。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_BAL_001",
+      "rule_name": "单腿站立6-10秒",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.single_leg_stand",
+      "operator": "between",
+      "value": [
+        6,
+        10
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "无保护复杂平衡动作"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "WHO《身体活动和久坐行为指南》(2020)；适用于公共健康运动量建议。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_6MWT_001",
+      "rule_name": "6分钟步行≤300米",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.six_mwt",
+      "operator": "between",
+      "value": [
+        0,
+        300
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "长时间连续耐力",
+        "高强度间歇",
+        "无人监督进阶"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_6MWT_001",
+      "rule_name": "6分钟步行301-450米",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.six_mwt",
+      "operator": "between",
+      "value": [
+        301,
+        450
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然增加总量",
+        "高强度间歇"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_STEP_001",
+      "rule_name": "台阶试验指数≤45",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.step_test_index",
+      "operator": "between",
+      "value": [
+        0,
+        45
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高强度有氧",
+        "爬坡/爬楼大剂量"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_STEP_001",
+      "rule_name": "台阶试验指数46-60",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.step_test_index",
+      "operator": "between",
+      "value": [
+        46,
+        60
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_RPE_001",
+      "rule_name": "基础RPE≥15",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.rpe_baseline",
+      "operator": "gte",
+      "value": 15,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "继续增加强度",
+        "长时间连续训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_SED_001",
+      "rule_name": "久坐≥8小时/日",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "profile.sedentary_hours",
+      "operator": "gte",
+      "value": 8,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "直接大剂量运动替代全天久坐"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "WHO《身体活动和久坐行为指南》(2020)；适用于公共健康运动量建议。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_SED_001",
+      "rule_name": "久坐≥12小时/日",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "profile.sedentary_hours",
+      "operator": "gte",
+      "value": 12,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "突然高总量运动",
+        "高强度开局"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "WHO《身体活动和久坐行为指南》(2020)；适用于公共健康运动量建议。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_BMI_001",
+      "rule_name": "BMI 24.0-27.9",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "profile.bmi",
+      "operator": "between",
+      "value": [
+        24.0,
+        27.9
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "高冲击跑跳开局"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BMI_001",
+      "rule_name": "BMI≥28.0",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "profile.bmi",
+      "operator": "gte",
+      "value": 28.0,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "高冲击跑跳",
+        "大体重负荷跳跃",
+        "快速大剂量进阶"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_WAIST_001",
+      "rule_name": "腰围≥90 cm",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "profile.waist_cm",
+      "operator": "gte",
+      "value": 90,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "突然高强度"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_HABIT_001",
+      "rule_name": "无规律运动习惯",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "profile.exercise_habit",
+      "operator": "in_any",
+      "value": [
+        "无",
+        "没有",
+        "久坐",
+        "不规律",
+        "很少",
+        "inactive",
+        "sedentary"
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "直接进入高强度或大总量"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "WHO《身体活动和久坐行为指南》(2020)；适用于公共健康运动量建议。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_EXP_001",
+      "rule_name": "运动经验少/新手",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "profile.exercise_experience",
+      "operator": "in_any",
+      "value": [
+        "新手",
+        "无经验",
+        "较少",
+        "少",
+        "beginner",
+        "none"
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "复杂技术动作",
+        "大重量自由重量",
+        "高强度间歇开局"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "R0_PARQ_001",
+      "rule_name": "PAR-Q+ 阴性",
+      "risk_level": "R0",
+      "severity": "GREEN",
+      "priority": 10,
+      "field_path": "risk_screening.parq_result",
+      "operator": "eq",
+      "value": "NEGATIVE",
+      "user_message": "当前未发现需要限制运动处方自动生成的高风险信息。平台将生成基础运动建议，并提醒你循序渐进。",
+      "contraindications": [],
+      "intensity_cap": "按基础处方；从低-中等强度开始，可按反馈进阶。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_PARQ_001",
+      "rule_name": "PAR-Q+ 阳性",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.parq_result",
+      "operator": "eq",
+      "value": "POSITIVE",
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "自动发布中高强度处方"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_PARQ_002",
+      "rule_name": "PAR-Q+ 不完整",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.parq_result",
+      "operator": "eq",
+      "value": "INCOMPLETE",
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "自动发布处方",
+        "高强度训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_PARQ_003",
+      "rule_name": "PAR-Q+ 需进一步评估",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "risk_screening.parq_result",
+      "operator": "eq",
+      "value": "NEEDS_FURTHER_EVALUATION",
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "自动发布处方",
+        "未审核进阶"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "PAR-Q+ / ePARmed-X+ 官方筛查工具；阳性或不完整需进一步评估，阴性可循序渐进。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_BC_001",
+      "rule_name": "体脂率偏高：男性≥25%通用触发",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "body_composition.body_fat_pct",
+      "operator": "gte",
+      "value": 25,
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "高冲击开局",
+        "极端减脂训练"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_BC_001",
+      "rule_name": "内脏脂肪等级≥10",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "body_composition.visceral_fat_level",
+      "operator": "gte",
+      "value": 10,
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "突然高强度",
+        "极端脱水减重"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_MUSCLE_001",
+      "rule_name": "骨骼肌量偏低待确认",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "body_composition.skeletal_muscle_kg",
+      "operator": "between",
+      "value": [
+        5,
+        20
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "直接大重量训练",
+        "高技术抗阻动作"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "GRN_FLEX_001",
+      "rule_name": "坐位体前屈≤0 cm",
+      "risk_level": "R1",
+      "severity": "GREEN",
+      "priority": 40,
+      "field_path": "fitness_test.sit_reach",
+      "operator": "between",
+      "value": [
+        -30,
+        0
+      ],
+      "user_message": "你的信息提示存在可通过运动改善的低风险因素。平台将生成保守、循序渐进的改善型运动建议，并建议关注身体反应。",
+      "contraindications": [
+        "弹震式强拉伸",
+        "疼痛性拉伸"
+      ],
+      "intensity_cap": "低-中等强度优先；RPE 11-13；初期避免突然进入高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_GRIP_001",
+      "rule_name": "握力极低：左手≤15kg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.grip_left",
+      "operator": "between",
+      "value": [
+        0,
+        15
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "大重量抗阻",
+        "复杂自由重量"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_GRIP_002",
+      "rule_name": "握力极低：右手≤15kg",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.grip_right",
+      "operator": "between",
+      "value": [
+        0,
+        15
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "大重量抗阻",
+        "复杂自由重量"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    },
+    {
+      "rule_code": "YEL_VC_001",
+      "rule_name": "肺活量≤1500 ml",
+      "risk_level": "R2",
+      "severity": "YELLOW",
+      "priority": 80,
+      "field_path": "fitness_test.vital_capacity",
+      "operator": "between",
+      "value": [
+        500,
+        1500
+      ],
+      "user_message": "你的信息提示需要更谨慎的运动安排。平台可生成初步建议，但必须经专家审核后才能发布。请不要自行提高运动强度。",
+      "contraindications": [
+        "长时间高强度耐力",
+        "低氧训练"
+      ],
+      "intensity_cap": "默认低强度至低-中等强度；RPE 9-11 或不超过 11-13；禁止自动推荐高强度。",
+      "evidence_source": "系统专家共识草案：基于保守风险原则、WHO/EIM/PAR-Q+框架；阈值待专家确认。",
+      "review_status": "DRAFT_PENDING_EXPERT_REVIEW",
+      "applies_to": [
+        "AI 运动处方平台的运动前风险分级、处方生成权限控制、专家审核分流与安全提示；不用于临床诊断、药物调整或急救处置。"
+      ]
+    }
+  ]
+}
