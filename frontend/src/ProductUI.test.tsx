@@ -29,7 +29,7 @@ describe("Product UI system", () => {
     );
 
     expect(screen.getByText("启衡")).toBeInTheDocument();
-    expect(screen.getByText("运营管理员")).toBeInTheDocument();
+    expect(screen.getAllByText("运营管理员").length).toBeGreaterThan(0);
     expect(screen.getByText("河南体育学院运动促进健康中心")).toBeInTheDocument();
     expect(screen.getByText("切片、向量化和检索验证")).toBeInTheDocument();
 

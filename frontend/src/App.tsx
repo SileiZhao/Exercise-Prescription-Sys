@@ -28,6 +28,7 @@ import { UserDashboardPage } from "./pages/user/UserDashboardPage";
 import "./styles.css";
 import "./product-layout.css";
 import "./clinical-workbench.css";
+import "./user-experience.css";
 
 const queryClient = new QueryClient();
 

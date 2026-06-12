@@ -165,7 +165,7 @@ describe("user dashboard", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "今日通行证" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "查看医学评估建议" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "进入运动前安全闸门" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /查看医学评估建议/ })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /进入运动前安全闸门/ })).not.toBeInTheDocument();
   });
 });

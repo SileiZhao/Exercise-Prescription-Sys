@@ -331,15 +331,47 @@ function locationNeedsBack(role: AppRole, pathname: string) {
 }
 
 export function RoleSidebar({ role }: { role: AppRole }) {
+  const roleLabel: Record<AppRole, string> = {
+    public: "公开入口",
+    user: "用户端",
+    expert: "专家端",
+    admin: "管理端",
+    research: "科研端"
+  };
+  const roleInitial: Record<AppRole, string> = {
+    public: "访",
+    user: "用",
+    expert: "专",
+    admin: "管",
+    research: "研"
+  };
   return (
-    <Layout.Sider className="role-sidebar" breakpoint="lg" collapsedWidth={0} width={188}>
+    <Layout.Sider className="role-sidebar" breakpoint="lg" collapsedWidth={0} width={216}>
       <div className="role-brand-block">
-        <Typography.Title level={5} className="role-brand">
-          启衡
-        </Typography.Title>
-        <Typography.Text className="role-brand-subtitle">运动处方与健康干预系统</Typography.Text>
+        <span className="role-brand-mark" aria-hidden="true">启</span>
+        <div className="role-brand-copy">
+          <Typography.Title level={5} className="role-brand">
+            启衡
+          </Typography.Title>
+          <Typography.Text className="role-brand-subtitle">运动处方与健康干预系统</Typography.Text>
+        </div>
       </div>
       <RoleNavLinks role={role} />
+      {role !== "public" ? (
+        <div className="role-sidebar-footer">
+          <div className="role-account">
+            <span className="role-account-avatar" aria-hidden="true">{roleInitial[role]}</span>
+            <span className="role-account-copy">
+              <strong>{currentUserName()}</strong>
+              <small>{roleLabel[role]} · {currentOrganizationName()}</small>
+            </span>
+          </div>
+          <div className="role-safety-note">
+            <ShieldCheck aria-hidden="true" />
+            <span>胸痛、晕厥、严重气短等信号出现时立即停止并就医。</span>
+          </div>
+        </div>
+      ) : null}
     </Layout.Sider>
   );
 }
