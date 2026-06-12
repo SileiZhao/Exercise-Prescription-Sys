@@ -200,38 +200,43 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getAllByText("AI 个性化运动处方平台").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("平台工作台入口")).toBeInTheDocument();
-    expect(screen.getByText(/R2 审核前不下发训练计划/)).toBeInTheDocument();
-    expect(screen.getAllByText("规则库").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("RAG")).toBeInTheDocument();
-    expect(screen.getByText("LLM")).toBeInTheDocument();
-    expect(screen.getByText("审核队列")).toBeInTheDocument();
-    expect(screen.getByText("演示闭环路径")).toBeInTheDocument();
-    expect(screen.getByText("风险分级")).toBeInTheDocument();
-    expect(screen.getByText("科研导出")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /进入用户端/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /进入专家端/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /进入管理端/ })).toBeInTheDocument();
-    const researchEntry = screen.getByRole("link", { name: /进入科研端/ });
-    expect(researchEntry).toBeInTheDocument();
-    expect(researchEntry).toHaveAttribute("href", "/research/dashboard");
+    expect(screen.getByLabelText("启衡首页")).toBeInTheDocument();
+    expect(screen.getByText("运动处方与健康干预系统")).toBeInTheDocument();
+    expect(screen.getByText("用户端")).toBeInTheDocument();
+    expect(screen.getByText("专家端")).toBeInTheDocument();
+    expect(screen.getByText("管理端")).toBeInTheDocument();
+    expect(screen.getByText("科研端")).toBeInTheDocument();
+    expect(document.querySelectorAll(".home-shell .ant-btn-primary")).toHaveLength(1);
+  });
+
+  it("keeps the public home page to one primary action for signed-in users", () => {
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "USER");
+
+    render(
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole("button", { name: "进入当前工作台" })).toBeInTheDocument();
+    expect(document.querySelectorAll(".home-shell .ant-btn-primary")).toHaveLength(1);
   });
 
   it.each([
-    ["/user/profile", "用户建档向导", "USER"],
-    ["/user/health-data", "用户建档向导", "USER"],
-    ["/user/risk-result", "判定报告", "USER"],
-    ["/user/prescriptions/88", "我的处方", "USER"],
-    ["/user/feedback", "今日运动", "USER"],
-    ["/user/follow-up-report", "阶段评估报告", "USER"],
-    ["/expert/dashboard", "专家工作台", "EXPERT"],
-    ["/expert/reviews/88", "专家审核工作台", "EXPERT"],
+    ["/user/profile", "用户建档", "USER"],
+    ["/user/health-data", "用户建档", "USER"],
+    ["/user/risk-result", "风险结果", "USER"],
+    ["/user/prescriptions/88", "处方发布面板", "USER"],
+    ["/user/feedback", "运动前安全闸门", "USER"],
+    ["/user/follow-up-report", "阶段报告", "USER"],
+    ["/expert/dashboard", "专家分诊队列", "EXPERT"],
+    ["/expert/reviews/88", "处方审核详情", "EXPERT"],
     ["/admin/exercises", "动作库管理", "ADMIN"],
     ["/admin/knowledge", "知识库管理", "ADMIN"],
-    ["/admin/clustering", "聚类模型管理", "ADMIN"],
+    ["/admin/clustering", "聚类模型生命周期", "ADMIN"],
     ["/admin/research-export", "科研导出审批", "ADMIN"],
-    ["/research/dashboard", "研究数据控制台", "RESEARCHER"],
+    ["/research/dashboard", "科研数据看板", "RESEARCHER"],
     ["/research/cluster-analysis", "科研分型分析", "RESEARCHER"],
     ["/research/intervention-effects", "科研干预效果", "RESEARCHER"],
     ["/research/export-jobs", "科研导出任务", "RESEARCHER"]
@@ -257,7 +262,7 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText(expectedHeading)).toBeInTheDocument();
-    expect(screen.queryByText("AI 个性化运动处方平台")).not.toBeInTheDocument();
+    expect((await screen.findAllByRole("heading", { name: expectedHeading })).length).toBeGreaterThan(0);
+    expect(screen.queryByText("启衡运动处方系统")).not.toBeInTheDocument();
   });
 });

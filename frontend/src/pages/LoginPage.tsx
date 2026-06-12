@@ -1,10 +1,10 @@
-import { Alert, Button, Card, Form, Input, Layout, Space, Tag, Typography } from "antd";
+import { Alert, Button, Card, Form, Input, Layout, Space, Typography } from "antd";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Activity, BookOpen, ClipboardCheck, Database, ShieldCheck } from "lucide-react";
 
 import { getCurrentUser, login, type UserRole } from "../api/auth";
 import { setAccessToken, setCurrentUserId, setCurrentUserRole, setRefreshToken } from "../auth/token";
+import { ClinicalStatusBadge, ProcessRail, StatusTile } from "../components/ProductUI";
 
 type LoginFormValues = {
   username: string;
@@ -19,14 +19,8 @@ const defaultRouteByRole: Record<UserRole, string> = {
   RESEARCHER: "/research/dashboard"
 };
 
-const loginStatusItems = [
-  { label: "规则库", value: "80 条规则", icon: <ShieldCheck size={17} />, tag: "READY" },
-  { label: "RAG", value: "57 份资料", icon: <BookOpen size={17} />, tag: "INDEXED" },
-  { label: "LLM", value: "aliyun / dashscope", icon: <Database size={17} />, tag: "REAL" },
-  { label: "审核队列", value: "R2/R3 专家处置", icon: <ClipboardCheck size={17} />, tag: "ACTIVE" }
-];
-
 export function LoginPage() {
+  const [form] = Form.useForm<LoginFormValues>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -54,53 +48,65 @@ export function LoginPage() {
 
   return (
     <Layout className="auth-shell">
-      <div className="auth-workbench">
-        <section className="auth-context-panel" aria-label="平台安全上下文">
-          <Space size={10} align="center" className="auth-brand-row">
-            <span className="brand-mark"><Activity size={18} /></span>
-            <Typography.Text strong>AI 个性化运动处方平台</Typography.Text>
-            <Tag className="neutral-status-tag">医疗健康干预中台</Tag>
-          </Space>
-          <Typography.Title level={2}>安全边界先行的运动处方协作平台</Typography.Title>
-          <Typography.Paragraph>
-            面向成人一般健康、慢病风险管理、体重管理与心肺/肌力/柔韧提升。R2 审核前不下发训练计划，R3 仅展示医学评估与转介建议。
-          </Typography.Paragraph>
-          <div className="auth-status-grid" aria-label="系统状态">
-            {loginStatusItems.map((item) => (
-              <div className="auth-status-item" key={item.label}>
-                <span className="auth-status-icon">{item.icon}</span>
-                <span>
-                  <Typography.Text type="secondary">{item.label}</Typography.Text>
-                  <Typography.Text strong>{item.value}</Typography.Text>
-                </span>
-                <Tag className={item.tag === "REAL" ? "real-status-tag" : "neutral-status-tag"}>{item.tag}</Tag>
-              </div>
-            ))}
-          </div>
-          <div className="auth-safety-note">
-            <ShieldCheck size={18} />
-            <span>登录后按角色进入用户端、专家端、管理端或科研端；科研侧仅展示脱敏聚合数据。</span>
-          </div>
-        </section>
+      <div className="auth-frame">
         <Card className="auth-card">
-          <Typography.Text className="auth-card-eyebrow">统一身份入口</Typography.Text>
-          <Typography.Title level={3}>登录</Typography.Title>
+          <Typography.Title level={3}>登录账号</Typography.Title>
+          <Typography.Paragraph type="secondary">使用邮箱和密码进入对应角色工作台。</Typography.Paragraph>
           {error ? <Alert type="error" message={error} showIcon className="form-alert" /> : null}
-          <Form layout="vertical" onFinish={handleFinish}>
+          <Form form={form} layout="vertical" onFinish={handleFinish}>
             <Form.Item label="邮箱" name="username" rules={[{ required: true, type: "email" }]}>
-              <Input autoComplete="email" />
+              <Input autoComplete="email" placeholder="name@example.com" />
             </Form.Item>
             <Form.Item label="密码" name="password" rules={[{ required: true }]}>
-              <Input.Password autoComplete="current-password" />
+              <Input.Password autoComplete="current-password" placeholder="输入登录密码" />
             </Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading} block>
-              登录
+            <Button className="auth-primary-action" type="primary" htmlType="submit" loading={loading} block>
+              登录并进入工作台
             </Button>
           </Form>
           <Typography.Paragraph className="auth-link">
-            没有账号？<Link to="/register">注册</Link>
+            没有账号？<Link to="/register">注册普通用户</Link>
           </Typography.Paragraph>
         </Card>
+        <section className="auth-context-panel" aria-label="登录说明">
+          <div className="auth-context-copy">
+            <Space className="auth-meta-row">
+              <ClinicalStatusBadge type="readiness" value="ready" label="角色工作台" />
+              <ClinicalStatusBadge type="review" value="pending_review" label="R2 专家审核" />
+              <ClinicalStatusBadge type="risk" value="R3" label="R3 训练阻断" />
+            </Space>
+            <Typography.Title level={3}>启衡运动处方系统</Typography.Title>
+            <Typography.Paragraph>
+              面向运动健康干预、专家审核和科研治理的工作台。系统优先呈现安全边界、审核状态和证据来源，避免未经审核的处方直接进入训练。
+            </Typography.Paragraph>
+          </div>
+          <ProcessRail
+            title="工作台安全流程"
+            description="不同角色进入各自的任务界面，关键动作保留审核、证据和审计记录。"
+            steps={[
+              {
+                title: "安全边界",
+                description: "用户端先显示今日能否运动，R2/R3 不直接进入训练。",
+                status: "active"
+              },
+              {
+                title: "审核链路",
+                description: "专家端处理待审处方、异常反馈和证据核对。",
+                status: "pending"
+              },
+              {
+                title: "脱敏治理",
+                description: "科研端只看聚合数据，导出需要审批和下载留痕。",
+                status: "pending"
+              }
+            ]}
+          />
+          <div className="status-grid auth-status-grid">
+            <StatusTile label="R2" value="审核后可见" detail="发布前隐藏训练动作" tone="warning" />
+            <StatusTile label="R3" value="医学评估" detail="不生成训练计划" tone="danger" />
+            <StatusTile label="科研" value="脱敏导出" detail="审批通过后限时下载" tone="info" />
+          </div>
+        </section>
       </div>
     </Layout>
   );

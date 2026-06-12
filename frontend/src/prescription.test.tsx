@@ -38,10 +38,10 @@ describe("prescription page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("我的处方")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "处方发布面板" })).toBeInTheDocument();
     expect(listMyPrescriptionsMock).toHaveBeenCalledWith(true);
     expect(screen.getByRole("button", { name: "生成处方" })).toBeInTheDocument();
-    expect(screen.getByText("R2 处方必须专家审核后发布，R3 不生成训练计划。")).toBeInTheDocument();
+    expect(screen.getByText("暂无处方。完成六类数据、风险筛查和人群分型后，可生成结构化 FITT-VP 处方。")).toBeInTheDocument();
   });
 
   it("renders pending R2 prescription safety state without FITT-VP training plan or report exports", async () => {
@@ -63,7 +63,7 @@ describe("prescription page", () => {
         contraindications: ["憋气用力"],
         reassessment: "2周复核",
         evidence_refs: [],
-        safety_notice: "AI 初稿已按规则约束生成，不替代医疗诊断。",
+        safety_notice: "系统初稿已按规则约束生成，不替代医疗诊断。",
         status: "PENDING_REVIEW",
         expert_review_required: true,
         version: 1,
@@ -82,7 +82,7 @@ describe("prescription page", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getAllByText("PENDING_REVIEW").length).toBeGreaterThan(0));
+    await waitFor(() => expect(screen.getAllByText("待专家审核").length).toBeGreaterThan(0));
     expect(screen.getAllByText("R2").length).toBeGreaterThan(0);
     expect(screen.getByText("高血压谨慎型")).toBeInTheDocument();
     expect(screen.getByText("专家审核前不展示训练计划")).toBeInTheDocument();
@@ -93,10 +93,57 @@ describe("prescription page", () => {
     expect(screen.queryByText(/frequency/)).not.toBeInTheDocument();
     expect(screen.queryByText(/每周3次/)).not.toBeInTheDocument();
     expect(screen.queryByText(/快走/)).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "导出处方报告 Word" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "导出处方报告 PDF" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "查看审核状态" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "生成处方" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 Word" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 PDF" })).not.toBeInTheDocument();
     expect(exportPrescriptionReportMock).not.toHaveBeenCalled();
     expect(exportPrescriptionPdfReportMock).not.toHaveBeenCalled();
+  });
+
+  it("keeps R0/R1 published prescription focused on today's exercise with exports behind more actions", async () => {
+    listMyPrescriptionsMock.mockResolvedValue([
+      {
+        id: 24,
+        risk_level: "R1",
+        cluster_label: "心肺功能不足型",
+        goals: ["增强心肺"],
+        fitt_vp: {
+          frequency: "每周3次",
+          intensity: "低-中强度",
+          time: "每次30分钟",
+          type: ["快走"],
+          volume: "每周90分钟",
+          progression: "每2周按RPE进阶"
+        },
+        precautions: ["监测RPE"],
+        contraindications: ["憋气用力"],
+        reassessment: "4周复测",
+        evidence_refs: [],
+        safety_notice: null,
+        status: "PUBLISHED",
+        expert_review_required: false,
+        version: 2,
+        created_at: "2026-06-02T00:00:00"
+      }
+    ]);
+
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "USER");
+    render(
+      <MemoryRouter
+        initialEntries={["/user/prescriptions"]}
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("link", { name: "进入今日运动" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "更多操作" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 Word" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 PDF" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "生成处方" })).not.toBeInTheDocument();
   });
 
   it("renders R3 safety notice without FITT-VP training plan", async () => {
@@ -136,15 +183,17 @@ describe("prescription page", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getAllByText("REFERRED").length).toBeGreaterThan(0));
+    await waitFor(() => expect(screen.getAllByText("已转介").length).toBeGreaterThan(0));
     expect(screen.getAllByText("R3").length).toBeGreaterThan(0);
     expect(screen.getByText("当前不展示训练计划，仅显示安全提醒和医学评估建议。")).toBeInTheDocument();
     expect(screen.getByText("当前存在高风险信号，系统不生成训练处方，建议先进行医学评估或专业转介。")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "查看医学评估建议" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "生成处方" })).not.toBeInTheDocument();
     expect(screen.queryByText("每周5次")).not.toBeInTheDocument();
     expect(screen.queryByText("跑步")).not.toBeInTheDocument();
     expect(screen.queryByText("中高强度")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "导出处方报告 Word" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "导出处方报告 PDF" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 Word" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 PDF" })).not.toBeInTheDocument();
     expect(exportPrescriptionReportMock).not.toHaveBeenCalled();
     expect(exportPrescriptionPdfReportMock).not.toHaveBeenCalled();
   });

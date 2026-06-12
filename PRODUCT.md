@@ -6,28 +6,28 @@ product
 
 ## Users
 
-领导、医学/运动健康专家、试点机构运营人员、普通成人用户、平台管理员和科研人员。用户通常在医疗健康干预、慢病风险管理、体重管理、心肺/肌力/柔韧提升等场景中使用系统，核心诉求是可信、安全、可审计地完成从建档到处方、审核、执行、反馈、复测和科研导出的闭环。
+Medical operations staff, exercise-prescription experts, research reviewers, and institutional evaluators use this platform in a regulated healthcare workflow. They need to inspect patient risk, review AI-assisted exercise prescriptions, manage rules and evidence, and export only approved aggregate research data.
 
 ## Product Purpose
 
-AI 个性化运动处方平台用于把六类健康数据、风险规则、禁忌证、动作库、模板库、RAG 证据和真实 LLM 组合成可审核、可追溯的运动处方工作流。产品成功标准是：演示时能清楚展示用户端、专家端、管理端、科研端的完整业务闭环；R2 审核前不下发训练计划；R3 仅展示医学评估/转介建议；管理和科研视图严格体现机构、角色和脱敏边界。
+The product provides an AI-assisted exercise prescription middle office for adult general health, chronic disease risk management, weight management, and cardiopulmonary, strength, and flexibility improvement. Success means the system reads as a trustworthy medical technology SaaS, with visible safety boundaries, auditable evidence, expert review for R2, and referral or institutional review for R3 and excluded populations.
 
 ## Brand Personality
 
-克制、可信、专业。界面应像医疗健康干预中台，而不是普通健身 App 或营销落地页。视觉参考 Ant Design Pro 的企业后台骨架、OpenMRS / Medplum patient chart 的医疗数据密度、IBM Carbon healthcare dashboard 的理性可读性。
+Restrained, clinical, accountable. The interface should feel like a serious healthcare operations system, not a consumer fitness app or marketing site.
 
 ## Anti-references
 
-不要做普通健身 App、营销落地页、AI 紫色渐变站、大面积玻璃拟态、霓虹色、装饰插画、夸张动效、空洞大卡片堆砌、只靠表格和按钮的毛坯后台。不要把高风险用户交给未审核 AI 独立决策，不要在生产入口出现 mock provider、hash embedding 或 OCR disabled。
+Avoid ordinary fitness-app aesthetics, marketing landing pages, decorative illustrations, large gradients, glassmorphism, neon colors, exaggerated motion, and fake or simplified clinical data.
 
 ## Design Principles
 
-1. 安全边界先于效率：R2 审核前隐藏训练动作和开始入口，R3 不生成训练处方。
-2. 数据密度服务信任：关键页面用医疗病历式摘要、规则证据、版本审计和明确状态，而不是装饰性留白。
-3. 熟悉的中台骨架：左侧角色导航、顶部页面上下文、中央工作区，控件遵循 Ant Design 语义。
-4. Demo 也必须真实：演示数据需有 demo 标识，并通过完整流程展示，不伪造缺失数据。
-5. 克制的医疗科技感：浅灰蓝背景、白色工作面、深青标题、蓝色主操作、固定风险色，动效只表达状态变化。
+- Put safety state and clinical provenance before visual flourish.
+- Use dense but readable enterprise layouts that support scanning, comparison, and repeated action.
+- Keep AI constrained: show rules, evidence, review status, and data gaps instead of presenting unsupported certainty.
+- Make operational data complete enough to tell the full business story while preserving medical boundaries.
+- Prefer familiar Ant Design controls and healthcare dashboard patterns over invented affordances.
 
 ## Accessibility & Inclusion
 
-目标至少满足 WCAG AA 的文本对比和键盘可达性。移动端小于 900px 时侧栏收为 Drawer，复杂三栏纵向折叠。尊重 `prefers-reduced-motion`。科研端永不展示姓名、手机、身份证等敏感字段，只展示 subject_id 和脱敏聚合数据。
+Use readable contrast, stable typography, keyboard-friendly Ant Design controls, reduced-motion support, and semantic error, empty, and loading states. Risk colors must not be the only carrier of meaning.

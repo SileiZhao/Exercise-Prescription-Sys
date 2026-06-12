@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -74,23 +74,21 @@ describe("admin dashboard", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("运营驾驶舱")).toBeInTheDocument();
-    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "运营指挥台" })).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
     const kpiStrip = screen.getByTestId("admin-kpi-strip");
-    expect(kpiStrip.querySelectorAll(".metric-card")).toHaveLength(6);
-    expect(within(kpiStrip).getByText("总用户")).toBeInTheDocument();
-    expect(within(kpiStrip).getByText("R2审核率")).toBeInTheDocument();
-    expect(within(kpiStrip).getByText("处方发布")).toBeInTheDocument();
-    expect(within(kpiStrip).getByText("R3转介")).toBeInTheDocument();
-    expect(within(kpiStrip).getByText("打卡完成率")).toBeInTheDocument();
-    expect(within(kpiStrip).getByText("RAG索引率")).toBeInTheDocument();
+    expect(kpiStrip.querySelectorAll(".status-tile")).toHaveLength(3);
+    expect(within(kpiStrip).getByText("上线阻断")).toBeInTheDocument();
+    expect(within(kpiStrip).getByText("R2 审核积压")).toBeInTheDocument();
+    expect(within(kpiStrip).getByText("R3 转介")).toBeInTheDocument();
+    expect(within(kpiStrip).getByText("LLM / Embedding / OCR / RAG")).toBeInTheDocument();
     expect(within(kpiStrip).queryByText("处方生成数")).not.toBeInTheDocument();
     expect(within(kpiStrip).queryByText("专家审核数")).not.toBeInTheDocument();
     expect(within(kpiStrip).queryByText("R2平均审核时长")).not.toBeInTheDocument();
     expect(screen.getByTestId("admin-command-center")).toBeInTheDocument();
     expect(screen.getByText("运营指挥摘要")).toBeInTheDocument();
     expect(screen.getByText("试点处方流转")).toBeInTheDocument();
-    expect(await screen.findByText("发布 6 / 生成 10")).toBeInTheDocument();
+    expect(screen.getByText((content) => content.includes("发布 6") && content.includes("生成 10"))).toBeInTheDocument();
     expect(screen.getByText("R2 审核 100%")).toBeInTheDocument();
     expect(screen.getByText("安全上线闸口")).toBeInTheDocument();
     expect(screen.getByText("LLM aliyun")).toBeInTheDocument();
@@ -100,22 +98,30 @@ describe("admin dashboard", () => {
     expect(screen.getByText("模板 16 / 16")).toBeInTheDocument();
     expect(screen.getByText("风险分布")).toBeInTheDocument();
     expect(await screen.findByTestId("RiskDistributionChart-echart")).toBeInTheDocument();
-    expect(await screen.findByTestId("PrescriptionTrendChart-echart")).toBeInTheDocument();
     expect(await screen.findByTestId("ExpertQueueChart-echart")).toBeInTheDocument();
-    expect(await screen.findByTestId("ClusterScatterChart-echart")).toBeInTheDocument();
     expect(await screen.findByTestId("RuleHitRankChart-echart")).toBeInTheDocument();
-    expect(await screen.findByTestId("TemplateUsageChart-echart")).toBeInTheDocument();
-    expect(screen.getByText("分型分布")).toBeInTheDocument();
-    expect(screen.getByText("上线资料状态")).toBeInTheDocument();
-    expect(screen.getByText("规则库")).toBeInTheDocument();
+    // Analysis charts are grouped into tabs; default "安全与审核" tab shows 3 charts only.
+    expect(document.querySelectorAll(".chart-panel")).toHaveLength(3);
+    expect(screen.queryByTestId("ClusterScatterChart-echart")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("TemplateUsageChart-echart")).not.toBeInTheDocument();
+    // Switch to business-flow tab to reveal the prescription trend chart.
+    fireEvent.click(screen.getByRole("tab", { name: "业务流转" }));
+    expect(await screen.findByTestId("PrescriptionTrendChart-echart")).toBeInTheDocument();
+    // Switch to model tab for the governance summaries.
+    fireEvent.click(screen.getByRole("tab", { name: "资料与模型" }));
+    expect(await screen.findByText("模板使用摘要")).toBeInTheDocument();
+    expect(screen.getByText("分型模型摘要")).toBeInTheDocument();
+    // Reference-data status now lives in its own tab.
+    fireEvent.click(screen.getByRole("tab", { name: "上线资料状态" }));
+    expect(await screen.findByText("规则库")).toBeInTheDocument();
     expect(screen.getByText("78 / 78")).toBeInTheDocument();
-	    expect(screen.getByText("动作库")).toBeInTheDocument();
+	    expect(screen.getAllByText("动作库").length).toBeGreaterThan(0);
 	    expect(screen.getByText("98 已审核 / 12 待审核")).toBeInTheDocument();
 	    expect(screen.getByText("已批准动作")).toBeInTheDocument();
 	    expect(screen.getByText("RAG 跳过文档")).toBeInTheDocument();
 	    expect(screen.getByText("RAG 索引失败文档")).toBeInTheDocument();
-	    expect(screen.getByText("2")).toBeInTheDocument();
-	    expect(screen.getByText("模板库")).toBeInTheDocument();
+	    expect(screen.getAllByText("2").length).toBeGreaterThan(0);
+	    expect(screen.getAllByText("模板库").length).toBeGreaterThan(0);
 	    expect(screen.getByText("16 / 16")).toBeInTheDocument();
 	    expect(screen.getByText("RAG")).toBeInTheDocument();
 	    expect(screen.getByText("53 文档 / 12050 切片 / 12050 已索引")).toBeInTheDocument();
@@ -152,14 +158,14 @@ describe("admin dashboard", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("上线阻断")).toBeInTheDocument();
+    expect((await screen.findAllByText("上线阻断")).length).toBeGreaterThan(0);
     const kpiStrip = screen.getByTestId("admin-kpi-strip");
-    const ragMetric = within(kpiStrip).getByText("RAG索引率").closest(".metric-card") as HTMLElement;
-    expect(within(ragMetric).getByText("99.99%")).toBeInTheDocument();
-    expect(within(ragMetric).queryByText("100%")).not.toBeInTheDocument();
-    expect(screen.getByText("LLM 未达到生产可用状态")).toBeInTheDocument();
-    expect(screen.getByText("OCR 未启用，资料入库链路不可用")).toBeInTheDocument();
-    expect(screen.getByText("RAG 存在 3 份跳过文档")).toBeInTheDocument();
-    expect(screen.getByText("RAG 索引未完成：12049 / 12050 切片")).toBeInTheDocument();
+    const blockingMetric = within(kpiStrip).getByText("上线阻断").closest(".status-tile") as HTMLElement;
+    expect(within(blockingMetric).getByText("4")).toBeInTheDocument();
+    expect(within(blockingMetric).getByText("LLM / Embedding / OCR / RAG")).toBeInTheDocument();
+    expect(screen.getAllByText("LLM 未达到生产可用状态").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("OCR 未启用，资料入库链路不可用").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("RAG 存在 3 份跳过文档").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("RAG 索引未完成：12049 / 12050 切片").length).toBeGreaterThan(0);
   });
 });

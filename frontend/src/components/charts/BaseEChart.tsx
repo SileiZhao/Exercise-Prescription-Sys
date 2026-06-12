@@ -1,7 +1,15 @@
 import { Alert, Empty, Spin } from "antd";
 import * as echarts from "echarts";
 import type { EChartsOption, EChartsType } from "echarts";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
+export type ChartDataRow = {
+  label: string;
+  values: Array<{
+    label: string;
+    value: string | number | null | undefined;
+  }>;
+};
 
 export type ChartStateProps<T> = {
   data?: T[];
@@ -18,6 +26,8 @@ export type BaseEChartProps = {
   empty?: boolean;
   error?: string | null;
   height?: number;
+  dataRows?: ChartDataRow[];
+  dataSummary?: string;
 };
 
 export function BaseEChart({
@@ -27,24 +37,12 @@ export function BaseEChart({
   loading = false,
   empty = false,
   error = null,
-  height = 280
+  height = 280,
+  dataRows = [],
+  dataSummary
 }: BaseEChartProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<EChartsType | null>(null);
-  const [isCompactViewport, setIsCompactViewport] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth <= 640 : false
-  );
-  const effectiveHeight = isCompactViewport ? Math.max(200, Math.round(height * 0.82)) : height;
-
-  useEffect(() => {
-    const updateViewport = () => {
-      setIsCompactViewport(window.innerWidth <= 640);
-      chartRef.current?.resize();
-    };
-    updateViewport();
-    window.addEventListener("resize", updateViewport);
-    return () => window.removeEventListener("resize", updateViewport);
-  }, []);
 
   useEffect(() => {
     if (loading || empty || error || !containerRef.current) {
@@ -54,8 +52,15 @@ export function BaseEChart({
     const chart = echarts.init(containerRef.current, undefined, { renderer: "canvas" });
     chartRef.current = chart;
     chart.setOption(option, true);
+    const resizeChart = () => chart.resize();
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(resizeChart) : null;
+    resizeObserver?.observe(containerRef.current);
+    window.addEventListener("resize", resizeChart);
 
     return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", resizeChart);
       chart.dispose();
       if (chartRef.current === chart) {
         chartRef.current = null;
@@ -63,13 +68,9 @@ export function BaseEChart({
     };
   }, [empty, error, loading, option]);
 
-  useEffect(() => {
-    chartRef.current?.resize();
-  }, [effectiveHeight]);
-
   if (loading) {
     return (
-      <div role="status" className="chart-state chart-loading" style={{ minHeight: effectiveHeight }}>
+      <div role="status" className="chart-state chart-loading">
         <Spin size="small" /> 图表加载中
       </div>
     );
@@ -80,17 +81,47 @@ export function BaseEChart({
   }
 
   if (empty) {
-    return <div className="chart-state" style={{ minHeight: effectiveHeight }}><Empty description="暂无图表数据" /></div>;
+    return <Empty description="暂无图表数据" />;
   }
 
   return (
-    <div
-      ref={containerRef}
-      aria-label={ariaLabel}
-      data-testid={testId}
-      role="img"
-      style={{ width: "100%", height: effectiveHeight }}
-    />
+    <div className="chart-figure">
+      <div
+        ref={containerRef}
+        aria-label={dataSummary ? `${ariaLabel}。${dataSummary}` : ariaLabel}
+        data-testid={testId}
+        role="img"
+        style={{ width: "100%", height }}
+      />
+      {dataRows.length ? (
+        <details className="chart-data-fallback">
+          <summary>查看数据</summary>
+          <div className="chart-data-table-wrap">
+            <table className="chart-data-table">
+              <caption>{dataSummary ?? ariaLabel}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">项目</th>
+                  {dataRows[0]?.values.map((item) => (
+                    <th scope="col" key={item.label}>{item.label}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {dataRows.map((row) => (
+                  <tr key={row.label}>
+                    <th scope="row">{row.label}</th>
+                    {row.values.map((item) => (
+                      <td key={`${row.label}-${item.label}`}>{item.value ?? "-"}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      ) : null}
+    </div>
   );
 }
 

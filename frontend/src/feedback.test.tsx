@@ -14,6 +14,7 @@ const adjustFeedbackMock = vi.hoisted(() =>
 );
 const createExerciseFeedbackMock = vi.hoisted(() => vi.fn().mockResolvedValue({ id: 88 }));
 const listMyPrescriptionsMock = vi.hoisted(() => vi.fn());
+const getUserDashboardMock = vi.hoisted(() => vi.fn());
 
 vi.mock("./api/feedback", () => ({
   adjustFeedback: adjustFeedbackMock
@@ -27,6 +28,10 @@ vi.mock("./api/healthData", () => ({
 vi.mock("./api/prescriptions", () => ({
   listMyPrescriptions: listMyPrescriptionsMock,
   generatePrescription: vi.fn()
+}));
+
+vi.mock("./api/userDashboard", () => ({
+  getUserDashboard: getUserDashboardMock
 }));
 
 describe("today exercise feedback page", () => {
@@ -49,8 +54,30 @@ describe("today exercise feedback page", () => {
         created_at: "2026-05-28T00:00:00"
       }
     ]);
+    getUserDashboardMock.mockResolvedValue({
+      current_risk_level: "R1",
+      expert_review_status: "APPROVED",
+      today_can_exercise: true,
+      today_block_reason: null,
+      weekly_completion_rate: 80,
+      current_stage_goals: [],
+      recent_feedback: null,
+      monitoring_reminders: [],
+      prescription_id: 10,
+      prescription_version: 1,
+      next_reassessment_date: null,
+      streak_days: 0,
+      weekly_target_hits: 0,
+      plan_completion_trend: [],
+      feedback_trend: [],
+      health_radar: [],
+      abnormal_feedback_count: 0,
+      review_status_label: "已发布",
+      prescription_summary: null
+    });
     createExerciseFeedbackMock.mockClear();
     adjustFeedbackMock.mockClear();
+    getUserDashboardMock.mockClear();
   });
 
   it("renders workout check-in and dynamic adjustment controls", async () => {
@@ -63,18 +90,9 @@ describe("today exercise feedback page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("今日运动")).toBeInTheDocument();
-    expect(await screen.findByText("运动打卡")).toBeInTheDocument();
-    expect(screen.getByTestId("today-exercise-pass")).toBeInTheDocument();
-    expect(screen.getByText("今日训练通行证")).toBeInTheDocument();
-    expect(screen.getByText("可执行处方")).toBeInTheDocument();
-    expect(screen.getByText("建议时长")).toBeInTheDocument();
-    expect(screen.getByText("反馈采集")).toBeInTheDocument();
-    expect(screen.getByTestId("today-feedback-workbench")).toBeInTheDocument();
-    expect(screen.getByText("动态反馈采集")).toBeInTheDocument();
-    expect(screen.getByText("安全确认")).toBeInTheDocument();
-    expect(screen.getByText("训练记录")).toBeInTheDocument();
-    expect(screen.getByText("主观反馈")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "运动前安全闸门" })).toBeInTheDocument();
+    expect(await screen.findByText("运动反馈")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "记录运动反馈" }));
     expect(screen.getByText("我确认运动前无胸痛、胸闷、晕厥、严重气短、心悸等红旗风险信号")).toBeInTheDocument();
     expect(screen.getByLabelText("RPE")).toBeInTheDocument();
     expect(screen.getByLabelText("疼痛评分")).toBeInTheDocument();
@@ -108,6 +126,27 @@ describe("today exercise feedback page", () => {
         created_at: "2026-05-30T00:00:00"
       }
     ]);
+    getUserDashboardMock.mockResolvedValue({
+      current_risk_level: "R3",
+      expert_review_status: "REFERRED",
+      today_can_exercise: false,
+      today_block_reason: "R3 仅显示医学评估建议。",
+      weekly_completion_rate: 0,
+      current_stage_goals: [],
+      recent_feedback: null,
+      monitoring_reminders: [],
+      prescription_id: null,
+      prescription_version: null,
+      next_reassessment_date: null,
+      streak_days: 0,
+      weekly_target_hits: 0,
+      plan_completion_trend: [],
+      feedback_trend: [],
+      health_radar: [],
+      abnormal_feedback_count: 0,
+      review_status_label: "已转介",
+      prescription_summary: null
+    });
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "USER");
 
@@ -136,6 +175,7 @@ describe("today exercise feedback page", () => {
       </MemoryRouter>
     );
 
+    fireEvent.click(await screen.findByRole("button", { name: "记录运动反馈" }));
     fireEvent.click(await screen.findByLabelText("我确认运动前无胸痛、胸闷、晕厥、严重气短、心悸等红旗风险信号"));
     fireEvent.click(screen.getByRole("button", { name: "提交打卡并动态调整" }));
 
@@ -190,7 +230,9 @@ describe("today exercise feedback page", () => {
     );
 
     expect(await screen.findByText("当前没有可执行处方")).toBeInTheDocument();
-    expect(screen.queryByText("运动打卡")).not.toBeInTheDocument();
+    expect(screen.getByText("训练入口已锁定")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "查看医学评估建议" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "记录运动反馈" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "提交打卡并动态调整" })).not.toBeInTheDocument();
     expect(createExerciseFeedbackMock).not.toHaveBeenCalled();
   });
@@ -205,10 +247,12 @@ describe("today exercise feedback page", () => {
       </MemoryRouter>
     );
 
-    await screen.findByText("运动打卡");
+    await screen.findByText("运动反馈");
+    fireEvent.click(screen.getByRole("button", { name: "记录运动反馈" }));
     fireEvent.click(screen.getByLabelText("胸痛"));
 
-    const interruptDialog = await screen.findByRole("dialog", { name: "红色安全中断" });
+    await screen.findByText("红色安全中断");
+    const interruptDialog = screen.getAllByRole("dialog").find((dialog) => within(dialog).queryByText("红色安全中断")) as HTMLElement;
     expect(interruptDialog).toBeInTheDocument();
     expect(within(interruptDialog).getByText(/已出现胸痛、晕厥、严重气短或心悸等安全信号/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "提交打卡并动态调整" })).toBeDisabled();
@@ -230,10 +274,12 @@ describe("today exercise feedback page", () => {
       </MemoryRouter>
     );
 
-    await screen.findByText("运动打卡");
+    await screen.findByText("运动反馈");
+    fireEvent.click(screen.getByRole("button", { name: "记录运动反馈" }));
     fireEvent.click(screen.getByLabelText("心悸"));
 
-    const interruptDialog = await screen.findByRole("dialog", { name: "红色安全中断" });
+    await screen.findByText("红色安全中断");
+    const interruptDialog = screen.getAllByRole("dialog").find((dialog) => within(dialog).queryByText("红色安全中断")) as HTMLElement;
     expect(interruptDialog).toBeInTheDocument();
     expect(within(interruptDialog).getByText(/心悸/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "提交打卡并动态调整" })).toBeDisabled();

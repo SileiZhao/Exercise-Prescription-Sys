@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -75,7 +75,7 @@ vi.mock("./api/prescriptions", () => ({
 }));
 
 describe("prescription report export", () => {
-  it("renders Word and PDF report export buttons for the latest prescription", async () => {
+  it("keeps Word and PDF report exports behind more actions for the latest prescription", async () => {
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "USER");
 
@@ -88,15 +88,12 @@ describe("prescription report export", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getByRole("button", { name: "导出处方报告 Word" })).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: "导出处方报告 PDF" })).toBeInTheDocument();
-    expect(screen.getByTestId("prescription-safety-panel")).toBeInTheDocument();
-    expect(screen.getByText("处方安全发布面板")).toBeInTheDocument();
-    expect(screen.getByText("处方 #8")).toBeInTheDocument();
-    expect(screen.getByText("报告可导出")).toBeInTheDocument();
-    expect(screen.getByText("结构化处方概览")).toBeInTheDocument();
-    expect(screen.getByTestId("prescription-detail-workbench")).toBeInTheDocument();
-    expect(await screen.findByText("报告导出审计")).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole("button", { name: "更多操作" })).toBeInTheDocument());
+    expect(screen.queryByRole("button", { name: "导出 Word" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "导出 PDF" })).not.toBeInTheDocument();
+    expect(await screen.findByText("最近导出记录")).toBeInTheDocument();
+    expect(screen.queryByText("prescription-8-v1.pdf")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText("最近导出记录"));
     expect(screen.getByText("prescription-8-v1.pdf")).toBeInTheDocument();
     expect(screen.getByText("PRESCRIPTION / PDF")).toBeInTheDocument();
   });

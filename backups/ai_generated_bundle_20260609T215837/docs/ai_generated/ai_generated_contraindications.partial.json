@@ -1,0 +1,1666 @@
+{
+  "items": [
+    {
+      "contraindication_code": "CI_HYP_UNC_001",
+      "disease": "未控制的高血压 (收缩压>180mmHg或舒张压>110mmHg)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "抗阻",
+        "高强度有氧",
+        "器械",
+        "居家爆发力动作"
+      ],
+      "stop_signals": [
+        "收缩压>220mmHg或舒张压>105mmHg",
+        "出现头晕、头痛、视力模糊",
+        "胸痛或异常呼吸困难"
+      ],
+      "referral_criteria": [
+        "血压持续>180/110mmHg需转介心内科",
+        "出现靶器官损害症状需立即就医"
+      ],
+      "rationale": "未控制的高血压患者在进行抗阻或高强度有氧运动时，血压会进一步急剧升高，增加心脑血管意外风险。需在药物控制血压至安全范围后，由专家审核制定低中强度有氧及柔韧训练初稿。",
+      "evidence_refs": [
+        "ACSM's Guidelines for Exercise Testing and Prescription",
+        "中国高血压防治指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_HF_DECOMP_001",
+      "disease": "急性心力衰竭失代偿期",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "有氧",
+        "抗阻",
+        "柔韧",
+        "平衡",
+        "低冲击",
+        "呼吸训练",
+        "居家",
+        "老年友好",
+        "器械"
+      ],
+      "stop_signals": [
+        "静息状态下呼吸困难",
+        "端坐呼吸",
+        "急性肺水肿症状",
+        "新发心律失常"
+      ],
+      "referral_criteria": [
+        "必须立即转介急诊或心血管内科",
+        "需住院进行血流动力学稳定治疗",
+        "在专科医生明确解除失代偿状态前禁止任何运动干预"
+      ],
+      "rationale": "急性心衰失代偿期患者心脏泵血功能严重受损，任何体力活动均可能加重心脏负荷，导致心源性休克或猝死。此阶段绝对禁忌运动，仅允许医疗转介和生命体征监测。",
+      "evidence_refs": [
+        "ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure",
+        "中国心力衰竭诊断和治疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_DM_RETIN_001",
+      "disease": "严重糖尿病视网膜病变 (增殖期)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "抗阻",
+        "高冲击",
+        "器械",
+        "居家跳跃",
+        "柔韧"
+      ],
+      "stop_signals": [
+        "视力突然下降或视野缺损",
+        "眼前出现飞蚊症激增或闪光感",
+        "眼部胀痛"
+      ],
+      "referral_criteria": [
+        "出现视网膜剥离先兆症状需紧急转介眼科",
+        "糖化血红蛋白>10%且伴微血管并发症需转介内分泌科"
+      ],
+      "rationale": "增殖期糖尿病视网膜病变患者视网膜新生血管脆弱，抗阻训练引起的血压波动或头部低于心脏的体位极易诱发玻璃体出血或视网膜脱离。需眼科评估后，由专家审核制定避免憋气和头部位置剧烈变化的低冲击有氧初稿。",
+      "evidence_refs": [
+        "ADA Standards of Medical Care in Diabetes",
+        "中国2型糖尿病防治指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AMI_RECENT_001",
+      "disease": "近期急性心肌梗死 (发病2周内或血流动力学不稳定)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "有氧",
+        "抗阻",
+        "柔韧",
+        "平衡",
+        "低冲击",
+        "呼吸训练",
+        "居家",
+        "老年友好",
+        "器械"
+      ],
+      "stop_signals": [
+        "静息或轻微活动时胸痛",
+        "心电图ST段动态改变",
+        "恶性心律失常",
+        "心源性休克征象"
+      ],
+      "referral_criteria": [
+        "必须转介心血管内科进行心脏康复I期评估",
+        "需在心电及血压严密监护下进行院内早期活动",
+        "禁止任何院外或居家自主运动处方"
+      ],
+      "rationale": "近期急性心梗患者心肌处于坏死修复期，电生理及血流动力学极不稳定。院外或非监护下的运动极易诱发室颤、心脏破裂或再梗死。R3级别仅支持转介至专业心脏康复中心进行I期监护下干预。",
+      "evidence_refs": [
+        "AHA Scientific Statement on Exercise Training in Patients With Heart Disease",
+        "冠心病心脏康复基层指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_OSTEO_FRAC_001",
+      "disease": "严重骨质疏松伴近期脆性骨折 (3个月内)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "抗阻",
+        "居家",
+        "平衡",
+        "老年友好",
+        "器械"
+      ],
+      "stop_signals": [
+        "骨折部位或脊柱新发疼痛",
+        "关节活动度突然受限",
+        "下肢麻木或放射痛"
+      ],
+      "referral_criteria": [
+        "新发疼痛需转介骨科或康复科进行影像学复查",
+        "跌倒风险极高者需转介物理治疗师进行专业防跌倒评估"
+      ],
+      "rationale": "严重骨质疏松伴近期骨折患者骨骼脆性极大，躯干屈曲、扭转及高冲击动作易导致脊柱压缩性骨折或原骨折部位移位。需在骨科或康复科专家审核下，制定以安全环境下的特定肌群等长收缩为主的初稿。",
+      "evidence_refs": [
+        "NOF Clinician's Guide to Prevention and Treatment of Osteoporosis",
+        "原发性骨质疏松症诊疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_COPD_EXAC_001",
+      "disease": "慢性阻塞性肺疾病 (COPD) 急性加重期",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "有氧",
+        "抗阻",
+        "柔韧",
+        "平衡",
+        "呼吸训练",
+        "低冲击",
+        "居家",
+        "老年友好"
+      ],
+      "stop_signals": [
+        "静息状态下呼吸困难加重",
+        "血氧饱和度(SpO2)低于90%",
+        "意识模糊或嗜睡",
+        "严重胸痛或心悸"
+      ],
+      "referral_criteria": [
+        "需立即转介至呼吸科或急诊进行医疗干预",
+        "待急性期控制且经主治医生评估稳定后方可重新评估运动风险"
+      ],
+      "rationale": "COPD急性加重期患者气道炎症和痉挛加剧，肺功能显著下降，任何体力活动均可能加重缺氧和呼吸肌疲劳，甚至诱发呼吸衰竭。此阶段绝对禁止任何形式的运动干预。",
+      "evidence_refs": [
+        "GOLD (Global Initiative for Chronic Obstructive Lung Disease) 指南",
+        "中国慢性阻塞性肺疾病诊治指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AS_SEV_001",
+      "disease": "严重主动脉瓣狭窄 (有症状或跨瓣压差>50mmHg)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "有氧",
+        "抗阻",
+        "低冲击",
+        "居家",
+        "老年友好",
+        "平衡",
+        "器械"
+      ],
+      "stop_signals": [
+        "晕厥或先兆晕厥",
+        "劳力性心绞痛",
+        "静息或轻微活动后呼吸困难",
+        "心悸伴头晕"
+      ],
+      "referral_criteria": [
+        "绝对禁忌运动，需立即转介心血管专科进行超声心动图复查及手术/介入评估",
+        "未经心外科或心内科干预并获明确运动许可前，禁止任何形式运动"
+      ],
+      "rationale": "严重主动脉瓣狭窄导致心排血量固定，运动时外周血管扩张而心排血量无法相应增加，极易引发心肌缺血、恶性心律失常、晕厥甚至心源性猝死。",
+      "evidence_refs": [
+        "AHA/ACC 瓣膜性心脏病管理指南",
+        "ESC/EACTS 瓣膜性心脏病管理指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_DVT_ACUTE_001",
+      "disease": "急性深静脉血栓形成 (DVT) (发病2周内或未建立有效抗凝)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "抗阻",
+        "有氧",
+        "柔韧",
+        "低冲击",
+        "居家",
+        "老年友好"
+      ],
+      "stop_signals": [
+        "患肢突发肿胀加剧",
+        "患肢剧烈疼痛或皮温升高",
+        "突发胸痛、呼吸困难或咯血(提示肺栓塞)",
+        "心率异常增快"
+      ],
+      "referral_criteria": [
+        "立即停止活动并转介血管外科或急诊",
+        "需经血管超声确认血栓稳定或机化，且抗凝治疗达标后，由专科医生出具运动许可"
+      ],
+      "rationale": "急性期深静脉血栓附着不牢固，肌肉收缩或肢体活动极易导致血栓脱落，引发致命性肺栓塞 (PE)。在血栓机化及有效抗凝前，严禁患肢运动。",
+      "evidence_refs": [
+        "ACCP 抗栓治疗与血栓预防指南",
+        "中国深静脉血栓形成诊治指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_HYPERTHYROID_UNC_001",
+      "disease": "未控制的甲状腺功能亢进 (静息心率>100bpm或伴心律失常)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "有氧",
+        "抗阻",
+        "器械",
+        "低冲击"
+      ],
+      "stop_signals": [
+        "心率超过目标上限或静息心率+20bpm",
+        "出现心悸、胸闷或心律不齐",
+        "大量出汗伴乏力",
+        "体温异常升高"
+      ],
+      "referral_criteria": [
+        "转介内分泌科调整抗甲状腺药物至甲状腺功能及心率控制平稳",
+        "需心电图及动态心电图评估排除严重心律失常后方可制定低强度处方"
+      ],
+      "rationale": "甲亢未控制时基础代谢率极高，交感神经兴奋性增强，运动易诱发心动过速、心房颤动甚至甲亢危象。仅允许在严密监测下进行极低强度的日常活动，禁止结构化训练。",
+      "evidence_refs": [
+        "ATA (美国甲状腺协会) 甲亢管理指南",
+        "ACSM 运动测试与运动处方指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_DF_ULCER_001",
+      "disease": "糖尿病足伴活动性溃疡或深部组织感染",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "下肢有氧",
+        "下肢抗阻",
+        "平衡",
+        "老年友好",
+        "居家"
+      ],
+      "stop_signals": [
+        "足部溃疡渗出增加或出现异味",
+        "足部红肿范围扩大或皮温升高",
+        "伴随发热或寒战",
+        "足部静息痛加剧"
+      ],
+      "referral_criteria": [
+        "转介内分泌科及糖尿病足专科进行创面处理和抗感染治疗",
+        "下肢负重运动需待溃疡完全愈合且经足病师评估定制减压鞋具后方可恢复"
+      ],
+      "rationale": "活动性溃疡或感染期进行下肢负重或摩擦运动，会加重局部组织缺血、缺氧和机械性损伤，导致感染扩散、溃疡加深甚至面临截肢风险。上肢及非负重躯干训练可在专家审核后进行。",
+      "evidence_refs": [
+        "IWGDF (国际糖尿病足工作组) 糖尿病足溃疡预防和管理指南",
+        "ADA (美国糖尿病协会) 糖尿病医学诊疗标准"
+      ]
+    },
+    {
+      "contraindication_code": "CI_UAP_UNST_001",
+      "disease": "不稳定型心绞痛",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "有氧",
+        "抗阻",
+        "柔韧"
+      ],
+      "stop_signals": [
+        "静息或轻微活动时出现胸痛",
+        "胸闷伴大汗",
+        "放射痛至左臂或下颌"
+      ],
+      "referral_criteria": [
+        "立即停止任何活动并呼叫急救",
+        "转介至心血管内科急诊",
+        "需进行冠脉造影及血运重建评估"
+      ],
+      "rationale": "不稳定型心绞痛属于急性冠脉综合征，运动可显著增加心肌耗氧量，诱发急性心肌梗死或恶性心律失常，危及生命。",
+      "evidence_refs": [
+        "ACSM's Guidelines for Exercise Testing and Prescription",
+        "AHA/ACC Guideline for the Management of Patients With Non-ST-Elevation Acute Coronary Syndromes"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PAH_SEV_001",
+      "disease": "严重肺动脉高压 (WHO功能分级III-IV级)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "有氧",
+        "抗阻",
+        "呼吸训练"
+      ],
+      "stop_signals": [
+        "晕厥或先兆晕厥",
+        "严重呼吸困难",
+        "咯血",
+        "胸痛"
+      ],
+      "referral_criteria": [
+        "转介至肺血管病专科",
+        "评估靶向药物治疗及心肺移植指征",
+        "禁止在专科医生许可前进行任何体力活动"
+      ],
+      "rationale": "严重肺动脉高压患者右心功能储备极差，运动可能导致右心衰竭、心排血量骤降及猝死。",
+      "evidence_refs": [
+        "ESC/ERS Guidelines for the diagnosis and treatment of pulmonary hypertension",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_MYO_ACU_001",
+      "disease": "急性心肌炎或心包炎",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "有氧",
+        "抗阻",
+        "居家活动"
+      ],
+      "stop_signals": [
+        "心悸",
+        "胸痛",
+        "发热",
+        "极度疲乏"
+      ],
+      "referral_criteria": [
+        "转介至心血管内科",
+        "需心肌酶学、心脏磁共振及超声心动图随访",
+        "建议休息3-6个月直至炎症指标及心功能恢复正常"
+      ],
+      "rationale": "急性期运动可加重心肌损伤，增加恶性心律失常和扩张型心肌病后遗症的风险。",
+      "evidence_refs": [
+        "ESC Guidelines for the diagnosis and management of pericardial diseases",
+        "AHA Scientific Statement on Exercise and Cardiovascular Disease"
+      ]
+    },
+    {
+      "contraindication_code": "CI_VPC_HEM_001",
+      "disease": "频发室性早搏伴血流动力学不稳定或运动诱发室速",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "有氧",
+        "抗阻",
+        "高冲击"
+      ],
+      "stop_signals": [
+        "心悸",
+        "黑蒙",
+        "晕厥",
+        "血压下降"
+      ],
+      "referral_criteria": [
+        "转介至心电生理专科",
+        "需进行24小时动态心电图及电生理检查",
+        "评估射频消融或ICD植入指征"
+      ],
+      "rationale": "运动交感神经兴奋可诱发致命性室性心律失常，血流动力学不稳定时运动极度危险。",
+      "evidence_refs": [
+        "ESC Guidelines for the management of patients with ventricular arrhythmias",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CKD5_ELE_001",
+      "disease": "慢性肾脏病5期未规律透析或伴严重电解质紊乱 (如高钾血症)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "抗阻",
+        "有氧",
+        "柔韧"
+      ],
+      "stop_signals": [
+        "肌肉无力",
+        "心律失常",
+        "恶心呕吐",
+        "意识模糊"
+      ],
+      "referral_criteria": [
+        "转介至肾内科急诊",
+        "紧急纠正电解质紊乱",
+        "建立规律透析方案后方可重新评估运动指征"
+      ],
+      "rationale": "严重高钾血症等电解质紊乱极易在运动中诱发心脏骤停，且尿毒症毒素蓄积影响肌肉和神经功能。",
+      "evidence_refs": [
+        "KDIGO Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease",
+        "KDOQI Clinical Practice Guidelines"
+      ]
+    },
+    {
+      "contraindication_code": "CI_INF_FEB_001",
+      "disease": "急性感染性疾病伴发热 (体温>38℃) 或全身系统性感染",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "有氧",
+        "抗阻",
+        "高冲击",
+        "高强度间歇"
+      ],
+      "stop_signals": [
+        "体温升高",
+        "寒战",
+        "心率异常增快",
+        "肌肉酸痛加剧"
+      ],
+      "referral_criteria": [
+        "转介至全科或感染科",
+        "待体温正常且急性症状消失后逐步恢复低强度活动",
+        "需排除心肌炎并发症"
+      ],
+      "rationale": "发热时基础代谢率增加，运动加重心肺负担，且可能促使病毒或细菌播散，增加心肌炎风险。",
+      "evidence_refs": [
+        "ACSM's Guidelines for Exercise Testing and Prescription",
+        "UpToDate: Exercise and sports medicine in primary care"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CAS_TIA_001",
+      "disease": "症状性颈动脉狭窄或近期短暂性脑缺血发作 (TIA) (3个月内)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "抗阻",
+        "有氧",
+        "颈部过度伸展或旋转动作"
+      ],
+      "stop_signals": [
+        "一过性黑蒙",
+        "单侧肢体无力",
+        "言语不清",
+        "头晕"
+      ],
+      "referral_criteria": [
+        "转介至神经内科或血管外科",
+        "评估颈动脉内膜剥脱术或支架植入指征",
+        "需完成脑血管影像学评估"
+      ],
+      "rationale": "运动引起的血压波动或颈部动作可能导致斑块破裂或脑血流灌注不足，诱发急性缺血性脑卒中。",
+      "evidence_refs": [
+        "AHA/ASA Guidelines for the Prevention of Stroke in Patients With Stroke and TIA",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PD_FALL_001",
+      "disease": "帕金森病晚期 (Hoehn-Yahr分级4-5级) 伴严重姿势不稳及频繁跌倒",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "无保护的平衡训练",
+        "高冲击",
+        "快速变向",
+        "复杂双重任务行走"
+      ],
+      "stop_signals": [
+        "步态冻结",
+        "失去平衡",
+        "严重震颤",
+        "体位性低血压症状"
+      ],
+      "referral_criteria": [
+        "转介至康复医学科及神经内科",
+        "需物理治疗师一对一保护下进行评估",
+        "调整抗帕金森药物以优化'开'期"
+      ],
+      "rationale": "晚期帕金森病患者姿势反射消失，无保护的平衡或复杂运动极易导致跌倒及严重骨折。",
+      "evidence_refs": [
+        "Movement Disorder Society Evidence-Based Medicine Review Update on Parkinson's Disease",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_OA_ACU_001",
+      "disease": "骨关节炎急性发作期伴严重关节积液或静息痛",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "受累关节的抗阻训练",
+        "高冲击",
+        "负重有氧",
+        "过度屈伸"
+      ],
+      "stop_signals": [
+        "关节肿胀加剧",
+        "静息痛",
+        "关节交锁",
+        "局部皮温升高"
+      ],
+      "referral_criteria": [
+        "转介至骨科或风湿免疫科",
+        "需进行关节穿刺抽液或局部抗炎治疗",
+        "急性期以休息和物理因子治疗为主"
+      ],
+      "rationale": "急性炎症期负重或抗阻训练会加重滑膜炎症和软骨磨损，导致关节结构进一步破坏。",
+      "evidence_refs": [
+        "OARSI Guidelines for the non-surgical management of knee, hip, and polyarticular osteoarthritis",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_GLA_UNC_001",
+      "disease": "未控制的青光眼或近期眼科手术 (如视网膜脱离复位术后)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "Valsalva动作",
+        "头部低于心脏的体位",
+        "大重量抗阻",
+        "高冲击"
+      ],
+      "stop_signals": [
+        "眼痛",
+        "视力模糊",
+        "视野缺损",
+        "头痛伴恶心"
+      ],
+      "referral_criteria": [
+        "转介至眼科",
+        "需监测眼压及眼底情况",
+        "术后需严格遵守眼科医生的体位及活动限制"
+      ],
+      "rationale": "憋气用力及头低位会显著升高眼内压，可能导致视神经不可逆损伤或眼科手术失败。",
+      "evidence_refs": [
+        "AAO Preferred Practice Pattern: Primary Open-Angle Glaucoma",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PRE_ECL_001",
+      "disease": "妊娠期高血压疾病或先兆子痫",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "有氧",
+        "抗阻",
+        "柔韧"
+      ],
+      "stop_signals": [
+        "严重头痛",
+        "视力改变",
+        "右上腹痛",
+        "阴道流血",
+        "胎动减少"
+      ],
+      "referral_criteria": [
+        "立即转介至产科急诊",
+        "需住院监测血压及胎儿情况",
+        "评估终止妊娠指征"
+      ],
+      "rationale": "先兆子痫存在全身小血管痉挛及内皮损伤，运动可能诱发子痫抽搐、胎盘早剥或胎儿窘迫。",
+      "evidence_refs": [
+        "ACOG Practice Bulletin: Gestational Hypertension and Preeclampsia",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_ANE_SEV_001",
+      "disease": "严重贫血 (血红蛋白<60g/L) 或伴明显组织缺氧症状",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "中高强度有氧",
+        "大重量抗阻",
+        "高冲击",
+        "高海拔环境运动"
+      ],
+      "stop_signals": [
+        "严重气促",
+        "心悸",
+        "头晕",
+        "心绞痛"
+      ],
+      "referral_criteria": [
+        "转介至血液科或内科",
+        "需查明贫血原因并进行针对性治疗",
+        "待血红蛋白恢复至安全水平后逐步恢复运动"
+      ],
+      "rationale": "严重贫血导致血液携氧能力显著下降，运动时极易发生心肌及骨骼肌缺血缺氧，诱发心力衰竭。",
+      "evidence_refs": [
+        "WHO Guidelines on Anaemia",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_EPI_UNC_001",
+      "disease": "癫痫未控制或近期频繁发作 (近3个月内发作≥2次)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有无保护运动",
+        "水上运动",
+        "高处运动",
+        "器械训练",
+        "骑行"
+      ],
+      "stop_signals": [
+        "先兆症状 (如嗅觉异常、视觉闪光)",
+        "意识丧失",
+        "肢体抽搐"
+      ],
+      "referral_criteria": [
+        "转介至神经内科",
+        "需调整抗癫痫药物方案",
+        "脑电图复查评估发作控制情况"
+      ],
+      "rationale": "未控制的癫痫在运动中发作可能导致溺水、坠落、机械损伤等严重意外伤害。",
+      "evidence_refs": [
+        "ILAE Guidelines for the Management of Epilepsy",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_LDH_ACU_001",
+      "disease": "腰椎间盘突出症急性期伴严重神经根压迫症状 (如下肢放射痛、肌力下降)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "脊柱屈曲抗阻",
+        "躯干旋转",
+        "高冲击",
+        "大重量深蹲/硬拉"
+      ],
+      "stop_signals": [
+        "下肢放射痛加剧",
+        "下肢麻木或无力",
+        "大小便功能障碍"
+      ],
+      "referral_criteria": [
+        "转介至骨科或康复科",
+        "需进行腰椎MRI评估",
+        "若出现马尾神经综合征需紧急手术干预"
+      ],
+      "rationale": "急性神经根水肿期，不当的脊柱负荷和屈曲旋转动作会加重神经压迫，甚至导致不可逆神经损伤。",
+      "evidence_refs": [
+        "NASS Evidence-Based Clinical Guidelines for Multidisciplinary Spine Care",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AST_UNC_001",
+      "disease": "哮喘未控制或运动诱发性支气管痉挛 (EIB) 高风险且未预防用药",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "冷空气环境有氧",
+        "高强度间歇",
+        "长时间耐力运动",
+        "高花粉/污染环境运动"
+      ],
+      "stop_signals": [
+        "喘息",
+        "胸闷",
+        "持续性咳嗽",
+        "呼气峰流速(PEF)下降>20%"
+      ],
+      "referral_criteria": [
+        "转介至呼吸内科",
+        "需优化吸入性糖皮质激素及支气管扩张剂方案",
+        "运动前需预防性使用SABA"
+      ],
+      "rationale": "未控制的哮喘在运动通气量增加时极易诱发严重支气管痉挛，导致急性呼吸衰竭。",
+      "evidence_refs": [
+        "GINA Global Strategy for Asthma Management and Prevention",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_MET_BON_001",
+      "disease": "恶性肿瘤骨转移伴病理性骨折高风险 (Mirels评分≥9分)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "受累骨骼的负重",
+        "抗阻训练",
+        "高冲击",
+        "躯干扭转"
+      ],
+      "stop_signals": [
+        "局部骨痛加剧",
+        "突发剧烈疼痛",
+        "肢体畸形",
+        "神经压迫症状"
+      ],
+      "referral_criteria": [
+        "转介至骨肿瘤科或骨科",
+        "需进行预防性内固定或局部放疗",
+        "严格限制受累部位机械应力"
+      ],
+      "rationale": "骨转移破坏骨皮质，机械负荷极易导致病理性骨折，造成严重残疾和剧烈疼痛。",
+      "evidence_refs": [
+        "NCCN Clinical Practice Guidelines in Oncology: Bone Health",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PSY_ACU_001",
+      "disease": "精神疾病急性发作期伴严重认知、行为障碍或自杀倾向",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有独立运动干预",
+        "器械训练",
+        "户外复杂环境运动"
+      ],
+      "stop_signals": [
+        "幻觉或妄想加重",
+        "极度激越",
+        "自伤或伤人倾向",
+        "拒绝配合"
+      ],
+      "referral_criteria": [
+        "转介至精神科急诊",
+        "需住院封闭治疗或调整精神类药物",
+        "需专业护理人员全程监护"
+      ],
+      "rationale": "急性精神障碍患者缺乏危险识别能力和自我保护意识，独立运动极易导致自伤或意外伤害。",
+      "evidence_refs": [
+        "APA Practice Guidelines for the Psychiatric Evaluation of Adults",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AAA_SYM_001",
+      "disease": "腹主动脉瘤 (直径>5.5cm或有症状) 或近期主动脉夹层",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有运动干预",
+        "抗阻",
+        "Valsalva动作",
+        "核心训练"
+      ],
+      "stop_signals": [
+        "突发剧烈腹痛或背痛",
+        "腹部搏动性肿块压痛",
+        "晕厥",
+        "下肢缺血症状"
+      ],
+      "referral_criteria": [
+        "立即转介至血管外科急诊",
+        "需紧急影像学评估及手术/腔内修复干预",
+        "绝对卧床休息"
+      ],
+      "rationale": "运动及血压升高会显著增加主动脉壁剪切力，极易导致动脉瘤破裂或夹层撕裂，致死率极高。",
+      "evidence_refs": [
+        "ESC Guidelines on the Diagnosis and Treatment of Aortic Diseases",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_GOU_ACU_001",
+      "disease": "痛风急性发作期 (关节红肿热痛)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "受累关节的负重",
+        "抗阻训练",
+        "高冲击",
+        "过度拉伸"
+      ],
+      "stop_signals": [
+        "关节疼痛加剧",
+        "局部红肿扩散",
+        "发热"
+      ],
+      "referral_criteria": [
+        "转介至风湿免疫科",
+        "需使用秋水仙碱、NSAIDs或糖皮质激素控制急性炎症",
+        "急性期以休息和抬高患肢为主"
+      ],
+      "rationale": "急性期关节腔内尿酸盐结晶引发剧烈炎症，机械摩擦和负重会加重滑膜损伤和疼痛。",
+      "evidence_refs": [
+        "ACR Guideline for the Management of Gout",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PAC_UNO_001",
+      "disease": "植入心脏起搏器或ICD且未过随访稳定期 (术后<3个月) 或参数未优化",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "术侧上肢大幅度外展/上举",
+        "高冲击",
+        "接触性运动",
+        "强磁场环境运动"
+      ],
+      "stop_signals": [
+        "心悸",
+        "头晕",
+        "起搏器囊袋红肿或渗出",
+        "ICD异常放电"
+      ],
+      "referral_criteria": [
+        "转介至心电生理或起搏器随访门诊",
+        "需进行起搏器程控及参数优化",
+        "确认导线固定良好后方可逐步恢复活动"
+      ],
+      "rationale": "术后早期导线尚未完全机化固定，大幅度上肢运动可能导致导线脱位；参数未优化可能导致运动时心率变时功能不良或ICD误放电。",
+      "evidence_refs": [
+        "HRS/EHRA Expert Consensus Statement on the Management of CIED Infections",
+        "ACSM's Guidelines for Exercise Testing and Prescription"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CKD34_UNC_001",
+      "disease": "慢性肾脏病 (CKD) 3-4期伴未控制的高血压或严重蛋白尿",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高强度抗阻",
+        "大重量器械",
+        "力竭性训练",
+        "高冲击有氧"
+      ],
+      "stop_signals": [
+        "收缩压>180mmHg或舒张压>110mmHg",
+        "出现肉眼血尿",
+        "严重水肿加重",
+        "异常疲劳或呼吸困难"
+      ],
+      "referral_criteria": [
+        "需肾内科及运动医学专家联合评估血压及蛋白尿控制情况",
+        "制定处方前必须由专家审核并确认肾脏血流动力学安全"
+      ],
+      "rationale": "未控制的高血压和严重蛋白尿会增加肾脏高滤过损伤风险，高强度运动可能导致急性肾损伤或加重蛋白尿。",
+      "evidence_refs": [
+        "KDIGO 慢性肾脏病血压管理临床实践指南",
+        "ACSM 运动测试与处方指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_DM2_DPN_001",
+      "disease": "2型糖尿病伴严重周围神经病变 (足部保护性感觉丧失)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高冲击有氧",
+        "长时间负重步行",
+        "赤足训练",
+        "不平衡表面训练"
+      ],
+      "stop_signals": [
+        "足部出现新发水泡、红肿或破溃",
+        "足部疼痛或麻木感突然加重",
+        "步态不稳导致跌倒"
+      ],
+      "referral_criteria": [
+        "需内分泌科及足病专科评估足部风险",
+        "运动处方需经专家审核，强制要求穿着定制减压鞋具"
+      ],
+      "rationale": "保护性感觉丧失极易导致足部微小创伤未被察觉，进而发展为糖尿病足溃疡，高冲击和长时间负重显著增加此风险。",
+      "evidence_refs": [
+        "ADA 糖尿病医学诊疗标准",
+        "ACSM 运动测试与处方指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CAD_STP_001",
+      "disease": "冠心病 (稳定性心绞痛) 近期运动负荷试验阳性或ST段显著压低",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有主动运动训练",
+        "抗阻训练",
+        "有氧训练",
+        "柔韧训练"
+      ],
+      "stop_signals": [
+        "任何胸痛、胸闷或心绞痛发作",
+        "心电图ST段压低>2mm",
+        "血压异常下降",
+        "严重心律失常"
+      ],
+      "referral_criteria": [
+        "立即转介心内科进行冠脉造影或血运重建评估",
+        "禁止生成任何运动处方，直至心内科医生出具运动许可"
+      ],
+      "rationale": "运动负荷试验阳性或ST段显著压低提示存在严重心肌缺血，运动可能诱发急性心肌梗死或恶性心律失常。",
+      "evidence_refs": [
+        "ESC 慢性冠脉综合征诊断和管理指南",
+        "AHA 心血管疾病患者运动训练科学声明"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AFIB_UNC_001",
+      "disease": "心房颤动 (未控制心室率或近期未规范抗凝)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高强度间歇训练 (HIIT)",
+        "爆发力训练",
+        "大重量抗阻",
+        "竞技性对抗运动"
+      ],
+      "stop_signals": [
+        "静息心率>110bpm或运动时心率异常飙升",
+        "出现心悸、头晕、黑矇或晕厥先兆",
+        "突发神经系统定位体征"
+      ],
+      "referral_criteria": [
+        "需心内科评估心室率控制及抗凝状态 (CHA2DS2-VASc评分)",
+        "处方发布前需心血管康复专家审核"
+      ],
+      "rationale": "未控制的心室率会降低心输出量并增加心肌耗氧，未规范抗凝在运动血流动力学改变时增加血栓脱落导致脑卒中的风险。",
+      "evidence_refs": [
+        "ESC 心房颤动诊断和管理指南",
+        "ACSM 运动测试与处方指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_OBES_OSA_001",
+      "disease": "极重度肥胖 (BMI>40) 伴重度阻塞性睡眠呼吸暂停 (OSA) 未使用无创呼吸机",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "仰卧位训练",
+        "高强度有氧",
+        "大重量抗阻",
+        "颈部过度屈伸动作"
+      ],
+      "stop_signals": [
+        "运动中或运动后出现严重嗜睡、晨起头痛加重",
+        "血氧饱和度(SpO2)<90%",
+        "血压异常升高"
+      ],
+      "referral_criteria": [
+        "需呼吸睡眠科评估并启动CPAP/BiPAP治疗",
+        "运动处方需由肥胖医学及康复专家联合审核"
+      ],
+      "rationale": "重度OSA未治疗会导致慢性间歇性缺氧和交感神经极度兴奋，运动时缺氧加重可能诱发肺动脉高压危象或心血管意外。",
+      "evidence_refs": [
+        "AASM 阻塞性睡眠呼吸暂停临床实践指南",
+        "AACE/ACE 肥胖患者综合管理指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_OA_ADV_001",
+      "disease": "骨关节炎 (膝/髋) 晚期 (Kellgren-Lawrence IV级) 等待关节置换",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "负重下肢抗阻",
+        "高冲击有氧",
+        "深蹲及大角度屈膝",
+        "长时间站立训练"
+      ],
+      "stop_signals": [
+        "关节静息痛或夜间痛加剧",
+        "关节肿胀或积液明显增加",
+        "关节交锁或打软腿"
+      ],
+      "referral_criteria": [
+        "需骨科及物理治疗师评估关节置换手术指征及术前康复条件",
+        "处方需专家审核，以非负重或水中运动为主"
+      ],
+      "rationale": "晚期骨关节炎软骨已完全磨损，负重和高冲击运动会加剧骨摩擦和炎症，导致难以忍受的疼痛和关节结构进一步破坏。",
+      "evidence_refs": [
+        "OARSI 骨关节炎非手术治疗指南",
+        "ACSM 运动测试与处方指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_SCO_SEV_001",
+      "disease": "严重脊柱侧弯 (Cobb角>45度) 或伴有神经压迫症状",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "大重量轴向负重 (如杠铃深蹲/硬拉)",
+        "脊柱极度扭转",
+        "高冲击跳跃",
+        "不对称单侧大重量训练"
+      ],
+      "stop_signals": [
+        "背部疼痛放射至下肢",
+        "下肢麻木、无力或感觉异常",
+        "大小便功能障碍"
+      ],
+      "referral_criteria": [
+        "需脊柱外科及专业物理治疗师评估",
+        "处方需专家审核，避免加重脊柱生物力学失衡"
+      ],
+      "rationale": "严重脊柱侧弯伴神经压迫时，轴向负重和极度扭转会增加椎间盘及神经根压力，可能导致不可逆的神经损伤。",
+      "evidence_refs": [
+        "SOSORT 脊柱侧弯保守治疗国际共识",
+        "NASS 脊柱疾病运动康复指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_HF_NYHA3_001",
+      "disease": "慢性心力衰竭 (NYHA III级) 稳定期但BNP/NT-proBNP显著升高",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高强度有氧",
+        "等长收缩抗阻 (如平板支撑)",
+        "上肢大肌群力竭训练",
+        "高温/高湿环境训练"
+      ],
+      "stop_signals": [
+        "体重短期内增加>2kg",
+        "夜间阵发性呼吸困难或端坐呼吸",
+        "下肢水肿加重",
+        "运动时收缩压下降>10mmHg"
+      ],
+      "referral_criteria": [
+        "需心衰专科调整利尿剂及神经内分泌拮抗剂剂量",
+        "运动处方需心脏康复专家严格审核并建议在心电监护下进行"
+      ],
+      "rationale": "NYHA III级且BNP显著升高提示心衰处于失代偿边缘，等长收缩和高强度运动会显著增加心脏后负荷，诱发急性心衰。",
+      "evidence_refs": [
+        "ESC 急性和慢性心力衰竭诊断和治疗指南",
+        "AHA 心衰患者运动康复科学声明"
+      ]
+    },
+    {
+      "contraindication_code": "CI_DM1_UNC_001",
+      "disease": "1型糖尿病 血糖控制极差 (HbA1c>10%) 或频繁发生严重低血糖",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "无人监护的居家训练",
+        "长时间耐力有氧",
+        "高强度间歇训练 (HIIT)",
+        "水上运动"
+      ],
+      "stop_signals": [
+        "血糖<3.9mmol/L或>16.7mmol/L且伴酮体阳性",
+        "出现意识模糊、出冷汗、手抖等低血糖症状",
+        "恶心、呕吐或深大呼吸 (酮症酸中毒先兆)"
+      ],
+      "referral_criteria": [
+        "需内分泌科调整胰岛素泵或多次注射方案",
+        "处方需专家审核，强制要求运动前后血糖监测及同伴陪同"
+      ],
+      "rationale": "极差血糖控制下运动易诱发严重低血糖或加速酮症酸中毒，无人监护的长时间或高强度运动具有极高生命危险。",
+      "evidence_refs": [
+        "ADA 糖尿病医学诊疗标准",
+        "ISPAD 儿童和青少年糖尿病临床实践共识"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PAD_REST_001",
+      "disease": "外周动脉疾病 (PAD) 伴严重间歇性跛行或静息痛 (Fontaine III-IV期)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有下肢主动运动",
+        "抗阻训练",
+        "有氧训练",
+        "平衡训练"
+      ],
+      "stop_signals": [
+        "下肢静息痛加剧",
+        "足部出现溃疡、坏疽或皮肤颜色发绀/苍白",
+        "下肢皮温显著降低"
+      ],
+      "referral_criteria": [
+        "立即转介血管外科评估血运重建 (介入或旁路手术) 指征",
+        "禁止生成任何下肢运动处方，直至血管外科医生解除禁忌"
+      ],
+      "rationale": "Fontaine III-IV期提示下肢严重缺血，运动不仅无法改善侧支循环，反而会加重组织缺氧，加速坏疽和截肢风险。",
+      "evidence_refs": [
+        "ESC 外周动脉疾病诊断和管理指南",
+        "AHA 下肢外周动脉疾病管理科学声明"
+      ]
+    },
+    {
+      "contraindication_code": "CI_LIV_DEC_001",
+      "disease": "肝硬化 失代偿期 (Child-Pugh B或C级) 或伴大量腹水",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有抗阻训练",
+        "有氧训练",
+        "核心训练",
+        "柔韧训练"
+      ],
+      "stop_signals": [
+        "腹围短期内显著增加",
+        "出现呕血、黑便 (消化道出血)",
+        "意识障碍或行为异常 (肝性脑病先兆)",
+        "尿量显著减少"
+      ],
+      "referral_criteria": [
+        "立即转介消化内科/肝病科进行综合治疗及并发症管理",
+        "禁止生成任何运动处方，仅建议日常轻度活动防血栓"
+      ],
+      "rationale": "失代偿期肝硬化患者存在严重门脉高压、低蛋白血症及凝血功能障碍，运动可能诱发食管胃底静脉曲张破裂出血或肝性脑病。",
+      "evidence_refs": [
+        "EASL 肝硬化失代偿期临床实践指南",
+        "AASLD 肝硬化患者管理指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_RA_ACU_001",
+      "disease": "类风湿关节炎 急性活动期 (CRP/ESR显著升高，多关节肿痛)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "受累关节的抗阻训练",
+        "高冲击有氧",
+        "关节全范围被动牵拉",
+        "负重训练"
+      ],
+      "stop_signals": [
+        "受累关节红肿热痛加剧",
+        "晨僵时间显著延长 (>1小时)",
+        "出现全身发热或极度疲劳"
+      ],
+      "referral_criteria": [
+        "需风湿免疫科调整DMARDs或生物制剂治疗方案",
+        "处方需专家审核，急性期以受累关节休息及非受累关节轻度活动为主"
+      ],
+      "rationale": "急性活动期关节滑膜炎症严重，抗阻和牵拉会加重关节囊及软骨损伤，导致不可逆的关节畸形和功能丧失。",
+      "evidence_refs": [
+        "EULAR 类风湿关节炎治疗建议",
+        "ACR 类风湿关节炎管理指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_STR_EAR_001",
+      "disease": "脑卒中 (缺血性或出血性) 恢复早期 (发病1个月内) 或伴严重吞咽/认知障碍",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有主动运动训练",
+        "平衡训练",
+        "抗阻训练",
+        "有氧训练"
+      ],
+      "stop_signals": [
+        "血压异常波动 (收缩压>180或<100mmHg)",
+        "出现新发神经功能缺损症状",
+        "吞咽困难导致呛咳或误吸",
+        "意识水平下降"
+      ],
+      "referral_criteria": [
+        "需在具备神经康复资质的医疗机构由专业团队进行床旁康复",
+        "禁止生成居家或普通健身房运动处方"
+      ],
+      "rationale": "脑卒中早期病情可能反复，严重吞咽/认知障碍患者无法配合指令且误吸风险极高，非专业环境下的运动存在极大安全隐患。",
+      "evidence_refs": [
+        "AHA/ASA 成人脑卒中早期康复管理指南",
+        "中国脑卒中早期康复治疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_COPD_VSEV_001",
+      "disease": "慢性阻塞性肺疾病 (COPD) 稳定期但FEV1<30%预计值 (极重度/GOLD 4级)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高强度有氧",
+        "上肢大肌群持续抗阻",
+        "无监护的居家训练",
+        "寒冷/干燥环境训练"
+      ],
+      "stop_signals": [
+        "SpO2下降至<88%或较基线下降>4%",
+        "出现严重呼吸困难 (mMRC 4级)",
+        "心率超过最大预测心率的85%",
+        "发绀或意识模糊"
+      ],
+      "referral_criteria": [
+        "需呼吸科评估长期氧疗 (LTOT) 及无创通气指征",
+        "处方需呼吸康复专家审核，强制要求运动中氧疗及心电/血氧监护"
+      ],
+      "rationale": "极重度COPD患者肺储备极差，运动极易诱发严重低氧血症和高碳酸血症，无监护训练可能导致呼吸衰竭或肺性脑病。",
+      "evidence_refs": [
+        "GOLD 慢性阻塞性肺疾病全球倡议",
+        "ATS/ERS 肺康复临床实践指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_OST_VCF_001",
+      "disease": "骨质疏松症 伴有多发性椎体压缩性骨折",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "脊柱屈曲训练 (如卷腹)",
+        "脊柱扭转训练",
+        "高冲击跳跃",
+        "大重量轴向负重"
+      ],
+      "stop_signals": [
+        "突发或加重的背部剧烈疼痛",
+        "身高短期内明显缩短",
+        "出现下肢放射痛或麻木"
+      ],
+      "referral_criteria": [
+        "需骨科/内分泌科评估抗骨质疏松药物及椎体成形术指征",
+        "处方需专家审核，重点在于姿势教育和安全的核心稳定训练"
+      ],
+      "rationale": "多发性椎体骨折后脊柱生物力学极度脆弱，屈曲和扭转会产生巨大的椎体前缘压应力，极易导致新发骨折或加重后凸畸形。",
+      "evidence_refs": [
+        "NOF 骨质疏松症预防和治疗临床指南",
+        "IOF 骨质疏松性骨折管理共识"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PREG_PLA_001",
+      "disease": "妊娠期 伴前置胎盘或宫颈机能不全",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有主动运动训练",
+        "抗阻训练",
+        "有氧训练",
+        "柔韧训练",
+        "盆底肌训练"
+      ],
+      "stop_signals": [
+        "阴道流血或流液",
+        "规律性宫缩或下腹坠痛",
+        "胎动异常减少"
+      ],
+      "referral_criteria": [
+        "立即转介产科进行高危妊娠管理及保胎治疗",
+        "禁止生成任何运动处方，建议严格卧床或限制活动"
+      ],
+      "rationale": "前置胎盘和宫颈机能不全属于极高危妊娠，任何增加腹压或引起子宫收缩的运动都可能导致致命性大出血或早产/流产。",
+      "evidence_refs": [
+        "ACOG 妊娠期及产后运动委员会意见",
+        "RCOG 妊娠期运动指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_HYPO_UNC_001",
+      "disease": "甲状腺功能减退 未控制 (TSH显著升高，伴黏液性水肿或心包积液)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高强度有氧",
+        "大重量抗阻",
+        "高温环境训练",
+        "力竭性训练"
+      ],
+      "stop_signals": [
+        "心率异常缓慢 (<50bpm) 或运动时心率不升",
+        "出现胸闷、气促或下肢严重水肿",
+        "体温过低或意识淡漠"
+      ],
+      "referral_criteria": [
+        "需内分泌科调整左甲状腺素 (L-T4) 替代治疗剂量",
+        "处方需专家审核，待甲状腺功能及心包积液改善后逐步恢复"
+      ],
+      "rationale": "严重甲减会导致心肌收缩力下降、心输出量降低及心包积液，高强度运动会加重心肌缺血和心力衰竭风险。",
+      "evidence_refs": [
+        "ATA 甲状腺功能减退症治疗指南",
+        "ETA 甲减管理共识"
+      ]
+    },
+    {
+      "contraindication_code": "CI_DEP_SEV_001",
+      "disease": "抑郁症 重度发作期 伴严重精神运动性迟滞或躯体化症状",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高认知负荷的复杂协调训练",
+        "竞技性对抗运动",
+        "高强度间歇训练 (HIIT)",
+        "孤立无援的居家训练"
+      ],
+      "stop_signals": [
+        "情绪极度低落导致拒绝运动或中途放弃",
+        "出现自伤或自杀意念",
+        "躯体化症状 (如不明原因疼痛) 显著加重"
+      ],
+      "referral_criteria": [
+        "需精神心理科调整抗抑郁药物及心理干预方案",
+        "处方需专家审核，建议在有专业人员陪伴的团体或低强度环境中进行"
+      ],
+      "rationale": "重度抑郁伴迟滞患者认知和动力严重受损，高负荷或孤立训练会增加挫败感，甚至因无人监护而增加自杀风险。",
+      "evidence_refs": [
+        "APA 重度抑郁症治疗实践指南",
+        "NICE 抑郁症识别和管理指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CFS_PEM_001",
+      "disease": "慢性疲劳综合征 (ME/CFS) 伴运动后不适 (PEM)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "渐进性运动疗法 (GET)",
+        "达到目标心率的有氧训练",
+        "力竭性抗阻",
+        "高强度间歇训练"
+      ],
+      "stop_signals": [
+        "运动后24-72小时内出现极度疲劳、认知障碍或流感样症状加重 (PEM发作)",
+        "静息心率显著升高或直立不耐受加重"
+      ],
+      "referral_criteria": [
+        "需神经内科或疲劳专科进行综合评估",
+        "处方需专家审核，采用能量管理 (Pacing) 策略而非传统运动处方"
+      ],
+      "rationale": "ME/CFS患者的核心病理特征为PEM，传统的渐进性运动疗法 (GET) 已被证实会加重病情，必须采用严格的能量管理策略。",
+      "evidence_refs": [
+        "NICE 肌痛性脑脊髓炎/慢性疲劳综合征诊断和管理指南",
+        "IOM 肌痛性脑脊髓炎/慢性疲劳综合征诊断标准"
+      ]
+    },
+    {
+      "contraindication_code": "CI_MS_REL_001",
+      "disease": "多发性硬化 (MS) 复发期 或伴严重热不耐受 (Uhthoff现象)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高温/高湿环境训练",
+        "热水浴后运动",
+        "高强度持续有氧",
+        "无降温措施的抗阻训练"
+      ],
+      "stop_signals": [
+        "体温轻微升高 (如>0.5℃) 导致视力模糊、肢体无力或麻木加重",
+        "出现新的神经系统定位体征",
+        "极度疲劳导致步态不稳"
+      ],
+      "referral_criteria": [
+        "需神经内科评估复发期大剂量糖皮质激素冲击治疗指征",
+        "处方需专家审核，强制要求在凉爽环境中进行并配备物理降温措施"
+      ],
+      "rationale": "MS复发期神经髓鞘脱失严重，体温升高 (Uhthoff现象) 会阻断神经传导，导致一过性但严重的神经功能恶化。",
+      "evidence_refs": [
+        "ECTRIMS/EAN 多发性硬化药物治疗指南",
+        "NMSS 多发性硬化运动与康复共识"
+      ]
+    },
+    {
+      "contraindication_code": "CI_HOCM_OBSTR_001",
+      "disease": "肥厚型梗阻性心肌病 (HOCM) 伴静息或激发左室流出道梗阻",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有抗阻训练",
+        "所有高强度有氧训练",
+        "爆发力训练",
+        "等长收缩训练",
+        "竞技性体育运动"
+      ],
+      "stop_signals": [
+        "胸痛",
+        "晕厥或先兆晕厥",
+        "严重呼吸困难",
+        "心悸伴头晕"
+      ],
+      "referral_criteria": [
+        "立即停止运动并转介心内科专科评估",
+        "需进行超声心动图及Holter评估",
+        "由心内科医生决定是否需要药物、手术或ICD干预后再评估运动资格"
+      ],
+      "rationale": "运动可能加重左室流出道梗阻，增加心肌耗氧量，诱发恶性心律失常、晕厥甚至心源性猝死。",
+      "evidence_refs": [
+        "AHA/ACC 肥厚型心肌病诊断与治疗指南",
+        "ESC 心肌病和心包疾病指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_MS_SEV_001",
+      "disease": "严重二尖瓣狭窄 (瓣口面积<1.0cm²) 伴肺动脉高压或心衰症状",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有中高强度有氧训练",
+        "所有抗阻训练",
+        "等长收缩训练",
+        "上肢过头运动"
+      ],
+      "stop_signals": [
+        "咯血",
+        "端坐呼吸",
+        "胸痛",
+        "晕厥",
+        "静息心率>110bpm"
+      ],
+      "referral_criteria": [
+        "立即转介心血管内科或心脏外科",
+        "评估二尖瓣球囊扩张或外科手术指征",
+        "在血流动力学纠正前禁止任何运动处方"
+      ],
+      "rationale": "严重二尖瓣狭窄限制左室充盈，运动导致心率加快，舒张期缩短，左房压急剧升高，易诱发急性肺水肿和右心衰竭。",
+      "evidence_refs": [
+        "AHA/ACC 瓣膜性心脏病患者管理指南",
+        "ESC/EACTS 瓣膜性心脏病管理指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_PE_ACU_001",
+      "disease": "急性肺栓塞 (发病1个月内或血流动力学不稳定/右心功能不全)",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有体力活动",
+        "所有有氧训练",
+        "所有抗阻训练",
+        "呼吸抗阻训练"
+      ],
+      "stop_signals": [
+        "突发胸痛",
+        "咯血",
+        "严重呼吸困难",
+        "晕厥",
+        "静息血氧饱和度<90%"
+      ],
+      "referral_criteria": [
+        "绝对卧床休息并立即转介急诊或呼吸/心血管内科",
+        "需评估溶栓或抗凝治疗效果",
+        "右心功能及肺动脉压力恢复正常前禁止运动"
+      ],
+      "rationale": "急性期运动可能增加血栓脱落风险，加重右心室后负荷，导致急性右心衰竭、心源性休克或猝死。",
+      "evidence_refs": [
+        "ESC 急性肺栓塞诊断和管理指南",
+        "CHEST 静脉血栓栓塞症抗栓治疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_MFS_AORT_001",
+      "disease": "马凡综合征或结缔组织病 伴主动脉根部扩张 (直径>4.5cm) 或夹层病史",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有抗阻训练",
+        "所有等长收缩训练",
+        "高强度有氧训练",
+        "身体接触性运动",
+        "Valsalva动作"
+      ],
+      "stop_signals": [
+        "突发撕裂样胸背痛",
+        "晕厥",
+        "严重呼吸困难",
+        "血压异常波动"
+      ],
+      "referral_criteria": [
+        "立即转介心血管外科及遗传性心血管病专科",
+        "需定期影像学监测主动脉直径",
+        "严禁任何可能引起血压骤升的运动，需专科医生制定极低强度日常活动建议"
+      ],
+      "rationale": "运动引起的血压和心输出量增加会显著增加主动脉壁剪切力，极易诱发主动脉夹层或破裂，危及生命。",
+      "evidence_refs": [
+        "AHA/ACC 主动脉疾病诊断和治疗指南",
+        "ESC 主动脉疾病诊断和治疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CAN_SEV_001",
+      "disease": "糖尿病 伴严重心血管自主神经病变 (静息心动过速、体位性低血压或无症状心肌缺血)",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "快速体位改变训练",
+        "高强度间歇训练(HIIT)",
+        "大重量抗阻训练",
+        "高温/高湿环境运动",
+        "长时间耐力运动"
+      ],
+      "stop_signals": [
+        "体位性头晕或黑蒙",
+        "异常出汗或无汗",
+        "静息心率异常增快",
+        "无痛性胸闷或气促"
+      ],
+      "referral_criteria": [
+        "转介内分泌科及心内科进行自主神经功能及心肌缺血全面评估",
+        "需进行动态心电图及心脏负荷影像学检查",
+        "运动处方需由专家审核并限制在低强度、恒温环境"
+      ],
+      "rationale": "心血管自主神经病变导致心率变异性下降和血管舒缩功能障碍，运动时易发生严重体位性低血压、无症状心肌缺血及心源性猝死。",
+      "evidence_refs": [
+        "ADA 糖尿病医学诊疗标准",
+        "AHA 糖尿病与心血管自主神经病变科学声明"
+      ]
+    },
+    {
+      "contraindication_code": "CI_CKD_MBD_001",
+      "disease": "慢性肾脏病 (CKD) 伴严重慢性肾脏病-矿物质和骨异常 (CKD-MBD) 或高骨折风险",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高冲击运动",
+        "大重量抗阻训练",
+        "躯干过度屈曲/扭转训练",
+        "跳跃训练"
+      ],
+      "stop_signals": [
+        "新发骨痛",
+        "关节剧痛",
+        "肌肉痉挛加重",
+        "跌倒"
+      ],
+      "referral_criteria": [
+        "转介肾内科及内分泌/骨科评估骨代谢指标及骨密度",
+        "需优化活性维生素D及钙磷代谢治疗",
+        "运动处方需排除所有增加骨骼机械应力的动作"
+      ],
+      "rationale": "CKD-MBD导致肾性骨营养不良，骨微结构破坏，骨脆性显著增加，机械应力极易诱发病理性骨折。",
+      "evidence_refs": [
+        "KDIGO 慢性肾脏病-矿物质和骨异常临床实践指南",
+        "KDOQI 慢性肾脏病营养与运动临床实践指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_MYOP_RET_001",
+      "disease": "高度近视伴严重眼底病变 (黄斑变性、视网膜裂孔) 或视网膜脱离术后3个月内",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有高冲击运动",
+        "所有抗阻训练",
+        "头部低于心脏位置的运动",
+        "剧烈震动或跳跃运动",
+        "Valsalva动作"
+      ],
+      "stop_signals": [
+        "眼前闪光感",
+        "飞蚊症突然增多",
+        "视野缺损或黑影遮挡",
+        "视力突然下降"
+      ],
+      "referral_criteria": [
+        "立即停止运动并转介眼科急诊",
+        "需进行散瞳眼底检查及OCT评估",
+        "在眼底病变稳定或术后完全康复并经眼科医生许可前，禁止任何中高强度及头部震动运动"
+      ],
+      "rationale": "高度近视眼轴延长导致视网膜变薄，运动引起的眼压波动、头部震动或Valsalva动作极易诱发视网膜撕裂、脱离或黄斑出血。",
+      "evidence_refs": [
+        "中华医学会眼科学分会 视网膜脱离诊断和治疗指南",
+        "AAO 高度近视及眼底病变临床指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AVB_3RD_001",
+      "disease": "三度 (完全性) 房室传导阻滞 未植入起搏器或起搏器功能异常",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有有氧训练",
+        "所有抗阻训练",
+        "所有柔韧与平衡训练",
+        "日常中高强度体力活动"
+      ],
+      "stop_signals": [
+        "严重心动过缓(<40bpm)",
+        "头晕或黑蒙",
+        "晕厥",
+        "极度乏力",
+        "呼吸困难"
+      ],
+      "referral_criteria": [
+        "立即转介心血管内科或急诊",
+        "需紧急评估起搏器植入指征或排查起搏器故障",
+        "在起搏器植入并程控优化前，绝对禁止任何运动处方"
+      ],
+      "rationale": "三度房室传导阻滞导致心室率无法随运动需求增加而提升，运动时心输出量严重不足，极易导致脑供血不足、晕厥及阿斯综合征。",
+      "evidence_refs": [
+        "AHA/ACC/HRS 心动过缓和心脏传导延迟评估与管理指南",
+        "ESC 心脏起搏和心脏再同步化治疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_AKI_OLIG_001",
+      "disease": "急性肾损伤 (AKI) 或慢性肾脏病急性加重伴少尿/无尿或严重容量超负荷",
+      "risk_level": "R3",
+      "contraindication_type": "absolute",
+      "forbidden_action_categories": [
+        "所有体力活动",
+        "所有有氧训练",
+        "所有抗阻训练",
+        "呼吸训练"
+      ],
+      "stop_signals": [
+        "尿量进一步减少",
+        "水肿加重",
+        "静息呼吸困难",
+        "血压异常升高或降低",
+        "意识模糊"
+      ],
+      "referral_criteria": [
+        "绝对卧床并立即转介肾内科或重症医学科",
+        "需评估肾脏替代治疗(RRT)指征",
+        "在肾功能恢复、容量状态纠正前禁止任何运动"
+      ],
+      "rationale": "急性期肾脏灌注和代谢需求需严格控制，运动增加肌肉代谢产物和容量负荷，加重肾脏缺血缺氧及心肺负担，甚至诱发急性心衰。",
+      "evidence_refs": [
+        "KDIGO 急性肾损伤临床实践指南",
+        "中华医学会肾脏病学分会 急性肾损伤临床诊疗指南"
+      ]
+    },
+    {
+      "contraindication_code": "CI_OSA_SEV_001",
+      "disease": "重度阻塞性睡眠呼吸暂停 (AHI>30次/h) 未接受有效正压通气治疗且伴日间严重嗜睡或肺动脉高压",
+      "risk_level": "R2",
+      "contraindication_type": "relative",
+      "forbidden_action_categories": [
+        "高强度有氧训练",
+        "大重量抗阻训练",
+        "仰卧位运动",
+        "颈部过度后伸或屈曲运动"
+      ],
+      "stop_signals": [
+        "运动中严重打鼾或呼吸暂停",
+        "日间极度嗜睡导致注意力不集中",
+        "晨起头痛加剧",
+        "运动中血压异常飙升"
+      ],
+      "referral_criteria": [
+        "转介呼吸内科或睡眠医学中心进行多导睡眠图(PSG)复查",
+        "需启动并滴定持续气道正压通气(CPAP)治疗",
+        "在CPAP依从性良好且日间症状缓解前，限制运动强度并避免仰卧位训练"
+      ],
+      "rationale": "未治疗的重度OSA在运动及仰卧位时易发生严重气道塌陷，导致间歇性严重低氧血症、交感神经极度激活，增加运动中心脑血管意外风险。",
+      "evidence_refs": [
+        "AASM 成人阻塞性睡眠呼吸暂停诊断与治疗临床实践指南",
+        "中华医学会呼吸病学分会 阻塞性睡眠呼吸暂停诊治指南"
+      ]
+    }
+  ]
+}

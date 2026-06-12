@@ -19,7 +19,36 @@
 | Embedding | `dashscope:text-embedding-v4` |
 | OCR | `paddleocr:enabled` |
 
-### 1.2 Docker Compose 服务
+### 1.2 Demo 演示账号
+
+演示账号仅用于产品演示和团队联调，不应复用于真实用户、真实机构或生产管理操作。当前服务器上 47 个 `[DEMO]` 用户均已统一重置为以下密码：
+
+```text
+DemoPass2026!
+```
+
+主要演示入口账号：
+
+| 演示入口 | 账号 | 角色/状态 |
+| --- | --- | --- |
+| 用户端 R0 | `demo-user-r0@example.com` | 普通用户，R0 可直接生成/查看已发布处方 |
+| 用户端 R1 | `demo-user-r1@example.com` | 普通用户，R1 可直接生成/查看已发布处方 |
+| 用户端 R2 | `demo-user-r2@example.com` | 普通用户，R2 强制专家审核 |
+| 用户端 R3 | `demo-user-r3@example.com` | 普通用户，R3 转介阻断，不展示训练处方 |
+| 专家端 | `demo-expert@example.com` | 审核专家 |
+| 管理端 | `demo-admin@example.com` | 平台管理员 |
+| 科研端 | `demo-researcher@example.com` | 科研人员 |
+
+样本账号也使用同一密码，主要用于列表、统计、审核队列和科研脱敏明细演示：
+
+| 风险层级 | 样本账号范围 |
+| --- | --- |
+| R0 | `demo-sample-01-r0@example.com` 至 `demo-sample-10-r0@example.com` |
+| R1 | `demo-sample-11-r1@example.com` 至 `demo-sample-20-r1@example.com` |
+| R2 | `demo-sample-21-r2@example.com` 至 `demo-sample-30-r2@example.com` |
+| R3 | `demo-sample-31-r3@example.com` 至 `demo-sample-40-r3@example.com` |
+
+### 1.3 Docker Compose 服务
 
 当前使用：
 
@@ -39,7 +68,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 | `minio` | `source-minio-1` | `9000/9001` | 文件对象存储 |
 | `ollama` | `source-ollama-1` | `11434` | 开发/兼容服务；生产 `/ready` 当前不使用它作为 LLM |
 
-### 1.3 最新验收结果
+### 1.4 最新验收结果
 
 | 验收项 | 结果 |
 | --- | --- |

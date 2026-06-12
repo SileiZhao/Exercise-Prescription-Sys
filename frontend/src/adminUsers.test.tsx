@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -64,11 +64,11 @@ vi.mock("./api/adminUsers", () => ({
   listOrganizations: vi.fn().mockResolvedValue([
     {
       id: 1,
-      name: "社区示范中心",
+      name: "社区运动健康中心",
       type: "COMMUNITY",
       contact_person: "张老师",
       contact_phone: "13800001111",
-      address: "郑州市示范路1号",
+      address: "郑州市健康路1号",
       status: "ACTIVE",
       created_at: "2026-05-30T10:00:00"
     }
@@ -88,13 +88,14 @@ describe("admin users page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("用户与专家管理")).toBeInTheDocument();
-    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "身份治理台" })).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
     expect(await screen.findByText("user@example.com")).toBeInTheDocument();
-    expect(await screen.findByText("社区示范中心")).toBeInTheDocument();
+    expect((await screen.findAllByText("社区运动健康中心")).length).toBeGreaterThan(0);
+    expect(screen.queryByRole("button", { name: "维护" })).not.toBeInTheDocument();
+    expect(screen.getByText("点选查看")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("tab", { name: "专家资料" }));
     expect(await screen.findByText("慢病运动干预")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "保存机构" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "保存专家资料" })).toBeInTheDocument();
   });
 
   it("filters users by keyword and role", async () => {
@@ -108,12 +109,14 @@ describe("admin users page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("用户与专家管理")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("用户关键词"), { target: { value: "expert" } });
-    fireEvent.mouseDown(screen.getByLabelText("角色筛选"));
+    expect(await screen.findByRole("heading", { name: "身份治理台" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "筛选用户" }));
+    const filterDialog = await screen.findByRole("dialog", { name: "筛选用户" });
+    fireEvent.change(within(filterDialog).getByLabelText("用户关键词"), { target: { value: "expert" } });
+    fireEvent.mouseDown(within(filterDialog).getByLabelText("角色筛选"));
     const expertOptions = await screen.findAllByText("专家");
     fireEvent.click(expertOptions[expertOptions.length - 1]);
-    fireEvent.click(screen.getByRole("button", { name: "筛选用户" }));
+    fireEvent.click(within(filterDialog).getByRole("button", { name: "应用筛选" }));
 
     await waitFor(() =>
       expect(listUsersMock).toHaveBeenLastCalledWith({

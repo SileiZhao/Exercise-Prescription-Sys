@@ -83,7 +83,7 @@ describe("auth routes", () => {
     expect(screen.queryByText("专家")).not.toBeInTheDocument();
     expect(screen.queryByText("科研人员")).not.toBeInTheDocument();
     expect(screen.queryByText("机构管理员")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /注\s*册/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "创建账号" })).toBeInTheDocument();
   });
 
   it("shows 403 when an expert opens a user-only page", async () => {
@@ -131,7 +131,7 @@ describe("auth routes", () => {
     );
 
     expect(await screen.findByText("403")).toBeInTheDocument();
-    expect(screen.queryByText("运营驾驶舱")).not.toBeInTheDocument();
+    expect(screen.queryByText("运营指挥台")).not.toBeInTheDocument();
     expect(getCurrentUserMock).toHaveBeenCalledTimes(1);
     expect(localStorage.getItem("current_user_role")).toBe("USER");
     expect(localStorage.getItem("current_user_id")).toBe("1");
@@ -139,8 +139,8 @@ describe("auth routes", () => {
 
   it("stores refresh token and redirects default accounts to change password", async () => {
     loginMock.mockResolvedValue({
-      access_token: "test-access-token",
-      refresh_token: "test-refresh-token",
+      access_token: "access-token",
+      refresh_token: "refresh-token",
       token_type: "bearer",
       must_change_password: true
     });
@@ -152,12 +152,12 @@ describe("auth routes", () => {
     );
 
     fireEvent.change(screen.getByLabelText("邮箱"), { target: { value: "seeded@example.com" } });
-    fireEvent.change(screen.getByLabelText("密码"), { target: { value: "test-current-password" } });
+    fireEvent.change(screen.getByLabelText("密码"), { target: { value: "SeededPass123" } });
     fireEvent.click(screen.getByRole("button", { name: /登\s*录/ }));
 
-    expect(await screen.findByText("首次登录修改密码")).toBeInTheDocument();
-    expect(localStorage.getItem("access_token")).toBe("test-access-token");
-    expect(localStorage.getItem("refresh_token")).toBe("test-refresh-token");
+    expect(await screen.findByText("首次登录安全确认")).toBeInTheDocument();
+    expect(localStorage.getItem("access_token")).toBe("access-token");
+    expect(localStorage.getItem("refresh_token")).toBe("refresh-token");
     expect(localStorage.getItem("current_user_id")).toBe("1");
   });
 
@@ -180,13 +180,13 @@ describe("auth routes", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("首次登录修改密码")).toBeInTheDocument();
+    expect(await screen.findByText("首次登录安全确认")).toBeInTheDocument();
     expect(localStorage.getItem("current_user_role")).toBe("RESEARCHER");
     expect(localStorage.getItem("current_user_id")).toBe("42");
   });
 
   it("submits first-login password change", async () => {
-    localStorage.setItem("access_token", "test-access-token");
+    localStorage.setItem("access_token", "access-token");
 
     render(
       <MemoryRouter initialEntries={["/auth/change-password"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
@@ -194,14 +194,14 @@ describe("auth routes", () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(await screen.findByLabelText("当前密码"), { target: { value: "test-current-password" } });
-    fireEvent.change(screen.getByLabelText("新密码"), { target: { value: "test-new-password" } });
-    fireEvent.click(screen.getByRole("button", { name: "确认修改" }));
+    fireEvent.change(await screen.findByLabelText("当前密码"), { target: { value: "SeededPass123" } });
+    fireEvent.change(screen.getByLabelText("新密码"), { target: { value: "ChangedSeededPass123" } });
+    fireEvent.click(screen.getByRole("button", { name: "修改密码并重新登录" }));
 
     await waitFor(() =>
       expect(changePasswordMock).toHaveBeenCalledWith({
-        current_password: "test-current-password",
-        new_password: "test-new-password"
+        current_password: "SeededPass123",
+        new_password: "ChangedSeededPass123"
       })
     );
   });

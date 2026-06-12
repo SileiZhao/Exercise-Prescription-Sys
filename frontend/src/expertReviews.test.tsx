@@ -46,6 +46,18 @@ const listReviewQueueMock = vi.hoisted(() =>
     }
   ])
 );
+const manyQueueItems = Array.from({ length: 18 }, (_, index) => ({
+  prescription_id: index + 20,
+  user_id: index + 200,
+  organization_id: 6,
+  risk_level: index < 4 ? "R3" : "R2",
+  status: index < 4 ? "REFERRED" : index < 12 ? "PENDING_REVIEW" : "IN_REVIEW",
+  prescription_type: index < 4 ? "referral" : "training",
+  abnormal_feedback_count: index % 3 === 0 ? 1 : 0,
+  version: 1,
+  created_at: `2026-06-${String((index % 9) + 1).padStart(2, "0")}T00:00:00Z`,
+  review_id: index + 100
+}));
 const getReviewDetailMock = vi.hoisted(() =>
   vi.fn(async (prescriptionId: number): Promise<ReviewDetail> => {
     if (prescriptionId === 2) {
@@ -172,7 +184,7 @@ describe("expert review workspace", () => {
     listReviewQueueMock.mockClear();
   });
 
-  it("renders expert review queue and three-column cues", async () => {
+  it("renders a dedicated expert queue page without prescription editing clutter", async () => {
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "EXPERT");
 
@@ -186,44 +198,59 @@ describe("expert review workspace", () => {
     );
 
     expect(await screen.findByText("审核队列")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-workbench-metrics")).toBeInTheDocument();
-    expect(screen.queryByText("专家审核队列分布")).not.toBeInTheDocument();
-    expect(screen.getByTestId("expert-filter-grid")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-filter-selects")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-filter-primary-row")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-filter-secondary-row")).toBeInTheDocument();
-    expect(screen.getByTestId("review-date-range")).toBeInTheDocument();
-    expect((await screen.findAllByTestId("expert-task-card")).length).toBeGreaterThan(0);
-    expect(screen.getByTestId("expert-left-column")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-middle-column")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-right-column")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-fitt-grid")).toBeInTheDocument();
-    expect(screen.getByTestId("expert-action-bar")).toBeInTheDocument();
-    expect(screen.getByText("用户画像")).toBeInTheDocument();
-    expect(screen.getByText("处方编辑")).toBeInTheDocument();
-    expect(screen.getByText("FITT-VP 结构化编辑器")).toBeInTheDocument();
-    expect(screen.getByText("规则证据")).toBeInTheDocument();
-    expect(screen.getByText("规则数")).toBeInTheDocument();
-    expect(screen.getByText("禁忌数")).toBeInTheDocument();
-    expect(screen.getByText("证据数")).toBeInTheDocument();
-    const evidenceTabs = screen.getByRole("tablist");
-    expect(within(evidenceTabs).getByRole("tab", { name: "规则" })).toBeInTheDocument();
-    expect(within(evidenceTabs).getByRole("tab", { name: "证据" })).toBeInTheDocument();
-    expect(within(evidenceTabs).getByRole("tab", { name: "版本" })).toBeInTheDocument();
-    expect(within(evidenceTabs).getByRole("tab", { name: "审计" })).toBeInTheDocument();
+    expect(screen.getByText("队列只做分诊和领取")).toBeInTheDocument();
+    expect(screen.queryByText("FITT-VP 结构化编辑器")).not.toBeInTheDocument();
+    expect(screen.queryByText("规则证据")).not.toBeInTheDocument();
     expect(await screen.findByText("处方 #1")).toBeInTheDocument();
-    expect((await screen.findAllByText("YELLOW_HYPERTENSION")).length).toBeGreaterThan(0);
-    expect(screen.getByText("高血压需专家审核")).toBeInTheDocument();
-    expect((await screen.findAllByText("高血压指南")).length).toBeGreaterThan(0);
-    expect(screen.getByText("审计留痕")).toBeInTheDocument();
-    expect(screen.getByText("审核单 #10")).toBeInTheDocument();
-    expect(await screen.findByText("R2 待审")).toBeInTheDocument();
-    expect(screen.getByText("4")).toBeInTheDocument();
-    expect(screen.getByText("超时项")).toBeInTheDocument();
+    expect(await screen.findByText("待领取")).toBeInTheDocument();
+    expect(screen.getByText("超时 1 项")).toBeInTheDocument();
     expect(screen.getByText("异常反馈 2")).toBeInTheDocument();
-    expect(screen.getByText("队列任务")).toBeInTheDocument();
-    expect(screen.getByText("R2 2")).toBeInTheDocument();
+    expect(screen.getByText("处理原则")).toBeInTheDocument();
+    expect(screen.getByTestId("ExpertQueueChart-echart")).toBeInTheDocument();
     expect(listReviewQueueMock).toHaveBeenCalledWith({});
+  });
+
+  it("renders the expert queue as a paginated data workbench with a selected preview", async () => {
+    listReviewQueueMock.mockResolvedValueOnce(manyQueueItems);
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "EXPERT");
+
+    render(
+      <MemoryRouter
+        initialEntries={["/expert/reviews"]}
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByLabelText("数据工作台")).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: "审核队列表格" })).toBeInTheDocument();
+    expect(screen.getByText("选中任务预览")).toBeInTheDocument();
+    const queueTable = screen.getByRole("table", { name: "审核队列表格" });
+    expect(within(queueTable).getAllByRole("button", { name: /领取|打开/ })).toHaveLength(10);
+    expect(screen.getByText("共 18 项")).toBeInTheDocument();
+    expect(document.querySelector(".ant-pagination")).toBeInTheDocument();
+  });
+
+  it("keeps expert triage focused on one primary action without repeated row buttons", async () => {
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "EXPERT");
+
+    render(
+      <MemoryRouter
+        initialEntries={["/expert/dashboard"]}
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("heading", { name: "专家分诊队列" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "处理最高优先级" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "进入审核" })).not.toBeInTheDocument();
+    expect(screen.getByText("优先处理列表")).toBeInTheDocument();
+    expect(screen.getByText("处方 #1")).toBeInTheDocument();
   });
 
   it("submits structured prescription edits when approving", async () => {
@@ -232,7 +259,7 @@ describe("expert review workspace", () => {
 
     render(
       <MemoryRouter
-        initialEntries={["/expert/reviews"]}
+        initialEntries={["/expert/reviews/1"]}
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
         <App />
@@ -247,11 +274,11 @@ describe("expert review workspace", () => {
     fireEvent.change(screen.getByLabelText("总量"), { target: { value: "每周45-60分钟" } });
     fireEvent.change(screen.getByLabelText("进阶"), { target: { value: "2周后根据血压和RPE再调整" } });
     fireEvent.change(screen.getByLabelText("注意事项"), { target: { value: "运动前后监测血压，出现头晕胸闷立即停止" } });
-    fireEvent.change(screen.getByLabelText("禁忌"), { target: { value: "憋气用力，大重量抗阻" } });
-    fireEvent.change(screen.getByLabelText("复评"), { target: { value: "2周复评" } });
+    fireEvent.change(screen.getByLabelText("禁忌动作"), { target: { value: "憋气用力，大重量抗阻" } });
+    fireEvent.change(screen.getByLabelText("复评安排"), { target: { value: "2周复评" } });
     fireEvent.change(screen.getByLabelText("安全提示"), { target: { value: "专家已降低起始运动量。" } });
-    fireEvent.click(screen.getByRole("button", { name: "批准发布" }));
-    expect(await screen.findByText("已核对风险规则、禁忌动作和处方强度")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "核对后发布处方" }));
+    expect(screen.getByText("已核对风险规则、禁忌动作和处方强度")).toBeInTheDocument();
     fireEvent.click(screen.getByLabelText("确认已核对风险规则、禁忌动作和处方强度"));
     fireEvent.click(screen.getByRole("button", { name: "确认发布" }));
 
@@ -276,7 +303,7 @@ describe("expert review workspace", () => {
     });
   });
 
-  it("filters queue and supports request-info action", async () => {
+  it("filters queue and supports request-info and pause actions", async () => {
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "EXPERT");
 
@@ -290,24 +317,39 @@ describe("expert review workspace", () => {
     );
 
     expect(await screen.findByText("处方 #1")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("风险等级"), { target: { value: "R2" } });
-    fireEvent.change(screen.getByLabelText("审核状态"), { target: { value: "PENDING_REVIEW" } });
-    fireEvent.change(screen.getByLabelText("机构"), { target: { value: "6" } });
-    fireEvent.change(screen.getByLabelText("处方类型"), { target: { value: "training" } });
-    fireEvent.click(screen.getByLabelText("仅异常反馈"));
-    fireEvent.click(screen.getByRole("button", { name: "筛选" }));
+    fireEvent.click(screen.getByRole("button", { name: "筛选队列" }));
+    const filterDialog = await screen.findByRole("dialog", { name: "筛选审核队列" });
+    fireEvent.change(within(filterDialog).getByLabelText("风险等级"), { target: { value: "R2" } });
+    fireEvent.change(within(filterDialog).getByLabelText("审核状态"), { target: { value: "PENDING_REVIEW" } });
+    fireEvent.change(within(filterDialog).getByLabelText("机构"), { target: { value: "6" } });
+    fireEvent.change(within(filterDialog).getByLabelText("处方类型"), { target: { value: "training" } });
+    fireEvent.click(within(filterDialog).getByLabelText("仅异常反馈"));
+    fireEvent.click(within(filterDialog).getByRole("button", { name: "应用筛选" }));
 
     await waitFor(() =>
-      expect(listReviewQueueMock).toHaveBeenLastCalledWith({
-        risk_level: "R2",
-        status: "PENDING_REVIEW",
+      expect(listReviewQueueMock).toHaveBeenLastCalledWith(expect.objectContaining({
         organization_id: 6,
         prescription_type: "training",
         abnormal_feedback: true
-      })
+      }))
+    );
+  });
+
+  it("supports request-info and pause actions on the detail page", async () => {
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("current_user_role", "EXPERT");
+
+    render(
+      <MemoryRouter
+        initialEntries={["/expert/reviews/1"]}
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "补充资料" }));
+    expect(await screen.findByText("处方 #1")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "要求补充资料" }));
     await waitFor(() =>
       expect(requestMoreInformationMock).toHaveBeenCalledWith(1, {
         review_comment: "请补充近期血压、血糖或异常反馈相关资料。",
@@ -315,6 +357,13 @@ describe("expert review workspace", () => {
       })
     );
 
+    fireEvent.click(screen.getByRole("button", { name: "暂停运动" }));
+    await waitFor(() =>
+      expect(pausePrescriptionMock).toHaveBeenCalledWith(1, {
+        review_comment: "异常反馈或资料不足期间暂停运动，待复核后恢复。",
+        edited_prescription: {}
+      })
+    );
   });
 
   it("does not allow publishing a training prescription for R3 reviews", async () => {
@@ -367,8 +416,8 @@ describe("expert review workspace", () => {
     );
 
     expect(await screen.findByText("处方 #3")).toBeInTheDocument();
-    expect(screen.getByText("R3 不允许发布训练处方，仅可建议医学评估 / 转介。")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "批准发布" })).toBeDisabled();
+    expect(screen.getByText("R3 不进入训练处方编辑")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "核对后发布处方" })).not.toBeInTheDocument();
     expect(approvePrescriptionMock).not.toHaveBeenCalled();
   });
 
@@ -389,27 +438,21 @@ describe("expert review workspace", () => {
     expect(getReviewDetailMock).toHaveBeenLastCalledWith(2);
     expect(await screen.findByText("姓名：详情用户")).toBeInTheDocument();
     expect(screen.getByText("六类数据")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("六类数据"));
     expect(screen.getByText("体成分：体脂 32%，骨骼肌 21kg")).toBeInTheDocument();
     expect(screen.getByText("生化：空腹血糖 7.1，LDL-C 3.8")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("趋势与历史版本"));
     expect(screen.getByText("趋势：血压 150/95 → 146/91；完成率 58% → 72%")).toBeInTheDocument();
-    expect(screen.getByText("历史版本")).toBeInTheDocument();
-    expect(screen.getByText("v2 NEEDS_INFO EXPERT_REQUEST_INFO")).toBeInTheDocument();
-    expect(screen.getByText("AI 初稿")).toBeInTheDocument();
+    expect(screen.getByText("趋势与历史版本")).toBeInTheDocument();
+    expect(screen.getByText("v2 待补充资料 专家要求补充资料")).toBeInTheDocument();
+    expect(screen.getByText("系统初稿")).toBeInTheDocument();
     expect(screen.getByText("结构化差异")).toBeInTheDocument();
-    expect(screen.getByText("强度：AI 低强度 → 当前 中等强度")).toBeInTheDocument();
+    expect(screen.getByText("强度：系统建议 低强度 → 当前 中等强度")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("tab", { name: "证据" }));
     expect(screen.getAllByText("糖尿病运动指南").length).toBeGreaterThan(0);
     expect(screen.getByText("从低强度开始并监测血糖")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("tab", { name: "审计" }));
     expect(screen.getByLabelText("审核意见")).toBeInTheDocument();
-
-    fireEvent.change(screen.getByLabelText("开始日期"), { target: { value: "2026-06-01" } });
-    fireEvent.change(screen.getByLabelText("结束日期"), { target: { value: "2026-06-03" } });
-    fireEvent.click(screen.getByRole("button", { name: "筛选" }));
-    await waitFor(() =>
-      expect(listReviewQueueMock).toHaveBeenLastCalledWith({
-        start_date: "2026-06-01",
-        end_date: "2026-06-03"
-      })
-    );
 
     fireEvent.click(screen.getByRole("button", { name: "开始审核" }));
     await waitFor(() => expect(startReviewMock).toHaveBeenCalledWith(2));
@@ -417,7 +460,7 @@ describe("expert review workspace", () => {
 
     fireEvent.change(screen.getByLabelText("审核意见"), { target: { value: "降低强度后发布，补充血糖监测提醒。" } });
     fireEvent.change(screen.getByLabelText("强度"), { target: { value: "低强度" } });
-    fireEvent.click(screen.getByRole("button", { name: "批准发布" }));
+    fireEvent.click(screen.getByRole("button", { name: "核对后发布处方" }));
     fireEvent.click(screen.getByLabelText("确认已核对风险规则、禁忌动作和处方强度"));
     fireEvent.click(screen.getByRole("button", { name: "确认发布" }));
     await waitFor(() =>
@@ -482,6 +525,7 @@ describe("expert review workspace", () => {
       </MemoryRouter>
     );
 
+    fireEvent.click(await screen.findByRole("tab", { name: "证据" }));
     expect(await screen.findByText("快走：禁忌 胸痛")).toBeInTheDocument();
     expect(screen.getByText("八段锦：禁忌 头晕")).toBeInTheDocument();
     expect(consoleErrorSpy.mock.calls.some((call) => call.join(" ").includes("Encountered two children with the same key"))).toBe(false);
@@ -495,7 +539,7 @@ describe("expert review workspace", () => {
 
     render(
       <MemoryRouter
-        initialEntries={["/expert/reviews"]}
+        initialEntries={["/expert/reviews/1"]}
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
         <App />
@@ -513,7 +557,7 @@ describe("expert review workspace", () => {
 
     render(
       <MemoryRouter
-        initialEntries={["/expert/reviews"]}
+        initialEntries={["/expert/reviews/5"]}
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
         <App />
@@ -522,11 +566,12 @@ describe("expert review workspace", () => {
 
     expect(await screen.findByText("处方 #1")).toBeInTheDocument();
     expect((await screen.findAllByText("审核详情加载失败，请重新选择任务或稍后重试。")).length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: "批准发布" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "批准发布" })).toBeDisabled();
+    expect(screen.getByText("先领取任务，再进入审核详情")).toBeInTheDocument();
+    expect(screen.queryByText("FITT-VP 结构化编辑器")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "核对后发布处方" })).not.toBeInTheDocument();
   });
 
-  it("guides experts to start unclaimed reviews before requesting guarded detail", async () => {
+  it("shows a read-only preview for unclaimed R2 reviews before editing", async () => {
     listReviewQueueMock.mockResolvedValueOnce([
       {
         prescription_id: 5,
@@ -546,7 +591,7 @@ describe("expert review workspace", () => {
 
     render(
       <MemoryRouter
-        initialEntries={["/expert/reviews"]}
+        initialEntries={["/expert/reviews/1"]}
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
         <App />
@@ -554,19 +599,24 @@ describe("expert review workspace", () => {
     );
 
     expect(await screen.findByText("处方 #5")).toBeInTheDocument();
-    expect((await screen.findAllByText("请先点击“开始审核”领取任务，再查看完整审核详情。")).length).toBeGreaterThan(0);
-    expect(getReviewDetailMock).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: "批准发布" })).toBeDisabled();
+    expect(getReviewDetailMock).toHaveBeenCalled();
+    expect((await screen.findAllByText("只读预览")).length).toBeGreaterThan(0);
+    expect(screen.getByText("当前为领取前只读预览。可以先查看用户摘要、处方结构和规则证据，开始审核后才能编辑或发布。")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "开始审核并解锁编辑" })).toBeInTheDocument();
+    expect(screen.queryByText("FITT-VP 结构化编辑器")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "核对后发布处方" })).not.toBeInTheDocument();
   });
 
-  it("uses the guarded detail prompt when the backend rejects a detail request", async () => {
-    getReviewDetailMock.mockRejectedValueOnce({ response: { status: 403 } });
+  it("uses the guarded detail prompt when the backend rejects a preview request", async () => {
+    getReviewDetailMock.mockImplementationOnce(async () => {
+      throw { response: { status: 403 } };
+    });
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "EXPERT");
 
     render(
       <MemoryRouter
-        initialEntries={["/expert/reviews"]}
+        initialEntries={["/expert/reviews/1"]}
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
         <App />
@@ -574,6 +624,7 @@ describe("expert review workspace", () => {
     );
 
     expect(await screen.findByText("处方 #1")).toBeInTheDocument();
-    expect((await screen.findAllByText("请先点击“开始审核”领取任务，再查看完整审核详情。")).length).toBeGreaterThan(0);
+    expect((await screen.findAllByText("当前接口未开放领取前详情，请先领取任务后查看完整审核详情。")).length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: "开始审核并查看详情" })).toBeInTheDocument();
   });
 });

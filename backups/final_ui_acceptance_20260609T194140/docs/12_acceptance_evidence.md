@@ -1,0 +1,693 @@
+# 验收证据矩阵
+
+本文档用于把产品目标、最高优先级安全规则、最低测试和上线命令映射到当前仓库中的可验证证据。结论以测试、源码、脚本、部署配置和文档为准。
+
+## 交付阶段证据
+
+### 1. 工程初始化
+
+- 后端：`backend/app/main.py`、`backend/app/core/*`、`backend/alembic/*`。
+- 前端：`frontend/src/App.tsx`、`frontend/package.json`、`frontend/vite.config.ts`。
+- 部署：`docker-compose.yml`、`docker-compose.prod.yml`、`.env.example`、`README.md`、`docs/08_deployment.md`。
+- 验证：`app/tests/api/test_health.py`、`app/tests/deployment/test_docker_compose_env.py`、`app/tests/deployment/test_docker_image_configuration.py`。
+
+### 2. 认证权限
+
+- 后端：`backend/app/api/v1/endpoints/auth.py`、`backend/app/api/v1/endpoints/users.py`、`backend/app/core/security.py`、`backend/app/core/deps.py`、`backend/app/models/user.py`。
+- 前端：`frontend/src/pages/LoginPage.tsx`、`frontend/src/pages/RegisterPage.tsx`、`frontend/src/components/ProtectedRoute.tsx`。
+- 覆盖角色：`USER`、`EXPERT`、`ADMIN`、`RESEARCHER`、`ORG_ADMIN`。
+- 验证：`app/tests/api/test_auth.py`、`app/tests/api/test_admin_users.py`。
+
+### 3. 六类数据
+
+- 数据模型：`backend/app/models/health_data.py`。
+- API：`backend/app/api/v1/endpoints/health_data.py`。
+- Service：`backend/app/services/health_profile_service.py`。
+- 前端建档：`frontend/src/pages/user/OnboardingWizardPage.tsx`。
+- 覆盖数据：基础信息、体质测试、身体成分、生化指标、疾病与运动风险、运动反馈。
+- 验证：`app/tests/api/test_health_data.py`。
+
+### 4. 风险引擎
+
+- 风险规则：`backend/app/services/risk_engine.py`、`backend/app/services/risk_service.py`。
+- 规则管理：`backend/app/api/v1/endpoints/admin_rules.py`、`backend/app/services/admin_rule_service.py`。
+- 前端：`frontend/src/pages/admin/AdminRulesPage.tsx`。
+- 内置规则：胸痛、晕厥、严重气短、SBP ≥ 180 或 DBP ≥ 110、疼痛 ≥ 7、医生限制运动判定为 R3；高血压、糖代谢异常、疼痛 4-6、老年功能下降、用药影响判定为 R2；BMI ≥ 28 判定为 R1/R2。
+- 验证：`app/tests/api/test_risk.py`、`app/tests/api/test_admin_rules.py`。
+
+### 5. 动作库、模板库、知识库
+
+- 模型：`backend/app/models/template.py`。
+- Service：`backend/app/services/template_service.py`、`backend/app/services/knowledge_service.py`。
+- API：`backend/app/api/v1/endpoints/admin_templates.py`、`backend/app/api/v1/endpoints/admin_knowledge.py`。
+- 导入脚本：`backend/scripts/import_exercise_actions.py`、`backend/scripts/import_knowledge.py`、`backend/scripts/import_prescription_templates.py`。
+- 上线统一导入：`backend/scripts/seed_reference_data.py`。
+- 种子数据：`backend/data/seed_actions.json`、`backend/data/seed_templates.json`、`backend/data/seed_knowledge.json`。
+- 专家审阅资料：`docs/ai_exercise_action_library_v0_1_expert_review_draft.json`、`docs/ai_exercise_prescription_template_library_v0_1_expert_review_draft.json`、`docs/ai_exercise_compliance_copy_pack_v0_1_expert_review_draft.json`。
+- RAG 来源：`rag_data/_manifests/rag_ingest_allowlist.txt` 与 `docs/knowledge_source_catalog_v0_2.json`。
+- 关键规则：导入动作默认 `PENDING_REVIEW`。
+- 验证：`app/tests/api/test_admin_actions.py`、`app/tests/api/test_admin_knowledge.py`、`app/tests/scripts/test_import_exercise_actions.py`、`app/tests/scripts/test_import_knowledge.py`、`app/tests/scripts/test_import_prescription_templates.py`、`app/tests/services/test_template_matching.py`、`app/tests/services/test_knowledge_retrieval.py`。
+
+### 5.1 资料驱动上线导入
+
+- 资料校验命令：`cd backend && PYTHONPATH=. python scripts/validate_reference_data.py --strict`。
+- 统一导入命令：`cd backend && PYTHONPATH=. python scripts/seed_reference_data.py --no-rag-index --strict`。
+- 生产导入命令：`docker compose exec backend python scripts/seed_reference_data.py --strict`。
+- 导入阶段：风险规则、动作库、处方模板、合规材料、RAG 文档按固定顺序执行，每个阶段输出 created、updated、skipped、errors 等指标。
+- RAG 文档保留来源元数据、导入批次 ID、跳过原因和解析状态；扫描件或解析失败文档不会伪造成可检索证据。
+- 生产非 mock LLM 门禁由 readiness 和上线清单覆盖，开发测试环境可继续使用 mock。
+
+### 6. 分型聚类
+
+- Service：`backend/app/services/clustering_service.py`。
+- API：`backend/app/api/v1/endpoints/clusters.py`。
+- 训练脚本：`backend/scripts/train_cluster_model.py`。
+- 前端：`frontend/src/pages/admin/AdminClustersPage.tsx`、`frontend/src/pages/user/PhenotypePage.tsx`。
+- 约束：聚类分型只用于画像和模板匹配，不覆盖 R0/R1/R2/R3 风险等级。
+- 验证：`app/tests/api/test_clusters.py`、`app/tests/services/test_clustering.py`、`frontend/src/adminClusters.test.tsx`、`frontend/src/cluster.test.tsx`。
+
+### 7. 处方生成
+
+- 编排器：`backend/app/services/prescription_orchestrator.py`。
+- LLM：`backend/app/services/llm_service.py`。
+- RAG：`backend/app/services/knowledge_service.py`。
+- 安全校验：`backend/app/services/prescription_safety_service.py`。
+- API：`backend/app/api/v1/endpoints/prescriptions.py`。
+- 前端：`frontend/src/pages/user/PrescriptionPage.tsx`。
+- 验证：`app/tests/api/test_prescriptions.py`、`app/tests/services/test_prescription_orchestrator.py`、`app/tests/services/test_llm_schema.py`、`app/tests/services/test_openai_compatible_provider.py`、`app/tests/services/test_prescription_safety.py`。
+- 上线路径验收：`app/tests/api/test_end_to_end_launch_paths.py` 覆盖 R0 自动发布、R2 专家编辑批准、R3 转介无 FITT-VP、已发布处方打卡调整和阶段报告。
+
+### 8. 专家审核
+
+- 模型：`backend/app/models/review.py`、`backend/app/models/prescription.py`。
+- Service：`backend/app/services/expert_review_service.py`。
+- API：`backend/app/api/v1/endpoints/expert_reviews.py`。
+- 前端：`frontend/src/pages/expert/ExpertReviewPage.tsx`。
+- 覆盖动作：批准、驳回、转介、结构化编辑、版本留存、审计留痕。
+- 验证：`app/tests/api/test_expert_reviews.py`、`frontend/src/expertReviews.test.tsx`。
+
+### 9. 反馈调整
+
+- Service：`backend/app/services/feedback_adjustment_service.py`。
+- API：`backend/app/api/v1/endpoints/feedback.py`、`backend/app/api/v1/endpoints/health_data.py`。
+- 前端：`frontend/src/pages/user/TodayExercisePage.tsx`、`frontend/src/pages/user/PhaseReportPage.tsx`。
+- 覆盖规则：运动前确认、RPE、心率、血压/血糖、疼痛、不适、完成率、动态调整、红色预警。
+- 验证：`app/tests/api/test_feedback.py`、`app/tests/services/test_feedback_adjustment.py`、`frontend/src/feedback.test.tsx`、`frontend/src/phaseReport.test.tsx`。
+- 页面路径验收：`frontend/src/prescription.test.tsx` 断言风险、状态、FITT-VP/R3 安全提醒和导出按钮；`frontend/src/feedback.test.tsx` 断言打卡后显示动态调整结果；`frontend/src/phaseReport.test.tsx` 断言 4 周周期汇总可见。
+
+### 10. 管理科研
+
+- 管理看板：`backend/app/services/admin_dashboard_service.py`、`backend/app/api/v1/endpoints/admin_dashboard.py`、`frontend/src/pages/admin/AdminDashboardPage.tsx`。
+- 审计日志：`backend/app/services/audit_service.py`、`backend/app/api/v1/endpoints/admin_audit.py`、`frontend/src/pages/admin/AdminAuditPage.tsx`。
+- 科研导出：`backend/app/services/research_export_service.py`、`backend/app/api/v1/endpoints/research_export.py`、`frontend/src/pages/research/ResearchExportPage.tsx`。
+- 验证：`app/tests/api/test_admin_dashboard.py`、`app/tests/api/test_admin_audit.py`、`app/tests/api/test_research_export.py`、`frontend/src/adminDashboard.test.tsx`、`frontend/src/adminAudit.test.tsx`、`frontend/src/researchExport.test.tsx`。
+
+### 11. 报告导出
+
+- Service：`backend/app/services/report_service.py`。
+- API：`backend/app/api/v1/endpoints/reports.py`。
+- 前端：`frontend/src/pages/user/PrescriptionPage.tsx`、`frontend/src/pages/user/PhaseReportPage.tsx`。
+- 覆盖格式：处方 DOCX/PDF、阶段评估 DOCX/PDF。
+- 报告内容：用户摘要、风险、命中规则、分型、FITT-VP、注意事项、禁忌、复测周期、专家审核、免责声明。
+- 验证：`app/tests/api/test_reports.py`、`frontend/src/prescriptionReport.test.tsx`、`frontend/src/phaseReport.test.tsx`。
+
+### 12. 测试部署
+
+- Docker：`docker-compose.yml`、`docker-compose.prod.yml`、`backend/Dockerfile`、`frontend/Dockerfile`。
+- Readiness：`backend/app/core/readiness.py`、`GET /ready`。
+- 日志和告警：`backend/app/core/logging.py`、`backend/app/core/exceptions.py`。
+- 备份恢复：`scripts/backup_data.sh`、`scripts/restore_data.sh`。
+- 上线清单：`docs/10_online_checklist.md`。
+- 验证：`app/tests/deployment/*`、完整容器验收命令。
+
+## 最高优先级安全规则证据
+
+1. R3 禁止生成具体训练处方：`backend/app/services/prescription_orchestrator.py`、`backend/app/services/prescription_safety_service.py`、`test_r3_no_training_plan`。
+2. R2 可生成 AI 初稿，但必须专家审核后发布：`backend/app/services/prescription_orchestrator.py`、`test_risk_r2_requires_review`、`app/tests/services/test_prescription_orchestrator.py`。
+3. R0/R1 可自动发布，但必须经过规则校验：`backend/app/services/prescription_orchestrator.py`、`backend/app/services/prescription_safety_service.py`、`app/tests/services/test_prescription_orchestrator.py`。
+4. 大模型输出必须是结构化 JSON，并通过 JSON Schema 校验：`backend/app/services/llm_service.py`、`backend/app/schemas/prescription.py`、`test_llm_output_schema`。
+5. 大模型输出后必须经过规则引擎二次安全校验：`backend/app/services/prescription_orchestrator.py`、`backend/app/services/prescription_safety_service.py`、`app/tests/services/test_prescription_safety.py`。
+6. 处方必须采用 FITT-VP 结构：`backend/app/schemas/prescription.py`、`backend/data/seed_templates.json`、`test_llm_output_schema`。
+7. 专家修改、批准、驳回、转介必须留痕：`backend/app/services/expert_review_service.py`、`backend/app/services/audit_service.py`、`app/tests/api/test_expert_reviews.py`。
+8. 处方必须保留版本历史：`backend/app/models/prescription.py`、`PrescriptionVersion`、`app/tests/api/test_expert_reviews.py`。
+9. 科研导出必须脱敏：`backend/app/services/research_export_service.py`、`test_research_export_desensitized`。
+10. 聚类结果只能辅助模板匹配，不能覆盖风险规则：`backend/app/services/clustering_service.py`、`backend/app/services/prescription_orchestrator.py`、`app/tests/api/test_clusters.py`、`app/tests/services/test_template_matching.py`。
+
+## 最低测试覆盖
+
+- `test_risk_r0`
+- `test_risk_r1`
+- `test_risk_r2_requires_review`
+- `test_risk_r3_chest_pain`
+- `test_risk_r3_high_bp`
+- `test_risk_r3_pain_score`
+- `test_r3_no_training_plan`
+- `test_llm_output_schema`
+- `test_template_matching`
+- `test_expert_approve_prescription`
+- `test_feedback_adjustment`
+- `test_research_export_desensitized`
+
+## 验收命令证据
+
+任务 12 全量验证（2026-06-02）：
+
+```bash
+cd backend && python -m pytest
+cd frontend && npm run lint
+cd frontend && npm run test -- --run
+cd frontend && npm run build
+docker compose up -d --build
+docker compose exec backend alembic upgrade head
+docker compose exec backend python scripts/seed_initial_data.py
+docker compose exec backend python scripts/validate_reference_data.py --strict
+docker compose exec backend python scripts/seed_reference_data.py --strict
+```
+
+结果：
+
+- 后端全量测试：139/139 通过。
+- 前端 lint：exit 0。
+- 前端 Vitest：16 个测试文件、28/28 通过。
+- 前端 build：构建成功；Vite 仅提示 chunk size warning。
+- 容器完整构建：远端隔离环境 `/tmp/exercise-prescription-launch` 执行 `docker compose up -d --build` 退出码 0，backend、frontend 镜像完成构建，backend 容器进入 healthy。
+- 容器迁移：`alembic upgrade head` 通过。
+- 远端容器初始 seed：通过，默认机构、用户、动作、知识和模板已初始化。
+- 远端容器资料校验：风险规则 80、动作 154、模板 16、合规材料 8、知识来源 40、RAG allowlist 57。
+- 远端容器严格资料导入：风险规则 imported=78、动作 approved=154 / pending=0、模板 created=16、合规 created=8、RAG skipped=57、errors=0。
+- 接口 Smoke：`/health`、`/ready`、`/api/v1/openapi.json`、管理端规则列表、动作库、知识库检索、R0/R1 发布、R2 专家批准、R3 转介、用户打卡和阶段评估均通过。
+
+本轮验证说明：
+
+- 本机 Docker registry metadata / pull 多次超时，未作为完整 build 证据使用。
+- 远端隔离环境已完成完整 build、容器启动、迁移和严格资料导入，因此本轮容器验收通过。
+- 远端 `.env` 使用 `.env.example` 生成，用于构建和容器脚本验收；本机生产 `.env` 已验证 `/ready` 非 mock LLM 门禁和阿里云百炼配置。
+- 上述 `RAG skipped=57` 属于上一轮历史记录，已被 2026-06-02 生产 RAG/OCR/Embedding/Ollama hardening 重新导入结果取代；最新验收以 `skipped=0` 为准。
+
+任务 10 端到端路径验收：
+
+```bash
+cd backend && python -m pytest app/tests/api/test_end_to_end_launch_paths.py -v
+cd frontend && npm run test -- --run src/prescription.test.tsx src/feedback.test.tsx src/phaseReport.test.tsx
+```
+
+结果：后端 4/4 通过；前端 3 个测试文件、6/6 通过。
+
+已验证的上线命令：
+
+```bash
+docker compose up -d --build
+docker compose exec backend alembic upgrade head
+docker compose exec backend python scripts/seed_initial_data.py
+docker compose exec backend python scripts/validate_reference_data.py --strict
+docker compose exec backend python scripts/seed_reference_data.py --strict
+docker compose exec backend pytest
+```
+
+前端验证命令：
+
+```bash
+cd frontend
+npm run lint
+npm run test -- --run
+npm run build
+```
+
+如部署网络访问 Docker Hub 超时，可通过 `.env` 或命令行覆盖基础镜像：
+
+```bash
+PYTHON_BASE_IMAGE=public.ecr.aws/docker/library/python:3.12-slim \
+NODE_BASE_IMAGE=public.ecr.aws/docker/library/node:22-alpine \
+NGINX_BASE_IMAGE=public.ecr.aws/docker/library/nginx:1.27-alpine \
+docker compose up -d --build
+```
+
+如果仍然卡在基础镜像 metadata / pull 阶段，需要先解决 Docker registry 访问或在可访问 Docker socket 的远端环境完成构建。
+
+## 2026-06-02 Production RAG/OCR/Embedding/Ollama Hardening
+
+本轮目标是补齐生产 RAG、OCR、Embedding、Ollama/Gemma、动作库批准、合规确认与上线验收。远端隔离环境为 `/tmp/exercise-prescription-prod-ai`。
+
+### 关键实现证据
+
+- RAG allowlist 已改为相对于 `rag_data/` 的路径，strict 校验会拒绝绝对路径、缺文件、解析失败、OCR 失败、索引失败和 `skipped>0`。
+- 生产 embedding provider 为 `ollama:nomic-embed-text`，向量维度 768；生产环境禁止 `EMBEDDING_PROVIDER=hash`。
+- OCR provider 为 `paddleocr:enabled`；`OCR_ENABLED=true` 时图片资料和空文本 PDF 会走 PaddleOCR 兜底抽取。
+- LLM provider/model 为 `ollama:gemma3:270m`；本地 provider 可生成符合 `PrescriptionDraft` schema 的 JSON。
+- docs 动作库已按用户确认的专家批准结论导入为 `APPROVED`；处方候选只使用 approved 动作。
+- 合规材料已按法务、伦理、运动医学专家确认版本导入为 `CONFIRMED` / `ACTIVE`，`pending_confirmation=[]`。
+- 管理看板展示 approved actions、pending actions、confirmed compliance、RAG skipped、embedding、OCR、LLM readiness。
+
+### TDD 与本地测试证据
+
+本轮按红-绿流程补充测试后实现，覆盖 embedding provider、PaddleOCR、RAG strict/idempotency、Ollama provider、动作库批准、合规确认、管理看板、Docker 依赖和备份恢复脚本。
+
+已记录的局部回归：
+
+- `cd backend && python -m pytest app/tests/deployment/test_backup_restore_scripts.py::test_backup_and_restore_scripts_do_not_source_dotenv -v`：红灯，旧脚本包含 `. ".env"`。
+- `cd backend && python -m pytest app/tests/deployment/test_backup_restore_scripts.py -v`：绿灯，`5 passed`。
+
+后端容器测试说明：
+
+- 在远端生产 `.env` 下直接运行 `python -m pytest` 会因测试期望 mock/hash provider 而失败，这是测试环境隔离问题，不作为生产 readiness 失败。
+- 使用显式测试环境覆盖后，远端容器测试通过：`167 passed, 12 warnings in 11.09s`。
+
+### 远端部署与资料导入证据
+
+远端已执行：
+
+```bash
+cd /tmp/exercise-prescription-prod-ai
+sudo docker compose --progress plain up -d --build
+sudo docker compose exec -T backend alembic upgrade head
+sudo docker compose exec -T backend python scripts/seed_initial_data.py
+sudo docker compose exec -T backend python scripts/validate_reference_data.py --strict
+sudo docker compose exec -T backend python scripts/seed_reference_data.py --strict
+```
+
+容器状态：
+
+- backend healthy。
+- frontend running。
+- postgres healthy。
+- redis healthy。
+- qdrant running。
+- minio running。
+- ollama running。
+
+严格校验结果：
+
+- `risk_rules_count=80`
+- `actions_count=154`
+- `templates_count=16`
+- `compliance_documents_count=8`
+- `knowledge_sources_count=40`
+- `rag_allowlist_count=57`
+- `absolute_allowlist_paths=[]`
+- `missing_files=[]`
+- `blocking_errors=[]`
+
+严格导入结果：
+
+- `risk_rules: imported=78, skipped_r0=2, skipped=2, errors=0`
+- `actions: updated=154, approved=154, pending=0, skipped=0, errors=0`
+- `templates: updated=16, skipped=0, errors=0`
+- `compliance: updated=8, skipped=0, errors=0, confirmed=8`
+- `rag_data: updated=57, skipped=0, errors=0, chunks=12841`
+
+数据库和 Qdrant 抽查：
+
+- `rag_documents_active=61`
+- `rag_documents_skipped=0`
+- `rag_chunks_unindexed=0`
+- docs 正式动作库导入 `approved=154`、`pending=0`；默认 seed 演示动作中仍有 3 个 pending，不属于 docs 动作库验收口径。
+- `compliance_confirmed=8`
+- `compliance_with_pending_confirmation=0`
+- Qdrant collection `exercise_prescription_knowledge`，vector size `768`，points `38414`。
+
+### Readiness 证据
+
+远端生产 `/ready` 返回 `status=ok`，以下检查均为 `ok`：
+
+- `secret_key`
+- `database`
+- `redis`
+- `qdrant`
+- `minio`
+- `llm`：`ollama:gemma3:270m`
+- `embedding`：`ollama:nomic-embed-text`
+- `ocr`：`paddleocr:enabled`
+
+### 运维硬化证据
+
+- 远端 5 个默认演示账号密码已轮换为随机值，未打印或写入仓库。
+- `scripts/backup_data.sh` 已执行成功，备份目录：`/tmp/exercise-prescription-prod-ai/backups/20260602-234834`。
+- `backup_manifest.sha256` 校验通过：`postgres.sql`、`redis_data.tgz`、`qdrant_data.tgz`、`minio_data.tgz` 均 OK。
+- `CONFIRM_RESTORE=yes scripts/restore_data.sh backups/20260602-234834` 已完成恢复演练，恢复后 backend healthy，生产 `/ready` 仍为 `ok`。
+- `LOG_FORMAT=json` 已开启，backend 日志 tail 中 JSON 日志可解析。
+- `ERROR_ALERT_WEBHOOK_URL` 未配置；阻断原因是生产平台尚未提供 webhook URL，当前不得伪造或泄漏 webhook secret。
+
+### 本轮仍排除范围
+
+以下四项按计划不纳入本轮，不作为阻断项：
+
+- 设备接口 `/device-integrations/*`。
+- 试点资料 `/pilot-materials/*`。
+- 报告模板管理 `/report-templates/*`。
+- 成果交付物生成 `/deliverables/*`。
+
+### Final Verification Refresh
+
+2026-06-02 final verification was rerun after the last implementation and operations commits.
+
+Local verification:
+
+- `cd backend && python -m pytest`: `168 passed in 9.55s`.
+- `cd frontend && npm run lint`: exit code 0.
+- `cd frontend && npm run test -- --run`: 16 test files passed, `29 passed`.
+- `cd frontend && npm run build`: exit code 0; Vite reported only the existing chunk size warning.
+
+Remote production verification in `/tmp/exercise-prescription-prod-ai`:
+
+- `sudo docker compose --progress plain up -d --build`: backend and frontend images built, backend container healthy; postgres and redis healthy; qdrant, minio, ollama and frontend running.
+- `sudo docker compose exec -T backend alembic upgrade head`: exit code 0.
+- `sudo docker compose exec -T backend python scripts/seed_initial_data.py`: exit code 0; default password output was redacted in verification logs.
+- `sudo docker compose exec -T backend python scripts/validate_reference_data.py --strict`: exit code 0 with risk rules 80, actions 98, templates 16, compliance documents 8, knowledge sources 40, RAG allowlist 57.
+- `sudo docker compose exec -T backend python scripts/seed_reference_data.py --strict`: exit code 0 with `actions approved=154 pending=0 errors=0`, `compliance confirmed=8 errors=0`, and `rag_data skipped=0 errors=0 chunks=12841`.
+- Production `/ready`: HTTP 200, `status=ok`; `components.secret_key`, `database`, `redis`, `qdrant`, `minio`, `llm`, `embedding`, and `ocr` were all `ok`.
+- Remote container pytest under explicit test environment: `168 passed, 11 warnings in 10.71s`. The explicit test environment is required because production `.env` intentionally uses real Ollama/OCR/embedding providers while tests expect mock/hash providers.
+
+Final provider status:
+
+- Embedding provider: `ollama:nomic-embed-text`.
+- OCR provider: `paddleocr:enabled`.
+- LLM provider/model: `ollama:gemma3:270m`.
+
+Final secret scan:
+
+- `git status --short`: no output before final documentation edits.
+- `git diff -- .env .env.*`: no output.
+- `git grep -n "sk-" -- . ':!.env' ':!*.lock'`: no secret keys found; matches were route names such as `risk-screenings`.
+- API key variable scan found only variable names, placeholders, and test keys; no real runtime secret was found in tracked files.
+
+## 2026-06-03 Production Readiness Gap Closure
+
+本轮目标是关闭上线级缺口：风险规则/模板专家确认、聚类多算法与 BOOTSTRAP_V1、处方执行安全、反馈调整规则、专家审核工作台、科研导出、用户 dashboard、处方证据持久化、认证与生产安全、远端隔离部署验收。设备接口、试点资料、报告模板管理、成果交付物仍按用户要求排除。
+
+### 实现证据
+
+- 风险规则导入支持 `--confirm`，处方模板导入支持批量批准；导入/确认/批准均写 audit log。
+- 聚类模块保留 KMeans，并上线 DBSCAN、GaussianMixture、AgglomerativeClustering；统一特征工程、评估指标、持久化参数、启用状态和前端管理页。
+- BOOTSTRAP_V1 已补齐：真实用户评估样本不足时，使用已确认风险规则锚点补足训练样本，记录 `model_origin=bootstrap_rule_calibrated`。
+- 聚类专家画像输出核心风险、运动目标、FITT 范围、禁忌/注意事项和专家复核建议；启用门禁拒绝未达标模型。
+- 用户处方执行安全已收紧：今日运动只使用 PUBLISHED 且最新有效处方；R2 审核前不可执行；R3 不展示训练入口；新发布处方自动 SUPERSEDED 旧版本；历史版本需显式查看。
+- 反馈调整规则覆盖血压、血糖、胸痛、头晕/晕厥感、严重气促、异常心率、疼痛加重、RPE 连续过高、完成率过低；调整保存触发规则、原因和前后版本差异。
+- 专家审核工作台新增风险等级、审核状态、机构、时间、处方类型、异常反馈筛选；支持批准、驳回、转诊、要求补充资料、暂停运动；统计平均审核时长、R2 待审数、超时项。
+- 科研导出支持申请、审批、限时下载、CSV/XLSX 与审计；匿名编号使用 `hash(user_id + salt)`，不导出姓名、邮箱、手机号、身份证等直接身份信息。
+- 用户 dashboard 已从占位页替换为产品页，覆盖风险/审核、今日门禁、周完成率、阶段目标、近期反馈、血压/血糖提醒、处方版本、复评日期和运营指标。
+- `prescription_evidence` 已结构化保存风险规则、模板、动作、RAG chunk、LLM provider/model、schema 校验、安全校验和对象引用。
+- 认证安全已补齐 refresh token、logout、change password、默认账号首次登录强制改密；生产 readiness 禁止 mock LLM、hash embedding、OCR disabled。
+
+### 本地最终验证
+
+最终验证在最后一次聚类 BOOTSTRAP_V1 修复后重新执行：
+
+```bash
+cd backend && ENVIRONMENT=test LLM_PROVIDER=mock EMBEDDING_PROVIDER=hash OCR_ENABLED=false python -m pytest
+cd frontend && npm run lint
+cd frontend && npm run test -- --run
+cd frontend && npm run build
+cd backend && python scripts/validate_reference_data.py --strict --json
+```
+
+结果：
+
+- 后端全量测试：`188 passed, 1 warning in 11.91s`。
+- 前端 lint：exit 0。
+- 前端 Vitest：17 个测试文件、34/34 passed。
+- 前端 build：exit 0；仅保留 Vite chunk size warning。
+- strict 资料校验：风险规则 80、动作 154、模板 16、合规材料 8、知识来源 40、RAG allowlist 57，`absolute_allowlist_paths=[]`、`missing_files=[]`、`blocking_errors=[]`。
+
+### 远端隔离部署验收
+
+远端目录：`/tmp/exercise-prescription-prod-ai`。
+
+已执行：
+
+```bash
+docker compose up -d --build
+docker compose exec -T backend alembic upgrade head
+docker compose exec -T backend python scripts/seed_initial_data.py
+docker compose exec -T backend python scripts/validate_reference_data.py --strict
+docker compose exec -T backend python scripts/seed_reference_data.py --strict
+curl -fsS http://localhost:8000/ready
+curl -fsSI http://localhost:5173
+```
+
+部署结果：
+
+- `docker compose up -d --build` 成功；backend/frontend 镜像 built。
+- 容器状态：backend `running (healthy)`；postgres/redis `running (healthy)`；qdrant/minio/ollama/frontend `running`。
+- `alembic upgrade head` 成功迁移至 `0019_auth_refresh_tokens`。
+- `seed_initial_data.py` 成功，未输出默认密码。
+- `validate_reference_data.py --strict` 成功。
+- `seed_reference_data.py --strict` 成功：风险规则 `imported=78`；动作 `approved=154`、`pending=0`；模板 `updated=16`；合规 `confirmed=8`；RAG `skipped=0`、`errors=0`、`chunks=12841`、`import_batch_id=rag-20260603070124637250`。
+- `/ready` 返回 `status=ok`；`secret_key`、`database`、`redis`、`qdrant`、`minio`、`llm`、`embedding`、`ocr` 均为 `ok`。
+- Provider 明细：LLM `ollama:gemma3:270m`；embedding `ollama:nomic-embed-text`；OCR `paddleocr:enabled`。
+- 前端 `curl -I http://localhost:5173` 返回 HTTP 200。
+
+### 聚类上线证据
+
+远端 seed 后初始无聚类模型，本轮修复持久化训练兜底后重新同步并训练启用：
+
+- 训练命令：`docker compose exec -T backend python scripts/train_cluster_model.py`。
+- 训练结果：`Trained cluster model #1: KMeans 人群分型模型, clusters=2`。
+- 远端指标：`effective_clusters=2.0`、`cluster_stability=0.70`、`min_cluster_ratio=0.2083`、`silhouette_score=0.6122`、`davies_bouldin_score=0.4344`、`evaluation_passed=1.0`。
+- 启用结果：`id=1`、`status=ACTIVE`、`model_origin=bootstrap_rule_calibrated`、`evaluation_passed=1.0`。
+
+### 真实阻断项与排除范围
+
+- 唯一真实外部配置阻断项：远端 `ERROR_ALERT_WEBHOOK_URL_SET=no`。生产平台尚未提供错误告警 webhook URL；本轮未伪造通过，也未输出 webhook secret。
+- 本轮仍排除：设备接口 `/device-integrations/*`、试点资料 `/pilot-materials/*`、报告模板管理 `/report-templates/*`、成果交付物生成 `/deliverables/*`。
+
+## 2026-06-03 Product UI and Critical Gap Polish
+
+本轮目标是按照用户提供的 txt 继续打磨当前平台，关闭今日运动安全回退、反馈执行门禁、聚类评估与预测简化、科研导出占位、RAG 索引失败静默、资料确认状态歧义，并把用户端、专家端、管理端和科研端前端迁移到产品级工作台体验。本轮明确不把 `ERROR_ALERT_WEBHOOK_URL`、真实聚类训练样本、复测采集规范、生产告警接收渠道、生产域名/HTTPS、真实大模型 QA 样本、设备接口、试点资料、报告模板管理、成果交付物作为阻断项。
+
+### 关键实现证据
+
+- 今日运动页只选择 `PUBLISHED`、非 R3、且含 `fitt_vp` 的可执行处方；无可执行处方时仅显示安全状态和查看处方/完善建档入口，不展示训练计划或打卡表单。
+- 创建运动反馈时后端校验处方存在、归属当前用户、状态为 `PUBLISHED`、非 R3、包含 `fitt_vp`，并且必须是最新有效可执行处方；不满足返回 403/409/404 的清晰错误。
+- 聚类评估已移除 `cluster_stability` 人工保底；冷启动规则校准模型保留真实指标，未达阈值时 `evaluation_passed=0.0`，不能启用，也不伪装为正式科研聚类结论。
+- 聚类预测策略已明确：KMeans 最近中心；GaussianMixture 保存 `means/covariances/precisions/weights` 并按高斯对数似然预测；AgglomerativeClustering 标记 `centroid_projection`；DBSCAN 使用核心代表点密度近似，超出 `eps` 返回“未归类/需专家解释”。
+- 科研导出阶段变化字段不再输出中文占位；UserProfile、FitnessTest、BodyComposition、BiochemicalIndex 均按最早/最新记录真实计算差值，记录不足时输出 structured null 和 `null_reason`；CSV/XLSX/JSON 保持直接身份信息脱敏。
+- RAG 索引失败写入 `KnowledgeDocument.status=INDEX_FAILED` 和 `skipped_reason`，记录 `KNOWLEDGE_INDEX_FAILED` audit log，管理端展示失败原因；strict 校验能发现 ACTIVE 未索引且无失败原因的异常状态。
+- 关键词降级检索允许使用 `INDEX_FAILED` 但有 chunk 的资料，避免向量库故障导致 RAG 证据完全丢失；向量检索仍限定 `ACTIVE` 且已索引 chunk。
+- 规则、模板、动作、合规材料管理页以 `review_status` 展示平台状态，保留原始 source 追溯，同时显示“本平台状态：专家已确认/已批准”。
+- 新增并实际使用共享产品组件：`AppShell`、`RoleSidebar`、`PageHeader`、`MetricCard`、`RiskBadge`、`MotionCard`、`AnimatedNumber`、`FlowProgress`、`HealthDataWizard`、`UnitInput`、`RpeSlider`、`PainScale`、`FITTVPCard`、`ExerciseTaskCard`、`ContraindicationList`、`ReviewWorkbench`、`PrescriptionEditor`、`RuleHitCard`、`EvidenceCard`、`AuditTrail`、`ChartCard`、`EmptyState`。
+- 路由别名已覆盖 txt 要求：用户端 `/user/profile`、`/user/health-data`、`/user/risk-result`、`/user/prescriptions/:id`、`/user/feedback`、`/user/follow-up-report`；专家端 `/expert/dashboard`、`/expert/reviews/:id`；管理端 `/admin/exercises`、`/admin/knowledge`、`/admin/clustering`、`/admin/research-export`；科研端 `/research/dashboard`、`/research/cluster-analysis`、`/research/intervention-effects`、`/research/export-jobs`。
+- 专家审核页改为三栏工作台，批准前必须勾选“确认已核对风险规则、禁忌动作和处方强度”；R3 审核禁止发布训练处方。
+- 阶段报告导出 Word/PDF 使用独立 loading 状态，避免一种格式导出时错误锁住另一种格式按钮。
+
+### 本地最终验证
+
+本轮在最后一次后端与前端修复后重新执行：
+
+```bash
+cd backend && ENVIRONMENT=test LLM_PROVIDER=mock EMBEDDING_PROVIDER=hash OCR_ENABLED=false python -m pytest
+cd frontend && npm run lint
+cd frontend && npm run test -- --run
+cd frontend && npm run build
+cd backend && python scripts/validate_reference_data.py --strict --json
+```
+
+结果：
+
+- 后端全量测试：`195 passed, 1 warning in 17.58s`。
+- 前端 lint：exit 0。
+- 前端 Vitest：17 个测试文件、54/54 passed。
+- 前端 build：exit 0；仅保留 Vite chunk size warning。
+- strict 资料校验：风险规则 80、动作 154、模板 16、合规材料 8、知识来源 40、RAG allowlist 57，`absolute_allowlist_paths=[]`、`missing_files=[]`、`knowledge_index_errors=[]`、`blocking_errors=[]`。
+
+### 浏览器烟测
+
+本轮启动本地 Vite 开发服务器并用 in-app Browser 检查公共页面：
+
+- `http://127.0.0.1:5173/`：平台入口可渲染，含“AI 个性化运动处方平台”和四端入口，无 console error。
+- `http://127.0.0.1:5173/login`：登录表单可渲染，含邮箱、密码和注册入口，无 console error。
+- `http://127.0.0.1:5173/register`：注册表单可渲染，含邮箱、姓名、手机号、密码等字段，无 console error。
+
+受保护业务页面需要有效 token 与 API 数据，本轮浏览器环境未直接写入 `localStorage`；其路由和页面行为由 Vitest 页面测试、路由测试和生产构建覆盖。
+
+## 2026-06-05 Remote Production UI And Provider Revalidation
+
+本节记录 2026-06-05 对远端生产服务器 `zhaosilei@100.99.170.46` 的最新复核。历史章节保留用于追溯；生产 provider、远端测试和页面 smoke 以本节和 `docs/10_online_checklist.md` 最新记录为准。
+
+### 生产 Provider 与容器状态
+
+- 生产运行目录：`/tmp/exercise-prescription-prod-ai`。
+- 当前源码镜像：`/home/zhaosilei/exercise-prescription-ui-current/source`。
+- `/ready` 返回 `status=ok`，组件 `secret_key`、`production_config`、`database`、`redis`、`qdrant`、`minio`、`llm`、`embedding`、`ocr` 全部为 `ok`。
+- LLM 当前为 `aliyun:qwen3.7-max key=DASHSCOPE_API_KEY:sk-...2443`。
+- Embedding 当前为 `dashscope:text-embedding-v4 key=DASHSCOPE_API_KEY:sk-...2443`。
+- OCR 当前为 `paddleocr:enabled`。
+- 前端入口 `curl -I http://127.0.0.1:5173/` 返回 HTTP 200。
+- Docker 状态：backend `Up (healthy)`，postgres/redis `healthy`，frontend/minio/qdrant/ollama `Up`。
+- 远端 demo 账号存在且可登录：`demo-user-r0@example.com`、`demo-user-r1@example.com`、`demo-user-r2@example.com`、`demo-user-r3@example.com`、`demo-expert@example.com`、`demo-admin@example.com`、`demo-researcher@example.com`，均 `must_change_password=False`。
+
+### 远端测试与构建
+
+远端前端源码目录：
+
+```bash
+cd /home/zhaosilei/exercise-prescription-ui-current/source/frontend
+npm test -- --run
+npm run lint
+npm run build
+```
+
+结果：
+
+- Vitest：`20 passed files / 107 passed tests`。
+- Lint：`0 errors, 2 warnings`，均为既有 `react-refresh/only-export-components` warning：`ProductUI.tsx`、`BaseEChart.tsx`。
+- Build：`tsc -b && vite build` 通过，仅 Vite chunk size warning。
+
+远端后端容器测试和资料校验：
+
+- `PROJECT_ROOT=/workspace ENVIRONMENT=test LLM_PROVIDER=mock EMBEDDING_PROVIDER=hash OCR_ENABLED=false python -m pytest -q`：`275 passed, 13 warnings in 35.76s`。
+- `python scripts/validate_reference_data.py --strict --json`：`blocking_errors=[]`、`missing_files=[]`、`knowledge_index_errors=[]`。
+
+### R2/R3 前端安全回归
+
+本轮定位并修复了前端全量 Vitest 中 3 个处方测试失败。根因不是业务页面丢失状态，而是 React/AntD 重绘后 `findByText/findByRole` 返回的旧 DOM 节点被替换；诊断时 `document.body.textContent` 已包含 `PENDING_REVIEW`、`REFERRED`、R2/R3 安全文案和导出锁定文案。修复为在 `waitFor` 内重新查询当前 DOM，安全断言保持并加强：
+
+- R2 `PENDING_REVIEW`：必须展示“专家审核前不展示训练计划”和“报告导出已锁定”；不得展示 FITT-VP 训练计划、频率、动作、Word/PDF 导出按钮。
+- R3 `REFERRED`：必须展示“当前不展示训练计划，仅显示安全提醒和医学评估建议”；不得展示训练频率、动作、强度、Word/PDF 导出按钮。
+- Published R1：仍展示 Word/PDF 报告导出按钮。
+
+回归验证：
+
+```bash
+npm run test -- feedback.test.tsx prescription.test.tsx prescriptionReport.test.tsx --run --pool forks --poolOptions.forks.singleFork --maxWorkers=1 --minWorkers=1
+```
+
+结果：`3 passed files / 10 passed tests`。随后远端前端全量 Vitest 通过：`20 passed files / 107 passed tests`。
+
+### 专家审核和科研导出边界修复
+
+本轮新增并验证两类资源边界：
+
+- 专家审核：`ADMIN` 保留全局审计能力；`ORG_ADMIN` 只能访问本机构审核队列、详情和动作；`EXPERT` 可看本机构队列，但不能读取或操作已分配给其他专家的任务，未领取任务必须先点击“开始审核”后才能查看完整详情和执行审核动作。
+- 科研导出：`ADMIN` 可全局审批；`ORG_ADMIN`、`RESEARCHER` 必须有机构边界；研究员只能看到自己的导出申请和本机构统计，不可直接访问 `/research/export/users` 全量脱敏预览。
+
+专家端演示指标也完成修复：之前 demo seed 固定 `reviewed_at=2026-06-03`，而 `created_at` 使用当前时间，导致 2026-06-05 重灌演示数据后平均审核时长显示为负数。修复后，`ExpertReviewService.stats` 对异常时间戳做非负保护，`seed_demo_data.py` 使用动态演示时间线生成 `created_at <= reviewed_at` 的已审核记录。
+
+红绿回归和最终验证：
+
+- 红灯：`test_expert_review_stats_never_report_negative_review_hours` 在远端容器返回 `average_review_hours=-2.0`，按预期失败。
+- 红灯：`test_seed_demo_data_creates_demo_accounts_samples_and_is_idempotent` 在远端容器因 `review.created_at <= review.reviewed_at` 断言失败。
+- 绿灯：两条新增回归在远端容器通过，`2 passed, 2 warnings in 5.17s`。
+- 全量：远端后端容器全量测试通过，`275 passed, 13 warnings in 35.76s`。
+- 视觉：远端专家端截图中“平均审核时长”已从 `-44.23小时` 变为 `0小时`。
+
+### 远端真实 API Smoke
+
+使用远端生产后端真实登录接口获取 demo token 后，只读检查四端页面依赖 API：
+
+- 用户 R2：`/user/dashboard` HTTP 200，返回 `current_risk_level=R2`、`expert_review_status=PENDING_REVIEW`、`today_can_exercise=false`、`today_block_reason=处方发布前不可执行`。
+- 用户 R2/R3 处方：`/prescriptions/me?include_history=true` HTTP 200；demo R2 处方为 `PENDING_REVIEW`，demo R3 处方为 `REFERRED`。
+- 专家端：`/expert-reviews/stats`、`/expert-reviews` HTTP 200；未领取任务的专家访问 `/expert-reviews/87` 返回 HTTP 403 和 `请先开始审核该任务`，管理员审计访问同一详情 HTTP 200 并返回处方、审核记录、六类健康数据、风险规则、RAG 证据、模板、候选动作、版本和趋势摘要。
+- 管理端：`/admin/dashboard/summary`、`/admin/rules`、`/admin/actions`、`/admin/templates`、`/admin/knowledge/documents`、`/clusters/models`、`/research/export/requests` 均 HTTP 200。
+- 科研端：`/research/export/summary` 和 `/research/export/requests` HTTP 200；`risk_distribution` 为 R0/R1/R2/R3 各 11，导出申请 4 条。
+- 脱敏边界：管理员访问 `/research/export/users` HTTP 200，返回 `participant_code` 和脱敏画像；研究员直接访问 `/research/export/users` HTTP 403，符合“不直接预览全量脱敏清单”的权限边界。
+
+### 远端浏览器 Smoke 与截图
+
+使用 Codex in-app Browser 访问远端前端 `http://100.99.170.46:5173`，真实 demo 用户登录已覆盖：
+
+- `/login`：登录页可渲染，截图 `/private/tmp/eps_acceptance_screenshots_20260605/01-login.png` 与 `01-login-viewport.png`。
+- `/user/dashboard`（demo R2）：展示 `R2`、`今日不可运动`、`处方发布前不可执行`、图表区域和 demo banner，截图 `02-user-r2-dashboard.png`。
+- `/user/health-data`：展示 `用户建档向导`、`基础信息`。
+- `/user/risk-result`：展示 `风险分型结果`、`R2`。
+- `/user/prescriptions/87`：展示 `PENDING_REVIEW`、`专家审核前不展示训练计划`、`报告导出已锁定`，截图 `03-user-r2-prescription.png`。
+- `/user/today`（demo R2）：展示 `当前没有可执行处方`、`R2 需等待专家审核`。
+- `/user/prescriptions/88`（demo R3）：展示 `REFERRED`、`当前不展示训练计划`、`R3 仅保留医学评估建议`，截图 `04-user-r3-prescription.png`。
+- `/user/today`（demo R3）：展示 `当前没有可执行处方`、`R3 仅显示医学评估建议`。
+- `/expert/dashboard`：展示 `专家工作台`、`优先处理 R2`、`异常反馈`。
+- `/expert/reviews`：展示 `专家审核工作台`、`审核队列`，平均审核时长为 `0小时`，截图 `05-expert-reviews.png`。
+- `/expert/reviews/87`：展示 `专家审核工作台` 和 `请先点击“开始审核”领取任务` 的未领取保护提示，未触发浏览器控制台 403 error，截图 `14-expert-review-detail-guard.png`。
+- `/admin/dashboard`：展示 `管理看板`、`规则与模型状态总览`，截图 `06-admin-dashboard.png`。
+- `/admin/rules`：展示 `风险规则管理` 和 `规则测试`，截图 `08-admin-rules.png`。
+- `/admin/knowledge`：展示 `知识库管理`，截图 `09-admin-knowledge.png`。
+- `/admin/research-export`：展示 `科研导出审批` 和审批留痕指标，截图 `10-admin-research-export.png`。
+- `/research/dashboard`：展示 `科研数据看板` 和 `脱敏` 聚合指标，截图 `07-research-dashboard.png`。
+- `/research/cluster-analysis`：展示 `科研分型分析` 和脱敏样本说明，截图 `11-research-cluster-analysis.png`。
+- `/research/intervention-effects`：展示 `科研干预效果`，截图 `12-research-intervention-effects.png`。
+- `/research/export-jobs`：展示 `科研导出任务`、本人申请和下载策略，截图 `13-research-export-jobs.png`。
+
+独立 Playwright 复跑结果：10/10 routes `ok=true`，`consoleErrors=[]`，截图保存在 `/private/tmp/eps_acceptance_screenshots_20260605/`。科研分型页当前按冷启动说明展示脱敏聚合和暂无分型散点数据，未伪造成正式聚类样本。
+
+## 2026-06-03 Final Launch Readiness Closure
+
+本节是当前仓库最新验收依据，覆盖主任务 A-J 以及附件中的前端产品化、四端演示和 demo 数据要求。历史章节保留用于追溯；最终上线判断以本节和 `docs/10_online_checklist.md` 的最新记录为准。
+
+### 逐项风险关闭证据
+
+- A. 公开注册与权限安全：公开注册接口和注册页均只允许创建 `USER`；匿名请求提交 `ADMIN`、`EXPERT`、`RESEARCHER`、`ORG_ADMIN` 会被拒绝或降级，不再展示高权限角色选项。证据：`backend/app/services/auth_service.py`、`frontend/src/pages/RegisterPage.tsx`、`app/tests/api/test_auth.py`、`frontend/src/auth.test.tsx`、浏览器烟测 `/register` forbidden roles `[]`。
+- B. 前端 RoleGuard 与 403：`ProtectedRoute` 登录后通过 `/users/me` 获取当前用户、角色和机构，按 `USER`、`EXPERT`、`ADMIN`/`ORG_ADMIN`、`RESEARCHER` 路由边界拦截，越权显示产品级 403；路由授权不再信任 `localStorage.current_user_role`，篡改缓存角色会被 `/users/me` 真实角色覆盖。证据：`frontend/src/components/ProtectedRoute.tsx`、`frontend/src/auth/token.ts`、`frontend/src/App.tsx`、`frontend/src/App.test.tsx`、`frontend/src/auth.test.tsx`。
+- C. 后端 RBAC 收紧：管理动作库、模板库、知识库启停、重建索引、聚类训练/启用/归档、科研导出审批等接口按角色和机构范围限制；`ORG_ADMIN` 仅能操作本机构数据。证据：`backend/app/api/v1/endpoints/*`、`backend/app/tests/api/test_global_rbac.py`、`test_admin_*`、`test_clusters.py`、`test_research_export.py`。
+- D. 处方生成 fallback 与自动发布安全：生产路径无已批准模板、动作候选为空、RAG 证据为空或 LLM provider 异常时，不生成可执行 `PUBLISHED` 处方；fallback 只在测试或显式开发环境可用，证据中标注来源；运动反馈和动态调整必须绑定最新可执行处方，未绑定反馈不得回退到最新处方或触发发布。证据：`backend/app/services/prescription_orchestrator.py`、`backend/app/services/prescription_safety_service.py`、`backend/app/services/feedback_adjustment_service.py`、`backend/app/api/v1/endpoints/prescriptions.py`、`app/tests/services/test_prescription_orchestrator.py`、`app/tests/services/test_feedback_adjustment.py`、`app/tests/api/test_prescriptions.py`、`app/tests/api/test_feedback.py`。
+- E. 科研导出完整闭环：导出申请支持 CSV、XLSX、JSON；管理员审批、驳回、限时下载、留痕、机构范围审批和默认字段脱敏已实现；研究员只能查看自己的申请和下载已批准任务，不能审批。证据：`backend/app/services/research_export_service.py`、`backend/app/api/v1/endpoints/research_export.py`、`frontend/src/pages/research/ResearchExportPage.tsx`、`app/tests/api/test_research_export.py`、`frontend/src/researchExport.test.tsx`。
+- F. 阶段评估与复测数据：新增 `UserProfileMeasurement` 和复测历史迁移，阶段评估与科研导出按最早/最新有效记录计算体重、BMI、腰围、血压、体成分和生化指标变化；记录不足输出 structured null 和 `null_reason`。证据：`backend/alembic/versions/0021_user_profile_measurements.py`、`backend/app/models/health_data.py`、`backend/app/services/health_profile_service.py`、`backend/app/services/research_export_service.py`、`frontend/src/pages/user/PhaseReportPage.tsx`、`app/tests/api/test_reports.py`、`frontend/src/phaseReport.test.tsx`。
+- G. RAG 检索透明度：向量检索失败不静默吞掉；关键词降级在返回证据、处方 evidence、审计日志和管理端 UI 中标注 `retrieval_mode`、`fallback_reason`；`ACTIVE` 向量检索只使用已索引 chunk，`INDEX_FAILED` 资料只能关键词召回并标注原因。证据：`backend/app/services/knowledge_service.py`、`backend/app/api/v1/endpoints/admin_knowledge.py`、`frontend/src/pages/admin/AdminTemplatePage.tsx`、`app/tests/services/test_knowledge_retrieval.py`、`app/tests/api/test_admin_knowledge.py`。
+- H. 前端产品级实现补齐：已实现并使用 ECharts 图表 `RiskDistributionChart`、`PrescriptionTrendChart`、`AdherenceChart`、`RuleHitRankChart`、`HealthRadarChart`、`FeedbackTrendChart`、`ClusterScatterChart`、`StageEvaluationCompareChart`、`TemplateUsageChart`、`ExpertQueueChart`，均有 loading、empty、error 状态；管理端规则/模板/动作/知识库使用统一列表、筛选、详情抽屉、编辑、版本历史、启停和审计日志流程；专家端包含开始审核、时间筛选、结构化差异、历史版本、趋势摘要和 RAG 证据展示。证据：`frontend/src/components/charts/*`、`frontend/src/charts.test.tsx`、`frontend/src/adminDashboard.test.tsx`、`frontend/src/adminRules.test.tsx`、`frontend/src/adminTemplates.test.tsx`、`frontend/src/expertReviews.test.tsx`。
+- I. 生产 provider 与 mock 边界：`MockLLMProvider`、hash embedding 和 OCR disabled 仅允许开发/测试；生产 readiness 和处方生成接口会再次拒绝 mock/hash/OCR disabled。Ollama/Gemma、真实 embedding、PaddleOCR 路径保持可用。证据：`backend/app/core/readiness.py`、`backend/app/core/config.py`、`backend/app/api/v1/endpoints/prescriptions.py`、`app/tests/core/test_readiness.py`、`app/tests/deployment/test_docker_compose_env.py`。
+- J. 独立审查与验收：本地全量验证、远端源码级验证、浏览器烟测、静态风险扫描和上线清单均已重新执行；未把文档记录当作代码完成依据。证据见本节后续命令记录和 `docs/10_online_checklist.md`。
+
+### 前端产品化与 demo 数据证据
+
+- 四端路由已覆盖：用户端 `/user/dashboard`、`/user/health-data`、`/user/risk-result`、`/user/prescriptions`、`/user/today`、`/user/feedback`、`/user/follow-up-report`；专家端 `/expert/dashboard`、`/expert/reviews`、`/expert/reviews/:id`；管理端 `/admin/dashboard`、`/admin/rules`、`/admin/templates`、`/admin/exercises`、`/admin/knowledge`、`/admin/clustering`、`/admin/research-export`；科研端 `/research/dashboard`、`/research/cluster-analysis`、`/research/intervention-effects`、`/research/export-jobs`。
+- 四端页面均接 API 封装，不再依赖静态假页面；保留的测试 mock 仅用于 Vitest 和开发测试环境。
+- `prefers-reduced-motion` 已在产品组件和样式中处理，减少动态效果时关闭非必要 Framer Motion 动画。
+- 新增 demo seed：`backend/scripts/seed_demo_data.py`。脚本创建“河南体育学院运动促进健康示范中心”、7 个 `[DEMO]` 账号、至少 40 个 demo 用户样本、R0/R1/R2/R3 处方、专家审核、运动反馈、复测记录和科研导出申请；支持 `--clear`，幂等执行且不打印明文演示密码。
+- demo seed 验证：`app/tests/scripts/test_seed_demo_data.py` 覆盖账号角色、demo 标识、样本数、处方/版本/反馈/复测数据存在、幂等性、清理只删除 demo 数据、CLI `--clear` 不泄露明文密码。
+- demo seed CLI 验证：临时 SQLite schema 中执行 `python scripts/seed_demo_data.py --clear` 输出 `users_created=47`、`health_records_created=240`、`prescriptions_created=80`、`reviews_created=20`、`export_requests_created=4`；随后执行 `python scripts/seed_demo_data.py` 输出全部新增计数为 0。
+
+Demo 导入命令：
+
+```bash
+cd backend && python scripts/seed_demo_data.py --clear
+cd backend && python scripts/seed_demo_data.py
+```
+
+### 最新本地验证
+
+最后一次代码和文档收口后必须重新执行以下命令，当前最新记录为：
+
+```bash
+cd backend && ENVIRONMENT=test LLM_PROVIDER=mock EMBEDDING_PROVIDER=hash OCR_ENABLED=false python -m pytest
+cd frontend && npm run lint
+cd frontend && npm run test -- --run
+cd frontend && npm run build
+cd backend && python scripts/validate_reference_data.py --strict --json
+```
+
+结果：
+
+- 后端全量测试：`239 passed, 1 warning`。
+- 前端 lint：exit 0；仅 `BaseEChart.tsx` fast-refresh export warning，非运行或构建错误。
+- 前端 Vitest：19 个测试文件、`82 passed`。
+- 前端 build：exit 0；仅 Vite chunk size warning。
+- strict 资料校验：`missing_files=[]`、`knowledge_index_errors=[]`、`blocking_errors=[]`。
+
+### 最新浏览器烟测
+
+本地临时服务 `127.0.0.1:8004/5178` 使用 seeded smoke 数据执行 Playwright 烟测：
+
+- 覆盖 `/login`、`/register`、`/user/dashboard`、`/user/health-data`、`/user/risk-result`、`/user/prescriptions`、`/user/today`、`/expert/reviews`、`/expert/reviews/:id`、`/admin/dashboard`、`/admin/rules`、`/admin/templates`、`/admin/knowledge`、`/admin/clustering`、`/admin/research-export`、`/research/dashboard`、`/research/cluster-analysis`、`/research/intervention-effects`、`/research/export-jobs`。
+- 结果：19/19 routes `ok=true`，`failed=[]`，无 console error、无失败响应。
+- 注册页检查：高权限角色文案未出现，forbidden roles `[]`。
+- 科研页面检查：研究员页面未请求管理端 `/research/export/users`。
+
+### 远端源码级验证
+
+远端服务器 `zhaosilei@100.99.170.46` 使用隔离目录 `/home/zhaosilei/exercise-prescription-codex-smoke-20260604` 执行源码级验证，不影响该机已有生产容器：
+
+- 后端 Docker 测试：`ENVIRONMENT=test LLM_PROVIDER=mock EMBEDDING_PROVIDER=hash OCR_ENABLED=false python -m pytest`：`239 passed, 1 warning`。
+- strict 资料校验：`python scripts/validate_reference_data.py --strict --json` 返回 `missing_files=[]`、`knowledge_index_errors=[]`、`blocking_errors=[]`。
+- 前端干净源码验证：在 `/home/zhaosilei/exercise-prescription-codex-smoke-20260604/frontend-clean-final-20260604095626/frontend` 使用 Node `v24.13.0`、npm `11.6.2` 依次执行 `npm run test -- --run`、`npm run lint`、`npm run build` 成功；Vitest 19 个文件、82/82 passed；lint 仅 `BaseEChart.tsx` fast-refresh warning；build 成功，仅 chunk size warning。
+
+### 静态风险扫描结论
+
+已重新扫描 `TODO`、`FIXME`、`mock`、`placeholder`、`fallback`、`NotImplemented`、`501`、`草案`、`待确认`、`简化` 等关键词：
+
+- `mock`：生产源码中出现的 mock provider 均受 `ENVIRONMENT`、readiness 和处方生成接口门禁限制；测试中的 `vi.mock`、mock provider、fixture 不是上线运行路径。
+- `fallback`：处方 fallback 仅测试/显式开发可用；RAG keyword fallback 会在 evidence、审计日志和 UI 中标注 `retrieval_mode` 与 `fallback_reason`，不是静默降级。
+- `placeholder`：生产前端命中主要是输入框 placeholder 或空值显示 `-`，未发现静态假页面替代业务实现。
+- `NotImplemented` / `501`：仓库已移除占位 `not_implemented` 路由；排除范围模块访问返回 404，不再伪装成功。
+- `草案` / `待确认` / `简化`：命中主要为历史 docs、专家审阅草案源材料或测试断言；当前导入和运行路径使用 `APPROVED`、`CONFIRMED`、`ACTIVE` 状态与 strict 校验门禁，不把历史草案当作上线通过依据。
+
+### 外部阻断项
+
+- `ERROR_ALERT_WEBHOOK_URL` 仍需生产平台提供真实告警接收地址并完成触发测试；当前仓库已保留配置门禁和记录方式，但不能伪造外部 webhook secret 或测试结果。
+- 生产域名、HTTPS 证书、真实短信/邮件/告警渠道属于部署平台配置，不由当前仓库代码单独闭环；本轮未把这些外部配置伪造为已完成。

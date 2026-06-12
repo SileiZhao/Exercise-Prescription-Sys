@@ -1,10 +1,10 @@
-import { Alert, Button, Card, Descriptions, Drawer, Input, Select, Space, Table, Tag, Typography } from "antd";
+import { Alert, Button, Descriptions, Drawer, Input, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { listAuditLogs, type AuditLogItem } from "../../api/adminAudit";
-import { AppShell } from "../../components/ProductUI";
+import { AppShell, ClinicalStatusBadge, DecisionBanner, StatusTile, WorkbenchSection } from "../../components/ProductUI";
 
 function metadataValue(value: unknown) {
   if (Array.isArray(value)) {
@@ -16,51 +16,6 @@ function metadataValue(value: unknown) {
       .join("，");
   }
   return String(value ?? "-");
-}
-
-function formatDateTime(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value || "-";
-  }
-  return new Intl.DateTimeFormat("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(date);
-}
-
-function actionColor(action: string) {
-  if (/REJECT|BLOCK|FAIL|ERROR|DELETE|ARCHIVE/i.test(action)) {
-    return "red";
-  }
-  if (/REVIEW|APPROVE|CONFIRM/i.test(action)) {
-    return "gold";
-  }
-  if (/GENERATE|CREATE|UPLOAD|EXPORT/i.test(action)) {
-    return "blue";
-  }
-  return "default";
-}
-
-function metadataSummary(value: Record<string, unknown>) {
-  const entries = Object.entries(value ?? {});
-  if (!entries.length) {
-    return "-";
-  }
-  const first = entries.slice(0, 2).map(([key, item]) => `${key}：${metadataValue(item)}`);
-  return entries.length > 2 ? `${first.join("，")}，另 ${entries.length - 2} 项` : first.join("，");
-}
-
-function metadataBrief(value: Record<string, unknown>) {
-  const entries = Object.entries(value ?? {});
-  if (!entries.length) {
-    return "-";
-  }
-  const keys = entries.slice(0, 3).map(([key]) => key).join("、");
-  return entries.length > 3 ? `元数据 ${entries.length} 项：${keys} 等` : `元数据 ${entries.length} 项：${keys}`;
 }
 
 function MetadataList({ value }: { value: Record<string, unknown> }) {
@@ -79,15 +34,78 @@ function MetadataList({ value }: { value: Record<string, unknown> }) {
   );
 }
 
+const auditActionLabels: Array<[RegExp, string]> = [
+  [/USER_LOGIN/i, "用户登录"],
+  [/FEEDBACK_ADJUST/i, "反馈调整处方"],
+  [/APPROVE|APPROVED/i, "批准"],
+  [/REJECT|REJECTED/i, "驳回"],
+  [/REFER|REFERRED/i, "转介"],
+  [/PAUSE/i, "暂停运动"],
+  [/PUBLISH|PUBLISHED/i, "发布处方"],
+  [/DOWNLOAD/i, "下载留痕"],
+  [/EXPORT/i, "科研导出"],
+  [/CREATE/i, "新建"],
+  [/UPDATE/i, "更新"],
+  [/GENERATE/i, "生成"],
+  [/TEST/i, "规则测试"],
+  [/REINDEX/i, "重建索引"],
+  [/RULE/i, "风险规则"],
+  [/TEMPLATE/i, "处方模板"],
+  [/KNOWLEDGE/i, "知识库"]
+];
+
+function auditActionLabel(action: string) {
+  const match = auditActionLabels.find(([pattern]) => pattern.test(action));
+  if (match) return match[1];
+  return action.replace(/_/g, " ").replace(/\b[A-Z]{3,}\b/g, (value) => value.toLowerCase());
+}
+
+function auditTone(action: string) {
+  const upper = action.toUpperCase();
+  if (upper.includes("REJECT") || upper.includes("REFER") || upper.includes("PAUSE") || upper.includes("RED")) return "red";
+  if (upper.includes("APPROVE") || upper.includes("PUBLISH") || upper.includes("DOWNLOAD")) return "green";
+  if (upper.includes("UPDATE") || upper.includes("CREATE") || upper.includes("GENERATE")) return "blue";
+  if (upper.includes("TEST") || upper.includes("REINDEX")) return "gold";
+  return "default";
+}
+
+function resourceLabel(value: string) {
+  const labels: Record<string, string> = {
+    PrescriptionRecord: "运动处方",
+    RiskRuleConfig: "风险规则",
+    ResearchExportRequest: "科研导出申请",
+    User: "用户账号",
+    ExpertProfile: "专家资料",
+    Organization: "机构",
+    KnowledgeDocument: "知识库资料",
+    PrescriptionTemplate: "处方模板",
+    ExerciseAction: "动作库"
+  };
+  return labels[value] ?? value.replace(/([a-z])([A-Z])/g, "$1 $2");
+}
+
+function metadataSearchText(value: Record<string, unknown>) {
+  return Object.entries(value ?? {})
+    .map(([key, item]) => `${key}:${metadataValue(item)}`)
+    .join(" ");
+}
+
+function includesText(value: unknown, keyword: string) {
+  return String(value ?? "").toLowerCase().includes(keyword.toLowerCase());
+}
+
 export function AdminAuditPage() {
   const [items, setItems] = useState<AuditLogItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [query, setQuery] = useState("");
-  const [actionFilter, setActionFilter] = useState("all");
-  const [resourceFilter, setResourceFilter] = useState("all");
   const [selectedLog, setSelectedLog] = useState<AuditLogItem | null>(null);
+  const [filters, setFilters] = useState({
+    actor: "",
+    action: "",
+    resource: "",
+    date: ""
+  });
 
   useEffect(() => {
     listAuditLogs()
@@ -100,187 +118,184 @@ export function AdminAuditPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const actionOptions = Array.from(new Set(items.map((item) => item.action))).map((value) => ({ value, label: value }));
-  const resourceOptions = Array.from(new Set(items.map((item) => item.resource_type))).map((value) => ({ value, label: value }));
-  const filteredItems = items.filter((item) => {
-    const text = [
-      item.action,
-      item.resource_type,
-      item.resource_id,
-      item.actor_id,
-      item.created_at,
-      metadataSummary(item.metadata)
-    ].join(" ");
-    const matchesQuery = text.toLowerCase().includes(query.toLowerCase());
-    const matchesAction = actionFilter === "all" || item.action === actionFilter;
-    const matchesResource = resourceFilter === "all" || item.resource_type === resourceFilter;
-    return matchesQuery && matchesAction && matchesResource;
-  });
-  const actorCount = new Set(items.map((item) => item.actor_id ?? "system")).size;
-  const prescriptionEvents = items.filter((item) => /Prescription/i.test(item.resource_type)).length;
-  const safetyEvents = items.filter((item) => /REVIEW|RISK|REJECT|BLOCK|ADJUST/i.test(`${item.action} ${metadataSummary(item.metadata)}`)).length;
-  const displayTotal = total || items.length;
-  const latestLog = items[0];
+  const filteredItems = useMemo(() => {
+    return items.filter((item) => {
+      const dateText = item.created_at.slice(0, 10);
+      return (
+        (!filters.actor || includesText(item.actor_id ?? "系统", filters.actor)) &&
+        (!filters.action || includesText(item.action, filters.action)) &&
+        (!filters.resource || includesText(`${item.resource_type} ${item.resource_id ?? ""} ${metadataSearchText(item.metadata)}`, filters.resource)) &&
+        (!filters.date || dateText === filters.date)
+      );
+    });
+  }, [filters, items]);
+
+  const highRiskCount = items.filter((item) => auditTone(item.action) === "red").length;
+  const exportCount = items.filter((item) => item.action.toUpperCase().includes("EXPORT") || item.resource_type.toUpperCase().includes("EXPORT")).length;
+
   const columns: ColumnsType<AuditLogItem> = [
     {
       title: "动作",
       dataIndex: "action",
       key: "action",
-      width: 240,
-      render: (value: string) => <Tag color={actionColor(value)}>{value}</Tag>
+      render: (value: string) => <Tag color={auditTone(value)}>{auditActionLabel(value)}</Tag>
     },
     {
       title: "资源",
       dataIndex: "resource_type",
       key: "resource_type",
-      width: 180
-    },
-    {
-      title: "资源ID",
-      dataIndex: "resource_id",
-      key: "resource_id",
-      width: 100,
-      render: (value: string | null) => value || "-"
+      render: (value: string, record) => (
+        <Space direction="vertical" size={0}>
+          <Typography.Text>{resourceLabel(value)}</Typography.Text>
+          <Typography.Text type="secondary">{record.resource_id || "无资源 ID"}</Typography.Text>
+        </Space>
+      )
     },
     {
       title: "操作者",
       dataIndex: "actor_id",
       key: "actor_id",
-      width: 110,
       render: (value: number | null) => value ?? "系统"
-    },
-    {
-      title: "摘要",
-      dataIndex: "metadata",
-      key: "metadata",
-      ellipsis: true,
-      render: (value: Record<string, unknown>) => <Typography.Text type="secondary">{metadataBrief(value)}</Typography.Text>
     },
     {
       title: "时间",
       dataIndex: "created_at",
-      key: "created_at",
-      width: 170,
-      render: (value: string) => formatDateTime(value)
-    },
-    {
-      title: "操作",
-      key: "operation",
-      fixed: "right",
-      width: 120,
-      render: (_: unknown, record: AuditLogItem) => (
-        <Button aria-label="查看审计详情" size="small" onClick={() => setSelectedLog(record)}>
-          详情
-        </Button>
-      )
+      key: "created_at"
     }
   ];
 
   return (
-    <AppShell role="admin" title="审计日志" subtitle="平台操作、处方安全与科研导出留痕">
-      <Space direction="vertical" size={16} className="onboarding-section admin-audit-page">
-        {error ? <Alert type="error" showIcon message="加载审计日志失败，请确认管理员权限。" /> : null}
-        <section className="audit-workbench-summary" aria-label="审计监控总览">
-          <div>
-            <Typography.Title level={4}>审计监控总览</Typography.Title>
-            <Typography.Paragraph type="secondary">
-              追踪处方生成、反馈调整、专家审核、配置变更与科研导出审批，关键动作可下钻查看结构化元数据。
-            </Typography.Paragraph>
-          </div>
-          <div className="audit-workbench-metrics">
-            <div>
-              <span>留痕总数</span>
-              <strong>{displayTotal}</strong>
-            </div>
-            <div>
-              <span>操作者</span>
-              <strong>{actorCount}</strong>
-            </div>
-            <div>
-              <span>处方相关</span>
-              <strong>{prescriptionEvents}</strong>
-            </div>
-            <div>
-              <span>安全相关</span>
-              <strong>{safetyEvents}</strong>
-            </div>
-          </div>
-        </section>
-        <Card>
-          <div className="audit-workbench-toolbar">
-            <Input
-              aria-label="审计筛选"
-              placeholder="按动作、资源、操作者、时间或元数据摘要筛选"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <Select
-              aria-label="动作类型"
-              value={actionFilter}
-              onChange={setActionFilter}
-              options={[{ value: "all", label: "全部动作" }, ...actionOptions]}
-            />
-            <Select
-              aria-label="资源类型"
-              value={resourceFilter}
-              onChange={setResourceFilter}
-              options={[{ value: "all", label: "全部资源" }, ...resourceOptions]}
-            />
-            <Typography.Text type="secondary">
-              筛选后 {filteredItems.length} / 全部 {displayTotal}
-            </Typography.Text>
-            <Typography.Text type="secondary">每页 12 条，详情在抽屉中查看</Typography.Text>
-            <Link to="/admin/dashboard">
-              <Button>返回看板</Button>
-            </Link>
-          </div>
-          {latestLog ? (
-            <div className="audit-latest-strip">
-              <Typography.Text strong>最新动作</Typography.Text>
-              <Tag color={actionColor(latestLog.action)}>{latestLog.action}</Tag>
-              <Typography.Text type="secondary">
-                {latestLog.resource_type} #{latestLog.resource_id ?? "-"} · {formatDateTime(latestLog.created_at)}
-              </Typography.Text>
-            </div>
-          ) : null}
-          <Table
-            rowKey="id"
-            className="audit-workbench-table"
-            loading={loading}
-            columns={columns}
-            dataSource={filteredItems}
-            pagination={{
-              pageSize: 12,
-              showSizeChanger: false,
-              showTotal: (count, range) => `${range[0]}-${range[1]} / ${count}`
-            }}
-            scroll={{ x: 1120 }}
-            locale={{ emptyText: "暂无审计记录" }}
+    <AppShell
+      role="admin"
+      title="审计日志"
+      subtitle="追踪规则、处方、资料、导出和身份治理操作"
+      statusItems={
+        <>
+          <ClinicalStatusBadge type="readiness" value={error ? "blocked" : "ready"} label={error ? "加载失败" : `留痕 ${total}`} />
+        </>
+      }
+    >
+        <Space direction="vertical" size={16} className="onboarding-section">
+          <DecisionBanner
+            tone={error ? "danger" : "info"}
+            title={error ? "审计日志加载失败" : "关键治理操作已集中留痕"}
+            description="审计页用于追踪规则、处方审核、知识库、科研导出等关键动作。表格保留资源、操作者、元数据和时间。"
+            meta={<ClinicalStatusBadge type="readiness" value={error ? "blocked" : "ready"} label={`共 ${total} 条`} />}
+            actions={
+              <Link to="/admin/dashboard">
+                <Button>返回看板</Button>
+              </Link>
+            }
           />
-        </Card>
-        <Drawer title="审计详情" width={680} open={Boolean(selectedLog)} onClose={() => setSelectedLog(null)} destroyOnClose>
-          {selectedLog ? (
-            <Space direction="vertical" size={16} style={{ width: "100%" }}>
-              <Descriptions column={1} bordered size="small">
-                <Descriptions.Item label="动作">
-                  <Tag color={actionColor(selectedLog.action)}>{selectedLog.action}</Tag>
-                </Descriptions.Item>
-                <Descriptions.Item label="资源">
-                  {selectedLog.resource_type} #{selectedLog.resource_id ?? "-"}
-                </Descriptions.Item>
-                <Descriptions.Item label="操作者">{selectedLog.actor_id ?? "系统"}</Descriptions.Item>
-                <Descriptions.Item label="时间">{formatDateTime(selectedLog.created_at)}</Descriptions.Item>
-              </Descriptions>
-              <div>
-                <Typography.Text strong>元数据字段</Typography.Text>
-                <div className="audit-metadata-list">
+          <div className="status-grid">
+            <StatusTile label="留痕记录" value={total} detail={`当前筛选 ${filteredItems.length} 条`} tone={error ? "danger" : "safe"} />
+            <StatusTile label="高风险操作" value={highRiskCount} detail="驳回、转介、暂停等" tone={highRiskCount ? "warning" : "safe"} />
+            <StatusTile label="导出相关" value={exportCount} detail="审批、下载、脱敏导出" />
+          </div>
+          {error ? <Alert type="error" showIcon message="加载审计日志失败，请确认管理员权限。" /> : null}
+          <WorkbenchSection title="快速过滤" description="基于当前返回记录快速过滤，适合排查最近治理动作。">
+            <div className="audit-quick-filter-row" aria-label="高风险操作筛选">
+              <Button onClick={() => setFilters((current) => ({ ...current, action: "RULE", resource: "RiskRule" }))}>
+                规则变更
+              </Button>
+              <Button onClick={() => setFilters((current) => ({ ...current, action: "PUBLISH", resource: "Prescription" }))}>
+                处方发布
+              </Button>
+              <Button onClick={() => setFilters((current) => ({ ...current, action: "EXPORT", resource: "Export" }))}>
+                导出审批
+              </Button>
+              <Button onClick={() => setFilters((current) => ({ ...current, action: "USER", resource: "User" }))}>
+                权限变更
+              </Button>
+            </div>
+            <div className="audit-filter-grid">
+              <label>
+                操作者
+                <Input
+                  aria-label="按操作者过滤"
+                  value={filters.actor}
+                  onChange={(event) => setFilters((current) => ({ ...current, actor: event.target.value }))}
+                  placeholder="用户 ID 或 系统"
+                  allowClear
+                />
+              </label>
+              <label>
+                动作
+                <Input
+                  aria-label="按动作过滤"
+                  value={filters.action}
+                  onChange={(event) => setFilters((current) => ({ ...current, action: event.target.value }))}
+                  placeholder="批准 / 导出 / 规则"
+                  allowClear
+                />
+              </label>
+              <label>
+                资源或元数据
+                <Input
+                  aria-label="按资源过滤"
+                  value={filters.resource}
+                  onChange={(event) => setFilters((current) => ({ ...current, resource: event.target.value }))}
+                  placeholder="处方 / 风险等级 / 导出申请"
+                  allowClear
+                />
+              </label>
+              <label>
+                日期
+                <Input
+                  aria-label="按日期过滤"
+                  type="date"
+                  value={filters.date}
+                  onChange={(event) => setFilters((current) => ({ ...current, date: event.target.value }))}
+                />
+              </label>
+              <Button
+                onClick={() => setFilters({ actor: "", action: "", resource: "", date: "" })}
+              >
+                清空过滤
+              </Button>
+            </div>
+          </WorkbenchSection>
+          <WorkbenchSection title="审计明细" description="点击行或详情按钮查看完整 metadata。">
+            <Table
+              className="compact-governance-table"
+              rowKey="id"
+              loading={loading}
+              columns={columns}
+              dataSource={filteredItems}
+              pagination={{ pageSize: 12, showSizeChanger: true }}
+              scroll={{ x: 760 }}
+              locale={{ emptyText: "暂无审计记录" }}
+              onRow={(record) => ({
+                onClick: () => setSelectedLog(record)
+              })}
+            />
+          </WorkbenchSection>
+          <Drawer
+            title={selectedLog ? `审计详情 #${selectedLog.id}` : "审计详情"}
+            width={640}
+            open={Boolean(selectedLog)}
+            onClose={() => setSelectedLog(null)}
+            destroyOnClose
+          >
+            {selectedLog ? (
+              <Space direction="vertical" size={16} className="onboarding-section">
+                <Descriptions bordered column={1} size="small">
+                  <Descriptions.Item label="动作">
+                    <Tag color={auditTone(selectedLog.action)}>{auditActionLabel(selectedLog.action)}</Tag>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="资源">{resourceLabel(selectedLog.resource_type)}</Descriptions.Item>
+                  <Descriptions.Item label="资源 ID">{selectedLog.resource_id || "-"}</Descriptions.Item>
+                  <Descriptions.Item label="操作者">{selectedLog.actor_id ?? "系统"}</Descriptions.Item>
+                  <Descriptions.Item label="时间">{selectedLog.created_at}</Descriptions.Item>
+                </Descriptions>
+                <div className="metadata-detail-panel">
+                  <Typography.Text strong>审计元数据与变更差异</Typography.Text>
                   <MetadataList value={selectedLog.metadata} />
                 </div>
-              </div>
-            </Space>
-          ) : null}
-        </Drawer>
-      </Space>
+              </Space>
+            ) : null}
+          </Drawer>
+        </Space>
     </AppShell>
   );
 }

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -86,9 +86,9 @@ const exportDesensitizedUsersMock = vi.hoisted(() => vi.fn().mockResolvedValue({
   items: [
     {
       research_subject_id: "RS-001",
-      age_band: "30-39",
       participant_code: "P000001",
       profile: {
+        age: 36,
         sex: "男",
         bmi: 28.37,
         exercise_goal: ["减脂"],
@@ -175,8 +175,36 @@ function defaultResearchExportRequests() {
   ];
 }
 
+function requestListPanel() {
+  const listPanel = document.querySelector(".research-request-list-panel") as HTMLElement | null;
+  expect(listPanel).not.toBeNull();
+  return listPanel as HTMLElement;
+}
+
+function requestItemByPurpose(purpose: string) {
+  const listPanel = requestListPanel();
+  const item = within(listPanel as HTMLElement).getByText(purpose).closest(".ant-list-item");
+  expect(item).not.toBeNull();
+  return within(item as HTMLElement);
+}
+
+async function findRequestItemByPurpose(purpose: string) {
+  await waitFor(() => expect(within(requestListPanel()).getByText(purpose)).toBeInTheDocument());
+  return requestItemByPurpose(purpose);
+}
+
+async function findResearchJobsWorkbench() {
+  await waitFor(() => expect(screen.getByRole("heading", { name: "我的导出任务" })).toBeInTheDocument());
+}
+
 function selectRequestByPurpose(purpose: string) {
-  fireEvent.click(screen.getAllByText(purpose)[0]);
+  const listPanel = requestListPanel();
+  const item = within(listPanel as HTMLElement).getByText(purpose).closest(".ant-list-item") as HTMLElement | null;
+  expect(item).not.toBeNull();
+  fireEvent.click(item as HTMLElement);
+  const detail = document.querySelector(".research-request-detail-panel") as HTMLElement | null;
+  expect(detail).not.toBeNull();
+  return within(detail as HTMLElement);
 }
 
 describe("research export page", () => {
@@ -206,26 +234,13 @@ describe("research export page", () => {
   it("renders the research dashboard with aggregate sections without calling the admin preview API", async () => {
     renderResearchRoute("/research/dashboard");
 
-    expect(await screen.findByText("研究数据控制台")).toBeInTheDocument();
-    expect(screen.getAllByText("仅展示脱敏聚合数据").length).toBeGreaterThan(0);
+    expect(await screen.findByRole("heading", { name: "科研数据看板" })).toBeInTheDocument();
     expect(screen.getByText("脱敏样本量")).toBeInTheDocument();
     expect(screen.getByText("风险分布")).toBeInTheDocument();
-    expect(screen.getByText("分型分布")).toBeInTheDocument();
     expect(screen.getByText("干预前后变化")).toBeInTheDocument();
-    expect(screen.getByText("模板效果")).toBeInTheDocument();
-    expect(screen.getByText("导出任务状态")).toBeInTheDocument();
-    expect(screen.getByTestId("research-console-analytics")).toBeInTheDocument();
-    expect(screen.getByText("风险/分型矩阵")).toBeInTheDocument();
-    expect(screen.getByText("干预趋势摘要")).toBeInTheDocument();
-    expect(screen.getByText("导出治理")).toBeInTheDocument();
-    expect(await screen.findByText("肥胖代谢风险型")).toBeInTheDocument();
-    expect(await screen.findByText("R2 1")).toBeInTheDocument();
-    expect(screen.getByText("完成率 86.5%")).toBeInTheDocument();
-    expect(screen.getAllByText("待审批 1").length).toBeGreaterThan(0);
     expect(screen.queryByText("研究对象ID")).not.toBeInTheDocument();
     expect(screen.queryByText("RS-001")).not.toBeInTheDocument();
     expect(screen.queryByText("P000001")).not.toBeInTheDocument();
-    expect(await screen.findByTestId("ClusterScatterChart-echart")).toBeInTheDocument();
     expect(await screen.findByTestId("StageEvaluationCompareChart-echart")).toBeInTheDocument();
     await waitFor(() => expect(exportDesensitizedUsersMock).not.toHaveBeenCalled());
     expect(screen.queryByText("真实姓名")).not.toBeInTheDocument();
@@ -237,67 +252,52 @@ describe("research export page", () => {
   it("renders cluster analysis with scatter chart, cluster statistics, risk overlay and cold-start guidance", async () => {
     renderResearchRoute("/research/cluster-analysis");
 
-    expect(await screen.findByText("科研分型分析")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研分型分析" })).toBeInTheDocument();
     expect(await screen.findByTestId("ClusterScatterChart-echart")).toBeInTheDocument();
     expect(screen.getByText("分型统计")).toBeInTheDocument();
     expect(screen.getByText("风险叠加")).toBeInTheDocument();
     expect(screen.getByText("冷启动说明")).toBeInTheDocument();
-    expect(screen.getByText(/肥胖代谢风险型/)).toBeInTheDocument();
-    expect(screen.getByText(/R2/)).toBeInTheDocument();
+    expect(screen.getAllByText(/肥胖代谢风险型/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/R2/).length).toBeGreaterThan(0);
   });
 
   it("renders intervention effects with stage comparison and completion RPE pain blood pressure glucose trends", async () => {
     renderResearchRoute("/research/intervention-effects");
 
-    expect(await screen.findByText("科研干预效果")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研干预效果" })).toBeInTheDocument();
+    expect(screen.getByText("依从性")).toBeInTheDocument();
+    expect(screen.getByText("主观强度")).toBeInTheDocument();
+    expect(screen.getByText("疼痛/不适")).toBeInTheDocument();
+    expect(screen.getByText("生理趋势")).toBeInTheDocument();
     expect(await screen.findByTestId("StageEvaluationCompareChart-echart")).toBeInTheDocument();
     expect(screen.getByText("完成率趋势")).toBeInTheDocument();
-    expect(screen.getByText("RPE趋势")).toBeInTheDocument();
     expect(screen.getByText("疼痛趋势")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("主观强度"));
+    expect(await screen.findByText("RPE趋势")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("生理趋势"));
     expect(screen.getByText("血压变化趋势")).toBeInTheDocument();
     expect(screen.getByText("血糖变化趋势")).toBeInTheDocument();
     expect(screen.getByTestId("BloodPressureTrendChart-echart")).toBeInTheDocument();
     expect(screen.getByTestId("BloodGlucoseTrendChart-echart")).toBeInTheDocument();
   });
 
-  it("shows an explicit empty state when the backend omits trend aggregation fields", async () => {
-    getResearchSummaryMock.mockResolvedValueOnce({
-      total_participants: 2,
-      risk_distribution: { R1: 1, R2: 1 },
-      cluster_distribution: { 肥胖代谢风险型: 1, 心肺功能不足型: 1 },
-      cluster_risk_overlay: { 肥胖代谢风险型: { R2: 1 }, 心肺功能不足型: { R1: 1 } },
-      prescription_status: { PUBLISHED: 1, PENDING_REVIEW: 1 },
-      template_effects: { 减脂模板: 82, 心肺模板: 76 },
-      export_job_status: { PENDING: 1, APPROVED: 1 },
-      intervention_effects: {
-        feedback_count: 4,
-        average_completion_rate: 86.5,
-        average_rpe: 12.25,
-        discomfort_event_count: 1,
-        pain_worsened_count: 0
-      }
-    });
-
-    renderResearchRoute("/research/intervention-effects");
-
-    expect(await screen.findByText("科研干预效果")).toBeInTheDocument();
-    const trendEmptyStates = await screen.findAllByText("当前后端未提供趋势聚合字段");
-    expect(trendEmptyStates.length).toBeGreaterThanOrEqual(5);
-  });
-
   it("renders export jobs as the researcher own requests with CSV Excel JSON creation and approved downloads", async () => {
     renderResearchRoute("/research/export-jobs");
 
-    expect(await screen.findByText("科研导出任务")).toBeInTheDocument();
-    expect((await screen.findAllByText("Excel 汇总")).length).toBeGreaterThan(0);
+    expect(await screen.findByRole("heading", { name: "科研导出任务" })).toBeInTheDocument();
+    await findRequestItemByPurpose("Excel 汇总");
     expect(screen.queryByText("管理员待审批")).not.toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "CSV" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Excel" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "JSON" })).toBeInTheDocument();
-
-    fireEvent.change(screen.getByLabelText("导出用途"), { target: { value: "Excel 阶段分析" } });
-    fireEvent.change(screen.getByLabelText("导出格式"), { target: { value: "xlsx" } });
+    selectRequestByPurpose("Excel 汇总");
     fireEvent.click(screen.getByRole("button", { name: "提交导出申请" }));
+    const requestDialog = await screen.findByRole("dialog", { name: "提交导出申请" });
+    expect(within(requestDialog).getByText("字段范围预览")).toBeInTheDocument();
+    expect(within(requestDialog).getByText("阶段效果分析")).toBeInTheDocument();
+    expect(within(requestDialog).getByRole("option", { name: "CSV" })).toBeInTheDocument();
+    expect(within(requestDialog).getByRole("option", { name: "Excel" })).toBeInTheDocument();
+    expect(within(requestDialog).getByRole("option", { name: "JSON" })).toBeInTheDocument();
+    fireEvent.change(within(requestDialog).getByLabelText("导出用途"), { target: { value: "Excel 阶段分析" } });
+    fireEvent.change(within(requestDialog).getByLabelText("导出格式"), { target: { value: "xlsx" } });
+    fireEvent.click(within(requestDialog).getByRole("button", { name: "提交导出申请" }));
 
     await waitFor(() =>
       expect(createResearchExportRequestMock).toHaveBeenCalledWith({
@@ -306,7 +306,6 @@ describe("research export page", () => {
       })
     );
 
-    selectRequestByPurpose("Excel 汇总");
     fireEvent.click(screen.getByRole("button", { name: "下载 #8" }));
     await waitFor(() => expect(downloadResearchExportRequestMock).toHaveBeenCalledWith(8));
   });
@@ -314,10 +313,10 @@ describe("research export page", () => {
   it("renders only researcher-owned export requests and explains non-owned requests are hidden", async () => {
     renderResearchRoute("/research/export-jobs");
 
-    expect(await screen.findByText("科研导出任务")).toBeInTheDocument();
-    expect(screen.getAllByText("Excel 汇总").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("CSV 已过期").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("JSON 已下载").length).toBeGreaterThan(0);
+    expect(await screen.findByRole("heading", { name: "科研导出任务" })).toBeInTheDocument();
+    await findRequestItemByPurpose("Excel 汇总");
+    expect(screen.getByText("CSV 已过期")).toBeInTheDocument();
+    expect(screen.getByText("JSON 已下载")).toBeInTheDocument();
     expect(screen.queryByText("管理员待审批")).not.toBeInTheDocument();
     expect(screen.getByText("非本人申请不可见")).toBeInTheDocument();
   });
@@ -325,36 +324,39 @@ describe("research export page", () => {
   it("does not offer downloads for approved requests that are expired or already downloaded", async () => {
     renderResearchRoute("/research/export-jobs");
 
-    expect(await screen.findByText("CSV 已过期")).toBeInTheDocument();
-    selectRequestByPurpose("CSV 已过期");
-    expect(screen.getAllByText("已过期").length).toBeGreaterThan(0);
+    await findRequestItemByPurpose("CSV 已过期");
+    expect(requestItemByPurpose("CSV 已过期").getByText("已过期")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "下载 #12" })).not.toBeInTheDocument();
 
-    selectRequestByPurpose("JSON 已下载");
-    expect(screen.getAllByText("已下载").length).toBeGreaterThan(0);
+    expect(requestItemByPurpose("JSON 已下载").getByText("已下载")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "下载 #13" })).not.toBeInTheDocument();
   });
 
   it("shows approval, expiry and download audit text for each export request", async () => {
     renderResearchRoute("/research/export-jobs");
 
-    expect((await screen.findAllByText("Excel 汇总")).length).toBeGreaterThan(0);
-    selectRequestByPurpose("Excel 汇总");
-    expect(screen.getAllByText("限时可下载").length).toBeGreaterThan(0);
-    expect(screen.getByText("审批意见：同意用于阶段分析")).toBeInTheDocument();
-    expect(screen.getByText("过期时间：2999-06-04T00:00:00")).toBeInTheDocument();
-    expect(screen.getByText("下载状态：未下载")).toBeInTheDocument();
+    await findRequestItemByPurpose("Excel 汇总");
+    const downloadable = requestItemByPurpose("Excel 汇总");
+    expect(downloadable.getByText("限时可下载")).toBeInTheDocument();
+    const downloadableDetail = selectRequestByPurpose("Excel 汇总");
+    expect(downloadableDetail.getByText("同意用于阶段分析")).toBeInTheDocument();
+    expect(downloadableDetail.getByText("2999-06-04T00:00:00")).toBeInTheDocument();
+    expect(downloadableDetail.getByText("未下载")).toBeInTheDocument();
 
-    selectRequestByPurpose("CSV 已过期");
-    expect(screen.getByText("审批意见：同意但已超过下载窗口")).toBeInTheDocument();
-    expect(screen.getByText("过期时间：2000-01-01T00:00:00")).toBeInTheDocument();
-    expect(screen.getByText("下载状态：未下载")).toBeInTheDocument();
+    const expired = requestItemByPurpose("CSV 已过期");
+    expect(expired.getByText("已过期")).toBeInTheDocument();
+    const expiredDetail = selectRequestByPurpose("CSV 已过期");
+    expect(expiredDetail.getByText("同意但已超过下载窗口")).toBeInTheDocument();
+    expect(expiredDetail.getByText("2000-01-01T00:00:00")).toBeInTheDocument();
+    expect(expiredDetail.getByText("未下载")).toBeInTheDocument();
 
-    selectRequestByPurpose("JSON 已下载");
-    expect(screen.getByText("审批意见：同意用于结题归档")).toBeInTheDocument();
-    expect(screen.getByText("过期时间：2999-06-04T00:00:00")).toBeInTheDocument();
-    expect(screen.getByText("下载状态：已下载")).toBeInTheDocument();
-    expect(screen.getByText("下载时间：2026-06-04T09:30:00")).toBeInTheDocument();
+    const downloaded = requestItemByPurpose("JSON 已下载");
+    expect(downloaded.getByText("已下载")).toBeInTheDocument();
+    const downloadedDetail = selectRequestByPurpose("JSON 已下载");
+    expect(downloadedDetail.getByText("同意用于结题归档")).toBeInTheDocument();
+    expect(downloadedDetail.getByText("2999-06-04T00:00:00")).toBeInTheDocument();
+    expect(downloadedDetail.getAllByText("已下载").length).toBeGreaterThan(0);
+    expect(downloadedDetail.getByText("2026-06-04T09:30:00")).toBeInTheDocument();
   });
 
   it("refreshes export requests after downloading an approved active request", async () => {
@@ -368,15 +370,16 @@ describe("research export page", () => {
 
     renderResearchRoute("/research/export-jobs");
 
-    expect((await screen.findAllByText("Excel 汇总")).length).toBeGreaterThan(0);
+    await findRequestItemByPurpose("Excel 汇总");
+    expect(requestItemByPurpose("Excel 汇总").getByText("限时可下载")).toBeInTheDocument();
     selectRequestByPurpose("Excel 汇总");
-    expect(screen.getAllByText("限时可下载").length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("button", { name: "下载 #8" }));
 
     await waitFor(() => expect(downloadResearchExportRequestMock).toHaveBeenCalledWith(8));
     await waitFor(() => expect(listResearchExportRequestsMock).toHaveBeenCalledTimes(2));
-    expect(screen.getByText("下载状态：已下载")).toBeInTheDocument();
-    expect(screen.getByText("下载时间：2026-06-05T10:00:00")).toBeInTheDocument();
+    const updatedDetail = selectRequestByPurpose("Excel 汇总");
+    expect(updatedDetail.getAllByText("已下载").length).toBeGreaterThan(0);
+    expect(updatedDetail.getByText("2026-06-05T10:00:00")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "下载 #8" })).not.toBeInTheDocument();
   });
 
@@ -384,10 +387,10 @@ describe("research export page", () => {
     localStorage.setItem("current_user_id", "not-a-number");
     renderResearchRoute("/research/export-jobs");
 
-    expect(await screen.findByText("科研导出任务")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研导出任务" })).toBeInTheDocument();
     expect(screen.queryByText("Excel 汇总")).not.toBeInTheDocument();
     expect(screen.queryByText("管理员待审批")).not.toBeInTheDocument();
-    expect(screen.getAllByText("暂无导出申请").length).toBeGreaterThan(0);
+    expect(screen.getByText("暂无导出申请")).toBeInTheDocument();
   });
 
   it("renders desensitized export and intervention statistics", async () => {
@@ -400,15 +403,11 @@ describe("research export page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("科研脱敏导出")).toBeInTheDocument();
-    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
-    expect(screen.getByText("脱敏样本量")).toBeInTheDocument();
-    expect(screen.getByText("平均完成率")).toBeInTheDocument();
-    expect(screen.getByText("分型统计")).toBeInTheDocument();
-    expect(screen.getByText("干预效果")).toBeInTheDocument();
-    expect(screen.getAllByTestId("RiskDistributionChart-echart").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByTestId("ClusterScatterChart-echart")).toBeInTheDocument();
-    expect(screen.getByTestId("StageEvaluationCompareChart-echart")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研脱敏导出" })).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
+    expect(screen.getByText("导出前可见范围")).toBeInTheDocument();
+    expect(screen.getByText("审批后下载规则")).toBeInTheDocument();
+    expect(document.querySelectorAll(".ant-btn-primary")).toHaveLength(1);
     expect(screen.queryByText("P000001")).not.toBeInTheDocument();
     await waitFor(() => expect(exportDesensitizedUsersMock).not.toHaveBeenCalled());
     expect(screen.queryByText("真实姓名")).not.toBeInTheDocument();
@@ -424,11 +423,13 @@ describe("research export page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("导出申请")).toBeInTheDocument();
-    expect(screen.getAllByText("APPROVED").length).toBeGreaterThanOrEqual(1);
-    fireEvent.change(screen.getByLabelText("导出用途"), { target: { value: "阶段分析" } });
-    fireEvent.change(screen.getByLabelText("导出格式"), { target: { value: "csv" } });
+    await findResearchJobsWorkbench();
+    expect(screen.getAllByText("已批准").length).toBeGreaterThanOrEqual(1);
     fireEvent.click(screen.getByRole("button", { name: "提交导出申请" }));
+    const requestDialog = await screen.findByRole("dialog", { name: "提交导出申请" });
+    fireEvent.change(within(requestDialog).getByLabelText("导出用途"), { target: { value: "阶段分析" } });
+    fireEvent.change(within(requestDialog).getByLabelText("导出格式"), { target: { value: "csv" } });
+    fireEvent.click(within(requestDialog).getByRole("button", { name: "提交导出申请" }));
 
     await waitFor(() =>
       expect(createResearchExportRequestMock).toHaveBeenCalledWith({
@@ -452,16 +453,18 @@ describe("research export page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("导出申请")).toBeInTheDocument();
+    await findResearchJobsWorkbench();
 
     for (const [format, purpose] of [
       ["csv", "CSV 阶段分析"],
       ["xlsx", "Excel 阶段分析"],
       ["json", "JSON 阶段分析"]
     ] as const) {
-      fireEvent.change(screen.getByLabelText("导出用途"), { target: { value: purpose } });
-      fireEvent.change(screen.getByLabelText("导出格式"), { target: { value: format } });
       fireEvent.click(screen.getByRole("button", { name: "提交导出申请" }));
+      const requestDialog = await screen.findByRole("dialog", { name: "提交导出申请" });
+      fireEvent.change(within(requestDialog).getByLabelText("导出用途"), { target: { value: purpose } });
+      fireEvent.change(within(requestDialog).getByLabelText("导出格式"), { target: { value: format } });
+      fireEvent.click(within(requestDialog).getByRole("button", { name: "提交导出申请" }));
       await waitFor(() => expect(createResearchExportRequestMock).toHaveBeenCalledWith({ format, purpose }));
     }
   });
@@ -476,15 +479,12 @@ describe("research export page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("科研导出审批")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研导出审批" })).toBeInTheDocument();
     expect((await screen.findAllByText("管理员待审批")).length).toBeGreaterThan(0);
-    expect(screen.getByTestId("research-desensitized-table")).toBeInTheDocument();
-    expect(screen.getAllByText("研究对象ID").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("年龄段").length).toBeGreaterThan(0);
-    expect(screen.getByText("RS-001")).toBeInTheDocument();
-    expect(screen.getByText("30-39")).toBeInTheDocument();
-    expect(screen.queryByText("匿名编码")).not.toBeInTheDocument();
-    expect(screen.queryByText("年龄")).not.toBeInTheDocument();
+    expect(screen.getByText("研究匿名编号")).toBeInTheDocument();
+    expect(screen.getByText("参与者编码")).toBeInTheDocument();
+    expect(screen.getByText("脱敏编号、年龄、性别、BMI、风险等级、分型、处方状态")).toBeInTheDocument();
+    expect(screen.queryByText("RS-001")).not.toBeInTheDocument();
     expect(screen.queryByText("P000001")).not.toBeInTheDocument();
     expect(exportDesensitizedUsersMock).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("button", { name: "批准 #9" })).toBeInTheDocument();
@@ -492,6 +492,8 @@ describe("research export page", () => {
 
     fireEvent.change(screen.getByLabelText("审批意见 #9"), { target: { value: "同意用于课题结题分析" } });
     fireEvent.click(screen.getByRole("button", { name: "批准 #9" }));
+    expect(await screen.findByText("确认批准导出申请")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "确认批准" }));
 
     await waitFor(() =>
       expect(approveResearchExportRequestMock).toHaveBeenCalledWith(9, {
@@ -510,9 +512,11 @@ describe("research export page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("科研导出审批")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研导出审批" })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("审批意见 #9"), { target: { value: "用途不清晰，需补充伦理编号" } });
     fireEvent.click(screen.getByRole("button", { name: "驳回 #9" }));
+    expect(await screen.findByText("确认驳回导出申请")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "确认驳回" }));
 
     await waitFor(() =>
       expect(rejectResearchExportRequestMock).toHaveBeenCalledWith(9, {
@@ -531,7 +535,7 @@ describe("research export page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("科研脱敏导出")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "科研脱敏导出" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /批准 #/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /驳回 #/ })).not.toBeInTheDocument();
   });

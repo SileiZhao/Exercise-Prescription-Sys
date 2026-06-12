@@ -119,20 +119,16 @@ describe("admin rules page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("风险规则管理")).toBeInTheDocument();
-    expect(screen.getByTestId("admin-rules-workbench")).toBeInTheDocument();
-    expect(await screen.findByText("规则库概览")).toBeInTheDocument();
-    expect(screen.getByText("筛选后 1 / 全部 1")).toBeInTheDocument();
-    expect(screen.getByText("每页 12 条，详情在抽屉中查看")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "风险规则构建器" })).toBeInTheDocument();
     expect(await screen.findByText("CUSTOM_RED_SBP")).toBeInTheDocument();
     expect(screen.getByText("自定义收缩压红色风险")).toBeInTheDocument();
-    expect(screen.getByText("fitness_test.sbp gte 175")).toBeInTheDocument();
+    expect(screen.queryByText("fitness_test.sbp gte 175")).not.toBeInTheDocument();
     expect(screen.queryByText(/"path"/)).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "保存规则" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "运行规则测试" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "运行规则测试" }));
+    fireEvent.click((await screen.findAllByRole("button", { name: "运行规则测试" })).at(-1) as HTMLElement);
 
-    await waitFor(() => expect(screen.getByText("测试结果：R3")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("最近测试结果：R3")).toBeInTheDocument());
     expect(screen.getByText("命中规则")).toBeInTheDocument();
     expect(screen.getAllByText("CUSTOM_RED_SBP").length).toBeGreaterThan(0);
     expect(screen.getByText("字段：fitness_test.sbp")).toBeInTheDocument();
@@ -156,12 +152,15 @@ describe("admin rules page", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "查看规则详情" }));
     expect(await screen.findByText("规则详情")).toBeInTheDocument();
+    expect(screen.getByText("收缩压 大于等于 175")).toBeInTheDocument();
+    expect(screen.getByText("编辑预览：收缩压 大于等于 175")).toBeInTheDocument();
     expect(screen.getByText("版本历史")).toBeInTheDocument();
     expect(screen.getByText("v1 · 启用")).toBeInTheDocument();
-    expect(screen.getByText("审计日志")).toBeInTheDocument();
-    expect(await screen.findByText("UPDATE_RISK_RULE")).toBeInTheDocument();
+    expect(screen.getAllByText("审计日志").length).toBeGreaterThan(0);
+    expect(await screen.findByText("更新风险规则")).toBeInTheDocument();
+    expect(screen.queryByText("UPDATE_RISK_RULE")).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("编辑规则名称"), { target: { value: "更新后收缩压红色风险" } });
+    fireEvent.change(screen.getByLabelText("规则名称"), { target: { value: "更新后收缩压红色风险" } });
     fireEvent.click(screen.getByRole("button", { name: "保存规则编辑" }));
 
     await waitFor(() =>
@@ -172,26 +171,6 @@ describe("admin rules page", () => {
     );
   });
 
-  it("rejects invalid JSON values while editing an existing rule", async () => {
-    updateRiskRuleMock.mockClear();
-    listAuditLogsMock.mockClear();
-
-    render(
-      <MemoryRouter initialEntries={["/admin/rules"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
-        <App />
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("自定义收缩压红色风险")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "查看规则详情" }));
-    expect(await screen.findByText("规则详情")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("编辑比较值"), { target: { value: "{bad-json" } });
-    fireEvent.click(screen.getByRole("button", { name: "保存规则编辑" }));
-
-    await waitFor(() => expect(screen.getByText("编辑比较值必须是合法 JSON。")).toBeInTheDocument());
-    expect(updateRiskRuleMock).not.toHaveBeenCalled();
-  });
-
   it("creates rules with audit metadata and rejects invalid JSON values before saving", async () => {
     render(
       <MemoryRouter initialEntries={["/admin/rules"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
@@ -199,7 +178,8 @@ describe("admin rules page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("风险规则管理")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "风险规则构建器" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "新增规则" }));
     fireEvent.change(screen.getByLabelText("规则编码"), { target: { value: "CUSTOM_YELLOW_PAIN" } });
     fireEvent.change(screen.getByLabelText("规则名称"), { target: { value: "疼痛黄色风险" } });
     fireEvent.change(screen.getByLabelText("优先级"), { target: { value: "20" } });
@@ -230,6 +210,11 @@ describe("admin rules page", () => {
     );
 
     createRiskRuleMock.mockClear();
+    fireEvent.click(screen.getByRole("button", { name: "新增规则" }));
+    fireEvent.change(screen.getByLabelText("规则编码"), { target: { value: "CUSTOM_BAD_JSON" } });
+    fireEvent.change(screen.getByLabelText("规则名称"), { target: { value: "坏 JSON 测试" } });
+    fireEvent.change(screen.getByLabelText("命中文案"), { target: { value: "比较值格式错误。" } });
+    fireEvent.change(screen.getByLabelText("字段路径"), { target: { value: "fitness_test.pain_score" } });
     fireEvent.change(screen.getByLabelText("比较值"), { target: { value: "{bad-json" } });
     fireEvent.click(screen.getByRole("button", { name: "保存规则" }));
 

@@ -1,7 +1,6 @@
-import { Alert, Button, Card, Col, Empty, Input, List, Row, Space, Table, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, List, Modal, Row, Space, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Database, FlaskConical, ListChecks } from "lucide-react";
 
 import {
   approveResearchExportRequest,
@@ -11,20 +10,18 @@ import {
   getResearchSummary,
   listResearchExportRequests,
   rejectResearchExportRequest,
-  type DesensitizedUserRow,
   type ResearchExportFormat,
   type ResearchExportRequest,
   type ResearchSummary
 } from "../../api/researchExport";
-import { AppShell, ChartCard, EmptyState, MetricCard, PageHero } from "../../components/ProductUI";
+import { AppShell, ChartCard, ClinicalStatusBadge, ClinicalSummaryStrip, DataNote, DataWorkbench, DecisionBanner, formatStatusLabel, statusTagColor, StatusTile, WorkbenchSection } from "../../components/ProductUI";
 import {
   BloodGlucoseTrendChart,
   BloodPressureTrendChart,
   ClusterScatterChart,
   FeedbackTrendChart,
   RiskDistributionChart,
-  StageEvaluationCompareChart,
-  TemplateUsageChart
+  StageEvaluationCompareChart
 } from "../../components/charts";
 
 function namedValues(data: Record<string, number> = {}) {
@@ -51,52 +48,45 @@ function effectCompare(summary: ResearchSummary | null) {
   ];
 }
 
-const TREND_AGGREGATION_EMPTY_TEXT = "当前后端未提供趋势聚合字段";
-
 function trendValues(items: Array<{ date: string; value?: number; rpe?: number; pain?: number; completionRate?: number }> = []) {
   return items;
 }
 
-function hasTrendRows<T>(items: T[] | undefined) {
-  return Array.isArray(items) && items.length > 0;
+function namedDataRows(data: Record<string, number> = {}, valueLabel = "样本") {
+  return Object.entries(data).map(([label, value]) => ({
+    label,
+    values: [{ label: valueLabel, value }]
+  }));
 }
 
-function renderTrendEmpty() {
-  return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={TREND_AGGREGATION_EMPTY_TEXT} />;
+function effectDataRows(summary: ResearchSummary | null) {
+  return effectCompare(summary).map((item) => ({
+    label: item.metric,
+    values: [
+      { label: "干预前", value: item.previous },
+      { label: "当前", value: item.current }
+    ]
+  }));
 }
 
-function formatResearchNumber(value: number | undefined, suffix = "") {
-  if (typeof value !== "number" || Number.isNaN(value)) {
-    return "-";
+function chartCellValue(value: unknown) {
+  if (value === null || value === undefined) {
+    return null;
   }
-  const text = Number.isInteger(value) ? String(value) : value.toFixed(1);
-  return `${text}${suffix}`;
+  if (typeof value === "number" || typeof value === "string") {
+    return value;
+  }
+  return String(value);
 }
 
-function exportStatusLabel(status: string) {
-  if (status === "PENDING") return "待审批";
-  if (status === "APPROVED") return "已审批";
-  if (status === "REJECTED") return "已驳回";
-  return status;
-}
-
-function exportStatusColor(status: string) {
-  if (status === "PENDING") return "gold";
-  if (status === "APPROVED") return "green";
-  if (status === "REJECTED") return "red";
-  return "blue";
-}
-
-function riskTagColor(level: string) {
-  if (level === "R3") return "red";
-  if (level === "R2") return "orange";
-  if (level === "R1") return "cyan";
-  if (level === "R0") return "green";
-  return "blue";
-}
-
-function noticeAlertType(message: string) {
-  return message.includes("失败") || message.includes("不能为空") ? "error" : "success";
+function trendDataRows(items: Array<Record<string, unknown>>, valueLabels: Record<string, string>) {
+  return items.map((item, index) => ({
+    label: String(item.date ?? item.label ?? `第 ${index + 1} 条`),
+    values: Object.entries(valueLabels).map(([key, label]) => ({
+      label,
+      value: chartCellValue(item[key])
+    }))
+  }));
 }
 
 function currentUserId() {
@@ -112,6 +102,48 @@ function routeMode(pathname: string) {
   if (pathname.endsWith("/export-jobs")) return "jobs";
   return "export";
 }
+
+const researchRoutes = [
+  {
+    mode: "dashboard",
+    title: "总览",
+    href: "/research/dashboard",
+    description: "样本、风险、完成率和 RPE"
+  },
+  {
+    mode: "cluster",
+    title: "分型",
+    href: "/research/cluster-analysis",
+    description: "聚类规模和风险叠加"
+  },
+  {
+    mode: "effects",
+    title: "干预",
+    href: "/research/intervention-effects",
+    description: "完成率、疼痛和生理趋势"
+  },
+  {
+    mode: "jobs",
+    title: "导出",
+    href: "/research/export-jobs",
+    description: "申请、审批和下载状态"
+  }
+];
+
+const exportFieldScope = [
+  "研究匿名编号",
+  "参与者编码",
+  "年龄 / 性别 / BMI",
+  "风险等级",
+  "分型标签",
+  "处方状态"
+];
+
+const exportPurposeTemplates = [
+  "阶段效果分析",
+  "分型结构分析",
+  "课题结题归档"
+];
 
 function parseDateTime(value: string | null) {
   if (!value) {
@@ -147,43 +179,6 @@ function exportAvailabilityText(request: ResearchExportRequest) {
   return "限时可下载";
 }
 
-
-function ResearchPrivacyStrip({
-  isAdminMode,
-  summary,
-  requests,
-  visibleCount
-}: {
-  isAdminMode: boolean;
-  summary: ResearchSummary | null;
-  requests: ResearchExportRequest[];
-  visibleCount: number;
-}) {
-  const pending = requests.filter((item) => item.status === "PENDING").length;
-  const approved = requests.filter((item) => item.status === "APPROVED").length;
-  const expired = requests.filter((item) => isExportExpired(item)).length;
-  const downloaded = requests.filter((item) => isExportDownloaded(item)).length;
-  return (
-    <section className={`research-privacy-strip ${isAdminMode ? "is-admin-mode" : ""}`} data-testid="research-privacy-strip">
-      <div>
-        <Typography.Text className="page-hero-eyebrow">脱敏治理</Typography.Text>
-        <Typography.Title level={4}>仅展示脱敏聚合数据</Typography.Title>
-        <Typography.Text type="secondary">
-          姓名、手机、身份证等敏感字段永不进入科研端；导出必须审批，下载限时并写入审计。
-        </Typography.Text>
-      </div>
-      <div className="research-privacy-kpis">
-        <div><span>脱敏样本</span><strong>{summary?.total_participants ?? 0}</strong></div>
-        <div><span>{isAdminMode ? "全部申请" : "本人申请"}</span><strong>{visibleCount}</strong></div>
-        <div><span>待审批</span><strong>{pending}</strong></div>
-        <div><span>已批准</span><strong>{approved}</strong></div>
-        <div><span>已下载</span><strong>{downloaded}</strong></div>
-        <div><span>已过期</span><strong>{expired}</strong></div>
-      </div>
-    </section>
-  );
-}
-
 function exportAvailabilityColor(request: ResearchExportRequest) {
   const text = exportAvailabilityText(request);
   if (text === "限时可下载") return "green";
@@ -192,17 +187,57 @@ function exportAvailabilityColor(request: ResearchExportRequest) {
   return "gold";
 }
 
+function exportNextStep(request: ResearchExportRequest) {
+  if (request.status === "PENDING") return "等待管理员审批，可在审批记录中查看进度";
+  if (request.status === "REJECTED") return "按审批意见补充用途后重新申请";
+  if (isExportDownloaded(request)) return "文件已下载，如需再次使用请重新申请";
+  if (isExportExpired(request)) return "下载窗口已过期，请重新申请";
+  return "可在有效期内下载一次";
+}
+
+function researchReadiness(summary: ResearchSummary | null, total: number, hasError: boolean) {
+  const sampleCount = summary?.total_participants ?? total;
+  const feedbackCount = summary?.intervention_effects.feedback_count ?? 0;
+  if (hasError) {
+    return {
+      tone: "danger" as const,
+      title: "当前数据暂不可用于分析",
+      description: "科研汇总加载失败，需要先恢复数据服务或确认科研权限。"
+    };
+  }
+  if (!sampleCount) {
+    return {
+      tone: "warning" as const,
+      title: "当前数据暂不可用于分析",
+      description: "脱敏样本量为 0，暂不支持分型、干预效果或导出判断。"
+    };
+  }
+  if (sampleCount < 10 || feedbackCount < 10) {
+    return {
+      tone: "warning" as const,
+      title: "当前数据仅适合探索性观察",
+      description: `脱敏样本 ${sampleCount} 例，反馈记录 ${feedbackCount} 条，适合查看结构，不适合输出稳定结论。`
+    };
+  }
+  return {
+    tone: "safe" as const,
+    title: "当前数据可用于脱敏聚合分析",
+    description: `脱敏样本 ${sampleCount} 例，反馈记录 ${feedbackCount} 条，可查看风险分布、分型结构和干预趋势。`
+  };
+}
+
 export function ResearchExportPage() {
   const location = useLocation();
   const isAdminMode = location.pathname.startsWith("/admin/");
   const mode = routeMode(location.pathname);
   const [summary, setSummary] = useState<ResearchSummary | null>(null);
-  const [rows, setRows] = useState<DesensitizedUserRow[]>([]);
   const [requests, setRequests] = useState<ResearchExportRequest[]>([]);
   const [purpose, setPurpose] = useState("");
   const [format, setFormat] = useState<ResearchExportFormat>("csv");
   const [approvalComments, setApprovalComments] = useState<Record<number, string>>({});
+  const [confirmAction, setConfirmAction] = useState<{ type: "approve" | "reject"; item: ResearchExportRequest } | null>(null);
   const [selectedRequestId, setSelectedRequestId] = useState<number | null>(null);
+  const [requestDrawerOpen, setRequestDrawerOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -213,19 +248,32 @@ export function ResearchExportPage() {
     : requests.filter((request) => {
         return researcherUserId !== null && request.requested_by === researcherUserId;
       });
+  const requestQueue = [...visibleRequests].sort((a, b) => {
+    const rank = (request: ResearchExportRequest) => {
+      if (request.status === "PENDING") return 0;
+      if (canDownloadExport(request)) return 1;
+      if (request.status === "APPROVED") return 2;
+      return 3;
+    };
+    return rank(a) - rank(b) || b.id - a.id;
+  });
   const hiddenRequestCount = isAdminMode ? 0 : requests.length - visibleRequests.length;
-  const selectedRequest = visibleRequests.find((request) => request.id === selectedRequestId) ?? visibleRequests[0] ?? null;
+  const pendingRequests = visibleRequests.filter((request) => request.status === "PENDING").length;
+  const downloadableRequests = visibleRequests.filter(canDownloadExport).length;
+  const rejectedRequests = visibleRequests.filter((request) => request.status === "REJECTED").length;
   const pageTitle = isAdminMode
     ? "科研导出审批"
     : mode === "dashboard"
-      ? "研究数据控制台"
+      ? "科研数据看板"
       : mode === "cluster"
         ? "科研分型分析"
         : mode === "effects"
           ? "科研干预效果"
           : mode === "jobs"
             ? "科研导出任务"
-            : "科研脱敏导出";
+          : "科研脱敏导出";
+  const selectedRequest = visibleRequests.find((request) => request.id === selectedRequestId) ?? requestQueue[0] ?? null;
+  const readiness = researchReadiness(summary, total, error);
 
   async function refreshRequests() {
     try {
@@ -250,7 +298,6 @@ export function ResearchExportPage() {
           return;
         }
         setSummary(summaryData);
-        setRows(exportData.items);
         setRequests(requestData);
         setTotal(exportData.total);
         setError(false);
@@ -271,23 +318,13 @@ export function ResearchExportPage() {
     };
   }, [isAdminMode]);
 
-  useEffect(() => {
-    if (!visibleRequests.length) {
-      setSelectedRequestId(null);
-      return;
-    }
-    if (!selectedRequestId || !visibleRequests.some((request) => request.id === selectedRequestId)) {
-      setSelectedRequestId(visibleRequests[0].id);
-    }
-  }, [selectedRequestId, visibleRequests]);
-
   async function submitRequest() {
     setNotice(null);
     try {
       const item = await createResearchExportRequest({ format, purpose });
       setRequests((current) => [item, ...current]);
-      setSelectedRequestId(item.id);
       setPurpose("");
+      setRequestDrawerOpen(false);
       setNotice("导出申请已提交，审批通过后可限时下载。");
     } catch {
       setNotice("导出申请提交失败，请确认用途和权限。");
@@ -296,234 +333,88 @@ export function ResearchExportPage() {
 
   function renderMetrics() {
     return (
-      <Row gutter={[16, 16]}>
-        <Col xs={24} md={6}>
-          <MetricCard title="脱敏样本量" value={summary?.total_participants ?? total} />
-        </Col>
-        <Col xs={24} md={6}>
-          <MetricCard title="打卡记录数" value={summary?.intervention_effects.feedback_count ?? 0} />
-        </Col>
-        <Col xs={24} md={6}>
-          <MetricCard title="平均完成率" value={summary?.intervention_effects.average_completion_rate ?? 0} suffix="%" />
-        </Col>
-        <Col xs={24} md={6}>
-          <MetricCard title="平均RPE" value={summary?.intervention_effects.average_rpe ?? 0} />
-        </Col>
-      </Row>
+      <ClinicalSummaryStrip className="research-summary-strip">
+        <StatusTile label="脱敏样本量" value={summary?.total_participants ?? total} detail="仅匿名编码和聚合字段" tone="info" />
+        <StatusTile label="打卡记录数" value={summary?.intervention_effects.feedback_count ?? 0} detail="用于干预效果分析" />
+        <StatusTile label="平均完成率" value={`${summary?.intervention_effects.average_completion_rate ?? 0}%`} detail="脱敏聚合统计" tone="safe" />
+      </ClinicalSummaryStrip>
     );
   }
 
-  function renderDesensitizedTable(title = "脱敏数据明细") {
-    const columns = [
-      {
-        title: "研究对象ID",
-        dataIndex: "research_subject_id",
-        key: "research_subject_id",
-        fixed: "left" as const,
-        render: (value: string) => value || "-"
-      },
-      {
-        title: "年龄段",
-        dataIndex: "age_band",
-        key: "age_band",
-        render: (value: string) => value || "-"
-      },
-      {
-        title: "性别",
-        key: "sex",
-        render: (_: unknown, record: DesensitizedUserRow) => String(record.profile.sex ?? "-")
-      },
-      {
-        title: "BMI",
-        key: "bmi",
-        render: (_: unknown, record: DesensitizedUserRow) => String(record.profile.bmi ?? "-")
-      },
-      {
-        title: "风险等级",
-        key: "risk_level",
-        render: (_: unknown, record: DesensitizedUserRow) => {
-          const level = record.risk_screening?.risk_level as string | undefined;
-          return level ? <Tag color={level === "R3" ? "red" : level === "R2" ? "orange" : "blue"}>{level}</Tag> : "-";
-        }
-      },
-      {
-        title: "分型",
-        key: "cluster",
-        render: (_: unknown, record: DesensitizedUserRow) => (record.latest_prescription?.cluster_label as string | undefined) || "-"
-      },
-      {
-        title: "处方状态",
-        key: "status",
-        render: (_: unknown, record: DesensitizedUserRow) => (record.latest_prescription?.status as string | undefined) || "-"
-      }
-    ];
-
+  function renderReadinessConclusion() {
     return (
-      <Card title={title}>
-        <div data-testid="research-desensitized-table">
-          <Table<DesensitizedUserRow>
-            columns={columns}
-            dataSource={rows}
-            loading={loading}
-            rowKey={(record) => record.research_subject_id || record.participant_code}
-            pagination={{ pageSize: 8, hideOnSinglePage: true }}
-            scroll={{ x: 760 }}
-            locale={{ emptyText: "暂无脱敏数据" }}
-            size="small"
-          />
-        </div>
+      <Card className="dashboard-panel research-readiness-card">
+        <Space direction="vertical" size={12} className="onboarding-section">
+          <Space wrap>
+            <ClinicalStatusBadge type="readiness" value={readiness.tone === "safe" ? "ready" : readiness.tone === "danger" ? "blocked" : "degraded"} label="分析可用性" />
+            <Tag>脱敏聚合</Tag>
+            <Tag>无姓名/手机号/身份证</Tag>
+          </Space>
+          <Typography.Title level={4}>{readiness.title}</Typography.Title>
+          <Typography.Paragraph type="secondary">{readiness.description}</Typography.Paragraph>
+        </Space>
       </Card>
     );
   }
 
-  function renderResearchConsoleAnalytics() {
-    const overlayEntries = Object.entries(summary?.cluster_risk_overlay ?? {});
-    const exportStatusEntries = Object.entries(summary?.export_job_status ?? {});
-    const effects = summary?.intervention_effects;
-    const hasAnyTrend = Boolean(
-      effects?.completion_rate_trend?.length ||
-      effects?.rpe_trend?.length ||
-      effects?.pain_trend?.length ||
-      effects?.blood_pressure_trend?.length ||
-      effects?.blood_glucose_trend?.length
-    );
-
+  function renderOverviewCharts() {
     return (
-      <Row gutter={[16, 16]} className="research-console-analytics" data-testid="research-console-analytics">
-        <Col xs={24} lg={8}>
-          <Card
-            className="research-console-card"
-            title={
-              <span className="research-console-title">
-                <FlaskConical size={16} />
-                风险/分型矩阵
-              </span>
-            }
+      <Row gutter={[16, 16]}>
+        <Col xs={24} md={12}>
+          <ChartCard
+            title="风险分布"
+            unit="脱敏样本数"
+            insight="用于判断当前研究样本的风险构成，不展示可识别个人信息。"
+            threshold="R3 占比变化只提示样本结构，不直接推断干预效果。"
+            dataRows={namedDataRows(summary?.risk_distribution, "脱敏样本")}
           >
-            {overlayEntries.length ? (
-              <div className="research-matrix-list">
-                {overlayEntries.map(([cluster, risks]) => (
-                  <div className="research-matrix-row" key={cluster}>
-                    <div>
-                      <Typography.Text strong>{cluster}</Typography.Text>
-                      <Typography.Text type="secondary">脱敏分型队列</Typography.Text>
-                    </div>
-                    <Space wrap size={[4, 4]}>
-                      {Object.entries(risks).map(([risk, count]) => (
-                        <Tag color={riskTagColor(risk)} key={`${cluster}-${risk}`}>{`${risk} ${count}`}</Tag>
-                      ))}
-                    </Space>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无风险分型矩阵" />
-            )}
-          </Card>
+            <RiskDistributionChart data={namedValues(summary?.risk_distribution)} loading={loading} />
+          </ChartCard>
         </Col>
-        <Col xs={24} lg={8}>
-          <Card
-            className="research-console-card"
-            title={
-              <span className="research-console-title">
-                <BarChart3 size={16} />
-                干预趋势摘要
-              </span>
-            }
+        <Col xs={24} md={12}>
+          <ChartCard
+            title="干预前后变化"
+            unit="前后变化值"
+            insight="用于初步观察聚合指标变化，需结合样本量和完成率解释。"
+            threshold="样本不足时不输出确定性结论。"
+            dataRows={effectDataRows(summary)}
           >
-            <div className="research-trend-grid">
-              <div className="research-trend-cell">
-                <Typography.Text type="secondary">完成率</Typography.Text>
-                <strong>{`完成率 ${formatResearchNumber(effects?.average_completion_rate, "%")}`}</strong>
-              </div>
-              <div className="research-trend-cell">
-                <Typography.Text type="secondary">平均 RPE</Typography.Text>
-                <strong>{formatResearchNumber(effects?.average_rpe)}</strong>
-              </div>
-              <div className="research-trend-cell">
-                <Typography.Text type="secondary">不适事件</Typography.Text>
-                <strong>{formatResearchNumber(effects?.discomfort_event_count)}</strong>
-              </div>
-              <div className="research-trend-cell">
-                <Typography.Text type="secondary">疼痛加重</Typography.Text>
-                <strong>{formatResearchNumber(effects?.pain_worsened_count)}</strong>
-              </div>
-            </div>
-            <Tag color={hasAnyTrend ? "green" : "gold"}>
-              {hasAnyTrend ? "趋势字段已接入" : TREND_AGGREGATION_EMPTY_TEXT}
-            </Tag>
-          </Card>
-        </Col>
-        <Col xs={24} lg={8}>
-          <Card
-            className="research-console-card"
-            title={
-              <span className="research-console-title">
-                <Database size={16} />
-                导出治理
-              </span>
-            }
-          >
-            <div className="research-export-status-list">
-              {exportStatusEntries.length ? (
-                exportStatusEntries.map(([status, count]) => (
-                  <div className="research-export-status-row" key={status}>
-                    <Tag color={exportStatusColor(status)}>{`${exportStatusLabel(status)} ${count}`}</Tag>
-                    <Typography.Text type="secondary">{status}</Typography.Text>
-                  </div>
-                ))
-              ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无导出任务状态" />
-              )}
-            </div>
-            <div className="research-governance-note">
-              <ListChecks size={16} />
-              <span>审批通过后限时下载，下载动作写入审计日志。</span>
-            </div>
-          </Card>
+            <StageEvaluationCompareChart data={effectCompare(summary)} loading={loading} />
+          </ChartCard>
         </Col>
       </Row>
     );
   }
 
-  function renderOverviewCharts() {
-    const isExportOverview = mode === "export";
+  function renderResearchNavigation() {
     return (
-      <Row gutter={[16, 16]}>
-        <Col xs={24} md={12}>
-          <ChartCard title="风险分布">
-            <RiskDistributionChart data={namedValues(summary?.risk_distribution)} loading={loading} />
-          </ChartCard>
-        </Col>
-        <Col xs={24} md={12}>
-          <ChartCard title={isExportOverview ? "分型统计" : "分型分布"}>
-            <ClusterScatterChart data={clusterScatterValues(summary?.cluster_distribution)} loading={loading} />
-          </ChartCard>
-        </Col>
-        <Col xs={24} md={12}>
-          <ChartCard title="处方状态">
-            <RiskDistributionChart data={namedValues(summary?.prescription_status)} loading={loading} />
-          </ChartCard>
-        </Col>
-        <Col xs={24} md={12}>
-          <ChartCard title={isExportOverview ? "干预效果" : "干预前后变化"}>
-            <StageEvaluationCompareChart data={effectCompare(summary)} loading={loading} />
-          </ChartCard>
-        </Col>
-        <Col xs={24} md={12}>
-          <ChartCard title="模板效果">
-            <TemplateUsageChart
-              data={Object.entries(summary?.template_effects ?? {}).map(([template, count]) => ({ template, count }))}
-              loading={loading}
-            />
-          </ChartCard>
-        </Col>
-        <Col xs={24} md={12}>
-          <ChartCard title="导出任务状态">
-            <RiskDistributionChart data={namedValues(summary?.export_job_status)} loading={loading} />
-          </ChartCard>
-        </Col>
-      </Row>
+      <nav className="research-mode-nav" aria-label="科研页面导航">
+        {researchRoutes.map((item) => (
+          <Link
+            key={item.mode}
+            to={item.href}
+            className={`research-mode-link${mode === item.mode || (mode === "export" && item.mode === "jobs") ? " is-active" : ""}`}
+          >
+            <strong>{item.title}</strong>
+            <small>{item.description}</small>
+          </Link>
+        ))}
+      </nav>
+    );
+  }
+
+  function renderExportScopeNote() {
+    return (
+      <div className="research-scope-grid">
+        <DataNote
+          title="导出前可见范围"
+          description="科研端只显示脱敏聚合指标和本人申请记录，不展示姓名、手机号、真实身份字段或非本人导出任务。"
+        />
+        <DataNote
+          title="审批后下载规则"
+          description="申请通过后限时下载，下载完成后关闭再次下载入口，并写入审计日志。"
+        />
+      </div>
     );
   }
 
@@ -533,12 +424,19 @@ export function ResearchExportPage() {
       <>
         <Row gutter={[16, 16]}>
           <Col xs={24} lg={14}>
-            <ChartCard title="分型统计">
+            <ChartCard
+              title="分型统计"
+              unit="脱敏样本"
+              insight="用于查看分型规模和覆盖，不用于识别个体。"
+              threshold="样本过少时只展示冷启动说明。"
+              dataRows={namedDataRows(summary?.cluster_distribution, "脱敏样本")}
+            >
               <ClusterScatterChart data={clusterScatterValues(summary?.cluster_distribution)} loading={loading} />
             </ChartCard>
           </Col>
           <Col xs={24} lg={10}>
-            <Card title="风险叠加">
+            <div className="research-side-panel">
+              <Typography.Text strong>风险叠加</Typography.Text>
               <List
                 dataSource={Object.entries(overlay)}
                 locale={{ emptyText: "暂无风险叠加数据" }}
@@ -551,14 +449,13 @@ export function ResearchExportPage() {
                   </List.Item>
                 )}
               />
-            </Card>
+            </div>
           </Col>
           <Col xs={24}>
-            <Card title="冷启动说明">
-              <Typography.Paragraph>
-                当分型样本不足时，仅展示脱敏聚合统计、风险叠加和处方状态，不开放可识别个体字段。
-              </Typography.Paragraph>
-            </Card>
+            <DataNote
+              title="冷启动说明"
+              description="当分型样本不足时，仅展示脱敏聚合统计、风险叠加和处方状态，不开放可识别个体字段。"
+            />
           </Col>
         </Row>
       </>
@@ -572,82 +469,327 @@ export function ResearchExportPage() {
     const painTrend = trendValues((effects?.pain_trend ?? []).map((item) => ({ date: item.date, pain: item.value })));
     const bloodPressureTrend = effects?.blood_pressure_trend ?? [];
     const bloodGlucoseTrend = effects?.blood_glucose_trend ?? [];
-
+    const trendPanel = (
+      title: string,
+      values: unknown[],
+      chart: JSX.Element,
+      description: string
+    ) =>
+      loading || values.length ? (
+          <ChartCard
+            title={title}
+            unit={title.includes("完成率") ? "%" : title.includes("RPE") || title.includes("疼痛") ? "分" : "趋势值"}
+            insight="用于判断该维度是否支持进一步干预效果分析。"
+            threshold="连续异常或样本不足时需要回到数据范围说明。"
+            dataRows={trendDataRows(values as Array<Record<string, unknown>>, {
+              value: "趋势值",
+              completionRate: "完成率",
+              rpe: "RPE",
+              pain: "疼痛"
+            })}
+          >
+            {chart}
+          </ChartCard>
+      ) : (
+        <DataNote title={`${title}暂不可用`} description={description} />
+      );
     return (
-      <>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} md={12}>
-            <ChartCard title="干预前后变化">
-              <StageEvaluationCompareChart data={effectCompare(summary)} loading={loading} />
-            </ChartCard>
-          </Col>
-          <Col xs={24} md={12}>
-            <ChartCard title="完成率趋势">
-              {!loading && !hasTrendRows(completionTrend) ? (
-                renderTrendEmpty()
-              ) : (
-                <FeedbackTrendChart data={completionTrend} loading={loading} />
-              )}
-            </ChartCard>
-          </Col>
-          <Col xs={24} md={12}>
-            <ChartCard title="RPE趋势">
-              {!loading && !hasTrendRows(rpeTrend) ? renderTrendEmpty() : <FeedbackTrendChart data={rpeTrend} loading={loading} />}
-            </ChartCard>
-          </Col>
-          <Col xs={24} md={12}>
-            <ChartCard title="疼痛趋势">
-              {!loading && !hasTrendRows(painTrend) ? renderTrendEmpty() : <FeedbackTrendChart data={painTrend} loading={loading} />}
-            </ChartCard>
-          </Col>
-          <Col xs={24} md={12}>
-            <ChartCard title="血压变化趋势">
-              {!loading && !hasTrendRows(bloodPressureTrend) ? (
-                renderTrendEmpty()
-              ) : (
-                <BloodPressureTrendChart data={bloodPressureTrend} loading={loading} />
-              )}
-            </ChartCard>
-          </Col>
-          <Col xs={24} md={12}>
-            <ChartCard title="血糖变化趋势">
-              {!loading && !hasTrendRows(bloodGlucoseTrend) ? (
-                renderTrendEmpty()
-              ) : (
-                <BloodGlucoseTrendChart data={bloodGlucoseTrend} loading={loading} />
-              )}
-            </ChartCard>
-          </Col>
-        </Row>
-      </>
+      <Collapse
+        className="research-effect-collapse"
+        defaultActiveKey={["adherence", "pain"]}
+        items={[
+          {
+            key: "adherence",
+            label: "依从性",
+            children: (
+              <Space direction="vertical" size={12} className="onboarding-section">
+                <DataNote title="如何解读" description="先看完成率和前后变化，判断样本是否支持继续分析；低完成率时不输出确定性效果结论。" />
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} lg={12}>
+                    <ChartCard
+                      title="干预前后变化"
+                      unit="前后变化值"
+                      insight="用于观察干预前后聚合变化，不能替代个体临床判断。"
+                      threshold="需结合脱敏样本数和反馈完整率解读。"
+                      dataRows={effectDataRows(summary)}
+                    >
+                      <StageEvaluationCompareChart data={effectCompare(summary)} loading={loading} />
+                    </ChartCard>
+                  </Col>
+                  <Col xs={24} lg={12}>
+                    {trendPanel(
+                      "完成率趋势",
+                      completionTrend,
+                      <FeedbackTrendChart data={completionTrend} loading={loading} />,
+                      "后端尚未提供完成率趋势聚合，当前只展示平均完成率和反馈数量。"
+                    )}
+                  </Col>
+                </Row>
+              </Space>
+            )
+          },
+          {
+            key: "intensity",
+            label: "主观强度",
+            children: (
+              <Space direction="vertical" size={12} className="onboarding-section">
+                <DataNote title="如何解读" description="RPE 只用于观察主观强度趋势，连续偏高需要结合风险等级和不适反馈复核。" />
+                {trendPanel(
+                  "RPE趋势",
+                  rpeTrend,
+                  <FeedbackTrendChart data={rpeTrend} loading={loading} />,
+                  "后端尚未提供 RPE 趋势聚合，当前只展示平均 RPE。"
+                )}
+              </Space>
+            )
+          },
+          {
+            key: "pain",
+            label: "疼痛/不适",
+            children: (
+              <Space direction="vertical" size={12} className="onboarding-section">
+                <DataNote title="如何解读" description="疼痛和不适优先级高于完成率，若趋势上升，应提示回到专家审核或规则复核。" />
+                {trendPanel(
+                  "疼痛趋势",
+                  painTrend,
+                  <FeedbackTrendChart data={painTrend} loading={loading} />,
+                  "后端尚未提供疼痛变化趋势聚合，当前只展示疼痛加重计数。"
+                )}
+              </Space>
+            )
+          },
+          {
+            key: "physiology",
+            label: "生理趋势",
+            children: (
+              <Space direction="vertical" size={12} className="onboarding-section">
+                <DataNote title="如何解读" description="血压和血糖趋势只作为脱敏聚合观察，不能替代个体医学诊断或处方调整。" />
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} lg={12}>
+                    {trendPanel(
+                      "血压变化趋势",
+                      bloodPressureTrend,
+                      <BloodPressureTrendChart data={bloodPressureTrend} loading={loading} />,
+                      "后端尚未提供血压变化趋势聚合，暂不渲染空图表。"
+                    )}
+                  </Col>
+                  <Col xs={24} lg={12}>
+                    {trendPanel(
+                      "血糖变化趋势",
+                      bloodGlucoseTrend,
+                      <BloodGlucoseTrendChart data={bloodGlucoseTrend} loading={loading} />,
+                      "后端尚未提供血糖变化趋势聚合，暂不渲染空图表。"
+                    )}
+                  </Col>
+                </Row>
+              </Space>
+            )
+          }
+        ]}
+      />
     );
   }
 
   function renderExportJobs() {
-    const requestSummary = {
-      pending: visibleRequests.filter((item) => item.status === "PENDING").length,
-      approved: visibleRequests.filter((item) => item.status === "APPROVED").length,
-      rejected: visibleRequests.filter((item) => item.status === "REJECTED").length
-    };
+    if (isAdminMode) {
+      const approvalComment = selectedRequest ? approvalComments[selectedRequest.id] || "" : "";
+      const approvalQualityOk = approvalComment.trim().length >= 8;
+      return (
+        <div className="research-approval-workbench">
+          <div className="research-request-queue-panel">
+            <Typography.Text strong>申请队列</Typography.Text>
+            <List
+              dataSource={requestQueue}
+              locale={{ emptyText: "暂无导出申请" }}
+              renderItem={(item) => (
+                <List.Item
+                  className={`research-request-item approval-request-item${selectedRequest?.id === item.id ? " is-selected" : ""}`}
+                  onClick={() => setSelectedRequestId(item.id)}
+                >
+                  <Space direction="vertical" size={4}>
+                    <Space wrap>
+                      <Typography.Text strong>{item.purpose}</Typography.Text>
+                      <Tag color={statusTagColor(item.status)}>
+                        {formatStatusLabel(item.status, "export")}
+                      </Tag>
+                    </Space>
+                    <Typography.Text type="secondary">{`#${item.id} · ${item.format.toUpperCase()} · 样本 ${item.row_count}`}</Typography.Text>
+                    <Typography.Text type="secondary">{exportAvailabilityText(item)}</Typography.Text>
+                  </Space>
+                </List.Item>
+              )}
+            />
+          </div>
+          <Card title={selectedRequest ? `申请详情 #${selectedRequest.id}` : "申请详情"} className="dashboard-panel approval-detail-card">
+            {selectedRequest ? (
+              <Space direction="vertical" size={16} className="onboarding-section">
+                <Descriptions bordered column={1} size="small">
+                  <Descriptions.Item label="敏感字段检查">不包含姓名、手机号、身份证号，仅开放脱敏编号和聚合分析字段。</Descriptions.Item>
+                  <Descriptions.Item label="用途">{selectedRequest.purpose}</Descriptions.Item>
+                  <Descriptions.Item label="格式">{selectedRequest.format.toUpperCase()}</Descriptions.Item>
+                  <Descriptions.Item label="状态">
+                    <Tag color={exportAvailabilityColor(selectedRequest)}>{exportAvailabilityText(selectedRequest)}</Tag>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="样本量">{selectedRequest.row_count}</Descriptions.Item>
+                  <Descriptions.Item label="申请人">{selectedRequest.requested_by}</Descriptions.Item>
+                  <Descriptions.Item label="过期时间">{selectedRequest.expires_at || "-"}</Descriptions.Item>
+                  <Descriptions.Item label="下载状态">{selectedRequest.downloaded_at ? "已下载" : "未下载"}</Descriptions.Item>
+                  {selectedRequest.downloaded_at ? (
+                    <Descriptions.Item label="下载时间">{selectedRequest.downloaded_at}</Descriptions.Item>
+                  ) : null}
+                  <Descriptions.Item label="审批意见">{selectedRequest.approval_comment || "待审批"}</Descriptions.Item>
+                </Descriptions>
+                {selectedRequest.status === "PENDING" ? (
+                  <Space direction="vertical" size={8} className="onboarding-section">
+                    <label htmlFor={`research-export-approval-${selectedRequest.id}`}>{`审批意见 #${selectedRequest.id}`}</label>
+                    <Input.TextArea
+                      id={`research-export-approval-${selectedRequest.id}`}
+                      aria-label={`审批意见 #${selectedRequest.id}`}
+                      rows={4}
+                      value={approvalComment}
+                      onChange={(event) =>
+                        setApprovalComments((current) => ({ ...current, [selectedRequest.id]: event.target.value }))
+                      }
+                      placeholder="填写审批意见，至少 8 个字，说明用途是否合规、字段范围是否足够。"
+                    />
+                    <Typography.Text type={approvalQualityOk ? "secondary" : "danger"}>
+                      {approvalQualityOk ? "审批意见已满足最小说明要求。" : "审批意见至少 8 个字，不能只写同意或驳回。"}
+                    </Typography.Text>
+                  </Space>
+                ) : null}
+                <div className="approval-action-bar">
+                  {selectedRequest.status === "PENDING" ? (
+                    <>
+                      <Button
+                        type="primary"
+                        aria-label={`批准 #${selectedRequest.id}`}
+                        disabled={!approvalQualityOk}
+                        onClick={() => setConfirmAction({ type: "approve", item: selectedRequest })}
+                      >
+                        批准 #{selectedRequest.id}
+                      </Button>
+                      <Button
+                        aria-label={`驳回 #${selectedRequest.id}`}
+                        disabled={!approvalQualityOk}
+                        onClick={() => setConfirmAction({ type: "reject", item: selectedRequest })}
+                      >
+                        驳回 #{selectedRequest.id}
+                      </Button>
+                    </>
+                  ) : canDownloadExport(selectedRequest) ? (
+                    <Button aria-label={`下载 #${selectedRequest.id}`} onClick={() => downloadRequest(selectedRequest)}>
+                      下载 #{selectedRequest.id}
+                    </Button>
+                  ) : (
+                    <Typography.Text type="secondary">该申请当前无需审批动作。</Typography.Text>
+                  )}
+                </div>
+              </Space>
+            ) : (
+              <Typography.Text type="secondary">暂无申请。</Typography.Text>
+            )}
+          </Card>
+          <Card title="脱敏字段与审计" className="dashboard-panel">
+            <Space direction="vertical" size={12} className="onboarding-section">
+              <Alert type="info" showIcon message="管理员审批只核验脱敏字段范围，不展示姓名、手机号和真实身份字段。" />
+              <div className="policy-strip">
+                {exportFieldScope.map((field) => (
+                  <Tag key={field}>{field}</Tag>
+                ))}
+              </div>
+              <Descriptions column={1} size="small" bordered>
+                <Descriptions.Item label="可见样本">{total}</Descriptions.Item>
+                <Descriptions.Item label="字段范围">脱敏编号、年龄、性别、BMI、风险等级、分型、处方状态</Descriptions.Item>
+                <Descriptions.Item label="审计记录">审批、驳回、下载均写入审计日志</Descriptions.Item>
+              </Descriptions>
+            </Space>
+          </Card>
+        </div>
+      );
+    }
 
     return (
-      <section className="research-export-workbench" data-testid="research-export-workbench">
-        <Card
-          title={isAdminMode ? "审批口径" : "新建导出申请"}
-          className="research-export-form-card"
-          extra={<Tag color={isAdminMode ? "blue" : "cyan"}>{isAdminMode ? "管理员" : "研究者"}</Tag>}
-        >
-          {isAdminMode ? (
-            <div className="research-approval-guardrail">
-              <ListChecks size={18} />
-              <div>
-                <Typography.Text strong>审批前核对用途、格式、样本量和下载窗口。</Typography.Text>
-                <Typography.Text type="secondary">仅允许脱敏字段导出，批准或驳回都会写入审计日志。</Typography.Text>
-              </div>
+      <DataWorkbench
+        className="research-export-workbench"
+        filters={
+          <div className="panel-toolbar">
+            <div>
+              <Typography.Text strong>{isAdminMode ? "审批队列" : "我的导出任务"}</Typography.Text>
+              <Typography.Paragraph type="secondary">导出申请需要用途说明，审批通过后限时下载，下载后记录审计。</Typography.Paragraph>
             </div>
-          ) : (
-            <Space direction="vertical" size={12} className="research-export-form">
-              <div className="research-form-field">
+            {!isAdminMode ? <Button type="primary" onClick={() => setRequestDrawerOpen(true)}>提交导出申请</Button> : null}
+          </div>
+        }
+        main={
+          <div className="research-request-list-panel">
+            {!isAdminMode && hiddenRequestCount > 0 ? (
+              <Typography.Text type="secondary">非本人申请不可见</Typography.Text>
+            ) : null}
+            <List
+              dataSource={requestQueue}
+              locale={{ emptyText: "暂无导出申请" }}
+              renderItem={(item) => (
+                <List.Item
+                  className={`research-request-item${selectedRequest?.id === item.id ? " is-selected" : ""}`}
+                  onClick={() => setSelectedRequestId(item.id)}
+                >
+                  <Space direction="vertical" size={4}>
+                    <Space wrap>
+                      <Typography.Text strong>{`#${item.id} ${item.format.toUpperCase()}`}</Typography.Text>
+                      <Tag color={statusTagColor(item.status)}>{formatStatusLabel(item.status, "export")}</Tag>
+                      <Tag color={exportAvailabilityColor(item)}>{exportAvailabilityText(item)}</Tag>
+                    </Space>
+                    <Typography.Text>{item.purpose}</Typography.Text>
+                    <Typography.Text type="secondary">{`样本 ${item.row_count} · 下一步：${exportNextStep(item)}`}</Typography.Text>
+                  </Space>
+                </List.Item>
+              )}
+            />
+          </div>
+        }
+        detail={
+          <div className="research-request-detail-panel">
+            {selectedRequest ? (
+              <Space direction="vertical" size={12} className="onboarding-section">
+                <Typography.Text strong>{`申请详情 #${selectedRequest.id}`}</Typography.Text>
+                <Descriptions bordered column={1} size="small">
+                  <Descriptions.Item label="用途">{selectedRequest.purpose}</Descriptions.Item>
+                  <Descriptions.Item label="格式">{selectedRequest.format.toUpperCase()}</Descriptions.Item>
+                  <Descriptions.Item label="状态">
+                    <Tag color={exportAvailabilityColor(selectedRequest)}>{exportAvailabilityText(selectedRequest)}</Tag>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="样本量">{selectedRequest.row_count}</Descriptions.Item>
+                  <Descriptions.Item label="过期时间">{selectedRequest.expires_at || "-"}</Descriptions.Item>
+                  <Descriptions.Item label="下载状态">{selectedRequest.downloaded_at ? "已下载" : "未下载"}</Descriptions.Item>
+                  {selectedRequest.downloaded_at ? (
+                    <Descriptions.Item label="下载时间">{selectedRequest.downloaded_at}</Descriptions.Item>
+                  ) : null}
+                  <Descriptions.Item label="审批意见">{selectedRequest.approval_comment || "待审批"}</Descriptions.Item>
+                </Descriptions>
+                {canDownloadExport(selectedRequest) ? (
+                  <Button aria-label={`下载 #${selectedRequest.id}`} onClick={() => downloadRequest(selectedRequest)}>
+                    下载 #{selectedRequest.id}
+                  </Button>
+                ) : (
+                  <DataNote title="当前不可下载" description={exportNextStep(selectedRequest)} />
+                )}
+              </Space>
+            ) : (
+              <Empty description="暂无选中申请" />
+            )}
+          </div>
+        }
+      />
+    );
+  }
+
+  function renderExportRequestDrawer() {
+    return (
+      <Drawer title="提交导出申请" width={520} open={requestDrawerOpen} onClose={() => setRequestDrawerOpen(false)} destroyOnClose className="task-drawer">
+        <Space direction="vertical" size={12} className="onboarding-section">
+              <section className="drawer-field-section">
+                <Typography.Text strong>基础信息</Typography.Text>
+                <Typography.Paragraph type="secondary">用途说明会进入审批记录，不能只写“导出”或“分析”。</Typography.Paragraph>
                 <label htmlFor="research-export-purpose">导出用途</label>
                 <Input
                   id="research-export-purpose"
@@ -655,8 +797,6 @@ export function ResearchExportPage() {
                   onChange={(event) => setPurpose(event.target.value)}
                   placeholder="填写研究用途或课题名称"
                 />
-              </div>
-              <div className="research-form-field">
                 <label htmlFor="research-export-format">导出格式</label>
                 <select
                   id="research-export-format"
@@ -668,144 +808,40 @@ export function ResearchExportPage() {
                   <option value="xlsx">Excel</option>
                   <option value="json">JSON</option>
                 </select>
-              </div>
-              <div className="research-download-policy">
-                <Database size={16} />
-                <span>审批通过后限时下载，下载后自动写入审计日志。</span>
-              </div>
-              <Button type="primary" block onClick={submitRequest}>
-                提交导出申请
-              </Button>
-            </Space>
-          )}
-          {!isAdminMode && hiddenRequestCount > 0 ? (
-            <Typography.Text className="research-hidden-note" type="secondary">非本人申请不可见</Typography.Text>
-          ) : null}
-        </Card>
-
-        <Card
-          title="导出申请"
-          className="research-export-queue-card"
-          extra={
-            <Space size={6} wrap>
-              <Tag color="gold">{`待审批 ${requestSummary.pending}`}</Tag>
-              <Tag color="green">{`APPROVED ${requestSummary.approved}`}</Tag>
-              <Tag color="red">{`已驳回 ${requestSummary.rejected}`}</Tag>
-            </Space>
-          }
-        >
-          <List
-            className="research-export-queue"
-            dataSource={visibleRequests}
-            locale={{ emptyText: "暂无导出申请" }}
-            renderItem={(item) => (
-              <List.Item
-                className={item.id === selectedRequest?.id ? "research-export-request is-selected" : "research-export-request"}
-                onClick={() => setSelectedRequestId(item.id)}
-              >
-                <div className="research-export-request-main">
-                  <div>
-                    <Typography.Text strong>{`#${item.id} ${item.format.toUpperCase()}`}</Typography.Text>
-                    <Typography.Text>{item.purpose}</Typography.Text>
-                  </div>
-                  <Space wrap size={[6, 6]}>
-                    <Tag color={exportStatusColor(item.status)}>{item.status}</Tag>
-                    <Tag color={exportAvailabilityColor(item)}>{exportAvailabilityText(item)}</Tag>
-                    <Typography.Text type="secondary">{`样本 ${item.row_count}`}</Typography.Text>
-                  </Space>
-                </div>
-              </List.Item>
-            )}
-          />
-        </Card>
-
-        <Card title="申请详情与审计" className="research-export-detail-card">
-          {selectedRequest ? (
-            <Space direction="vertical" size={12} className="research-export-detail">
-              <div className="research-export-detail-head">
-                <div>
-                  <Typography.Text className="page-hero-eyebrow">当前申请</Typography.Text>
-                  <Typography.Title level={5}>{`#${selectedRequest.id} ${selectedRequest.format.toUpperCase()}`}</Typography.Title>
-                </div>
-                <Space wrap size={[6, 6]}>
-                  <Tag color={exportStatusColor(selectedRequest.status)}>{exportStatusLabel(selectedRequest.status)}</Tag>
-                  <Tag color={exportAvailabilityColor(selectedRequest)}>{exportAvailabilityText(selectedRequest)}</Tag>
-                </Space>
-              </div>
-              <div className="research-export-detail-grid">
-                <span>用途</span><strong>{selectedRequest.purpose}</strong>
-                <span>样本量</span><strong>{selectedRequest.row_count}</strong>
-                <span>过期时间</span><strong>{selectedRequest.expires_at || "-"}</strong>
-                <span>下载状态</span><strong>{selectedRequest.downloaded_at ? "已下载" : "未下载"}</strong>
-                {selectedRequest.downloaded_at ? (
-                  <>
-                    <span>下载时间</span><strong>{selectedRequest.downloaded_at}</strong>
-                  </>
-                ) : null}
-                <span>审批意见</span><strong>{selectedRequest.approval_comment || "待审批"}</strong>
-              </div>
-              <div className="research-export-audit-lines" aria-label="导出申请审计摘要">
-                <Typography.Text type="secondary">{`过期时间：${selectedRequest.expires_at || "-"}`}</Typography.Text>
-                <Typography.Text type="secondary">{`下载状态：${selectedRequest.downloaded_at ? "已下载" : "未下载"}`}</Typography.Text>
-                {selectedRequest.downloaded_at ? (
-                  <Typography.Text type="secondary">{`下载时间：${selectedRequest.downloaded_at}`}</Typography.Text>
-                ) : null}
-                <Typography.Text type="secondary">{`审批意见：${selectedRequest.approval_comment || "待审批"}`}</Typography.Text>
-              </div>
-              {isAdminMode && selectedRequest.status === "PENDING" ? (
-                <Space direction="vertical" size={8} className="research-export-approval-box">
-                  <label htmlFor={`research-export-approval-${selectedRequest.id}`}>{`审批意见 #${selectedRequest.id}`}</label>
-                  <Input
-                    id={`research-export-approval-${selectedRequest.id}`}
-                    value={approvalComments[selectedRequest.id] || ""}
-                    onChange={(event) =>
-                      setApprovalComments((current) => ({ ...current, [selectedRequest.id]: event.target.value }))
-                    }
-                    placeholder="填写审批意见"
-                  />
+              </section>
+              <section className="drawer-field-section drawer-field-section-critical">
+                <Typography.Text strong>预览/证据</Typography.Text>
+                <Alert type="info" showIcon message="审批通过后限时下载，下载后会关闭再次下载入口。" />
+                <DataNote
+                  title="字段范围预览"
+                  description={
+                    <Space wrap>
+                      {exportFieldScope.map((field) => <Tag key={field}>{field}</Tag>)}
+                    </Space>
+                  }
+                />
+                <div className="purpose-template-row" aria-label="申请用途模板">
+                  <Typography.Text strong>用途模板</Typography.Text>
                   <Space wrap>
-                    <Button
-                      type="primary"
-                      aria-label={`批准 #${selectedRequest.id}`}
-                      disabled={!approvalComments[selectedRequest.id]?.trim()}
-                      onClick={() => approveRequest(selectedRequest)}
-                    >
-                      批准 #{selectedRequest.id}
-                    </Button>
-                    <Button
-                      aria-label={`驳回 #${selectedRequest.id}`}
-                      disabled={!approvalComments[selectedRequest.id]?.trim()}
-                      onClick={() => rejectRequest(selectedRequest)}
-                    >
-                      驳回 #{selectedRequest.id}
-                    </Button>
+                    {exportPurposeTemplates.map((template) => (
+                      <Button key={template} onClick={() => setPurpose(template)}>
+                        {template}
+                      </Button>
+                    ))}
                   </Space>
-                </Space>
-              ) : null}
-              {canDownloadExport(selectedRequest) ? (
-                <Button aria-label={`下载 #${selectedRequest.id}`} onClick={() => downloadRequest(selectedRequest)}>
-                  下载 #{selectedRequest.id}
+                </div>
+              </section>
+              <div className="drawer-sticky-actions">
+                <Button type="primary" disabled={!purpose.trim()} onClick={() => void submitRequest()}>
+                  提交导出申请
                 </Button>
+                <Button onClick={() => setRequestDrawerOpen(false)}>取消</Button>
+              </div>
+              {!purpose.trim() ? (
+                <Typography.Text type="secondary">填写导出用途后才能提交申请。</Typography.Text>
               ) : null}
             </Space>
-          ) : (
-            <EmptyState
-              title="暂无导出申请"
-              description={isAdminMode ? "当前没有待审批或可追溯的科研导出申请。" : "提交导出申请后，审批、过期时间、下载状态都会在这里留痕。"}
-              action={
-                <Space wrap>
-                  {!isAdminMode ? (
-                    <Link to="/research/export">
-                      <Button type="primary">新建导出申请</Button>
-                    </Link>
-                  ) : null}
-                  <Button onClick={refreshRequests}>刷新申请</Button>
-                </Space>
-              }
-            />
-          )}
-        </Card>
-      </section>
+      </Drawer>
     );
   }
 
@@ -871,49 +907,95 @@ export function ResearchExportPage() {
   }
 
   return (
-    <AppShell role={isAdminMode ? "admin" : "research"} title={pageTitle}>
+    <AppShell
+      role={isAdminMode ? "admin" : "research"}
+      title={pageTitle}
+      subtitle={isAdminMode ? "审批用途、格式、样本量和限时下载" : "只查看脱敏聚合数据和本人导出任务"}
+      statusItems={
+        <>
+          <ClinicalStatusBadge type="export" value={pendingRequests ? "pending" : downloadableRequests ? "approved" : "downloaded"} label={`待审批 ${pendingRequests}`} />
+          <ClinicalStatusBadge type="readiness" value={summary ? "ready" : "degraded"} label={`样本 ${summary?.total_participants ?? total}`} />
+        </>
+      }
+    >
         <Space direction="vertical" size={16} className="onboarding-section">
-          <PageHero
-            eyebrow={isAdminMode ? "管理端科研审批" : "科研端脱敏分析"}
+          <DecisionBanner
+            tone={isAdminMode && pendingRequests ? "warning" : error ? "danger" : "info"}
             title={isAdminMode ? "导出申请审批与留痕" : "脱敏样本、分型与干预效果总览"}
-            summary={
+            description={
               isAdminMode
                 ? "仅展示审批所需的用途、格式、样本量、状态和过期时间。"
-                : `当前脱敏样本 ${summary?.total_participants ?? 0} 例，仅展示 subject_id、年龄段与聚合指标。`
+                : readiness.description
+            }
+            meta={
+              <>
+                <ClinicalStatusBadge type="export" value={pendingRequests ? "pending" : "approved"} label={`待审批 ${pendingRequests}`} />
+                <ClinicalStatusBadge type="export" value={downloadableRequests ? "approved" : "downloaded"} label={`可下载 ${downloadableRequests}`} />
+                <ClinicalStatusBadge type="export" value={rejectedRequests ? "rejected" : "approved"} label={`驳回 ${rejectedRequests}`} />
+              </>
             }
             actions={
-              <Link to={isAdminMode ? "/admin/dashboard" : "/research/export-jobs"}>
-                <Button type="primary">{isAdminMode ? "返回运营驾驶舱" : "查看导出任务"}</Button>
-              </Link>
+              mode === "jobs" && !isAdminMode ? null : (
+                <Link to={isAdminMode ? "/admin/dashboard" : "/research/export-jobs"}>
+                  <Button type={isAdminMode || mode === "export" ? "default" : "primary"}>{isAdminMode ? "返回运营驾驶舱" : "查看导出任务"}</Button>
+                </Link>
+              )
             }
           />
-          <ResearchPrivacyStrip isAdminMode={isAdminMode} summary={summary} requests={requests} visibleCount={visibleRequests.length} />
-          {!isAdminMode ? (
-            <Alert
-              type="info"
-              showIcon
-              message="仅展示脱敏聚合数据"
-              description="科研端隐藏姓名、手机、身份证等敏感字段，仅保留 subject_id、年龄段和群体统计。"
-            />
-          ) : null}
           {error ? <Alert type="error" showIcon message="加载科研数据失败，请确认科研权限。" /> : null}
-          {notice ? <Alert type={noticeAlertType(notice)} showIcon message={notice} /> : null}
+          {notice ? <Alert type={notice.includes("失败") ? "error" : "success"} showIcon message={notice} /> : null}
           <Space wrap>
             <Link to="/">
               <Button>返回首页</Button>
             </Link>
             <Typography.Text type="secondary">
-              {isAdminMode ? "管理员预览仅展示 subject_id、年龄段和脱敏指标。" : "科研端仅展示脱敏聚合指标和本人导出申请。"}
+              {isAdminMode ? "管理员预览仅展示匿名编码和脱敏指标。" : "科研端仅展示脱敏聚合指标和本人导出申请。"}
             </Typography.Text>
           </Space>
-          {isAdminMode ? renderExportJobs() : null}
-          {(mode === "dashboard" || mode === "export") && renderMetrics()}
-          {!isAdminMode && (mode === "dashboard" || mode === "export") && renderResearchConsoleAnalytics()}
-          {(mode === "dashboard" || mode === "export") && renderOverviewCharts()}
-          {mode === "cluster" && renderClusterAnalysis()}
-          {mode === "effects" && renderInterventionEffects()}
-          {!isAdminMode && (mode === "jobs" || mode === "export") && renderExportJobs()}
-          {isAdminMode && (mode === "dashboard" || mode === "export") && renderDesensitizedTable("管理员脱敏预览")}
+          {!isAdminMode ? renderResearchNavigation() : null}
+          {!isAdminMode && mode === "dashboard" ? renderReadinessConclusion() : null}
+          {!isAdminMode && mode === "dashboard" ? renderMetrics() : null}
+          {!isAdminMode && mode === "dashboard" ? (
+            <WorkbenchSection title="科研总览" description="默认只保留最影响判断的风险分布和干预变化，其他分析进入对应页面。">
+              {renderOverviewCharts()}
+            </WorkbenchSection>
+          ) : null}
+          {!isAdminMode && mode === "export" ? renderExportScopeNote() : null}
+          {mode === "cluster" ? (
+            <WorkbenchSection title="分型分析" description="展示分型规模与风险叠加，不开放可识别个体字段。">
+              {renderClusterAnalysis()}
+            </WorkbenchSection>
+          ) : null}
+          {mode === "effects" ? (
+            <WorkbenchSection title="干预效果" description="完成率、RPE、疼痛、血压和血糖趋势均来自脱敏聚合数据。">
+              {renderInterventionEffects()}
+            </WorkbenchSection>
+          ) : null}
+          {(mode === "jobs" || mode === "export" || isAdminMode) ? (
+            <WorkbenchSection title={isAdminMode ? "导出审批队列" : "我的导出任务"} description="审批通过后限时下载，下载后记录审计并关闭再次下载入口。">
+              {renderExportJobs()}
+            </WorkbenchSection>
+          ) : null}
+          {renderExportRequestDrawer()}
+          <Modal
+            title={confirmAction?.type === "approve" ? "确认批准导出申请" : "确认驳回导出申请"}
+            open={Boolean(confirmAction)}
+            okText={confirmAction?.type === "approve" ? "确认批准" : "确认驳回"}
+            cancelText="取消"
+            onCancel={() => setConfirmAction(null)}
+            onOk={() => {
+              if (!confirmAction) return undefined;
+              const action = confirmAction;
+              setConfirmAction(null);
+              return action.type === "approve" ? approveRequest(action.item) : rejectRequest(action.item);
+            }}
+          >
+            <Typography.Paragraph>
+              {confirmAction?.type === "approve"
+                ? "批准后研究人员将在有效期内下载一次脱敏数据包，审批和下载都会写入审计日志。"
+                : "驳回后研究人员需要按审批意见补充用途或字段范围后重新申请。"}
+            </Typography.Paragraph>
+          </Modal>
         </Space>
     </AppShell>
   );

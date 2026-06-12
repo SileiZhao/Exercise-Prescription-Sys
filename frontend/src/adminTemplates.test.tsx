@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -226,43 +226,23 @@ describe("admin template workspace", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("模板库")).toBeInTheDocument();
+    expect((await screen.findAllByRole("heading", { name: "模板库管理" })).length).toBeGreaterThan(0);
     expect(screen.getByRole("tab", { name: "动作库" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "知识库" })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("tab", { name: "动作库" }));
-    expect(screen.getByRole("button", { name: "保存动作" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "导入动作" })).toBeInTheDocument();
     expect(await screen.findByText("八段锦")).toBeInTheDocument();
-    expect(screen.getByText("Baduanjin")).toBeInTheDocument();
-    expect(screen.getAllByText("动作属性").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("冲击 低").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("关节 低").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("传统功法").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("适宜人群").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Baduanjin")).not.toBeInTheDocument();
     expect(screen.queryByText("WHO 2020")).not.toBeInTheDocument();
+    expect(screen.queryByText("胸痛立即停止")).not.toBeInTheDocument();
     expect(screen.getAllByText("已批准").length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: "批准动作" })).toBeInTheDocument();
-  });
-
-  it("renders the action library as a paged review workbench instead of fully expanded rows", async () => {
-    render(
-      <MemoryRouter
-        initialEntries={["/admin/exercises"]}
-        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
-      >
-        <App />
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("动作库概览")).toBeInTheDocument();
-    expect(screen.getByText("筛选后 1 / 全部 1")).toBeInTheDocument();
-    expect(screen.getByText("每页 12 条，详情在抽屉中查看")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "查看动作详情" })).toBeInTheDocument();
-    expect(screen.queryByText("WHO 2020")).not.toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: "查看动作详情" }));
     expect(await screen.findByText("动作详情")).toBeInTheDocument();
+    expect(screen.getByText("Baduanjin")).toBeInTheDocument();
     expect(screen.getByText("WHO 2020")).toBeInTheDocument();
+    expect(screen.getByText("胸痛立即停止")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "批准动作" })).toBeInTheDocument();
   });
 
   it("renders imported prescription template metadata and details", async () => {
@@ -275,44 +255,22 @@ describe("admin template workspace", () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(await screen.findByText("模板库"));
-    expect(await screen.findByText("模板库概览")).toBeInTheDocument();
-    expect(screen.getByText("筛选后 1 / 全部 1")).toBeInTheDocument();
-    expect(screen.getByText("每页 12 条，详情在抽屉中查看")).toBeInTheDocument();
+    fireEvent.click(await screen.findByRole("tab", { name: "模板库" }));
     expect(await screen.findByText("R2 高血压稳定型模板")).toBeInTheDocument();
+    expect(screen.queryByText("慢病稳定型")).not.toBeInTheDocument();
+    expect(screen.queryByText("血压管理辅助")).not.toBeInTheDocument();
+    expect(screen.queryByText("Exercise is Medicine Rx for Health: Hypertension")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "查看模板详情" }));
+    expect(await screen.findByText("模板详情")).toBeInTheDocument();
     expect(screen.getByText("慢病稳定型")).toBeInTheDocument();
     expect(screen.getByText("血压管理辅助")).toBeInTheDocument();
-    expect(screen.queryByText("FITT-VP 处方结构")).not.toBeInTheDocument();
+    expect(screen.getAllByText("FITT-VP 处方结构").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("频率").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("每周3-5次").length).toBeGreaterThan(0);
     expect(screen.getAllByText("本平台状态：已批准").length).toBeGreaterThan(0);
     expect(screen.queryByText("APPROVED")).not.toBeInTheDocument();
     expect(screen.queryByText(/frequency/)).not.toBeInTheDocument();
-    expect(screen.queryByText("Exercise is Medicine Rx for Health: Hypertension")).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "查看模板详情" }));
-    expect(await screen.findByText("模板详情")).toBeInTheDocument();
-    expect(screen.getByText("FITT-VP 处方结构")).toBeInTheDocument();
-    expect(screen.getByText("频率")).toBeInTheDocument();
-    expect(screen.getByText("每周3-5次")).toBeInTheDocument();
     expect(screen.getByText("Exercise is Medicine Rx for Health: Hypertension")).toBeInTheDocument();
-  });
-
-  it("keeps template creation in a drawer instead of a persistent full-page form", async () => {
-    render(
-      <MemoryRouter
-        initialEntries={["/admin/templates"]}
-        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
-      >
-        <App />
-      </MemoryRouter>
-    );
-
-    fireEvent.click(await screen.findByText("模板库"));
-    expect(await screen.findByText("R2 高血压稳定型模板")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "保存模板" })).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "新增模板" }));
-    expect(await screen.findByText("创建处方模板")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "保存模板" })).toBeInTheDocument();
   });
 
   it("opens the template detail drawer with filters, version history, audit logs and real edit API", async () => {
@@ -328,7 +286,7 @@ describe("admin template workspace", () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(await screen.findByText("模板库"));
+    fireEvent.click(await screen.findByRole("tab", { name: "模板库" }));
     expect(await screen.findByText("R2 高血压稳定型模板")).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("模板筛选"), { target: { value: "高血压" } });
@@ -339,10 +297,10 @@ describe("admin template workspace", () => {
     expect(await screen.findByText("模板详情")).toBeInTheDocument();
     expect(screen.getByText("版本历史")).toBeInTheDocument();
     expect(screen.getByText("v1 · 已批准")).toBeInTheDocument();
-    expect(screen.getByText("审计日志")).toBeInTheDocument();
+    expect(screen.getAllByText("审计日志").length).toBeGreaterThan(0);
     expect(await screen.findByText("UPDATE_PRESCRIPTION_TEMPLATE")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("编辑模板名称"), {
+    fireEvent.change(screen.getByLabelText("模板名称"), {
       target: { value: "R2 高血压稳定型模板（更新）" }
     });
     fireEvent.click(screen.getByRole("button", { name: "保存模板编辑" }));
@@ -366,24 +324,17 @@ describe("admin template workspace", () => {
     );
 
     fireEvent.click(await screen.findByRole("tab", { name: "知识库" }));
-    expect(await screen.findByText("知识库概览")).toBeInTheDocument();
-    expect(screen.getByText("筛选后 2 / 全部 2")).toBeInTheDocument();
-    expect(screen.getByText("每页 12 条，详情在抽屉中查看")).toBeInTheDocument();
     expect(await screen.findByText("高血压运动干预指南")).toBeInTheDocument();
     expect(screen.getByText("索引失败示例文档")).toBeInTheDocument();
-    expect(screen.getByText("索引失败：向量服务不可用")).toBeInTheDocument();
-    expect(screen.getAllByText("指南").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("2024").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("high").length).toBeGreaterThan(0);
-    expect(screen.getByText("2")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "保存知识" })).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("检索问题")).not.toBeInTheDocument();
-
+    expect(screen.queryByText("索引失败：向量服务不可用")).not.toBeInTheDocument();
+    expect(screen.queryByText("high")).not.toBeInTheDocument();
+    expect(screen.queryByText("2024 · 指南")).not.toBeInTheDocument();
+    expect(screen.getAllByText("2").length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("button", { name: "检索验证" }));
-    expect(await screen.findByText("RAG 检索验证")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("检索问题"), { target: { value: "高血压如何安排运动" } });
-    fireEvent.change(screen.getByLabelText("证据标签"), { target: { value: "高血压，R2" } });
-    fireEvent.click(screen.getByRole("button", { name: "运行检索验证" }));
+    const searchDialog = await screen.findByRole("dialog", { name: "RAG 检索验证" });
+    fireEvent.change(within(searchDialog).getByLabelText("检索问题"), { target: { value: "高血压如何安排运动" } });
+    fireEvent.change(within(searchDialog).getByLabelText("证据标签"), { target: { value: "高血压，R2" } });
+    fireEvent.click(within(searchDialog).getByRole("button", { name: "检索验证" }));
 
     await waitFor(() =>
       expect(searchKnowledgeMock).toHaveBeenCalledWith({
@@ -417,14 +368,13 @@ describe("admin template workspace", () => {
 
     fireEvent.change(screen.getByLabelText("知识筛选"), { target: { value: "高血压" } });
     expect(screen.getByText("高血压运动干预指南")).toBeInTheDocument();
-    expect(screen.queryByLabelText("上传知识文件")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "上传资料" }));
-    expect(await screen.findByText("上传知识文件")).toBeInTheDocument();
     const file = new File(["# 运动原则\n高血压稳定期建议低强度起步。"], "upload-guide.txt", { type: "text/plain" });
-    fireEvent.change(screen.getByLabelText("上传知识文件"), { target: { files: [file] } });
-    fireEvent.change(screen.getByLabelText("上传文档标题"), { target: { value: "上传运动指南" } });
-    fireEvent.click(screen.getByRole("button", { name: "上传知识文件" }));
+    fireEvent.click(screen.getByRole("button", { name: "上传文件" }));
+    const uploadDialog = await screen.findByRole("dialog", { name: "上传知识文件" });
+    fireEvent.change(within(uploadDialog).getByLabelText("上传知识文件"), { target: { files: [file] } });
+    fireEvent.change(within(uploadDialog).getByLabelText("上传文档标题"), { target: { value: "上传运动指南" } });
+    fireEvent.click(within(uploadDialog).getByRole("button", { name: "上传知识文件" }));
 
     await waitFor(() => expect(uploadKnowledgeDocumentMock).toHaveBeenCalled());
     const uploadedFormData = uploadKnowledgeDocumentMock.mock.calls[0][0] as FormData;
@@ -439,7 +389,7 @@ describe("admin template workspace", () => {
     expect(screen.getByText("向量化完成")).toBeInTheDocument();
     expect(screen.getByText("版本历史")).toBeInTheDocument();
     expect(screen.getByText("2024 · 指南")).toBeInTheDocument();
-    expect(screen.getByText("审计日志")).toBeInTheDocument();
+    expect(screen.getAllByText("审计日志").length).toBeGreaterThan(0);
     expect(await screen.findByText("UPDATE_KNOWLEDGE_DOCUMENT_STATUS")).toBeInTheDocument();
   });
 
@@ -457,6 +407,8 @@ describe("admin template workspace", () => {
 
     fireEvent.click(await screen.findByRole("tab", { name: "知识库" }));
     expect(await screen.findByText("高血压运动干预指南")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "查看知识详情" }));
+    expect(await screen.findByText("知识文档详情")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "停用文档" }));
 
     await waitFor(() =>
@@ -498,7 +450,7 @@ describe("admin template workspace", () => {
 	      </MemoryRouter>
 	    );
 
-	    fireEvent.click(await screen.findByText("合规材料"));
+	    fireEvent.click(await screen.findByRole("tab", { name: "合规材料" }));
 	    expect(await screen.findByText("知情同意")).toBeInTheDocument();
 	    expect(screen.getByText("已确认")).toBeInTheDocument();
 	    expect(screen.queryByText(/待法务|专家确认|草案/)).not.toBeInTheDocument();

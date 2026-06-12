@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -85,19 +85,31 @@ describe("admin cluster model page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("聚类模型管理")).toBeInTheDocument();
-    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "聚类模型生命周期" })).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
     expect(await screen.findByText("DBSCAN 分型 v1")).toBeInTheDocument();
-    expect(screen.getAllByText("BOOTSTRAP_V1").length).toBeGreaterThan(0);
-    expect(screen.getByText("冷启动规则校准模型，仅用于试运行人群画像和模板匹配，不作为正式科研聚类结论。")).toBeInTheDocument();
+    const modelVersionSection = screen.getByText("模型版本").closest("section");
+    expect(modelVersionSection).not.toBeNull();
+    expect(within(modelVersionSection as HTMLElement).queryByRole("columnheader", { name: "算法" })).not.toBeInTheDocument();
+    expect(within(modelVersionSection as HTMLElement).queryByRole("columnheader", { name: "来源" })).not.toBeInTheDocument();
+    expect(within(modelVersionSection as HTMLElement).queryByRole("columnheader", { name: "轮廓系数" })).not.toBeInTheDocument();
+    expect(within(modelVersionSection as HTMLElement).getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
+      "模型名称",
+      "评估",
+      "状态",
+      "聚类数",
+      "关键指标",
+      "详情"
+    ]);
+    expect(screen.getByText(/冷启动模型不能作为正式科研聚类结论/)).toBeInTheDocument();
     expect(screen.getByTestId("ClusterScatterChart-echart")).toBeInTheDocument();
-    expect(screen.getByText("密度近似分类，不确定时需专家解释")).toBeInTheDocument();
-    expect(screen.getByText("未归类/需专家解释")).toBeInTheDocument();
-    expect(screen.getByText("最近中心分类")).toBeInTheDocument();
     expect(screen.getAllByText("通过").length).toBeGreaterThan(0);
-    expect(screen.getByText("0.12")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "查看详情 DBSCAN 分型 v1" }));
+    expect(screen.getAllByText("冷启动规则校准模型").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/0.12/).length).toBeGreaterThan(0);
     expect(screen.getByText("中心型肥胖或糖脂代谢风险")).toBeInTheDocument();
-    expect(screen.getByText("0.42")).toBeInTheDocument();
+    expect(screen.getByText(/0.42/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "查看详情 KMeans 分型 v2" }));
     fireEvent.click(screen.getByRole("button", { name: "启用模型 KMeans 分型 v2" }));
 
     await waitFor(() =>
@@ -122,12 +134,14 @@ describe("admin cluster model page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("聚类模型管理")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("模型名称"), { target: { value: "GMM 新模型" } });
-    fireEvent.mouseDown(screen.getAllByRole("combobox", { name: "算法" })[0]);
+    expect(await screen.findByRole("heading", { name: "聚类模型生命周期" })).toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole("button", { name: "训练模型" })[0]);
+    const trainDrawer = await screen.findByRole("dialog", { name: "训练聚类分型模型" });
+    fireEvent.change(within(trainDrawer).getByLabelText("模型名称"), { target: { value: "GMM 新模型" } });
+    fireEvent.mouseDown(within(trainDrawer).getByRole("combobox", { name: "算法" }));
     fireEvent.click(screen.getByText("GaussianMixture"));
-    fireEvent.change(screen.getByLabelText("聚类数"), { target: { value: 4 } });
-    fireEvent.click(screen.getByRole("button", { name: "训练模型" }));
+    fireEvent.change(within(trainDrawer).getByLabelText("聚类数"), { target: { value: 4 } });
+    fireEvent.click(within(trainDrawer).getByRole("button", { name: "训练模型" }));
 
     await waitFor(() =>
       expect(trainClusterModelMock).toHaveBeenCalledWith({

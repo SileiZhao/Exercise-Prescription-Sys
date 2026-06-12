@@ -1,6 +1,6 @@
-import { Alert, Button, Card, Col, Descriptions, Divider, Drawer, Form, Input, List, Row, Select, Space, Table, Tabs, Tag, Typography } from "antd";
-import { Check, Plus, RefreshCw, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { CheckOutlined, CloseOutlined, SyncOutlined } from "@ant-design/icons";
+import { Alert, Button, Col, Descriptions, Divider, Drawer, Form, Input, List, Row, Select, Space, Table, Tabs, Tag, Typography } from "antd";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { listAuditLogs, type AuditLogItem } from "../../api/adminAudit";
@@ -22,7 +22,7 @@ import {
   type AdminPayload,
   type ComplianceMaterial
 } from "../../api/adminContent";
-import { AppShell, ClinicalScopePanel, FITTVPCard } from "../../components/ProductUI";
+import { AppShell, ClinicalStatusBadge, DataNote, DecisionBanner, FITTVPCard, formatStatusLabel, sanitizeDisplayText, statusTagColor, StatusTile, WorkbenchSection } from "../../components/ProductUI";
 
 const riskOptions = ["R0", "R1", "R2", "R3"].map((value) => ({ value, label: value }));
 const categoryOptions = ["有氧", "抗阻", "柔韧", "平衡", "传统功法", "康复训练"].map((value) => ({ value, label: value }));
@@ -50,53 +50,6 @@ const retrievalModeLabels: Record<KnowledgeEvidence["retrieval_mode"], string> =
   keyword_fallback: "关键词降级"
 };
 
-
-function countByStatus<T extends { status: string }>(items: T[]) {
-  return items.reduce<Record<string, number>>((acc, item) => {
-    acc[item.status] = (acc[item.status] ?? 0) + 1;
-    return acc;
-  }, {});
-}
-
-function ConfigWorkspaceHero({
-  activeTab,
-  actions,
-  templates,
-  knowledgeDocuments
-}: {
-  activeTab: string;
-  actions: ExerciseAction[];
-  templates: PrescriptionTemplate[];
-  knowledgeDocuments: KnowledgeDocument[];
-}) {
-  const actionStatus = countByStatus(actions);
-  const templateStatus = countByStatus(templates);
-  const indexedDocuments = knowledgeDocuments.filter((item) => item.chunk_count > 0 && item.status === "ACTIVE").length;
-  const failedDocuments = knowledgeDocuments.filter((item) => item.status === "INDEX_FAILED" || Boolean(item.skipped_reason)).length;
-  const copy = activeTab === "knowledge"
-    ? "管理 RAG 资料、切片索引和检索验证，突出向量化失败状态与可审计来源。"
-    : activeTab === "actions"
-      ? "维护运动动作候选库，动作必须经过专家审核后才能被模板和处方引擎使用。"
-      : "维护 FITT-VP 模板库，R0/R1/R2 覆盖训练处方，R3 仅保留医学评估/转介建议。";
-
-  return (
-    <section className="config-workspace-hero" data-testid="config-workspace-hero">
-      <div className="config-workspace-copy">
-        <Typography.Text className="page-hero-eyebrow">配置中台</Typography.Text>
-        <Typography.Title level={3}>{activeTab === "knowledge" ? "知识库与 RAG 证据" : activeTab === "actions" ? "运动动作审核库" : "处方模板工作区"}</Typography.Title>
-        <Typography.Paragraph>{copy}</Typography.Paragraph>
-      </div>
-      <div className="config-workspace-kpis">
-        <div><span>动作已审</span><strong>{actionStatus.APPROVED ?? 0}</strong></div>
-        <div><span>动作待审</span><strong>{actionStatus.PENDING_REVIEW ?? 0}</strong></div>
-        <div><span>模板批准</span><strong>{templateStatus.APPROVED ?? 0}</strong></div>
-        <div><span>RAG 可用</span><strong>{indexedDocuments}</strong></div>
-        <div><span>索引异常</span><strong>{failedDocuments}</strong></div>
-      </div>
-    </section>
-  );
-}
-
 function splitTags(value?: string): string[] {
   return value
     ? value
@@ -118,35 +71,96 @@ function parseJson(value: string | undefined, fallback: AdminPayload) {
 }
 
 function platformStatus(status?: string | null) {
-  return platformStatusLabels[String(status ?? "")] ?? String(status ?? "未确认");
+  return platformStatusLabels[String(status ?? "")] ?? formatStatusLabel(status, "general");
 }
 
 function joinTags(tags?: string[]) {
   return tags?.length ? tags.join("，") : "";
 }
 
-function previewTags(tags?: string[], limit = 2) {
-  if (!tags?.length) {
-    return "-";
-  }
-  const visible = tags.slice(0, limit);
-  const hiddenCount = tags.length - visible.length;
-  return (
-    <Space size={[4, 4]} wrap>
-      {visible.map((tag) => (
-        <Tag key={tag}>{tag}</Tag>
-      ))}
-      {hiddenCount > 0 ? <Tag color="blue">+{hiddenCount}</Tag> : null}
-    </Space>
-  );
+function displayText(value?: unknown) {
+  return sanitizeDisplayText(value ?? "-") || "-";
 }
 
-function stringifyJson(value: unknown) {
-  return JSON.stringify(value ?? {}, null, 2);
+function displayTags(tags?: string[]) {
+  return tags?.length ? tags.map((tag) => sanitizeDisplayText(tag)).join("，") : "";
 }
 
 function auditItemText(log: AuditLogItem) {
-  return log.action;
+  return sanitizeDisplayText(log.action);
+}
+
+function governancePayload(values: AdminPayload): AdminPayload {
+  const fitt = {
+    frequency: values.fitt_frequency ?? "每周3次",
+    intensity: values.fitt_intensity ?? "低到中等强度",
+    time: values.fitt_time ?? "每次30分钟",
+    type: splitTags(values.fitt_type as string),
+    volume: values.fitt_volume ?? "每周90分钟",
+    progression: values.fitt_progression ?? "每2-4周根据反馈调整"
+  };
+  return {
+    name: values.name,
+    risk_level: values.risk_level,
+    cluster_tags: values.cluster_tags,
+    goal_tags: values.goal_tags,
+    fitt_vp: JSON.stringify(fitt),
+    precautions: values.precautions,
+    contraindications: values.contraindications,
+    evidence_refs: values.evidence_refs,
+    status: values.status,
+    review_status: values.review_status,
+    version: values.version,
+    source_version: values.source_version
+  };
+}
+
+function fittValue(template: PrescriptionTemplate | null | undefined, key: string, fallback = "") {
+  const value = template?.fitt_vp?.[key];
+  if (Array.isArray(value)) return value.join("，");
+  return value === null || value === undefined ? fallback : String(value);
+}
+
+function templateInitialValues(template?: PrescriptionTemplate | null): AdminPayload {
+  return {
+    name: template?.name ?? "",
+    risk_level: template?.risk_level ?? "R1",
+    cluster_tags: joinTags(template?.cluster_tags),
+    goal_tags: joinTags(template?.goal_tags),
+    fitt_frequency: fittValue(template, "frequency", "每周3次"),
+    fitt_intensity: fittValue(template, "intensity", "低到中等强度"),
+    fitt_time: fittValue(template, "time", "每次30分钟"),
+    fitt_type: fittValue(template, "type", "快走"),
+    fitt_volume: fittValue(template, "volume", "每周90分钟"),
+    fitt_progression: fittValue(template, "progression", "每2-4周根据反馈调整"),
+    precautions: joinTags(template?.precautions),
+    contraindications: joinTags(template?.contraindications),
+    evidence_refs: joinTags(template?.evidence_refs),
+    status: template?.status ?? "DRAFT",
+    review_status: template?.review_status ?? "EXPERT_REVIEW_DRAFT",
+    version: template?.version ?? 1,
+    source_version: template?.source_version ?? ""
+  };
+}
+
+function GovernanceFormGroup({
+  title,
+  description,
+  children
+}: {
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="governance-form-group">
+      <div className="governance-form-group-head">
+        <Typography.Text strong>{title}</Typography.Text>
+        <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
+      </div>
+      <div className="governance-form-grid">{children}</div>
+    </section>
+  );
 }
 
 type ExerciseAction = {
@@ -339,7 +353,7 @@ export function AdminTemplatePage() {
         evidence_refs: splitTags(values.evidence_refs as string),
         fitt_vp: parseJson(values.fitt_vp as string, {
           frequency: "每周3次",
-          intensity: "低—中等强度",
+          intensity: "低到中等强度",
           time: "每次30分钟",
           type: ["快走"],
           volume: "每周90分钟",
@@ -483,19 +497,81 @@ export function AdminTemplatePage() {
       ? "actions"
       : "templates";
   const pageTitle = activeTab === "knowledge" ? "知识库管理" : activeTab === "actions" ? "动作库管理" : "模板库管理";
+  const pendingActions = actions.filter((item) => item.status === "PENDING_REVIEW").length;
+  const approvedTemplates = templates.filter((item) => item.status === "APPROVED").length;
+  const activeKnowledgeDocuments = knowledgeDocuments.filter((item) => item.status === "ACTIVE").length;
+  const routeDecision = activeTab === "knowledge"
+    ? {
+        title: "知识库用于 RAG 证据召回，需保持可检索、可停用、可重建索引",
+        detail: `${activeKnowledgeDocuments} 份启用文档 / ${knowledgeDocuments.length} 份总文档`,
+        action: "重建知识索引"
+      }
+    : activeTab === "actions"
+      ? {
+          title: "动作库需要先审核禁忌、停止信号和适宜人群，再进入模板匹配",
+          detail: `${pendingActions} 个动作待审核 / ${actions.length} 个总动作`,
+          action: "导入动作"
+        }
+      : {
+          title: "模板库控制 FITT-VP 默认结构，批准后才能参与处方匹配",
+          detail: `${approvedTemplates} 个模板已批准 / ${templates.length} 个总模板`,
+          action: "新建模板"
+        };
 
   return (
-    <AppShell role="admin" title={pageTitle} subtitle="列表、筛选、详情、编辑、版本历史和审计留痕">
-        <Space direction="vertical" size={16} className="onboarding-section admin-config-page">
-          <ConfigWorkspaceHero activeTab={activeTab} actions={actions} templates={templates} knowledgeDocuments={knowledgeDocuments} />
-          <ClinicalScopePanel compact />
-          <Card className="admin-workspace">
+    <AppShell
+      role="admin"
+      title={pageTitle}
+      subtitle="列表、筛选、详情、编辑、版本历史和审计留痕"
+      statusItems={
+        <>
+          <ClinicalStatusBadge type="review" value={pendingActions ? "pending_review" : "approved"} label={`动作待审 ${pendingActions}`} />
+          <ClinicalStatusBadge type="readiness" value={activeKnowledgeDocuments ? "ready" : "degraded"} label={`知识启用 ${activeKnowledgeDocuments}`} />
+        </>
+      }
+    >
+      <Space direction="vertical" size={16} className="onboarding-section">
+        <DecisionBanner
+          tone={activeTab === "actions" && pendingActions ? "warning" : activeTab === "knowledge" && !activeKnowledgeDocuments ? "warning" : "info"}
+          title={routeDecision.title}
+          description={routeDecision.detail}
+          meta={
+            <>
+              <ClinicalStatusBadge type="review" value={pendingActions ? "pending_review" : "approved"} label={`动作待审 ${pendingActions}`} />
+              <ClinicalStatusBadge type="review" value={approvedTemplates ? "approved" : "pending"} label={`模板批准 ${approvedTemplates}`} />
+              <ClinicalStatusBadge type="readiness" value={activeKnowledgeDocuments ? "ready" : "degraded"} label={`知识启用 ${activeKnowledgeDocuments}`} />
+            </>
+          }
+          actions={
+            <Space wrap>
+              <Link to="/admin/templates">
+                <Button>模板库</Button>
+              </Link>
+              <Link to="/admin/exercises">
+                <Button>动作库</Button>
+              </Link>
+              <Link to="/admin/knowledge">
+                <Button>知识库</Button>
+              </Link>
+            </Space>
+          }
+        />
+        <div className="status-grid">
+          <StatusTile label="动作库" value={`${actions.length}`} detail={`${pendingActions} 个待审核`} tone={pendingActions ? "warning" : "safe"} />
+          <StatusTile label="模板库" value={`${approvedTemplates}/${templates.length}`} detail="已批准 / 全部模板" tone={approvedTemplates ? "safe" : "warning"} />
+          <StatusTile label="知识库" value={`${activeKnowledgeDocuments}/${knowledgeDocuments.length}`} detail="已启用 / 全部文档" tone={activeKnowledgeDocuments ? "safe" : "warning"} />
+          <StatusTile label="合规材料" value={complianceMaterials.length} detail="确认后支撑发布与审计" />
+        </div>
+        <WorkbenchSection
+          title={pageTitle}
+          description={`当前主任务：${routeDecision.action}。所有更新都会保留版本或审计线索。`}
+        >
+        <div className="admin-workspace">
           {notice ? (
             <Alert className="form-alert" type={notice.includes("失败") ? "error" : "success"} message={notice} showIcon />
           ) : null}
           <Tabs
             defaultActiveKey={activeTab}
-            destroyOnHidden
             items={[
               {
                 key: "actions",
@@ -554,8 +630,9 @@ export function AdminTemplatePage() {
           <Link to="/admin/dashboard">
             <Button>返回管理端</Button>
           </Link>
-        </Card>
-        </Space>
+        </div>
+        </WorkbenchSection>
+      </Space>
     </AppShell>
   );
 }
@@ -564,23 +641,24 @@ function CompliancePanel({ materials }: { materials: ComplianceMaterial[] }) {
   return (
     <Space direction="vertical" size={16} style={{ width: "100%" }}>
       <Table
+        className="compact-governance-table"
         rowKey="code"
         dataSource={materials}
         pagination={false}
+        scroll={{ x: 760 }}
         locale={{ emptyText: "暂无合规材料，请先运行参考资料导入脚本。" }}
         columns={[
           { title: "编码", dataIndex: "code" },
           { title: "标题", dataIndex: "title" },
-          { title: "版本", dataIndex: "version" },
-          { title: "适用范围", dataIndex: "applicable_scope" },
           {
             title: "审核状态",
             dataIndex: "review_status",
             render: (status: string) => (
-              <Tag color={status === "CONFIRMED" ? "green" : "orange"}>{complianceStatusLabels[status] ?? status}</Tag>
+              <Tag color={statusTagColor(status)}>{complianceStatusLabels[status] ?? formatStatusLabel(status, "general")}</Tag>
             )
           },
-          { title: "短提示", dataIndex: "short_notice" }
+          { title: "版本", dataIndex: "version" },
+          { title: "适用范围", dataIndex: "applicable_scope" }
         ]}
       />
     </Space>
@@ -607,20 +685,9 @@ function ActionLibraryPanel({
   const [selectedAction, setSelectedAction] = useState<ExerciseAction | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [actionFilter, setActionFilter] = useState("");
-  const actionStatus = countByStatus(actions);
+  const [createOpen, setCreateOpen] = useState(false);
   const filteredActions = actions.filter((action) => {
-    const text = [
-      action.name,
-      action.name_en,
-      action.category,
-      action.exercise_type,
-      action.risk_level,
-      action.status,
-      action.intensity,
-      ...(action.suitable_tags ?? []),
-      ...(action.contraindication_tags ?? []),
-      ...(action.body_parts ?? [])
-    ].join(" ");
+    const text = [action.name, action.category, action.risk_level, action.status, ...(action.suitable_tags ?? [])].join(" ");
     return text.toLowerCase().includes(actionFilter.toLowerCase());
   });
 
@@ -631,145 +698,84 @@ function ActionLibraryPanel({
   }
 
   return (
-    <Space direction="vertical" size={16} className="action-library-workbench">
-      <section className="action-library-summary" aria-label="动作库概览">
-        <div>
-          <Typography.Title level={4}>动作库概览</Typography.Title>
-          <Typography.Text type="secondary">
-            筛选后 {filteredActions.length} / 全部 {actions.length}
-          </Typography.Text>
-        </div>
-        <div className="action-library-metrics">
-          <div>
-            <span>已批准</span>
-            <strong>{actionStatus.APPROVED ?? 0}</strong>
-          </div>
-          <div>
-            <span>待审核</span>
-            <strong>{actionStatus.PENDING_REVIEW ?? 0}</strong>
-          </div>
-          <div>
-            <span>已驳回</span>
-            <strong>{actionStatus.REJECTED ?? 0}</strong>
-          </div>
-        </div>
-      </section>
-      <ActionForm saving={saving} onFinish={onFinish} />
+    <Space direction="vertical" size={16} style={{ width: "100%" }}>
       {error ? <Alert type="error" showIcon message={error} /> : null}
-      <div className="action-library-toolbar">
-        <Input
-          aria-label="动作筛选"
-          placeholder="按名称、分类、风险等级或标签筛选动作"
-          value={actionFilter}
-          onChange={(event) => setActionFilter(event.target.value)}
-        />
-        <Typography.Text type="secondary">每页 12 条，详情在抽屉中查看</Typography.Text>
+      <div className="panel-toolbar">
+        <div>
+          <Typography.Text strong>动作审核队列</Typography.Text>
+          <Typography.Paragraph type="secondary">默认只处理列表、详情和审核。新增动作放入抽屉，避免干扰审核任务。</Typography.Paragraph>
+        </div>
+        <Button type="primary" onClick={() => setCreateOpen(true)}>
+          导入动作
+        </Button>
       </div>
+      <Input
+        aria-label="动作筛选"
+        placeholder="按名称、分类、风险等级或标签筛选动作"
+        value={actionFilter}
+        onChange={(event) => setActionFilter(event.target.value)}
+      />
       <Table
+        className="compact-governance-table"
         rowKey="id"
-        className="action-library-table"
         loading={loading}
         dataSource={filteredActions}
-        pagination={{
-          pageSize: 12,
-          showSizeChanger: false,
-          showTotal: (total) => `共 ${total} 条动作`
-        }}
+        pagination={{ pageSize: 8, showSizeChanger: true }}
+        scroll={{ x: 820 }}
         locale={{ emptyText: "暂无动作，请先导入动作库。" }}
-        scroll={{ x: 980 }}
+        onRow={(record) => ({
+          onClick: () => void openActionDetail(record)
+        })}
         columns={[
           {
             title: "动作名称",
             dataIndex: "name",
-            width: 220,
             render: (name: string, record: ExerciseAction) => (
               <Space direction="vertical" size={0}>
                 <Typography.Text strong>{name}</Typography.Text>
-                {record.name_en ? <Typography.Text type="secondary">{record.name_en}</Typography.Text> : null}
+                {record.source_exercise_id ? <Typography.Text type="secondary">{displayText(record.source_exercise_id)}</Typography.Text> : null}
               </Space>
             )
           },
           {
             title: "类型",
             dataIndex: "category",
-            width: 150,
             render: (category: string, record: ExerciseAction) => record.exercise_type || category
           },
           {
             title: "风险等级",
             dataIndex: "risk_level",
-            width: 96,
-            render: (risk: string) => <Tag color={risk === "R3" ? "red" : risk === "R2" ? "orange" : "green"}>{risk}</Tag>
-          },
-          {
-            title: "强度",
-            dataIndex: "intensity",
-            width: 88,
-            render: (value?: string | null) => value || "-"
-          },
-          {
-            title: "动作属性",
-            width: 170,
-            render: (_: unknown, record: ExerciseAction) => (
-              <Space size={[4, 4]} wrap>
-                <Tag color={record.impact_level === "高" ? "red" : "blue"}>冲击 {record.impact_level || "-"}</Tag>
-                <Tag color={record.joint_stress_level === "高" ? "red" : "default"}>关节 {record.joint_stress_level || "-"}</Tag>
-                {record.is_traditional_exercise ? <Tag color="green">传统功法</Tag> : null}
-              </Space>
-            )
+            render: (value: string) => <Tag color={value === "R3" ? "red" : value === "R2" ? "orange" : "green"}>{value}</Tag>
           },
           {
             title: "状态",
             dataIndex: "status",
-            width: 96,
             render: (status: ExerciseAction["status"]) => (
-              <Tag color={status === "APPROVED" ? "green" : status === "REJECTED" ? "red" : "orange"}>
+              <Tag color={statusTagColor(status)}>
                 {actionStatusLabels[status]}
               </Tag>
             )
           },
           {
-            title: "禁忌标签",
-            dataIndex: "contraindication_tags",
-            width: 180,
-            render: (tags?: string[]) => previewTags(tags)
+            title: "审核线索",
+            render: (_: unknown, record: ExerciseAction) => {
+              const stopCount = record.stop_signals?.length ?? 0;
+              const contraindicationCount = record.contraindication_tags?.length ?? 0;
+              return `${contraindicationCount} 禁忌 / ${stopCount} 停止信号`;
+            }
           },
           {
-            title: "适宜人群",
-            dataIndex: "suitable_tags",
-            width: 190,
-            render: (tags?: string[]) => previewTags(tags)
-          },
-          {
-            title: "审核",
-            width: 260,
-            fixed: "right",
+            title: "详情",
             render: (_: unknown, record: ExerciseAction) => (
-              <Space wrap>
-                <Button aria-label="查看动作详情" size="small" onClick={() => void openActionDetail(record)}>
-                  详情
-                </Button>
-                <Button
-                  aria-label="批准动作"
-                  icon={<Check size={14} />}
-                  size="small"
-                  disabled={record.status === "APPROVED"}
-                  loading={saving}
-                  onClick={() => onReview(record.id, "APPROVED")}
-                >
-                  批准动作
-                </Button>
-                <Button
-                  aria-label="驳回动作"
-                  icon={<X size={14} />}
-                  size="small"
-                  disabled={record.status === "REJECTED"}
-                  loading={saving}
-                  onClick={() => onReview(record.id, "REJECTED")}
-                >
-                  驳回
-                </Button>
-              </Space>
+              <Button
+                aria-label="查看动作详情"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  void openActionDetail(record);
+                }}
+              >
+                详情
+              </Button>
             )
           }
         ]}
@@ -780,27 +786,49 @@ function ActionLibraryPanel({
         open={Boolean(selectedAction)}
         onClose={() => setSelectedAction(null)}
         destroyOnClose
+        className="task-drawer"
       >
         {selectedAction ? (
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
             <Descriptions column={1} bordered size="small">
               <Descriptions.Item label="动作名称">{selectedAction.name}</Descriptions.Item>
-              <Descriptions.Item label="英文名">{selectedAction.name_en || "-"}</Descriptions.Item>
+              <Descriptions.Item label="英文名称">{selectedAction.name_en ?? "-"}</Descriptions.Item>
               <Descriptions.Item label="动作类型">{selectedAction.exercise_type || selectedAction.category}</Descriptions.Item>
               <Descriptions.Item label="风险等级">{selectedAction.risk_level}</Descriptions.Item>
-              <Descriptions.Item label="强度">{selectedAction.intensity || "-"}</Descriptions.Item>
-              <Descriptions.Item label="冲击等级">{selectedAction.impact_level || "-"}</Descriptions.Item>
-              <Descriptions.Item label="关节压力">{selectedAction.joint_stress_level || "-"}</Descriptions.Item>
-              <Descriptions.Item label="适宜人群">{joinTags(selectedAction.suitable_tags) || "-"}</Descriptions.Item>
-              <Descriptions.Item label="禁忌人群">{joinTags(selectedAction.contraindication_tags) || "-"}</Descriptions.Item>
               <Descriptions.Item label="状态">{actionStatusLabels[selectedAction.status]}</Descriptions.Item>
-              <Descriptions.Item label="停止信号">{joinTags(selectedAction.stop_signals) || "-"}</Descriptions.Item>
-              <Descriptions.Item label="证据引用">{joinTags(selectedAction.evidence_refs) || "-"}</Descriptions.Item>
+              <Descriptions.Item label="适宜人群">{joinTags(selectedAction.suitable_tags) || "-"}</Descriptions.Item>
+              <Descriptions.Item label="禁忌标签">{joinTags(selectedAction.contraindication_tags) || "-"}</Descriptions.Item>
+              <Descriptions.Item label="停止信号">{joinTags(selectedAction.stop_signals)}</Descriptions.Item>
+              <Descriptions.Item label="证据引用">{displayTags(selectedAction.evidence_refs) || "-"}</Descriptions.Item>
               <Descriptions.Item label="来源">
-                {selectedAction.source ?? "-"}
-                {selectedAction.source_exercise_id ? ` / ${selectedAction.source_exercise_id}` : ""}
+                {displayText(selectedAction.source)}
+                {selectedAction.source_exercise_id ? ` / ${displayText(selectedAction.source_exercise_id)}` : ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="关节/冲击">
+                {selectedAction.joint_stress_level ?? "-"} / {selectedAction.impact_level ?? "-"}
               </Descriptions.Item>
             </Descriptions>
+            <div className="drawer-action-row">
+              <Button
+                aria-label="批准动作"
+                icon={<CheckOutlined />}
+                disabled={selectedAction.status === "APPROVED"}
+                loading={saving}
+                onClick={() => onReview(selectedAction.id, "APPROVED")}
+              >
+                批准动作
+              </Button>
+              <Button
+                aria-label="驳回动作"
+                icon={<CloseOutlined />}
+                danger
+                disabled={selectedAction.status === "REJECTED"}
+                loading={saving}
+                onClick={() => onReview(selectedAction.id, "REJECTED")}
+              >
+                驳回
+              </Button>
+            </div>
             <Divider>编辑</Divider>
             <Form
               layout="vertical"
@@ -840,9 +868,11 @@ function ActionLibraryPanel({
               <Form.Item name="stop_signals" label="停止信号">
                 <Input />
               </Form.Item>
-              <Button type="primary" htmlType="submit" loading={saving}>
-                保存动作编辑
-              </Button>
+              <div className="drawer-sticky-actions">
+                <Button type="primary" htmlType="submit" loading={saving}>
+                  保存动作编辑
+                </Button>
+              </div>
             </Form>
             <Divider>版本历史</Divider>
             <List size="small" dataSource={[`当前版本 · ${actionStatusLabels[selectedAction.status]}`]} renderItem={(item) => <List.Item>{item}</List.Item>} />
@@ -856,6 +886,16 @@ function ActionLibraryPanel({
           </Space>
         ) : null}
       </Drawer>
+      <Drawer title="导入动作" width={640} open={createOpen} onClose={() => setCreateOpen(false)} destroyOnClose className="task-drawer">
+        <Alert className="form-alert" type="info" showIcon message="新增动作默认进入待审核状态，批准后才参与处方模板匹配。" />
+        <ActionForm
+          saving={saving}
+          onFinish={(values) => {
+            onFinish(values);
+            setCreateOpen(false);
+          }}
+        />
+      </Drawer>
     </Space>
   );
 }
@@ -863,46 +903,38 @@ function ActionLibraryPanel({
 function ActionForm({ saving, onFinish }: { saving: boolean; onFinish: (values: AdminPayload) => void }) {
   return (
     <Form layout="vertical" onFinish={onFinish} initialValues={{ category: "有氧", risk_level: "R1", intensity: "低" }}>
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
+      <div className="governance-form-groups">
+        <GovernanceFormGroup title="基础信息" description="说明动作名称、类型和适用风险等级，先确认是否适合进入动作库。">
           <Form.Item name="name" label="动作名称" rules={[{ required: true, message: "请填写动作名称" }]}>
             <Input placeholder="如：快走、八段锦、弹力带划船" />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="category" label="动作类型" rules={[{ required: true }]}>
             <Select options={categoryOptions} />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="risk_level" label="适用风险等级">
             <Select options={riskOptions} />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="intensity" label="强度">
             <Select options={["低", "中", "高"].map((value) => ({ value, label: value }))} />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
+        </GovernanceFormGroup>
+        <GovernanceFormGroup title="关键条件" description="适宜标签、禁忌标签和停止信号决定动作能否进入处方模板。">
           <Form.Item name="suitable_tags" label="适宜标签">
             <Input placeholder="肥胖代谢风险型，心肺功能不足型" />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="contraindication_tags" label="禁忌标签">
             <Input placeholder="膝痛，高血压，大重量" />
           </Form.Item>
-        </Col>
-        <Col xs={24}>
           <Form.Item name="instructions" label="动作说明">
             <Input.TextArea rows={3} />
           </Form.Item>
-        </Col>
-      </Row>
-      <Button type="primary" htmlType="submit" loading={saving}>
-        保存动作
-      </Button>
+        </GovernanceFormGroup>
+      </div>
+      <div className="drawer-sticky-actions">
+        <Button type="primary" htmlType="submit" loading={saving}>
+          保存动作
+        </Button>
+      </div>
     </Form>
   );
 }
@@ -925,8 +957,7 @@ function TemplateLibraryPanel({
   const [selectedTemplate, setSelectedTemplate] = useState<PrescriptionTemplate | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [templateFilter, setTemplateFilter] = useState("");
-  const [creatingTemplate, setCreatingTemplate] = useState(false);
-  const templateStatus = countByStatus(templates);
+  const [createOpen, setCreateOpen] = useState(false);
   const filteredTemplates = templates.filter((template) => {
     const text = [
       template.name,
@@ -947,134 +978,67 @@ function TemplateLibraryPanel({
   }
 
   return (
-    <Space direction="vertical" size={16} className="template-library-workbench">
-      <section className="template-library-summary" aria-label="模板库概览">
-        <div>
-          <Typography.Title level={4}>模板库概览</Typography.Title>
-          <Typography.Text type="secondary">
-            筛选后 {filteredTemplates.length} / 全部 {templates.length}
-          </Typography.Text>
-        </div>
-        <div className="template-library-metrics">
-          <div>
-            <span>已批准</span>
-            <strong>{templateStatus.APPROVED ?? 0}</strong>
-          </div>
-          <div>
-            <span>草稿</span>
-            <strong>{templateStatus.DRAFT ?? 0}</strong>
-          </div>
-          <div>
-            <span>已归档</span>
-            <strong>{templateStatus.ARCHIVED ?? 0}</strong>
-          </div>
-          <div>
-            <span>R2/R3</span>
-            <strong>{templates.filter((item) => item.risk_level === "R2" || item.risk_level === "R3").length}</strong>
-          </div>
-        </div>
-      </section>
+    <Space direction="vertical" size={16} style={{ width: "100%" }}>
       {error ? <Alert type="error" showIcon message={error} /> : null}
-      <div className="template-library-toolbar">
-        <Input
-          aria-label="模板筛选"
-          placeholder="按名称、风险等级、分型、目标或证据筛选模板"
-          value={templateFilter}
-          onChange={(event) => setTemplateFilter(event.target.value)}
-        />
-        <Typography.Text type="secondary">每页 12 条，详情在抽屉中查看</Typography.Text>
-        <Button type="primary" icon={<Plus size={14} />} onClick={() => setCreatingTemplate(true)}>
-          新增模板
+      <div className="panel-toolbar">
+        <div>
+          <Typography.Text strong>模板治理列表</Typography.Text>
+          <Typography.Paragraph type="secondary">先筛选和核对已批准模板；新建模板仅在需要扩展 FITT-VP 结构时打开。</Typography.Paragraph>
+        </div>
+        <Button type="primary" onClick={() => setCreateOpen(true)}>
+          新建模板
         </Button>
       </div>
+      <Input
+        aria-label="模板筛选"
+        placeholder="按名称、风险等级、分型、目标或证据筛选模板"
+        value={templateFilter}
+        onChange={(event) => setTemplateFilter(event.target.value)}
+      />
       <Table
+        className="compact-governance-table"
         rowKey="id"
-        className="template-library-table"
         loading={loading}
         dataSource={filteredTemplates}
-        pagination={{
-          pageSize: 12,
-          showSizeChanger: false,
-          showTotal: (total) => `共 ${total} 个模板`
-        }}
+        pagination={{ pageSize: 10, showSizeChanger: true }}
+        scroll={{ x: 820 }}
         locale={{ emptyText: "暂无模板，请先导入处方模板库。" }}
-        scroll={{ x: 960 }}
+        onRow={(record) => ({
+          onClick: () => void openTemplateDetail(record)
+        })}
         columns={[
-          {
-            title: "模板名称",
-            dataIndex: "name",
-            width: 260,
-            render: (name: string, record: PrescriptionTemplate) => (
-              <Space direction="vertical" size={0}>
-                <Typography.Text strong>{name}</Typography.Text>
-                <Typography.Text type="secondary">
-                  {record.template_code || record.source_version || `v${record.version}`}
-                </Typography.Text>
-              </Space>
-            )
-          },
+          { title: "模板名称", dataIndex: "name" },
           {
             title: "风险等级",
             dataIndex: "risk_level",
-            width: 96,
-            render: (risk: string) => <Tag color={risk === "R3" ? "red" : risk === "R2" ? "orange" : "green"}>{risk}</Tag>
+            render: (value: string) => <Tag color={value === "R3" ? "red" : value === "R2" ? "orange" : "green"}>{value}</Tag>
           },
           {
-            title: "分型标签",
-            dataIndex: "cluster_tags",
-            width: 210,
-            render: (tags?: string[]) => previewTags(tags, 2)
-          },
-          {
-            title: "目标标签",
-            dataIndex: "goal_tags",
-            width: 210,
-            render: (tags?: string[]) => previewTags(tags, 2)
-          },
-          {
-            title: "FITT-VP 摘要",
-            width: 220,
-            render: (_: unknown, record: PrescriptionTemplate) => {
-              const fitt = record.fitt_vp ?? {};
-              return (
-                <Typography.Text type="secondary">
-                  {[fitt.frequency, fitt.intensity, fitt.time].filter(Boolean).join(" / ") || "-"}
-                </Typography.Text>
-              );
-            }
+            title: "匹配范围",
+            render: (_: unknown, record: PrescriptionTemplate) =>
+              `${record.cluster_tags?.length ?? 0} 分型 / ${record.goal_tags?.length ?? 0} 目标`
           },
           {
             title: "本平台状态",
-            width: 150,
             render: (_: unknown, record: PrescriptionTemplate) => {
               const status = record.review_status ?? record.status;
               return (
-                <Tag color={status === "APPROVED" || status === "EXPERT_CONFIRMED" ? "green" : "orange"}>
+                <Tag color={statusTagColor(status)}>
                   本平台状态：{platformStatus(status)}
                 </Tag>
               );
             }
           },
           {
-            title: "安全要点",
-            width: 160,
-            dataIndex: "evidence_refs",
-            render: (_refs: string[] | undefined, record: PrescriptionTemplate) => (
-              <Space size={[4, 4]} wrap>
-                <Tag color={record.precautions?.length ? "blue" : "default"}>注意 {record.precautions?.length ?? 0}</Tag>
-                <Tag color={record.contraindications?.length ? "red" : "default"}>
-                  禁忌 {record.contraindications?.length ?? 0}
-                </Tag>
-                <Tag color={record.evidence_refs?.length ? "cyan" : "default"}>证据 {record.evidence_refs?.length ?? 0}</Tag>
-              </Space>
-            )
-          },
-          {
             title: "操作",
-            width: 110,
-            fixed: "right",
             render: (_: unknown, record: PrescriptionTemplate) => (
-              <Button aria-label="查看模板详情" size="small" onClick={() => void openTemplateDetail(record)}>
+              <Button
+                aria-label="查看模板详情"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  void openTemplateDetail(record);
+                }}
+              >
                 详情
               </Button>
             )
@@ -1082,109 +1046,39 @@ function TemplateLibraryPanel({
         ]}
       />
       <Drawer
-        title="创建处方模板"
-        width={760}
-        open={creatingTemplate}
-        onClose={() => setCreatingTemplate(false)}
-        destroyOnClose
-      >
-        <TemplateForm saving={saving} onFinish={onFinish} />
-      </Drawer>
-      <Drawer
         title="模板详情"
         width={760}
         open={Boolean(selectedTemplate)}
         onClose={() => setSelectedTemplate(null)}
         destroyOnClose
+        className="task-drawer"
       >
         {selectedTemplate ? (
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
             <Descriptions column={1} bordered size="small">
               <Descriptions.Item label="模板名称">{selectedTemplate.name}</Descriptions.Item>
               <Descriptions.Item label="风险等级">{selectedTemplate.risk_level}</Descriptions.Item>
-              <Descriptions.Item label="分型标签">{joinTags(selectedTemplate.cluster_tags) || "-"}</Descriptions.Item>
-              <Descriptions.Item label="目标标签">{joinTags(selectedTemplate.goal_tags) || "-"}</Descriptions.Item>
+              <Descriptions.Item label="分型标签">
+                <Space wrap>{selectedTemplate.cluster_tags?.length ? selectedTemplate.cluster_tags.map((tag) => <Tag key={tag}>{tag}</Tag>) : "-"}</Space>
+              </Descriptions.Item>
+              <Descriptions.Item label="目标标签">
+                <Space wrap>{selectedTemplate.goal_tags?.length ? selectedTemplate.goal_tags.map((tag) => <Tag key={tag}>{tag}</Tag>) : "-"}</Space>
+              </Descriptions.Item>
               <Descriptions.Item label="本平台状态">
                 {platformStatus(selectedTemplate.review_status ?? selectedTemplate.status)}
               </Descriptions.Item>
               <Descriptions.Item label="注意事项">{joinTags(selectedTemplate.precautions) || "-"}</Descriptions.Item>
-              <Descriptions.Item label="禁忌动作">{joinTags(selectedTemplate.contraindications) || "-"}</Descriptions.Item>
-              <Descriptions.Item label="证据引用">{joinTags(selectedTemplate.evidence_refs) || "-"}</Descriptions.Item>
+              <Descriptions.Item label="禁忌">{joinTags(selectedTemplate.contraindications) || "-"}</Descriptions.Item>
+              <Descriptions.Item label="证据引用">{displayTags(selectedTemplate.evidence_refs) || "-"}</Descriptions.Item>
             </Descriptions>
             <FITTVPCard fitt={selectedTemplate.fitt_vp} riskLevel={selectedTemplate.risk_level} />
             <Divider>编辑</Divider>
-            <Form
-              layout="vertical"
-              initialValues={{
-                edit_name: selectedTemplate.name,
-                edit_risk_level: selectedTemplate.risk_level,
-                edit_cluster_tags: joinTags(selectedTemplate.cluster_tags),
-                edit_goal_tags: joinTags(selectedTemplate.goal_tags),
-                edit_fitt_vp: stringifyJson(selectedTemplate.fitt_vp),
-                edit_precautions: joinTags(selectedTemplate.precautions),
-                edit_contraindications: joinTags(selectedTemplate.contraindications),
-                edit_evidence_refs: joinTags(selectedTemplate.evidence_refs),
-                edit_status: selectedTemplate.status,
-                edit_review_status: selectedTemplate.review_status
-              }}
-              onFinish={(values) =>
-                onUpdate(selectedTemplate.id, {
-                  name: values.edit_name,
-                  risk_level: values.edit_risk_level,
-                  cluster_tags: values.edit_cluster_tags,
-                  goal_tags: values.edit_goal_tags,
-                  fitt_vp: values.edit_fitt_vp,
-                  precautions: values.edit_precautions,
-                  contraindications: values.edit_contraindications,
-                  evidence_refs: values.edit_evidence_refs,
-                  status: values.edit_status,
-                  review_status: values.edit_review_status
-                })
-              }
-            >
-              <Form.Item name="edit_name" label="编辑模板名称" rules={[{ required: true }]}>
-                <Input />
-              </Form.Item>
-              <Row gutter={12}>
-                <Col xs={24} md={12}>
-                  <Form.Item name="edit_risk_level" label="风险等级">
-                    <Select options={riskOptions} />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} md={12}>
-                  <Form.Item name="edit_status" label="启用状态">
-                    <Select
-                      options={[
-                        { value: "DRAFT", label: "草稿" },
-                        { value: "APPROVED", label: "已批准" },
-                        { value: "ARCHIVED", label: "已归档" }
-                      ]}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Form.Item name="edit_cluster_tags" label="分型标签">
-                <Input />
-              </Form.Item>
-              <Form.Item name="edit_goal_tags" label="目标标签">
-                <Input />
-              </Form.Item>
-              <Form.Item name="edit_fitt_vp" label="FITT-VP JSON">
-                <Input.TextArea rows={6} />
-              </Form.Item>
-              <Form.Item name="edit_precautions" label="注意事项">
-                <Input />
-              </Form.Item>
-              <Form.Item name="edit_contraindications" label="禁忌动作">
-                <Input />
-              </Form.Item>
-              <Form.Item name="edit_evidence_refs" label="证据引用">
-                <Input />
-              </Form.Item>
-              <Button type="primary" htmlType="submit" loading={saving}>
-                保存模板编辑
-              </Button>
-            </Form>
+            <TemplateForm
+              saving={saving}
+              submitLabel="保存模板编辑"
+              initialValues={templateInitialValues(selectedTemplate)}
+              onFinish={(values) => onUpdate(selectedTemplate.id, governancePayload(values))}
+            />
             <Divider>版本历史</Divider>
             <List
               size="small"
@@ -1204,55 +1098,106 @@ function TemplateLibraryPanel({
           </Space>
         ) : null}
       </Drawer>
+      <Drawer title="新建处方模板" width={720} open={createOpen} onClose={() => setCreateOpen(false)} destroyOnClose className="task-drawer">
+        <Alert className="form-alert" type="info" showIcon message="模板保存后需审核批准，批准前不会参与自动处方匹配。" />
+        <TemplateForm
+          saving={saving}
+          onFinish={(values) => {
+            onFinish(governancePayload(values));
+            setCreateOpen(false);
+          }}
+        />
+      </Drawer>
     </Space>
   );
 }
 
-function TemplateForm({ saving, onFinish }: { saving: boolean; onFinish: (values: AdminPayload) => void }) {
+function TemplateForm({
+  saving,
+  onFinish,
+  initialValues,
+  submitLabel = "保存模板"
+}: {
+  saving: boolean;
+  onFinish: (values: AdminPayload) => void;
+  initialValues?: AdminPayload;
+  submitLabel?: string;
+}) {
   return (
-    <Form layout="vertical" onFinish={onFinish} initialValues={{ risk_level: "R1", status: "DRAFT", version: 1 }}>
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
+    <Form layout="vertical" onFinish={onFinish} initialValues={initialValues ?? templateInitialValues()}>
+      <div className="governance-form-groups">
+        <GovernanceFormGroup title="基础信息" description="先说明模板适用的风险、分型和目标，避免从 FITT-VP 细节开始。">
           <Form.Item name="name" label="模板名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="risk_level" label="风险等级">
             <Select options={riskOptions} />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="cluster_tags" label="分型标签">
             <Input placeholder="肥胖代谢风险型，初级运动水平" />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="goal_tags" label="目标标签">
             <Input placeholder="减脂，增强心肺" />
           </Form.Item>
-        </Col>
-        <Col xs={24}>
-          <Form.Item name="fitt_vp" label="FITT-VP JSON">
-            <Input.TextArea rows={6} placeholder='{"frequency":"每周3次","intensity":"低强度","time":"每次30分钟","type":["快走"],"volume":"每周90分钟","progression":"每2周调整"}' />
+        </GovernanceFormGroup>
+
+        <GovernanceFormGroup title="FITT-VP 处方结构" description="把 JSON 拆成可读字段，保存时再自动组装为原接口需要的结构。">
+          <Form.Item name="fitt_frequency" label="频率">
+            <Input placeholder="每周3次" />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
+          <Form.Item name="fitt_intensity" label="强度">
+            <Input placeholder="低到中等强度" />
+          </Form.Item>
+          <Form.Item name="fitt_time" label="单次时间">
+            <Input placeholder="每次30分钟" />
+          </Form.Item>
+          <Form.Item name="fitt_type" label="运动类型">
+            <Input placeholder="快走，弹力带，八段锦" />
+          </Form.Item>
+          <Form.Item name="fitt_volume" label="周总量">
+            <Input placeholder="每周90分钟" />
+          </Form.Item>
+          <Form.Item name="fitt_progression" label="进阶规则">
+            <Input placeholder="每2-4周根据反馈调整" />
+          </Form.Item>
+        </GovernanceFormGroup>
+
+        <GovernanceFormGroup title="安全边界与发布治理" description="禁忌、证据和平台状态决定模板是否能进入自动匹配。">
           <Form.Item name="precautions" label="注意事项">
             <Input />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="contraindications" label="禁忌动作">
             <Input />
           </Form.Item>
-        </Col>
-      </Row>
-      <Space>
+          <Form.Item name="evidence_refs" label="证据引用">
+            <Input placeholder="指南编号、专家共识或知识库文档" />
+          </Form.Item>
+          <Form.Item name="status" label="模板状态">
+            <Select
+              options={[
+                { value: "DRAFT", label: "草稿" },
+                { value: "APPROVED", label: "已批准" },
+                { value: "ARCHIVED", label: "已归档" }
+              ]}
+            />
+          </Form.Item>
+          <Form.Item name="review_status" label="平台审核状态">
+            <Select
+              options={[
+                { value: "EXPERT_REVIEW_DRAFT", label: "专家草稿" },
+                { value: "APPROVED", label: "已批准" },
+                { value: "EXPERT_CONFIRMED", label: "专家已确认" },
+                { value: "ARCHIVED", label: "已归档" }
+              ]}
+            />
+          </Form.Item>
+        </GovernanceFormGroup>
+      </div>
+      <div className="drawer-sticky-actions">
         <Button type="primary" htmlType="submit" loading={saving}>
-          保存模板
+          {submitLabel}
         </Button>
-      </Space>
+      </div>
     </Form>
   );
 }
@@ -1282,10 +1227,11 @@ function KnowledgePanel({
 }) {
   const [knowledgeFilter, setKnowledgeFilter] = useState("");
   const [selectedDocument, setSelectedDocument] = useState<KnowledgeDocument | null>(null);
-  const [creatingKnowledge, setCreatingKnowledge] = useState(false);
-  const [uploadingKnowledge, setUploadingKnowledge] = useState(false);
-  const [searchingKnowledge, setSearchingKnowledge] = useState(false);
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
+  const [createOpen, setCreateOpen] = useState<"manual" | "upload" | "search" | null>(null);
+  const activeDocuments = documents.filter((document) => document.status === "ACTIVE");
+  const failedDocuments = documents.filter((document) => document.status === "INDEX_FAILED" || Boolean(document.skipped_reason));
+  const totalChunks = documents.reduce((sum, document) => sum + Number(document.chunk_count ?? 0), 0);
   const filteredDocuments = documents.filter((document) => {
     const text = [
       document.title,
@@ -1299,9 +1245,6 @@ function KnowledgePanel({
     ].join(" ");
     return text.toLowerCase().includes(knowledgeFilter.toLowerCase());
   });
-  const indexedDocuments = documents.filter((document) => document.chunk_count > 0 && document.status === "ACTIVE").length;
-  const failedDocuments = documents.filter((document) => document.status === "INDEX_FAILED" || Boolean(document.skipped_reason)).length;
-  const archivedDocuments = documents.filter((document) => document.status === "ARCHIVED").length;
 
   async function openKnowledgeDetail(document: KnowledgeDocument) {
     setSelectedDocument(document);
@@ -1312,209 +1255,114 @@ function KnowledgePanel({
   return (
     <Space direction="vertical" size={16} style={{ width: "100%" }}>
       {error ? <Alert type="error" showIcon message={error} /> : null}
-      <div className="knowledge-library-workbench">
-        <div className="knowledge-library-summary">
-          <div>
-            <Typography.Title level={4}>知识库概览</Typography.Title>
-            <Typography.Paragraph type="secondary">
-              管理指南、专家共识和动作证据的入库、切片、索引与检索验证，索引异常资料保留审计但不会悄悄伪装为向量证据。
-            </Typography.Paragraph>
-          </div>
-          <div className="knowledge-library-metrics">
-            <div>
-              <span>全部文档</span>
-              <strong>{documents.length} 份</strong>
-            </div>
-            <div>
-              <span>可用于 RAG</span>
-              <strong>{indexedDocuments} 份</strong>
-            </div>
-            <div>
-              <span>索引异常</span>
-              <strong>{failedDocuments} 份</strong>
-            </div>
-            <div>
-              <span>已停用</span>
-              <strong>{archivedDocuments} 份</strong>
-            </div>
-          </div>
+      <div className="panel-toolbar">
+        <div>
+          <Typography.Text strong>知识文档治理</Typography.Text>
+          <Typography.Paragraph type="secondary">默认检查文档状态、索引和检索结果；录入和上传作为低频动作收起。</Typography.Paragraph>
         </div>
+        <Space wrap>
+          <Button onClick={() => setCreateOpen("manual")}>录入知识</Button>
+          <Button type="primary" onClick={() => setCreateOpen("upload")}>上传文件</Button>
+          <Button onClick={() => setCreateOpen("search")}>检索验证</Button>
+          <Button aria-label="重建向量索引" icon={<SyncOutlined />} loading={saving} onClick={onReindex}>
+            重建向量索引
+          </Button>
+        </Space>
       </div>
-      <Card>
-        <div className="knowledge-library-toolbar">
-          <Input
-            aria-label="知识筛选"
-            placeholder="按标题、分类、来源、版本、状态或索引失败原因筛选知识文档"
-            value={knowledgeFilter}
-            onChange={(event) => setKnowledgeFilter(event.target.value)}
-          />
-          <Typography.Text type="secondary">
-            筛选后 {filteredDocuments.length} / 全部 {documents.length}
-          </Typography.Text>
-          <Typography.Text type="secondary">每页 12 条，详情在抽屉中查看</Typography.Text>
-          <Space wrap>
-            <Button icon={<Plus size={14} />} onClick={() => setCreatingKnowledge(true)}>
-              录入知识
+      <div className="status-grid">
+        <StatusTile label="启用文档" value={`${activeDocuments.length}/${documents.length}`} detail="参与 RAG 召回" tone={activeDocuments.length ? "safe" : "warning"} />
+        <StatusTile label="索引失败" value={failedDocuments.length} detail="需要重建或停用" tone={failedDocuments.length ? "danger" : "safe"} />
+        <StatusTile label="已切片" value={totalChunks} detail="可召回知识片段" tone={totalChunks ? "info" : "warning"} />
+        <StatusTile label="本次检索证据" value={evidence.length} detail="用于验证召回质量" />
+      </div>
+      {failedDocuments.length ? (
+        <DataNote
+          title="索引失败修复队列"
+          description={failedDocuments
+            .slice(0, 3)
+            .map((document) => `${document.title}：${document.skipped_reason ?? "索引失败"}`)
+            .join("；")}
+          action={
+            <Button size="small" icon={<SyncOutlined />} loading={saving} onClick={onReindex}>
+              重建索引
             </Button>
-            <Button onClick={() => setUploadingKnowledge(true)}>上传资料</Button>
-            <Button onClick={() => setSearchingKnowledge(true)}>检索验证</Button>
-            <Button aria-label="重建向量索引" icon={<RefreshCw size={14} />} loading={saving} onClick={onReindex}>
-              重建向量索引
-            </Button>
-          </Space>
+          }
+        />
+      ) : null}
+      <section className="governance-table-surface">
+        <div className="governance-table-head">
+          <div>
+            <Typography.Text strong>已入库知识文档</Typography.Text>
+            <Typography.Paragraph type="secondary">点击详情查看切片、向量化状态、版本和审计留痕。</Typography.Paragraph>
+          </div>
         </div>
+        <Input
+          aria-label="知识筛选"
+          placeholder="按标题、分类、来源、版本、状态或索引失败原因筛选知识文档"
+          value={knowledgeFilter}
+          onChange={(event) => setKnowledgeFilter(event.target.value)}
+          style={{ marginBottom: 12 }}
+        />
         <Table
+          className="compact-governance-table"
           rowKey="id"
-          className="knowledge-library-table"
           loading={loading}
           dataSource={filteredDocuments}
-          pagination={{
-            pageSize: 12,
-            showSizeChanger: false,
-            showTotal: (total, range) => `${range[0]}-${range[1]} / ${total}`
-          }}
+          pagination={{ pageSize: 8, showSizeChanger: true }}
+          scroll={{ x: 760 }}
           size="small"
-          scroll={{ x: 1080 }}
           locale={{ emptyText: "暂无知识文档，请先录入指南、专家共识或动作说明。" }}
+          onRow={(record) => ({
+            onClick: () => void openKnowledgeDetail(record)
+          })}
           columns={[
-            {
-              title: "标题",
-              dataIndex: "title",
-              fixed: "left",
-              width: 220,
-              render: (value: string, record: KnowledgeDocument) => (
-                <Space direction="vertical" size={2}>
-                  <Typography.Text strong>{value}</Typography.Text>
-                  <Typography.Text type="secondary">{record.source ?? "未记录来源"}</Typography.Text>
-                </Space>
-              )
-            },
+            { title: "标题", dataIndex: "title" },
             { title: "分类", dataIndex: "category" },
-            { title: "来源类型", dataIndex: "source_type", render: (value: string | null) => value ?? "-" },
-            {
-              title: "版本",
-              render: (_: unknown, record: KnowledgeDocument) =>
-                record.version && record.version !== record.published_year ? record.version : "-"
-            },
-            { title: "年份", dataIndex: "published_year", render: (value: string | null) => value ?? "-" },
-            { title: "可信度", dataIndex: "credibility_level", render: (value: string | null) => value ?? "-" },
-            { title: "切片数", dataIndex: "chunk_count" },
             {
               title: "状态",
               dataIndex: "status",
               render: (value: string) => (
-                <Tag color={value === "ACTIVE" ? "green" : value === "INDEX_FAILED" ? "red" : "default"}>
+                <Tag color={statusTagColor(value)}>
                   {platformStatus(value)}
                 </Tag>
               )
             },
-            {
-              title: "索引状态",
-              render: (_: unknown, record: KnowledgeDocument) => (
-                <Space direction="vertical" size={2}>
-                  <Tag color={record.chunk_count > 0 ? "green" : record.status === "INDEX_FAILED" ? "red" : "default"}>
-                    {record.chunk_count > 0 ? "已切片" : record.status === "INDEX_FAILED" ? "索引失败" : "待索引"}
-                  </Tag>
-                  {record.skipped_reason ? (
-                    <Typography.Text type="secondary">
-                      {record.skipped_reason.startsWith("索引失败") ? record.skipped_reason : `索引失败：${record.skipped_reason}`}
-                    </Typography.Text>
-                  ) : null}
-                </Space>
-              )
-            },
+            { title: "切片数", dataIndex: "chunk_count" },
             {
               title: "操作",
-              fixed: "right",
-              width: 168,
               render: (_: unknown, record: KnowledgeDocument) => (
-                <Space>
-                  <Button
-                    aria-label={record.status === "ACTIVE" ? "查看知识详情" : `查看${record.title}详情`}
-                    size="small"
-                    onClick={() => void openKnowledgeDetail(record)}
-                  >
-                    详情
-                  </Button>
-                  {record.status === "ACTIVE" ? (
-                    <Button size="small" danger loading={saving} onClick={() => onUpdateStatus(record.id, "ARCHIVED")}>
-                      停用文档
-                    </Button>
-                  ) : (
-                    <Button size="small" loading={saving} onClick={() => onUpdateStatus(record.id, "ACTIVE")}>
-                      启用文档
-                    </Button>
-                  )}
-                </Space>
+                <Button
+                  aria-label={record.status === "ACTIVE" ? "查看知识详情" : `查看${record.title}详情`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    void openKnowledgeDetail(record);
+                  }}
+                >
+                  详情
+                </Button>
               )
             }
           ]}
         />
-      </Card>
-      <Drawer
-        title="录入知识"
-        width={640}
-        open={creatingKnowledge}
-        onClose={() => setCreatingKnowledge(false)}
-        destroyOnClose
-      >
-        {creatingKnowledge ? (
-          <KnowledgeForm
-            saving={saving}
-            onFinish={(values) => {
-              onFinish(values);
-              setCreatingKnowledge(false);
-            }}
-          />
-        ) : null}
-      </Drawer>
-      <Drawer
-        title="上传资料"
-        width={680}
-        open={uploadingKnowledge}
-        onClose={() => setUploadingKnowledge(false)}
-        destroyOnClose
-      >
-        {uploadingKnowledge ? (
-          <KnowledgeUploadForm
-            saving={saving}
-            onUpload={(payload) => {
-              onUpload(payload);
-              setUploadingKnowledge(false);
-            }}
-          />
-        ) : null}
-      </Drawer>
-      <Drawer
-        title="RAG 检索验证"
-        width={640}
-        open={searchingKnowledge}
-        onClose={() => setSearchingKnowledge(false)}
-        destroyOnClose
-      >
-        {searchingKnowledge ? (
-          <KnowledgeSearchForm
-            saving={saving}
-            onFinish={(values) => {
-              onSearch(values);
-              setSearchingKnowledge(false);
-            }}
-          />
-        ) : null}
-      </Drawer>
+      </section>
       <Drawer
         title="知识文档详情"
         width={720}
         open={Boolean(selectedDocument)}
         onClose={() => setSelectedDocument(null)}
         destroyOnClose
+        className="task-drawer"
       >
         {selectedDocument ? (
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
             <Descriptions column={1} bordered size="small">
               <Descriptions.Item label="文档标题">{selectedDocument.title}</Descriptions.Item>
               <Descriptions.Item label="知识分类">{selectedDocument.category}</Descriptions.Item>
-              <Descriptions.Item label="来源">{selectedDocument.source ?? "-"}</Descriptions.Item>
+              <Descriptions.Item label="来源">{displayText(selectedDocument.source)}</Descriptions.Item>
+              <Descriptions.Item label="来源类型">{displayText(selectedDocument.source_type)}</Descriptions.Item>
+              <Descriptions.Item label="版本">{selectedDocument.version ?? "-"}</Descriptions.Item>
+              <Descriptions.Item label="年份">{selectedDocument.published_year ?? "-"}</Descriptions.Item>
+              <Descriptions.Item label="可信度">{selectedDocument.credibility_level ?? "-"}</Descriptions.Item>
               <Descriptions.Item label="状态">{platformStatus(selectedDocument.status)}</Descriptions.Item>
               <Descriptions.Item label="切片状态">
                 {selectedDocument.chunk_count > 0 ? `已切片 ${selectedDocument.chunk_count} 段` : "未完成切片"}
@@ -1531,6 +1379,17 @@ function KnowledgePanel({
               ) : null}
               <Descriptions.Item label="文件路径">{selectedDocument.file_path ?? "-"}</Descriptions.Item>
             </Descriptions>
+            <div className="drawer-sticky-actions">
+              {selectedDocument.status === "ACTIVE" ? (
+                <Button danger loading={saving} onClick={() => onUpdateStatus(selectedDocument.id, "ARCHIVED")}>
+                  停用文档
+                </Button>
+              ) : (
+                <Button loading={saving} onClick={() => onUpdateStatus(selectedDocument.id, "ACTIVE")}>
+                  启用文档
+                </Button>
+              )}
+            </div>
             <Divider>版本历史</Divider>
             <List
               size="small"
@@ -1552,18 +1411,23 @@ function KnowledgePanel({
         ) : null}
       </Drawer>
       {evidence.length ? (
-        <Card title="检索证据">
+        <section className="governance-table-surface">
+          <div className="governance-table-head">
+            <div>
+              <Typography.Text strong>检索证据</Typography.Text>
+              <Typography.Paragraph type="secondary">显示召回模式、资料状态、来源和证据片段。</Typography.Paragraph>
+            </div>
+          </div>
           <Table
             rowKey="chunk_id"
             dataSource={evidence}
             pagination={false}
             size="small"
-            scroll={{ x: 1040 }}
+            scroll={{ x: 760 }}
             columns={[
               { title: "文档", dataIndex: "document_title" },
-              { title: "得分", dataIndex: "score" },
               {
-                title: "检索模式",
+                title: "召回状态",
                 render: (_: unknown, record: KnowledgeEvidence) => (
                   <Space direction="vertical" size={2}>
                     <Tag color={record.retrieval_mode === "vector" ? "green" : "orange"}>
@@ -1571,7 +1435,7 @@ function KnowledgePanel({
                         ? "索引失败资料，仅关键词召回"
                         : retrievalModeLabels[record.retrieval_mode]}
                     </Tag>
-                    {record.fallback_reason ? <Typography.Text type="secondary">{record.fallback_reason}</Typography.Text> : null}
+                    {record.fallback_reason ? <Typography.Text type="secondary">{displayText(record.fallback_reason)}</Typography.Text> : null}
                   </Space>
                 )
               },
@@ -1579,7 +1443,7 @@ function KnowledgePanel({
                 title: "资料状态",
                 render: (_: unknown, record: KnowledgeEvidence) => (
                   <Space direction="vertical" size={2}>
-                    <Tag color={record.document_status === "ACTIVE" ? "green" : "red"}>
+                    <Tag color={statusTagColor(record.document_status)}>
                       {platformStatus(record.document_status)}
                     </Tag>
                     {record.document_skipped_reason ? (
@@ -1588,20 +1452,59 @@ function KnowledgePanel({
                   </Space>
                 )
               },
-              { title: "章节", dataIndex: "section", render: (value: string | null) => value ?? "-" },
               {
-                title: "页码",
-                render: (_: unknown, record: KnowledgeEvidence) =>
-                  record.page_start && record.page_end ? `${record.page_start}-${record.page_end}` : "-"
+                title: "来源定位",
+                render: (_: unknown, record: KnowledgeEvidence) => (
+                  <Space direction="vertical" size={2}>
+                    <Typography.Text>{record.section ?? "-"}</Typography.Text>
+                    <Typography.Text type="secondary">
+                      {record.page_start && record.page_end ? `${record.page_start}-${record.page_end}` : "-"}
+                    </Typography.Text>
+                    <Typography.Text type="secondary">
+                      {displayText([record.source_type, record.version].filter(Boolean).join(" / ") || "-")}
+                    </Typography.Text>
+                  </Space>
+                )
               },
-              { title: "来源", render: (_: unknown, record: KnowledgeEvidence) => [record.source_type, record.version].filter(Boolean).join(" / ") || "-" },
-              { title: "可信度", dataIndex: "credibility_level", render: (value: string | null) => value ?? "-" },
-              { title: "标签", dataIndex: "tags", render: (tags: string[]) => tags.join("，") },
               { title: "证据片段", dataIndex: "content" }
             ]}
           />
-        </Card>
+        </section>
       ) : null}
+      <Drawer
+        title={createOpen === "upload" ? "上传知识文件" : createOpen === "search" ? "RAG 检索验证" : "录入知识正文"}
+        width={720}
+        open={Boolean(createOpen)}
+        onClose={() => setCreateOpen(null)}
+        destroyOnClose
+        className="task-drawer"
+      >
+        {createOpen === "upload" ? (
+          <KnowledgeUploadForm
+            saving={saving}
+            onUpload={(payload) => {
+              onUpload(payload);
+              setCreateOpen(null);
+            }}
+          />
+        ) : createOpen === "search" ? (
+          <KnowledgeSearchForm
+            saving={saving}
+            onFinish={(values) => {
+              onSearch(values);
+              setCreateOpen(null);
+            }}
+          />
+        ) : createOpen === "manual" ? (
+          <KnowledgeForm
+            saving={saving}
+            onFinish={(values) => {
+              onFinish(values);
+              setCreateOpen(null);
+            }}
+          />
+        ) : null}
+      </Drawer>
     </Space>
   );
 }
@@ -1609,31 +1512,29 @@ function KnowledgePanel({
 function KnowledgeForm({ saving, onFinish }: { saving: boolean; onFinish: (values: AdminPayload) => void }) {
   return (
     <Form layout="vertical" onFinish={onFinish} initialValues={{ category: "慢病运动" }}>
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
+      <div className="governance-form-groups">
+        <GovernanceFormGroup title="基础信息" description="用于知识治理和检索过滤，建议使用清晰的指南或共识标题。">
           <Form.Item name="title" label="文档标题" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name="category" label="知识分类">
             <Input />
           </Form.Item>
-        </Col>
-        <Col xs={24}>
           <Form.Item name="tags" label="检索标签">
             <Input placeholder="高血压，R2，八段锦" />
           </Form.Item>
-        </Col>
-        <Col xs={24}>
+        </GovernanceFormGroup>
+        <GovernanceFormGroup title="预览/证据" description="正文会参与 RAG 检索，避免写入真实身份信息或未脱敏资料。">
           <Form.Item name="content" label="知识正文" rules={[{ required: true }]}>
             <Input.TextArea rows={8} />
           </Form.Item>
-        </Col>
-      </Row>
-      <Button type="primary" htmlType="submit" loading={saving}>
-        保存知识
-      </Button>
+        </GovernanceFormGroup>
+      </div>
+      <div className="drawer-sticky-actions">
+        <Button type="primary" htmlType="submit" loading={saving}>
+          保存知识
+        </Button>
+      </div>
     </Form>
   );
 }
@@ -1661,88 +1562,82 @@ function KnowledgeUploadForm({ saving, onUpload }: { saving: boolean; onUpload: 
   }
 
   return (
-    <Form
-      name="knowledge-upload"
-      layout="vertical"
-      onFinish={submit}
-      initialValues={{ upload_category: "慢病运动", upload_source_type: "上传资料" }}
-    >
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Form.Item name="upload_title" label="上传文档标题" rules={[{ required: true, message: "请填写文档标题" }]}>
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item label="资料文件" required>
-            <input
-              aria-label="上传知识文件"
-              ref={inputRef}
-              type="file"
-              accept=".txt,.md,.csv,.json,text/plain,text/markdown,application/json,text/csv"
-              onChange={(event) => {
-                const nextFile = event.currentTarget.files?.[0] ?? null;
-                fileRef.current = nextFile;
-              }}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={8}>
-          <Form.Item name="upload_category" label="知识分类">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={8}>
-          <Form.Item name="upload_source_type" label="来源类型">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={8}>
-          <Form.Item name="upload_version" label="版本">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={8}>
-          <Form.Item name="upload_published_year" label="年份">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={8}>
-          <Form.Item name="upload_credibility_level" label="可信度">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={8}>
-          <Form.Item name="upload_tags" label="检索标签">
-            <Input placeholder="高血压，R2" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Button type="primary" htmlType="submit" loading={saving}>
-        上传知识文件
-      </Button>
-    </Form>
+    <>
+      <Form
+        name="knowledge-upload"
+        layout="vertical"
+        onFinish={submit}
+        initialValues={{ upload_category: "慢病运动", upload_source_type: "上传资料" }}
+      >
+        <div className="governance-form-groups">
+          <GovernanceFormGroup title="基础信息" description="先确认文档标题、分类和上传文件，上传后进入索引治理流程。">
+            <Form.Item name="upload_title" label="上传文档标题" rules={[{ required: true, message: "请填写文档标题" }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="上传知识文件" required>
+              <input
+                aria-label="上传知识文件"
+                ref={inputRef}
+                type="file"
+                accept=".txt,.md,.csv,.json,text/plain,text/markdown,application/json,text/csv"
+                onChange={(event) => {
+                  const nextFile = event.currentTarget.files?.[0] ?? null;
+                  fileRef.current = nextFile;
+                }}
+              />
+            </Form.Item>
+            <Form.Item name="upload_category" label="知识分类">
+              <Input />
+            </Form.Item>
+          </GovernanceFormGroup>
+          <GovernanceFormGroup title="关键条件" description="来源、版本和可信度用于专家审核和后续证据追踪。">
+            <Form.Item name="upload_source_type" label="来源类型">
+              <Input />
+            </Form.Item>
+            <Form.Item name="upload_version" label="版本">
+              <Input />
+            </Form.Item>
+            <Form.Item name="upload_published_year" label="年份">
+              <Input />
+            </Form.Item>
+            <Form.Item name="upload_credibility_level" label="可信度">
+              <Input />
+            </Form.Item>
+            <Form.Item name="upload_tags" label="检索标签">
+              <Input placeholder="高血压，R2" />
+            </Form.Item>
+          </GovernanceFormGroup>
+        </div>
+        <div className="drawer-sticky-actions">
+          <Button type="primary" htmlType="submit" loading={saving}>
+            上传知识文件
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 }
 
 function KnowledgeSearchForm({ saving, onFinish }: { saving: boolean; onFinish: (values: AdminPayload) => void }) {
   return (
-    <Form layout="vertical" onFinish={onFinish}>
-      <Row gutter={16}>
-        <Col xs={24} md={14}>
-          <Form.Item name="search_query" label="检索问题" rules={[{ required: true, message: "请输入检索问题" }]}>
-            <Input placeholder="如：高血压如何安排运动强度" />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={10}>
-          <Form.Item name="search_tags" label="证据标签">
-            <Input placeholder="高血压，R2" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Button type="primary" htmlType="submit" loading={saving}>
-        运行检索验证
-      </Button>
-    </Form>
+    <>
+      <Form layout="vertical" onFinish={onFinish}>
+        <section className="drawer-field-section">
+          <Typography.Text strong>基础信息</Typography.Text>
+          <Typography.Paragraph type="secondary">输入脱敏问题和证据标签，仅用于验证召回质量。</Typography.Paragraph>
+            <Form.Item name="search_query" label="检索问题" rules={[{ required: true, message: "请输入检索问题" }]}>
+              <Input placeholder="如：高血压如何安排运动强度" />
+            </Form.Item>
+            <Form.Item name="search_tags" label="证据标签">
+              <Input placeholder="高血压，R2" />
+            </Form.Item>
+        </section>
+        <div className="drawer-sticky-actions">
+          <Button type="primary" htmlType="submit" loading={saving}>
+            检索验证
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 }

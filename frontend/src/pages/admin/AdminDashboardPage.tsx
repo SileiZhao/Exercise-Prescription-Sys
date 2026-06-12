@@ -1,31 +1,19 @@
-import { Alert, Button, Card, Col, Descriptions, List, Row, Space, Tag, Typography } from "antd";
+import { Alert, Card, Col, Descriptions, List, Row, Space, Tabs, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BarChart3, ClipboardCheck, Database, FileText, ListChecks, ShieldAlert, ShieldCheck, Users } from "lucide-react";
+import { BarChart3, ClipboardCheck, FileText, ListChecks, ShieldAlert, ShieldCheck } from "lucide-react";
 
 import { getAdminDashboardSummary, type AdminDashboardSummary } from "../../api/adminDashboard";
-import { AppShell, ChartCard, MetricCard, PageHero } from "../../components/ProductUI";
+import { AppShell, ChartCard, ClinicalStatusBadge, ClinicalSummaryStrip, DecisionBanner, formatStatusLabel, MetricCard, StatusTile, WorkbenchSection } from "../../components/ProductUI";
 import {
-  ClusterScatterChart,
   ExpertQueueChart,
   PrescriptionTrendChart,
   RiskDistributionChart,
-  RuleHitRankChart,
-  TemplateUsageChart
+  RuleHitRankChart
 } from "../../components/charts";
 
 function asPercent(value: number) {
   return `${Math.round(value * 100)}%`;
-}
-
-function ratioPercent(numerator: number, denominator: number) {
-  if (!denominator || denominator <= 0 || numerator <= 0) return "0%";
-  if (numerator >= denominator) return "100%";
-  const percent = (numerator / denominator) * 100;
-  if (percent >= 99.5) {
-    return String(Math.floor(percent * 100) / 100) + "%";
-  }
-  return String(Math.round(percent)) + "%";
 }
 
 function namedValues(data: Record<string, number> = {}) {
@@ -33,7 +21,7 @@ function namedValues(data: Record<string, number> = {}) {
 }
 
 function queueValues(data: Record<string, number> = {}) {
-  return Object.entries(data).map(([status, count]) => ({ status, count }));
+  return Object.entries(data).map(([status, count]) => ({ status: formatStatusLabel(status, "review"), count }));
 }
 
 function clusterScatterValues(data: Record<string, number> = {}) {
@@ -136,7 +124,7 @@ function AdminCommandCenter({ summary }: { summary: AdminDashboardSummary | null
             <strong className="admin-command-primary">{`动作 ${actionApproved} 已审核 / ${actionPending} 待审核`}</strong>
             <Space wrap size={[6, 6]}>
               <Tag color="blue">{`模板 ${templateApproved} / ${templateTotal}`}</Tag>
-              <Tag color="purple">{`规则 ${summary?.reference_data_status?.risk_rules.active ?? 0} / ${summary?.reference_data_status?.risk_rules.total ?? 0}`}</Tag>
+              <Tag color="blue">{`规则 ${summary?.reference_data_status?.risk_rules.active ?? 0} / ${summary?.reference_data_status?.risk_rules.total ?? 0}`}</Tag>
               <Tag>{`合规 ${summary?.reference_data_status?.compliance.confirmed ?? 0} 已确认`}</Tag>
             </Space>
           </Card>
@@ -225,103 +213,232 @@ export function AdminDashboardPage() {
   const prescriptionPublished = summary?.prescription_status?.PUBLISHED ?? 0;
   const ragChunks = summary?.reference_data_status?.knowledge.chunks ?? 0;
   const ragIndexedChunks = summary?.reference_data_status?.knowledge.indexed_chunks ?? 0;
-  const ragIndexRate = ratioPercent(ragIndexedChunks, ragChunks);
+  const issues = readinessIssues(summary?.reference_data_status);
+  const criticalEntries = [
+    {
+      title: "处理科研导出审批",
+      detail: "先处理待审批导出，避免脱敏数据流转无留痕。",
+      href: "/admin/research-export",
+      tone: "info"
+    },
+    {
+      title: "查看风险规则",
+      detail: "红色规则和专家草稿影响训练入口。",
+      href: "/admin/rules",
+      tone: "warning"
+    },
+    {
+      title: "治理模板与知识库",
+      detail: "动作、模板、RAG 索引决定处方来源。",
+      href: "/admin/templates",
+      tone: "safe"
+    },
+    {
+      title: "查看审计日志",
+      detail: "配置、发布、导出和账号动作均需可追踪。",
+      href: "/admin/audit-logs",
+      tone: "neutral"
+    }
+  ];
 
   return (
-    <AppShell role="admin" title="运营驾驶舱">
+    <AppShell
+      role="admin"
+      title="运营指挥台"
+      subtitle="先看上线阻断，再处理审核积压、R3 转介和资料治理"
+      statusItems={
+        <>
+          <ClinicalStatusBadge type="readiness" value={readinessIssues(summary?.reference_data_status).length ? "blocked" : "ready"} label={readinessIssues(summary?.reference_data_status).length ? "存在阻断" : "上线闸口正常"} />
+          <ClinicalStatusBadge type="review" value="pending_review" label={`R2 ${summary?.reference_data_status ? asPercent(summary.r2_review_rate) : "0%"}`} />
+        </>
+      }
+    >
         <Space direction="vertical" size={16} className="onboarding-section">
-          <PageHero
-            eyebrow="管理端运营驾驶舱"
-            title="试点运营、规则与模型状态总览"
-            summary={`当前累计 ${summary?.total_users ?? 0} 名用户，处方生成 ${prescriptionGenerated} 份，R3 转介 ${summary?.r3_referral_count ?? 0} 例。`}
-            actions={
-              <Link to="/admin/research-export">
-                <Button type="primary">审批科研导出</Button>
-              </Link>
+          <DecisionBanner
+            tone={readinessIssues(summary?.reference_data_status).length ? "warning" : "safe"}
+            title={readinessIssues(summary?.reference_data_status).length ? "存在上线阻断或资料缺口" : "运营闸口正常"}
+            description={`当前累计 ${summary?.total_users ?? 0} 名用户，处方生成 ${prescriptionGenerated} 份，R3 转介 ${summary?.r3_referral_count ?? 0} 例。先处理 readiness、R2 积压、R3 转介和资料索引。`}
+            meta={
+              <>
+                <ClinicalStatusBadge type="readiness" value={readinessIssues(summary?.reference_data_status).length ? "blocked" : "ready"} label={`${readinessIssues(summary?.reference_data_status).length} 项阻断`} />
+                <ClinicalStatusBadge type="readiness" value={ragIndexedChunks === ragChunks && ragChunks > 0 ? "ready" : "degraded"} label={`RAG ${ragIndexedChunks}/${ragChunks}`} />
+              </>
             }
           />
           {error ? <Alert type="error" showIcon message="加载管理统计失败，请确认管理员权限。" /> : null}
-          <Space wrap>
-            <Link to="/admin/users">
-              <Button type="primary">用户与专家</Button>
-            </Link>
-            <Link to="/admin/templates">
-              <Button>模板与知识库</Button>
-            </Link>
-            <Link to="/admin/rules">
-              <Button>风险规则</Button>
-            </Link>
-            <Link to="/admin/clusters">
-              <Button>聚类模型</Button>
-            </Link>
-            <Link to="/admin/audit-logs">
-              <Button>审计日志</Button>
-            </Link>
-            <Link to="/">
-              <Button>返回首页</Button>
-            </Link>
-          </Space>
-          <Row gutter={[12, 12]} data-testid="admin-kpi-strip">
-            <Col xs={24} sm={12} lg={4}>
-              <MetricCard title="总用户" value={summary?.total_users ?? 0} icon={<Users />} />
-            </Col>
-            <Col xs={24} sm={12} lg={4}>
-              <MetricCard title="R2审核率" value={summary ? asPercent(summary.r2_review_rate) : "0%"} icon={<ClipboardCheck />} />
-            </Col>
-            <Col xs={24} sm={12} lg={4}>
-              <MetricCard title="处方发布" value={prescriptionPublished} icon={<FileText />} trend="flat" trendLabel="PUBLISHED 状态" />
-            </Col>
-            <Col xs={24} sm={12} lg={4}>
-              <MetricCard title="R3转介" value={summary?.r3_referral_count ?? 0} icon={<ShieldAlert />} />
-            </Col>
-            <Col xs={24} sm={12} lg={4}>
-              <MetricCard title="打卡完成率" value={summary?.feedback_stats.average_completion_rate ?? 0} suffix="%" icon={<ClipboardCheck />} />
-            </Col>
-            <Col xs={24} sm={12} lg={4}>
-              <MetricCard title="RAG索引率" value={ragIndexRate} icon={<Database />} trendLabel={`${ragIndexedChunks} / ${ragChunks} 切片`} />
-            </Col>
-          </Row>
-          <AdminCommandCenter summary={summary} />
-          <Row gutter={[16, 16]} className="admin-dashboard-chart-grid">
-            <Col xs={24} lg={16}>
-              <ChartCard title="处方生成/发布趋势">
-                <PrescriptionTrendChart
-                  data={(summary?.prescription_trend ?? []).map((item) => ({
-                    date: item.date,
-                    generated: item.generated,
-                    approved: item.published
-                  }))}
-                  loading={!summary && !error}
-                />
-              </ChartCard>
-            </Col>
-            <Col xs={24} lg={8}>
-              <ChartCard title="风险分布">
-                <RiskDistributionChart data={namedValues(summary?.risk_distribution)} loading={!summary && !error} />
-              </ChartCard>
-            </Col>
-            <Col xs={24} lg={12}>
-              <ChartCard title="专家审核队列">
-                <ExpertQueueChart data={queueValues(summary?.review_stats)} loading={!summary && !error} />
-              </ChartCard>
-            </Col>
-            <Col xs={24} lg={12}>
-              <ChartCard title="规则命中排行">
-                <RuleHitRankChart data={summary?.rule_hit_rank ?? []} loading={!summary && !error} />
-              </ChartCard>
-            </Col>
-            <Col xs={24} lg={12}>
-              <ChartCard title="模板使用量">
-                <TemplateUsageChart data={summary?.template_usage_rank ?? []} loading={!summary && !error} />
-              </ChartCard>
-            </Col>
-            <Col xs={24} lg={12}>
-              <ChartCard title="分型分布">
-                <ClusterScatterChart data={clusterScatterValues(summary?.cluster_distribution)} loading={!summary && !error} />
-              </ChartCard>
-            </Col>
-          </Row>
-          <ReferenceDataStatus summary={summary} />
+          <WorkbenchSection title="上线闸口与待办异常" description="首屏只保留阻断、异常和处理入口，趋势图表进入下方分析区。">
+            <div className="admin-gate-grid">
+              <div className="admin-gate-issues">
+                {issues.length ? (
+                  <Alert
+                    type="error"
+                    showIcon
+                    message="当前存在上线阻断"
+                    description={
+                      <List
+                        size="small"
+                        dataSource={issues}
+                        renderItem={(item) => <List.Item>{item}</List.Item>}
+                      />
+                    }
+                  />
+                ) : (
+                  <Alert type="success" showIcon message="上线闸口正常" description="运行依赖、资料索引和安全链路未发现阻断项。" />
+                )}
+                <ClinicalSummaryStrip className="admin-critical-strip" data-testid="admin-kpi-strip">
+                  <StatusTile label="上线阻断" value={issues.length} detail="LLM / Embedding / OCR / RAG" tone={issues.length ? "danger" : "safe"} icon={<ShieldCheck />} />
+                  <StatusTile label="R2 审核积压" value={summary ? asPercent(summary.r2_review_rate) : "0%"} detail="强制专家审核链路" tone="warning" icon={<ClipboardCheck />} />
+                  <StatusTile label="R3 转介" value={summary?.r3_referral_count ?? 0} detail="不生成训练处方" tone={(summary?.r3_referral_count ?? 0) ? "danger" : "neutral"} icon={<ShieldAlert />} />
+                </ClinicalSummaryStrip>
+              </div>
+              <nav className="admin-gate-actions" aria-label="关键处理入口">
+                {criticalEntries.map((item) => (
+                  <Link className={`admin-gate-action admin-gate-${item.tone}`} to={item.href} key={item.href}>
+                    <strong>{item.title}</strong>
+                    <span>{item.detail}</span>
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </WorkbenchSection>
+          <WorkbenchSection title="运营摘要" description="摘要用于理解规模和资料状态，不替代上线闸口判断。">
+            <AdminCommandCenter summary={summary} />
+          </WorkbenchSection>
+          <WorkbenchSection title="运营分析" description="分析图表分组在标签页内，避免首屏图表墙；每次只看一组。">
+            <Tabs
+              className="admin-analysis-tabs"
+              defaultActiveKey="safety"
+              items={[
+                {
+                  key: "safety",
+                  label: "安全与审核",
+                  children: (
+                    <Row gutter={[16, 16]} className="admin-dashboard-chart-grid">
+                      <Col xs={24} lg={12}>
+                        <ChartCard
+                          title="风险分布"
+                          unit="人"
+                          insight="用于判断 R2/R3 是否形成运营阻断，优先安排审核或转介资源。"
+                          threshold="R3 增加时先检查转介和告知链路。"
+                        >
+                          <RiskDistributionChart data={namedValues(summary?.risk_distribution)} loading={!summary && !error} />
+                        </ChartCard>
+                      </Col>
+                      <Col xs={24} lg={12}>
+                        <ChartCard
+                          title="专家审核队列"
+                          unit="项"
+                          insight="用于判断审核积压结构，而不是替代专家处理顺序。"
+                          threshold="超时或 R2 积压增加时优先处理队列治理。"
+                        >
+                          <ExpertQueueChart data={queueValues(summary?.review_stats)} loading={!summary && !error} />
+                        </ChartCard>
+                      </Col>
+                      <Col xs={24}>
+                        <ChartCard
+                          title="规则命中排行"
+                          unit="次"
+                          insight="用于定位高频风险规则，决定是否需要复核规则阈值或文案。"
+                          threshold="异常高频命中需排查数据质量和规则配置。"
+                        >
+                          <RuleHitRankChart data={summary?.rule_hit_rank ?? []} loading={!summary && !error} />
+                        </ChartCard>
+                      </Col>
+                    </Row>
+                  )
+                },
+                {
+                  key: "flow",
+                  label: "业务流转",
+                  children: (
+                    <Row gutter={[16, 16]}>
+                      <Col xs={24} lg={16}>
+                        <ChartCard
+                          title="处方生成/发布趋势"
+                          unit="张"
+                          insight="用于观察生成、发布之间是否存在审核或安全阻断。"
+                          threshold="生成高于发布时优先看 R2 审核和 R3 转介。"
+                        >
+                          <PrescriptionTrendChart
+                            data={(summary?.prescription_trend ?? []).map((item) => ({
+                              date: item.date,
+                              generated: item.generated,
+                              approved: item.published
+                            }))}
+                            loading={!summary && !error}
+                          />
+                        </ChartCard>
+                      </Col>
+                      <Col xs={24} lg={8}>
+                        <MetricCard title="处方发布" value={prescriptionPublished} icon={<FileText />} trend="flat" trendLabel="已发布状态" />
+                      </Col>
+                    </Row>
+                  )
+                },
+                {
+                  key: "model",
+                  label: "资料与模型",
+                  children: (
+                    <Row gutter={[16, 16]}>
+                      <Col xs={24} lg={12}>
+                        <div className="admin-model-summary">
+                          <Typography.Text strong>模板使用摘要</Typography.Text>
+                          <Typography.Paragraph type="secondary">
+                            模板排名作为治理入口，不在驾驶舱继续增加图表。使用量异常集中时进入模板库复核适用范围。
+                          </Typography.Paragraph>
+                          <List
+                            size="small"
+                            dataSource={(summary?.template_usage_rank ?? []).slice(0, 5)}
+                            locale={{ emptyText: "暂无模板使用数据" }}
+                            renderItem={(item) => (
+                              <List.Item>
+                                <Space wrap>
+                                  <Tag>{item.template}</Tag>
+                                  <Typography.Text>{`${item.count} 次`}</Typography.Text>
+                                </Space>
+                              </List.Item>
+                            )}
+                          />
+                          <Link to="/admin/templates" className="inline-workbench-link">
+                            进入模板库治理
+                          </Link>
+                        </div>
+                      </Col>
+                      <Col xs={24} lg={12}>
+                        <div className="admin-model-summary">
+                          <Typography.Text strong>分型模型摘要</Typography.Text>
+                          <Typography.Paragraph type="secondary">
+                            分型分布用于模型治理，不放在驾驶舱首屏形成图表墙；进入聚类模型页查看训练、启用和版本详情。
+                          </Typography.Paragraph>
+                          <List
+                            size="small"
+                            dataSource={clusterScatterValues(summary?.cluster_distribution).slice(0, 5)}
+                            locale={{ emptyText: "暂无分型分布数据" }}
+                            renderItem={(item) => (
+                              <List.Item>
+                                <Space wrap>
+                                  <Tag>{item.cluster}</Tag>
+                                  <Typography.Text>{`${item.y} 样本`}</Typography.Text>
+                                </Space>
+                              </List.Item>
+                            )}
+                          />
+                          <Link to="/admin/clustering" className="inline-workbench-link">
+                            进入聚类模型生命周期
+                          </Link>
+                        </div>
+                      </Col>
+                    </Row>
+                  )
+                },
+                {
+                  key: "reference",
+                  label: "上线资料状态",
+                  children: <ReferenceDataStatus summary={summary} />
+                }
+              ]}
+            />
+          </WorkbenchSection>
         </Space>
     </AppShell>
   );

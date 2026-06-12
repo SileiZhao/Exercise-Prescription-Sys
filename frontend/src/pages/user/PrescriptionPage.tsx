@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Descriptions, List, Row, Space, Tag, Typography } from "antd";
+import { Alert, Button, Collapse, Descriptions, Dropdown, List, Space, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -13,21 +13,22 @@ import {
 } from "../../api/prescriptions";
 import {
   AppShell,
-  ClinicalScopePanel,
+  ActionBar,
+  ClinicalStatusBadge,
   ContraindicationList,
+  DataNote,
+  DecisionBanner,
   EmptyState,
   EvidenceTimeline,
   FITTVPCard,
-  MotionCard,
-  RiskBadge,
-  SafetyBoundaryChecklist
+  formatStatusLabel,
+  RiskHeroBadge,
+  sanitizeDisplayText,
+  statusTagColor,
+  StatusTile,
+  VersionTimeline,
+  WorkbenchSection
 } from "../../components/ProductUI";
-
-const statusColor: Record<string, string> = {
-  PUBLISHED: "green",
-  PENDING_REVIEW: "orange",
-  REFERRED: "red"
-};
 
 export function PrescriptionPage() {
   const { id } = useParams();
@@ -106,70 +107,121 @@ export function PrescriptionPage() {
     (latest?.risk_level === "R2" && !["PUBLISHED", "APPROVED"].includes(latest.status));
   const hideTrainingPlan = latest?.risk_level === "R3" || (latest?.risk_level === "R2" && latest.status !== "PUBLISHED");
   const canExportReport = Boolean(latest && latest.status === "PUBLISHED" && latest.risk_level !== "R3");
-  const reportStateText = canExportReport ? "报告可导出" : "报告锁定";
+  const bannerTone = latest?.risk_level === "R3" ? "danger" : generationBlocked ? "warning" : latest ? "safe" : "info";
+  const moreActionItems = [
+    ...(canExportReport
+      ? [
+          { key: "docx", label: "导出 Word" },
+          { key: "pdf", label: "导出 PDF" }
+        ]
+      : []),
+    ...(latest && !generationBlocked ? [{ key: "regenerate", label: "重新生成处方" }] : [])
+  ];
+  const moreActions = moreActionItems.length ? (
+    <Dropdown
+      trigger={["click"]}
+      menu={{
+        items: moreActionItems,
+        onClick: ({ key }) => {
+          if (key === "docx") {
+            void runExportReport("docx");
+          } else if (key === "pdf") {
+            void runExportReport("pdf");
+          } else if (key === "regenerate") {
+            void runGenerate();
+          }
+        }
+      }}
+    >
+      <Button aria-label="更多操作">更多操作</Button>
+    </Dropdown>
+  ) : null;
+  const primaryAction = !latest ? (
+    <Button type="primary" loading={loading} onClick={runGenerate}>
+      生成处方
+    </Button>
+  ) : latest.risk_level === "R3" ? (
+    <Link to="/user/risk-result">
+      <Button type="primary">查看医学评估建议</Button>
+    </Link>
+  ) : latest.risk_level === "R2" && latest.status !== "PUBLISHED" ? (
+    <Link to="/user/prescriptions">
+      <Button type="primary">查看审核状态</Button>
+    </Link>
+  ) : latest.status === "PUBLISHED" ? (
+    <Link to="/user/today">
+      <Button type="primary">进入今日运动</Button>
+    </Link>
+  ) : (
+    <Button type="primary" loading={loading} disabled={generationBlocked} onClick={runGenerate}>
+      生成处方
+    </Button>
+  );
+  const versionItems = [...items]
+    .sort((left, right) => {
+      if (right.version !== left.version) return right.version - left.version;
+      return new Date(right.created_at).getTime() - new Date(left.created_at).getTime();
+    })
+    .map((item) => ({
+      title: `v${item.version} · ${item.risk_level}`,
+      description: `${item.cluster_label || "未标注分型"} · ${item.created_at}`,
+      status: <Tag color={statusTagColor(item.status)}>{formatStatusLabel(item.status, "review")}</Tag>,
+      active: latest?.id === item.id
+    }));
 
   return (
-    <AppShell role="user" title="我的处方">
-        <MotionCard className="prescription-card">
-          <Space direction="vertical" size={16} className="onboarding-section">
-            <ClinicalScopePanel compact />
-            <SafetyBoundaryChecklist compact />
-            <Alert type="warning" showIcon message="R2 处方必须专家审核后发布，R3 不生成训练计划。" />
-            {notice ? <Alert type={notice.includes("失败") ? "error" : "success"} showIcon message={notice} /> : null}
-            <Space>
-              <Button type="primary" loading={loading} disabled={generationBlocked} onClick={runGenerate}>
-                生成处方
-              </Button>
-              <Link to="/user/dashboard">
-                <Button>返回用户端</Button>
-              </Link>
-              {latest && canExportReport ? (
-                <>
-                  <Button onClick={() => runExportReport("docx")}>导出处方报告 Word</Button>
-                  <Button onClick={() => runExportReport("pdf")}>导出处方报告 PDF</Button>
-                </>
-              ) : null}
-            </Space>
+    <AppShell
+      role="user"
+      title="处方发布面板"
+      subtitle="只展示当前允许执行的处方内容，未发布或 R3 状态自动锁定训练计划"
+      statusItems={
+        <>
+          <ClinicalStatusBadge type="risk" value={latest?.risk_level} />
+          <ClinicalStatusBadge type="review" value={latest?.status ?? "pending"} label={latest ? formatStatusLabel(latest.status, "review") : "暂无处方"} />
+        </>
+      }
+    >
+      <Space direction="vertical" size={16} className="onboarding-section">
+        <DecisionBanner
+          tone={bannerTone}
+          title={
+            latest
+              ? generationBlocked
+                ? "当前处方未达到训练发布门槛"
+                : "当前处方可查看或导出"
+              : "尚未生成处方"
+          }
+          description={
+            latest
+              ? latest.risk_level === "R3"
+                ? "R3 安全边界下不生成训练计划，只保留医学评估建议和安全提示。"
+                : latest.status === "PUBLISHED"
+                  ? "处方已发布，可以进入今日运动或导出训练报告。"
+                  : "处方仍处在审核或草稿状态，发布前不展示训练动作、强度和进阶计划。"
+              : "完成建档、风险筛查和分型后，可生成结构化 FITT-VP 处方。"
+          }
+          meta={
+            <>
+              <ClinicalStatusBadge type="risk" value={latest?.risk_level} />
+              <ClinicalStatusBadge type="review" value={latest?.status ?? "pending"} label={latest ? formatStatusLabel(latest.status, "review") : "无处方"} />
+              <ClinicalStatusBadge type="export" value={canExportReport ? "approved" : "blocked"} label={canExportReport ? "报告可导出" : "导出锁定"} />
+            </>
+          }
+          actions={
+            <ActionBar secondary={moreActions} primary={primaryAction} />
+          }
+        />
+        {notice ? <Alert type={notice.includes("失败") ? "error" : "success"} showIcon message={notice} /> : null}
+        <div className="status-grid">
+          <StatusTile label="当前版本" value={latest ? `v${latest.version}` : "-"} detail={latest?.created_at ?? "暂无生成记录"} />
+          <StatusTile label="训练可见性" value={hideTrainingPlan ? "锁定" : "可见"} detail="R2 发布前和 R3 均隐藏训练计划" tone={hideTrainingPlan ? "warning" : "safe"} />
+          <StatusTile label="报告导出" value={canExportReport ? "开放" : "锁定"} detail="仅发布且非 R3 可导出" tone={canExportReport ? "safe" : "warning"} />
+        </div>
+        <div className="prescription-workbench-grid">
+          <WorkbenchSection title="处方详情" description="发布状态、安全提示、FITT-VP 和禁忌动作保持同屏可核对。">
+            <Space direction="vertical" size={16} className="onboarding-section">
             {latest ? (
               <>
-                <section className="prescription-safety-panel" data-testid="prescription-safety-panel">
-                  <div className="prescription-safety-panel-head">
-                    <div>
-                      <Typography.Text className="page-hero-eyebrow">处方安全发布面板</Typography.Text>
-                      <Typography.Title level={3}>{`处方 #${latest.id}`}</Typography.Title>
-                    </div>
-                    <Space wrap>
-                      <Tag color={statusColor[latest.status] || "blue"}>{latest.status}</Tag>
-                      <RiskBadge level={latest.risk_level} />
-                    </Space>
-                  </div>
-                  <Row gutter={[12, 12]}>
-                    <Col xs={24} sm={12} lg={6}>
-                      <div className="prescription-safety-metric">
-                        <span>风险等级</span>
-                        <strong>{latest.risk_level}</strong>
-                      </div>
-                    </Col>
-                    <Col xs={24} sm={12} lg={6}>
-                      <div className="prescription-safety-metric">
-                        <span>处方状态</span>
-                        <strong>{latest.status}</strong>
-                      </div>
-                    </Col>
-                    <Col xs={24} sm={12} lg={6}>
-                      <div className="prescription-safety-metric">
-                        <span>版本</span>
-                        <strong>{`v${latest.version}`}</strong>
-                      </div>
-                    </Col>
-                    <Col xs={24} sm={12} lg={6}>
-                      <div className="prescription-safety-metric">
-                        <span>报告</span>
-                        <strong>{reportStateText}</strong>
-                      </div>
-                    </Col>
-                  </Row>
-                </section>
                 {generationBlocked ? (
                   <Alert
                     type={latest.risk_level === "R3" ? "error" : "warning"}
@@ -177,16 +229,18 @@ export function PrescriptionPage() {
                     message={latest.risk_level === "R3" ? "R3 不生成训练处方" : "R2 专家审核前不可重新生成训练处方"}
                   />
                 ) : null}
-                <Card title="结构化处方概览" className="prescription-detail-workbench" data-testid="prescription-detail-workbench">
-                  <Space direction="vertical" size={12} className="onboarding-section">
-                    <Descriptions bordered column={1} size="small">
+                <RiskHeroBadge
+                  level={latest.risk_level}
+                  actionLabel={formatStatusLabel(latest.status, "review")}
+                />
+                <Descriptions bordered column={1} size="small">
                   <Descriptions.Item label="状态">
-                    <Tag color={statusColor[latest.status] || "blue"}>{latest.status}</Tag>
+                    <Tag color={statusTagColor(latest.status)}>{formatStatusLabel(latest.status, "review")}</Tag>
                   </Descriptions.Item>
                   <Descriptions.Item label="风险等级">
                     <Space wrap>
                       <Tag>{latest.risk_level}</Tag>
-                      <RiskBadge level={latest.risk_level} />
+                      <ClinicalStatusBadge type="risk" value={latest.risk_level} />
                     </Space>
                   </Descriptions.Item>
                   <Descriptions.Item label="分型">{latest.cluster_label || "-"}</Descriptions.Item>
@@ -198,13 +252,13 @@ export function PrescriptionPage() {
                     {
                       title: "证据来源",
                       description: latest.evidence_refs?.length
-                        ? latest.evidence_refs.map((item) => String(item.source ?? item.document_title ?? "证据")).join("；")
+                        ? latest.evidence_refs.map((item) => sanitizeDisplayText(item.source ?? item.document_title ?? "证据")).join("；")
                         : "暂无证据来源",
                       status: "done"
                     },
                     {
                       title: "处方状态",
-                      description: `${latest.status} / v${latest.version}`,
+                      description: `${formatStatusLabel(latest.status, "review")} / v${latest.version}`,
                       status: latest.status === "PUBLISHED" ? "done" : "active"
                     },
                     {
@@ -222,7 +276,12 @@ export function PrescriptionPage() {
                     description={latest.risk_level === "R3" ? undefined : "R2 初稿需专家复核后才会展示动作、强度、组数和进阶计划。"}
                   />
                 ) : (
-                  <FITTVPCard fitt={latest.fitt_vp} riskLevel={latest.risk_level} />
+                  <FITTVPCard
+                    fitt={latest.fitt_vp}
+                    riskLevel={latest.risk_level}
+                    precautions={latest.precautions}
+                    contraindications={latest.contraindications}
+                  />
                 )}
                 {!canExportReport ? (
                   <Alert
@@ -237,64 +296,75 @@ export function PrescriptionPage() {
                   />
                 ) : null}
                 <ContraindicationList items={latest.contraindications} />
-                    {latest.precautions?.length ? (
-                      <Alert type="info" showIcon message="执行注意事项" description={latest.precautions.join("；")} />
-                    ) : null}
-                  </Space>
-                </Card>
+                {latest.precautions?.length ? (
+                  <Alert type="info" showIcon message="执行注意事项" description={latest.precautions.join("；")} />
+                ) : null}
               </>
             ) : (
-              <EmptyState
-                title="尚未生成处方"
-                description="完成六类数据、风险筛查和人群分型后，可生成结构化 FITT-VP 处方。"
-                action={
-                  <Space wrap>
-                    <Link to="/user/onboarding">
-                      <Button type="primary">继续建档</Button>
-                    </Link>
-                    <Button loading={loading} onClick={runGenerate}>尝试生成处方</Button>
+              <EmptyState description="暂无处方。完成六类数据、风险筛查和人群分型后，可生成结构化 FITT-VP 处方。" />
+            )}
+              <ActionBar
+                secondary={
+                  <Link to="/user/dashboard">
+                    <Button>返回用户端</Button>
+                  </Link>
+                }
+              />
+            </Space>
+          </WorkbenchSection>
+          <aside className="workbench-side-rail">
+            <VersionTimeline items={versionItems} />
+            <div className="checklist-rail">
+              <Typography.Title level={5}>发布门槛</Typography.Title>
+              <ul>
+                <li>R0/R1 可按规则生成处方。</li>
+                <li>R2 必须专家审核发布后才展示训练内容。</li>
+                <li>R3 不生成训练处方，也不允许导出训练报告。</li>
+              </ul>
+            </div>
+            <DataNote
+              title="报告导出记录"
+              description="导出会写入审计，便于确认处方版本、格式和下载状态。"
+            />
+          </aside>
+        </div>
+        <WorkbenchSection title="处方报告留痕" description="导出记录默认折叠，避免把处方主任务挤成记录列表。">
+          <Collapse
+            className="secondary-analysis-collapse"
+            items={[
+              {
+                key: "exports",
+                label: (
+                  <Space size={8}>
+                    <span>最近导出记录</span>
+                    <Tag>{exportRecords.length}</Tag>
                   </Space>
-                }
-              />
-            )}
-            <Typography.Title level={4}>报告导出审计</Typography.Title>
-            {exportRecords.length ? (
-              <List
-                bordered
-                dataSource={exportRecords}
-                renderItem={(record) => (
-                  <List.Item>
-                    <Space direction="vertical" size={4}>
-                      <Typography.Text strong>{record.filename}</Typography.Text>
-                      <Typography.Text>{`${record.report_type} / ${record.format.toUpperCase()}`}</Typography.Text>
-                      <Typography.Text type="secondary">
-                        {record.report_type} / {record.format.toUpperCase()} · 风险 {record.risk_level || "-"} · 状态{" "}
-                        {record.status || "-"}
-                      </Typography.Text>
-                    </Space>
-                  </List.Item>
-                )}
-              />
-            ) : (
-              <EmptyState
-                title="暂无报告导出记录"
-                description={canExportReport ? "当前处方已发布，可导出首份 Word 或 PDF 报告。" : "处方发布前不会生成训练报告导出记录。"}
-                action={
-                  canExportReport ? (
-                    <Space wrap>
-                      <Button onClick={() => runExportReport("docx")}>导出 Word 报告</Button>
-                      <Button onClick={() => runExportReport("pdf")}>导出 PDF 报告</Button>
-                    </Space>
-                  ) : (
-                    <Link to="/user/dashboard">
-                      <Button>查看今日安全状态</Button>
-                    </Link>
-                  )
-                }
-              />
-            )}
-          </Space>
-        </MotionCard>
+                ),
+                children: exportRecords.length ? (
+                  <List
+                    bordered
+                    dataSource={exportRecords}
+                    renderItem={(record) => (
+                      <List.Item>
+                        <Space direction="vertical" size={4}>
+                          <Typography.Text strong>{record.filename}</Typography.Text>
+                          <Typography.Text>{`${record.report_type} / ${record.format.toUpperCase()}`}</Typography.Text>
+                          <Typography.Text type="secondary">
+                            {record.report_type} / {record.format.toUpperCase()} · 风险 {record.risk_level || "-"} · 状态{" "}
+                            {formatStatusLabel(record.status, "export")}
+                          </Typography.Text>
+                        </Space>
+                      </List.Item>
+                    )}
+                  />
+                ) : (
+                  <EmptyState description="暂无报告导出记录" />
+                )
+              }
+            ]}
+          />
+        </WorkbenchSection>
+      </Space>
     </AppShell>
   );
 }

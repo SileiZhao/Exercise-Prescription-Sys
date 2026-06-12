@@ -57,33 +57,33 @@ describe("phase report page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("阶段报告")).toBeInTheDocument();
-    expect(screen.getByText("AI 运动处方")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "阶段报告" })).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
     expect(
-      await screen.findByText("近4周共记录3次运动反馈，平均完成率71.67%，平均RPE 8，疼痛事件2次，不适事件1次。")
-    ).toBeInTheDocument();
+      (await screen.findAllByText("近4周共记录3次运动反馈，平均完成率71.67%，平均RPE 8，疼痛事件2次，不适事件1次。")).length
+    ).toBeGreaterThan(0);
     expect(screen.getByText("打卡次数")).toBeInTheDocument();
     expect(screen.getByText("3次")).toBeInTheDocument();
     expect(screen.getByText("评估周期")).toBeInTheDocument();
     expect(screen.getByText("4周")).toBeInTheDocument();
-    expect(screen.getByText("71.67%")).toBeInTheDocument();
-    expect(screen.getByText("8")).toBeInTheDocument();
-    expect(screen.getByText("2次")).toBeInTheDocument();
-    expect(screen.getByText("疼痛或RPE偏高，进入专家复核")).toBeInTheDocument();
+    expect(screen.getAllByText("71.67%").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("8").length).toBeGreaterThan(0);
+    expect(screen.getByText("2 次")).toBeInTheDocument();
+    expect(screen.getAllByText("疼痛或RPE偏高，进入专家复核").length).toBeGreaterThan(0);
     expect(screen.getByText("阶段变化")).toBeInTheDocument();
     expect(screen.getByText("阶段指标对比")).toBeInTheDocument();
     expect(screen.getByTestId("StageEvaluationCompareChart-echart")).toBeInTheDocument();
     expect(screen.getByText("阶段反馈趋势")).toBeInTheDocument();
     expect(screen.getByTestId("FeedbackTrendChart-echart")).toBeInTheDocument();
-    expect(screen.getByText("体重")).toBeInTheDocument();
-    expect(screen.getByText("86 → 82")).toBeInTheDocument();
-    expect(screen.getByText("-4")).toBeInTheDocument();
-    expect(screen.getByText("收缩压")).toBeInTheDocument();
-    expect(screen.getByText("142 → 132")).toBeInTheDocument();
+    expect(screen.getAllByText("体重").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("86 → 82").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("-4").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("收缩压").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("142 → 132").length).toBeGreaterThan(0);
     expect(screen.getByText("BiochemicalIndex 记录不足 2 条，无法计算最早与最新差值")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "导出阶段报告 Word" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出 Word" }));
     await waitFor(() => expect(exportPhaseAssessmentReport).toHaveBeenCalledWith(4));
-    fireEvent.click(screen.getByRole("button", { name: "导出阶段报告 PDF" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出 PDF" }));
     await waitFor(() => expect(exportPhaseAssessmentPdfReport).toHaveBeenCalledWith(4));
   });
 });

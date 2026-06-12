@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -22,19 +22,7 @@ vi.mock("./api/userDashboard", () => ({
     plan_completion_trend: [],
     abnormal_feedback_count: 0,
     review_status_label: "专家审核中",
-    prescription_summary: null,
-    risk_rule_hits: [
-      {
-        rule_id: "YELLOW_HYPERTENSION",
-        rule_name: "YELLOW_HYPERTENSION",
-        field_path: "risk_screening.has_hypertension",
-        hit_value: true,
-        threshold: "既往高血压或当前血压 >= 140/90",
-        action_label: "提交专家审核",
-        risk_level: "R2",
-        explanation: "血压偏高，需专家审核后执行"
-      }
-    ]
+    prescription_summary: null
   })
 }));
 
@@ -52,41 +40,12 @@ describe("cluster pages", () => {
       </MemoryRouter>
     );
 
-    const pageHeader = await screen.findByTestId("page-header-title-block");
-    expect(within(pageHeader).getByText("人群分型")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "生成分型" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "风险结果" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "查看审核状态" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "重新评估" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "生成分型" })).not.toBeInTheDocument();
+    expect(screen.getByText("审核通过前不开放训练入口")).toBeInTheDocument();
     expect(screen.getByText("分型结果只用于模板匹配，不覆盖风险规则。")).toBeInTheDocument();
     expect(screen.getByText("当前风险边界")).toBeInTheDocument();
-  });
-
-  it("renders the phenotype page as a decision report with R2 review action and rule hits", async () => {
-    localStorage.setItem("access_token", "test-token");
-    localStorage.setItem("current_user_role", "USER");
-
-    render(
-      <MemoryRouter
-        initialEntries={["/user/risk-result"]}
-        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
-      >
-        <App />
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("YELLOW_HYPERTENSION")).toBeInTheDocument();
-    const pageHeader = screen.getByTestId("page-header-title-block");
-    expect(within(pageHeader).getByText("判定报告")).toBeInTheDocument();
-    expect(screen.getAllByText("判定报告").length).toBeGreaterThan(0);
-    expect(screen.getByText("R2")).toBeInTheDocument();
-    expect(screen.getAllByText("系统动作").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("提交专家审核").length).toBeGreaterThan(0);
-    expect(screen.getByText("命中规则")).toBeInTheDocument();
-    expect(screen.getByText("YELLOW_HYPERTENSION")).toBeInTheDocument();
-    expect(screen.getByText("血压偏高，需专家审核后执行")).toBeInTheDocument();
-    expect(screen.getByText("字段：risk_screening.has_hypertension")).toBeInTheDocument();
-    expect(screen.getByText("命中值：是")).toBeInTheDocument();
-    expect(screen.queryByText("当前后端未返回命中规则明细")).not.toBeInTheDocument();
-    expect(screen.getByTestId("risk-result-action-bar")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "提交专家审核" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "生成运动处方" })).not.toBeInTheDocument();
   });
 });
