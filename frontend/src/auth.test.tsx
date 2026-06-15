@@ -45,19 +45,19 @@ describe("auth routes", () => {
     });
   });
 
-  it("renders login form", () => {
+  it("renders login form", async () => {
     render(
       <MemoryRouter initialEntries={["/login"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <App />
       </MemoryRouter>
     );
 
-    expect(screen.getByLabelText("邮箱")).toBeInTheDocument();
+    expect(await screen.findByLabelText("邮箱")).toBeInTheDocument();
     expect(screen.getByLabelText("密码")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /登\s*录/ })).toBeInTheDocument();
   });
 
-  it("protects user dashboard without token", () => {
+  it("protects user dashboard without token", async () => {
     localStorage.removeItem("access_token");
 
     render(
@@ -66,17 +66,17 @@ describe("auth routes", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole("button", { name: /登\s*录/ })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /登\s*录/ })).toBeInTheDocument();
   });
 
-  it("renders register form without privileged role choices", () => {
+  it("renders register form without privileged role choices", async () => {
     render(
       <MemoryRouter initialEntries={["/register"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <App />
       </MemoryRouter>
     );
 
-    expect(screen.getByLabelText("邮箱")).toBeInTheDocument();
+    expect(await screen.findByLabelText("邮箱")).toBeInTheDocument();
     expect(screen.getByLabelText("姓名")).toBeInTheDocument();
     expect(screen.queryByLabelText("角色")).not.toBeInTheDocument();
     expect(screen.queryByText("管理员")).not.toBeInTheDocument();

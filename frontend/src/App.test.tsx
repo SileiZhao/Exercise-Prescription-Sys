@@ -3,6 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
+import { lazyPageLoaders } from "./routeLoaders";
 
 const getCurrentUserMock = vi.hoisted(() => vi.fn());
 
@@ -221,6 +222,28 @@ describe("App", () => {
 
     expect(screen.getByRole("button", { name: "进入当前工作台" })).toBeInTheDocument();
     expect(document.querySelectorAll(".home-shell .ant-btn-primary")).toHaveLength(1);
+  });
+
+  it("registers protected workspaces as lazy route modules", () => {
+    expect(Object.keys(lazyPageLoaders).sort()).toEqual([
+      "adminAudit",
+      "adminClusters",
+      "adminDashboard",
+      "adminRules",
+      "adminTemplates",
+      "adminUsers",
+      "changePassword",
+      "expertReview",
+      "login",
+      "onboarding",
+      "phaseReport",
+      "phenotype",
+      "prescription",
+      "register",
+      "researchExport",
+      "todayExercise",
+      "userDashboard"
+    ]);
   });
 
   it.each([

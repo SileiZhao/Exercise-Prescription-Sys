@@ -1,36 +1,47 @@
 import { AppstoreOutlined, ExperimentOutlined, MedicineBoxOutlined, TeamOutlined } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Button, ConfigProvider, Layout } from "antd";
+import { Button, ConfigProvider, Layout, Spin } from "antd";
 import zhCN from "antd/locale/zh_CN";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect, type ComponentType } from "react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ClinicalStatusBadge, antdTheme } from "./components/ProductUI";
 import type { AuthUserRole } from "./auth/token";
-import { AdminAuditPage } from "./pages/admin/AdminAuditPage";
-import { AdminClustersPage } from "./pages/admin/AdminClustersPage";
-import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
-import { AdminRulesPage } from "./pages/admin/AdminRulesPage";
-import { AdminTemplatePage } from "./pages/admin/AdminTemplatePage";
-import { AdminUsersPage } from "./pages/admin/AdminUsersPage";
-import { ExpertReviewPage } from "./pages/expert/ExpertReviewPage";
-import { ChangePasswordPage } from "./pages/ChangePasswordPage";
-import { LoginPage } from "./pages/LoginPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { ResearchExportPage } from "./pages/research/ResearchExportPage";
-import { OnboardingWizardPage } from "./pages/user/OnboardingWizardPage";
-import { PhenotypePage } from "./pages/user/PhenotypePage";
-import { PhaseReportPage } from "./pages/user/PhaseReportPage";
-import { PrescriptionPage } from "./pages/user/PrescriptionPage";
-import { TodayExercisePage } from "./pages/user/TodayExercisePage";
-import { UserDashboardPage } from "./pages/user/UserDashboardPage";
+import { lazyPageLoaders } from "./routeLoaders";
 import "./styles.css";
 import "./product-layout.css";
 import "./clinical-workbench.css";
 import "./user-experience.css";
 
 const queryClient = new QueryClient();
+
+type PageModule = Record<string, ComponentType>;
+
+function lazyPage(loader: () => Promise<PageModule>, exportName: string) {
+  return lazy(async () => {
+    const pageModule = await loader();
+    return { default: pageModule[exportName] };
+  });
+}
+
+const AdminAuditPage = lazyPage(lazyPageLoaders.adminAudit, "AdminAuditPage");
+const AdminClustersPage = lazyPage(lazyPageLoaders.adminClusters, "AdminClustersPage");
+const AdminDashboardPage = lazyPage(lazyPageLoaders.adminDashboard, "AdminDashboardPage");
+const AdminRulesPage = lazyPage(lazyPageLoaders.adminRules, "AdminRulesPage");
+const AdminTemplatePage = lazyPage(lazyPageLoaders.adminTemplates, "AdminTemplatePage");
+const AdminUsersPage = lazyPage(lazyPageLoaders.adminUsers, "AdminUsersPage");
+const ChangePasswordPage = lazyPage(lazyPageLoaders.changePassword, "ChangePasswordPage");
+const ExpertReviewPage = lazyPage(lazyPageLoaders.expertReview, "ExpertReviewPage");
+const LoginPage = lazyPage(lazyPageLoaders.login, "LoginPage");
+const OnboardingWizardPage = lazyPage(lazyPageLoaders.onboarding, "OnboardingWizardPage");
+const PhenotypePage = lazyPage(lazyPageLoaders.phenotype, "PhenotypePage");
+const PhaseReportPage = lazyPage(lazyPageLoaders.phaseReport, "PhaseReportPage");
+const PrescriptionPage = lazyPage(lazyPageLoaders.prescription, "PrescriptionPage");
+const RegisterPage = lazyPage(lazyPageLoaders.register, "RegisterPage");
+const ResearchExportPage = lazyPage(lazyPageLoaders.researchExport, "ResearchExportPage");
+const TodayExercisePage = lazyPage(lazyPageLoaders.todayExercise, "TodayExercisePage");
+const UserDashboardPage = lazyPage(lazyPageLoaders.userDashboard, "UserDashboardPage");
 
 const entryCards = [
   {
@@ -203,8 +214,30 @@ function HomePage() {
   );
 }
 
+function PageSuspense({ children }: { children: JSX.Element }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="route-loading">
+          <Spin />
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
+  );
+}
+
+function routePage(page: JSX.Element) {
+  return <PageSuspense>{page}</PageSuspense>;
+}
+
 function protectedPage(page: JSX.Element, allowedRoles?: AuthUserRole[]) {
-  return <ProtectedRoute allowedRoles={allowedRoles}>{page}</ProtectedRoute>;
+  return (
+    <ProtectedRoute allowedRoles={allowedRoles}>
+      <PageSuspense>{page}</PageSuspense>
+    </ProtectedRoute>
+  );
 }
 
 const USER_ONLY: AuthUserRole[] = ["USER"];
@@ -286,16 +319,18 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={routePage(<LoginPage />)} />
           <Route
             path="/auth/change-password"
             element={
               <ProtectedRoute>
-                <ChangePasswordPage />
+                <PageSuspense>
+                  <ChangePasswordPage />
+                </PageSuspense>
               </ProtectedRoute>
             }
           />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register" element={routePage(<RegisterPage />)} />
           <Route
             path="/user/dashboard"
             element={protectedPage(<UserDashboardPage />, USER_ONLY)}
