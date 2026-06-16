@@ -1,6 +1,4 @@
 import { Alert, Button, Card, Form, Input, Layout, Space, Typography } from "antd";
-import { motion } from "framer-motion";
-import { Activity, ArrowLeft, Database, LockKeyhole, Mail, ShieldCheck, Stethoscope } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -50,40 +48,17 @@ export function LoginPage() {
 
   return (
     <Layout className="auth-shell">
-      <div className="auth-background" aria-hidden="true">
-        <span className="auth-grid-plane" />
-        <span className="auth-scan-line" />
-        <span className="auth-vital-line" />
-      </div>
-      <motion.div
-        className="auth-frame"
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <div className="auth-frame">
         <Card className="auth-card">
-          <Link to="/" className="auth-back-link">
-            <ArrowLeft size={15} />
-            返回入口
-          </Link>
-          <div className="auth-brand-lockup">
-            <span className="auth-brand-mark">启</span>
-            <span>
-              <strong>启衡运动处方平台</strong>
-              <small>机构账号登录</small>
-            </span>
-          </div>
           <Typography.Title level={3}>登录账号</Typography.Title>
-          <Typography.Paragraph type="secondary">
-            使用邮箱和密码进入对应角色工作台，系统会按权限打开当前任务。
-          </Typography.Paragraph>
+          <Typography.Paragraph type="secondary">使用邮箱和密码进入对应角色工作台。</Typography.Paragraph>
           {error ? <Alert type="error" message={error} showIcon className="form-alert" /> : null}
           <Form form={form} layout="vertical" onFinish={handleFinish}>
             <Form.Item label="邮箱" name="username" rules={[{ required: true, type: "email" }]}>
-              <Input autoComplete="email" placeholder="name@example.com" prefix={<Mail size={16} />} />
+              <Input autoComplete="email" placeholder="name@example.com" />
             </Form.Item>
             <Form.Item label="密码" name="password" rules={[{ required: true }]}>
-              <Input.Password autoComplete="current-password" placeholder="输入登录密码" prefix={<LockKeyhole size={16} />} />
+              <Input.Password autoComplete="current-password" placeholder="输入登录密码" />
             </Form.Item>
             <Button className="auth-primary-action" type="primary" htmlType="submit" loading={loading} block>
               登录并进入工作台
@@ -93,56 +68,17 @@ export function LoginPage() {
             没有账号？<Link to="/register">注册普通用户</Link>
           </Typography.Paragraph>
         </Card>
-        <motion.section
-          className="auth-context-panel"
-          aria-label="登录说明"
-          initial={{ opacity: 0, x: 18 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.12, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <section className="auth-context-panel" aria-label="登录说明">
           <div className="auth-context-copy">
             <Space className="auth-meta-row">
               <ClinicalStatusBadge type="readiness" value="ready" label="角色工作台" />
               <ClinicalStatusBadge type="review" value="pending_review" label="R2 专家审核" />
               <ClinicalStatusBadge type="risk" value="R3" label="R3 训练阻断" />
             </Space>
-            <Typography.Title level={3}>安全边界清晰，处方流转可追踪</Typography.Title>
+            <Typography.Title level={3}>启衡运动处方系统</Typography.Title>
             <Typography.Paragraph>
-              启衡运动处方平台面向运动健康干预、专家审核和科研治理，优先呈现安全状态、审核结论和证据来源。
+              面向运动健康干预、专家审核和科研治理的工作台。系统优先呈现安全边界、审核状态和证据来源，避免未经审核的处方直接进入训练。
             </Typography.Paragraph>
-          </div>
-          <div className="auth-visual-console" aria-label="系统状态视觉">
-            <div className="auth-console-head">
-              <span>
-                <Activity size={18} />
-                Prescription safety console
-              </span>
-              <strong>READY</strong>
-            </div>
-            <div className="auth-vitals">
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="auth-console-grid">
-              <div>
-                <ShieldCheck size={18} />
-                <strong>R2 审核</strong>
-                <small>专家确认后发布</small>
-              </div>
-              <div>
-                <Stethoscope size={18} />
-                <strong>R3 阻断</strong>
-                <small>医学评估优先</small>
-              </div>
-              <div>
-                <Database size={18} />
-                <strong>科研导出</strong>
-                <small>脱敏审批留痕</small>
-              </div>
-            </div>
           </div>
           <ProcessRail
             title="工作台安全流程"
@@ -170,8 +106,8 @@ export function LoginPage() {
             <StatusTile label="R3" value="医学评估" detail="不生成训练计划" tone="danger" />
             <StatusTile label="科研" value="脱敏导出" detail="审批通过后限时下载" tone="info" />
           </div>
-        </motion.section>
-      </motion.div>
+        </section>
+      </div>
     </Layout>
   );
 }

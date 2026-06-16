@@ -1,16 +1,7 @@
+import { AppstoreOutlined, ExperimentOutlined, MedicineBoxOutlined, TeamOutlined } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Button, ConfigProvider, Layout, Spin } from "antd";
-import { motion } from "framer-motion";
 import zhCN from "antd/locale/zh_CN";
-import {
-  ArrowRight,
-  Database,
-  HeartPulse,
-  LogIn,
-  ShieldCheck,
-  Stethoscope,
-  UserPlus
-} from "lucide-react";
 import { lazy, Suspense, useEffect, type ComponentType } from "react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 
@@ -58,7 +49,7 @@ const entryCards = [
     description: "建档、查看风险结论、接收处方和完成运动反馈。",
     task: "确认能否运动",
     role: "USER",
-    icon: <HeartPulse />,
+    icon: <AppstoreOutlined />,
     path: "/user/dashboard"
   },
   {
@@ -66,7 +57,7 @@ const entryCards = [
     description: "处理 R2 处方、异常反馈和需要人工判断的任务。",
     task: "处理审核队列",
     role: "EXPERT",
-    icon: <Stethoscope />,
+    icon: <MedicineBoxOutlined />,
     path: "/expert/dashboard"
   },
   {
@@ -74,7 +65,7 @@ const entryCards = [
     description: "管理规则、模板、知识库、用户权限和上线审计。",
     task: "检查运营闸口",
     role: "ADMIN",
-    icon: <ShieldCheck />,
+    icon: <TeamOutlined />,
     path: "/admin/dashboard"
   },
   {
@@ -82,7 +73,7 @@ const entryCards = [
     description: "查看脱敏聚合指标，提交和下载已审批的数据导出。",
     task: "查看脱敏总览",
     role: "RESEARCHER",
-    icon: <Database />,
+    icon: <ExperimentOutlined />,
     path: "/research/dashboard"
   }
 ];
@@ -107,13 +98,6 @@ const safetyBoundaries = [
   ["导出", "审批后开放", "科研数据默认脱敏并记录下载行为。"]
 ];
 
-const flowCheckpoints = [
-  ["建档", "健康数据采集"],
-  ["筛查", "R0-R3 风险分级"],
-  ["审核", "专家确认边界"],
-  ["处方", "发布可执行方案"]
-];
-
 function HomePage() {
   const currentRole = localStorage.getItem("current_user_role");
   const isLoggedIn = Boolean(localStorage.getItem("access_token"));
@@ -122,80 +106,47 @@ function HomePage() {
 
   return (
     <Layout className="app-shell home-shell">
-      <div className="home-background" aria-hidden="true">
-        <span className="home-grid-plane" />
-        <span className="home-vital-line" />
-        <span className="home-vital-line home-vital-line-secondary" />
-      </div>
       <header className="home-topbar">
         <Link to="/" className="home-brand-lockup" aria-label="启衡首页">
           <span className="home-brand-mark">启</span>
           <span>
-            <strong>启衡运动处方平台</strong>
-            <small>临床安全 · 专家审核 · 科研治理</small>
+            <strong>启衡</strong>
+            <small>运动处方与健康干预系统</small>
           </span>
         </Link>
         <nav className="home-top-actions" aria-label="账户操作">
           {isLoggedIn ? (
             <Link to={activeEntry.path}>
-              <Button icon={<ArrowRight size={16} />}>进入当前工作台</Button>
+              <Button>进入当前工作台</Button>
             </Link>
           ) : (
             <Link to="/login">
-              <Button icon={<LogIn size={16} />}>登录账号</Button>
+              <Button>登录账号</Button>
             </Link>
           )}
           <Link to={isLoggedIn ? "/login" : "/register"}>
-            <Button icon={isLoggedIn ? undefined : <UserPlus size={16} />}>
-              {isLoggedIn ? "切换账号" : "注册用户"}
-            </Button>
+            <Button>{isLoggedIn ? "切换账号" : "注册用户"}</Button>
           </Link>
         </nav>
       </header>
 
       <Layout.Content className="home-content">
-        <motion.main
-          className="home-gateway"
-          aria-label="角色控制台入口"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <motion.section
-            className="home-briefing"
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.08, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
-          >
+        <main className="home-gateway" aria-label="角色控制台入口">
+          <section className="home-briefing">
             <div className="home-kicker">临床运动干预中台</div>
-            <h1>启衡运动处方平台</h1>
+            <h1>安全评估先行，处方执行随后</h1>
             <p className="home-briefing-copy">
-              把建档、风险分级、专家审核、规则治理和科研导出收在同一个受控入口，先确认边界，再进入任务。
+              启衡把建档、风险分级、专家审核、规则治理和科研导出收在同一个受控入口，先确认边界，再进入任务。
             </p>
             <div className="home-briefing-actions">
               <Link to={isLoggedIn ? activeEntry.path : "/login"}>
-                <Button type="primary" size="large" className="home-primary-action" icon={<LogIn size={17} />}>
+                <Button type="primary" size="large" className="home-primary-action">
                   {isLoggedIn ? `进入${activeEntry.title}` : "登录账号"}
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="large" className="home-secondary-action" icon={<UserPlus size={17} />}>注册用户</Button>
+                <Button size="large" className="home-secondary-action">注册用户</Button>
               </Link>
-            </div>
-            <div className="home-flow-card" aria-label="处方安全流程">
-              <div className="home-flow-pulse">
-                <HeartPulse size={22} />
-                <span>Safety gate active</span>
-              </div>
-              <div className="home-flow-steps">
-                {flowCheckpoints.map(([label, detail], index) => (
-                  <div className="home-flow-step" key={label}>
-                    <span>{index + 1}</span>
-                    <strong>{label}</strong>
-                    <small>{detail}</small>
-                  </div>
-                ))}
-              </div>
             </div>
             <dl className="home-signal-list" aria-label="系统边界">
               {platformSignals.map(([label, value, detail]) => (
@@ -208,15 +159,9 @@ function HomePage() {
                 </div>
               ))}
             </dl>
-          </motion.section>
+          </section>
 
-          <motion.aside
-            className="home-access-panel"
-            aria-label="选择工作台"
-            initial={{ opacity: 0, x: 18 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.14, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <aside className="home-access-panel" aria-label="选择工作台">
             <div className="home-access-head">
               <div>
                 <span className="home-section-label">选择工作台</span>
@@ -236,41 +181,26 @@ function HomePage() {
               {entryCards.map((item) => {
                 const isActive = currentRole === item.role;
                 return (
-                  <motion.div
+                  <Link
                     key={item.title}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + entryCards.indexOf(item) * 0.04, duration: 0.32 }}
+                    to={isLoggedIn ? item.path : "/login"}
+                    className={`home-role-row${isActive ? " is-active" : ""}`}
+                    aria-current={isActive ? "page" : undefined}
                   >
-                    <Link
-                      to={isLoggedIn ? item.path : "/login"}
-                      className={`home-role-row${isActive ? " is-active" : ""}`}
-                      aria-current={isActive ? "page" : undefined}
-                    >
-                      <span className="home-role-icon" aria-hidden="true">{item.icon}</span>
-                      <span className="home-role-copy">
-                        <strong>{item.title}</strong>
-                        <small>{item.description}</small>
-                      </span>
-                      <span className="home-role-action">
-                        {isActive ? "进入" : item.task}
-                        <ArrowRight size={14} />
-                      </span>
-                    </Link>
-                  </motion.div>
+                    <span className="home-role-icon" aria-hidden="true">{item.icon}</span>
+                    <span className="home-role-copy">
+                      <strong>{item.title}</strong>
+                      <small>{item.description}</small>
+                    </span>
+                    <span className="home-role-action">{isActive ? "进入" : item.task}</span>
+                  </Link>
                 );
               })}
             </nav>
-          </motion.aside>
-        </motion.main>
+          </aside>
+        </main>
 
-        <motion.section
-          className="home-safety-rail"
-          aria-label="安全边界"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22, duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <section className="home-safety-rail" aria-label="安全边界">
           {safetyBoundaries.map(([label, title, detail]) => (
             <div className="home-safety-item" key={label}>
               <span>{label}</span>
@@ -278,7 +208,7 @@ function HomePage() {
               <small>{detail}</small>
             </div>
           ))}
-        </motion.section>
+        </section>
       </Layout.Content>
     </Layout>
   );
@@ -317,10 +247,8 @@ const RESEARCH_ONLY: AuthUserRole[] = ["RESEARCHER"];
 
 function sanitizeVisibleRuntimeText(value: string) {
   return value
-    .replace(/AI\s*个性化运动处方平台/g, "启衡运动处方平台")
-    .replace(/启衡运动处方系统/g, "启衡运动处方平台")
-    .replace(/智能化运动处方系统/g, "启衡运动处方平台")
-    .replace(/AI\s*运动处方/g, "启衡运动处方")
+    .replace(/AI\s*个性化运动处方平台/g, "启衡运动处方系统")
+    .replace(/AI\s*运动处方/g, "启衡")
     .replace(/AI\s*初稿/g, "系统初稿")
     .replace(/\bAI_DRAFT\b/g, "系统初稿")
     .replace(/\[DEMO\]\s*/g, "")
