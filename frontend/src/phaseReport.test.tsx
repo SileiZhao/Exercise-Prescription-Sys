@@ -59,6 +59,8 @@ describe("phase report page", () => {
 
     expect(await screen.findByRole("heading", { name: "阶段报告" })).toBeInTheDocument();
     expect(screen.getByText("启衡")).toBeInTheDocument();
+    expect(screen.getByText("阶段评估报告")).toBeInTheDocument();
+    expect(screen.getByText("四周反馈、安全事件与指标变化的复评视图")).toBeInTheDocument();
     expect(
       (await screen.findAllByText("近4周共记录3次运动反馈，平均完成率71.67%，平均RPE 8，疼痛事件2次，不适事件1次。")).length
     ).toBeGreaterThan(0);

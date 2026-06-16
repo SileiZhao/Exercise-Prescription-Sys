@@ -108,7 +108,15 @@ function listValue(value: unknown): string[] {
   return [];
 }
 
-// PLACEHOLDER_RENDER
+function daysUntil(value: string | null | undefined) {
+  if (!value) return null;
+  const target = new Date(value);
+  if (Number.isNaN(target.getTime())) return null;
+  const today = new Date();
+  const targetDay = new Date(target.getFullYear(), target.getMonth(), target.getDate()).getTime();
+  const currentDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  return Math.max(0, Math.ceil((targetDay - currentDay) / 86400000));
+}
 
 const RISK_TONE: Record<string, "safe" | "info" | "warning" | "danger"> = {
   R0: "safe",
@@ -180,7 +188,7 @@ export function UserDashboardPage() {
     risk === "R3"
       ? "查看医学评估建议"
       : canExercise
-        ? "进入运动前安全闸门"
+        ? "开始今日任务"
         : risk === "R2"
           ? "查看审核状态"
           : "补充建档资料";
@@ -204,6 +212,7 @@ export function UserDashboardPage() {
   const feedbackTrendData = fallbackFeedbackTrend(summary);
   const healthRadarData = fallbackHealthRadar(summary, healthSnapshot);
   const reminders = summary?.monitoring_reminders ?? [];
+  const reassessmentDays = daysUntil(summary?.next_reassessment_date);
 
   const nextSteps = [
     canExercise
@@ -286,8 +295,8 @@ export function UserDashboardPage() {
           <div className="ue-col">
             <Panel
               icon={<ListChecks />}
-              title="当前阶段与处方可见性"
-              sub="先确认处方是否可见，再进入今日任务"
+              title="当前执行处方"
+              sub="处方频率、强度、禁忌与阶段目标同屏核对"
               extra={
                 <Link className="ue-panel-link" to="/user/prescriptions">
                   查看处方版本
@@ -366,9 +375,110 @@ export function UserDashboardPage() {
                 <Tag>{summary?.prescription_summary?.cluster_label ?? "未分型"}</Tag>
               </div>
             </Panel>
+
+            <Panel icon={<Activity />} title="趋势与监测" sub="趋势用于复评和动态调整，不参与今日通行证的第一判断">
+              <Collapse
+                className="ue-collapse"
+                defaultActiveKey={["reminders"]}
+                items={[
+                  {
+                    key: "reminders",
+                    label: "监测提醒",
+                    children: reminders.length ? (
+                      <ul className="ue-reminder-list">
+                        {reminders.map((item) => (
+                          <li key={item}>
+                            <HeartPulse aria-hidden="true" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <EmptyState description="暂无监测提醒" />
+                    )
+                  },
+                  {
+                    key: "adherence",
+                    label: "计划完成趋势",
+                    children: (
+                      <ChartCard
+                        title="计划完成趋势"
+                        unit="%"
+                        insight="用于判断处方依从性是否稳定，低完成率时优先排查执行障碍。"
+                        threshold="连续低于 60% 时建议进入复评或专家沟通。"
+                      >
+                        {adherenceData.length ? (
+                          <AdherenceChart data={adherenceData} loading={!summary && !error} />
+                        ) : (
+                          <DataNote title="暂无完成趋势" description="完成至少一次打卡后显示趋势。" />
+                        )}
+                      </ChartCard>
+                    )
+                  },
+                  {
+                    key: "feedback",
+                    label: "反馈趋势",
+                    children: (
+                      <div className="ue-chart-pair">
+                        <ChartCard
+                          title="反馈趋势"
+                          unit="RPE / 疼痛分 / 完成率%"
+                          insight="用于发现运动强度过高、疼痛增加或完成率下降。"
+                          threshold="RPE 偏高或疼痛升高时，不自动进阶处方。"
+                        >
+                          {feedbackTrendData.length ? (
+                            <FeedbackTrendChart data={feedbackTrendData} loading={!summary && !error} />
+                          ) : (
+                            <DataNote title="暂无反馈趋势" description="RPE、疼痛或完成率记录不足时不显示空图表。" />
+                          )}
+                        </ChartCard>
+                        <ChartCard
+                          title="健康画像雷达"
+                          unit="标准化评分"
+                          insight="用于概览体测、体成分和生化指标是否存在短板。"
+                          threshold="资料缺失时不做单项风险推断。"
+                        >
+                          {healthRadarData.length ? (
+                            <HealthRadarChart data={healthRadarData} loading={!summary && !error} />
+                          ) : (
+                            <DataNote title="健康画像待补充" description="完成体测、体成分或生化指标后生成画像雷达。" />
+                          )}
+                        </ChartCard>
+                      </div>
+                    )
+                  }
+                ]}
+              />
+            </Panel>
           </div>
 
           <aside className="ue-rail" aria-label="反馈与监测概览">
+            <section className="ue-countdown-card" aria-label="阶段复评倒计时">
+              <div className="ue-countdown-copy">
+                <div className="ue-subhead">阶段复评倒计时</div>
+                <strong>{reassessmentDays === null ? "--" : reassessmentDays}</strong>
+                <span>天</span>
+                <p>
+                  {summary?.next_reassessment_date
+                    ? `预计 ${summary.next_reassessment_date} 进行阶段复评`
+                    : "复评日期待处方发布后生成"}
+                </p>
+              </div>
+              <div className="ue-countdown-ring" aria-hidden="true">
+                <svg viewBox="0 0 132 132">
+                  <circle cx="66" cy="66" r="56" />
+                  <circle
+                    cx="66"
+                    cy="66"
+                    r="56"
+                    style={{
+                      strokeDashoffset: `${352 - Math.min(1, (reassessmentDays ?? 0) / 28) * 352}`
+                    }}
+                  />
+                </svg>
+                <CalendarDays />
+              </div>
+            </section>
             <div className="ue-feedback">
               <div className="ue-subhead">最新反馈预警</div>
               <div className="ue-feedback-metric">
@@ -409,81 +519,6 @@ export function UserDashboardPage() {
             </div>
           </aside>
         </div>
-
-        <Panel icon={<Activity />} title="趋势与监测" sub="趋势用于复评和动态调整，不参与今日通行证的第一判断">
-          <Collapse
-            className="ue-collapse"
-            defaultActiveKey={["reminders"]}
-            items={[
-              {
-                key: "reminders",
-                label: "监测提醒",
-                children: reminders.length ? (
-                  <ul className="ue-reminder-list">
-                    {reminders.map((item) => (
-                      <li key={item}>
-                        <HeartPulse aria-hidden="true" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <EmptyState description="暂无监测提醒" />
-                )
-              },
-              {
-                key: "adherence",
-                label: "计划完成趋势",
-                children: (
-                  <ChartCard
-                    title="计划完成趋势"
-                    unit="%"
-                    insight="用于判断处方依从性是否稳定，低完成率时优先排查执行障碍。"
-                    threshold="连续低于 60% 时建议进入复评或专家沟通。"
-                  >
-                    {adherenceData.length ? (
-                      <AdherenceChart data={adherenceData} loading={!summary && !error} />
-                    ) : (
-                      <DataNote title="暂无完成趋势" description="完成至少一次打卡后显示趋势。" />
-                    )}
-                  </ChartCard>
-                )
-              },
-              {
-                key: "feedback",
-                label: "反馈趋势",
-                children: (
-                  <div className="ue-chart-pair">
-                    <ChartCard
-                      title="反馈趋势"
-                      unit="RPE / 疼痛分 / 完成率%"
-                      insight="用于发现运动强度过高、疼痛增加或完成率下降。"
-                      threshold="RPE 偏高或疼痛升高时，不自动进阶处方。"
-                    >
-                      {feedbackTrendData.length ? (
-                        <FeedbackTrendChart data={feedbackTrendData} loading={!summary && !error} />
-                      ) : (
-                        <DataNote title="暂无反馈趋势" description="RPE、疼痛或完成率记录不足时不显示空图表。" />
-                      )}
-                    </ChartCard>
-                    <ChartCard
-                      title="健康画像雷达"
-                      unit="标准化评分"
-                      insight="用于概览体测、体成分和生化指标是否存在短板。"
-                      threshold="资料缺失时不做单项风险推断。"
-                    >
-                      {healthRadarData.length ? (
-                        <HealthRadarChart data={healthRadarData} loading={!summary && !error} />
-                      ) : (
-                        <DataNote title="健康画像待补充" description="完成体测、体成分或生化指标后生成画像雷达。" />
-                      )}
-                    </ChartCard>
-                  </div>
-                )
-              }
-            ]}
-          />
-        </Panel>
       </div>
     </AppShell>
   );
@@ -593,4 +628,3 @@ function MiniStat({
     </div>
   );
 }
-

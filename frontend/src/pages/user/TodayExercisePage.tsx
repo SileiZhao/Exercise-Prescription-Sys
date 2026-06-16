@@ -15,6 +15,7 @@ import {
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { ShieldAlert } from "lucide-react";
 
 import { adjustFeedback, type FeedbackAdjustment } from "../../api/feedback";
 import { createExerciseFeedback } from "../../api/healthData";
@@ -212,6 +213,32 @@ export function TodayExercisePage() {
           </Space>
         </Modal>
         <Space direction="vertical" size={16} className="onboarding-section">
+          <section className={`ue-gatekeeper-card tone-${gateTone}`} aria-label="运动前安全确认">
+            <div className="ue-gatekeeper-icon" aria-hidden="true">
+              <ShieldAlert />
+            </div>
+            <div className="ue-gatekeeper-copy">
+              <Typography.Title level={3}>运动前安全确认</Typography.Title>
+              <Typography.Paragraph>
+                今天是否有胸痛、严重气短、晕厥、心悸或关节疼痛明显加重？
+              </Typography.Paragraph>
+              <Space wrap>
+                <Button danger disabled={!executablePrescription} onClick={() => form.setFieldValue("discomfort", ["胸痛"])}>
+                  是，我有不适
+                </Button>
+                {executablePrescription ? (
+                  <Button type="primary" onClick={() => setFeedbackOpen(true)}>
+                    否，状态良好
+                  </Button>
+                ) : (
+                  <Button type="primary" disabled>
+                    训练入口锁定
+                  </Button>
+                )}
+              </Space>
+              <p>为了医疗安全，每次打卡前都必须完成自我确认。</p>
+            </div>
+          </section>
           <DecisionBanner
             tone={gateTone}
             title={

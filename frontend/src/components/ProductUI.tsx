@@ -75,18 +75,18 @@ const navItemsByRole: Record<AppRole, NavSection[]> = {
   ],
   user: [
     {
-      title: "今日执行",
+      title: "用户门户 (USER)",
       items: [
-        ["通行证", "/user/dashboard", <LayoutDashboard key="dashboard" />, "先判断能否运动"],
-        ["今日任务", "/user/today", <Activity key="today" />, "安全闸门与打卡"],
-        ["处方", "/user/prescriptions", <FileText key="rx" />, "发布状态与版本"]
+        ["工作台首页", "/user/dashboard", <LayoutDashboard key="dashboard" />, "今日通行证与处方概览"],
+        ["健康建档向导", "/user/health-data", <ClipboardCheck key="profile" />, "六类数据采集"],
+        ["风险评估结果", "/user/risk-result", <ShieldAlert key="risk" />, "R0-R3 判定报告"],
+        ["最新运动处方", "/user/prescriptions", <FileText key="rx" />, "发布状态与版本"],
+        ["今日运动打卡", "/user/today", <Activity key="today" />, "安全闸门与反馈"]
       ]
     },
     {
       title: "评估闭环",
       items: [
-        ["建档", "/user/health-data", <ClipboardCheck key="profile" />, "六类数据采集"],
-        ["风险", "/user/risk-result", <ShieldAlert key="risk" />, "R0-R3 判定报告"],
         ["阶段报告", "/user/phase-report", <BarChart3 key="phase" />, "复评与建议"]
       ]
     }

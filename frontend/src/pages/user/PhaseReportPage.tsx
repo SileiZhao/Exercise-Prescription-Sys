@@ -1,6 +1,7 @@
 import { Alert, Button, Col, Descriptions, List, Row, Space, Spin, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Activity, AlertTriangle, BarChart3, FileText } from "lucide-react";
 
 import {
   exportPhaseAssessmentPdfReport,
@@ -170,6 +171,31 @@ export function PhaseReportPage() {
       }
     >
         <Space direction="vertical" size={16} className="onboarding-section">
+          <section className="ue-phase-cover" aria-label="阶段评估报告">
+            <div>
+              <Typography.Text className="ue-section-kicker">阶段复评</Typography.Text>
+              <Typography.Title level={3}>阶段评估报告</Typography.Title>
+              <Typography.Paragraph>四周反馈、安全事件与指标变化的复评视图</Typography.Paragraph>
+            </div>
+            <div className="ue-phase-cover-grid">
+              <span>
+                <Activity aria-hidden="true" />
+                运动反馈
+              </span>
+              <span>
+                <AlertTriangle aria-hidden="true" />
+                安全事件
+              </span>
+              <span>
+                <BarChart3 aria-hidden="true" />
+                指标变化
+              </span>
+              <span>
+                <FileText aria-hidden="true" />
+                导出留痕
+              </span>
+            </div>
+          </section>
           <DecisionBanner
             tone={bannerTone}
             title={assessment ? `阶段决策：${meta.label}` : "阶段报告待生成"}

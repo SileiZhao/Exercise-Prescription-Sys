@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { Activity, CheckCircle2, ShieldAlert } from "lucide-react";
 import { z } from "zod";
 
 import {
@@ -222,6 +223,7 @@ export function OnboardingWizardPage() {
   const completedStepCount = submitted ? steps.length : current;
   const canSkipOptionalStep = step.id === "body" || step.id === "biochemical";
   const initialValues = useMemo(() => ({ ...defaultFormValues, ...(loadDraft()[step.id] ?? {}) }), [step.id]);
+  const redFlagLabels = ["胸痛或胸闷", "头晕或晕厥", "异常气短", "心悸或心律不齐"];
 
   useEffect(() => {
     if (step.id === "consent") return;
@@ -346,6 +348,45 @@ export function OnboardingWizardPage() {
       }
     >
       <Space direction="vertical" size={16} className="onboarding-section">
+        <section className="ue-onboarding-cover" aria-label="健康建档向导">
+          <div className="ue-onboarding-cover-main">
+            <Typography.Text className="ue-section-kicker">用户门户 (USER)</Typography.Text>
+            <Typography.Title level={3}>健康建档向导</Typography.Title>
+            <Typography.Paragraph>
+              按知情同意、基础档案、体质测试、身体成分、生化指标和风险问卷逐步保存，红旗信号优先进入医学安全边界。
+            </Typography.Paragraph>
+            <div className="ue-onboarding-mini-steps" aria-label="六类数据采集">
+              {steps.map((item, index) => (
+                <span key={item.id} className={index <= current || submitted ? "is-active" : undefined}>
+                  {index + 1}. {item.title}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="ue-redflag-panel" aria-label="心血管与红旗症状筛查">
+            <div className="ue-redflag-head">
+              <span aria-hidden="true">
+                <ShieldAlert />
+              </span>
+              <div>
+                <Typography.Text strong>心血管与红旗症状筛查</Typography.Text>
+                <Typography.Paragraph type="secondary">任何停止信号都会影响 R2/R3 判定和训练入口。</Typography.Paragraph>
+              </div>
+            </div>
+            <div className="ue-redflag-list">
+              {redFlagLabels.map((item) => (
+                <span key={item}>
+                  <Activity aria-hidden="true" />
+                  {item}
+                </span>
+              ))}
+            </div>
+            <div className="ue-redflag-foot">
+              <CheckCircle2 aria-hidden="true" />
+              草稿本机保存，每一步独立提交，失败时不丢失已填数据。
+            </div>
+          </div>
+        </section>
         <DecisionBanner
           tone={submitted ? "safe" : step.id === "risk" ? "warning" : "info"}
           title={submitted ? "六类数据已提交，可以进入风险评估" : `当前步骤：${step.title}`}

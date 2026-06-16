@@ -1,6 +1,7 @@
 import { Alert, Button, Collapse, Descriptions, Dropdown, List, Space, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Activity, BarChart, Calendar, Clock, TrendingUp, User } from "lucide-react";
 
 import {
   exportPrescriptionPdfReport,
@@ -168,6 +169,15 @@ export function PrescriptionPage() {
       status: <Tag color={statusTagColor(item.status)}>{formatStatusLabel(item.status, "review")}</Tag>,
       active: latest?.id === item.id
     }));
+  const fitt = latest?.fitt_vp ?? null;
+  const fittCards = [
+    { label: "频率 (Frequency)", value: fitt?.frequency ?? "-", icon: Calendar, tone: "blue" },
+    { label: "强度 (Intensity)", value: fitt?.intensity ?? "-", icon: Activity, tone: "teal" },
+    { label: "时间 (Time)", value: fitt?.time ?? "-", icon: Clock, tone: "indigo" },
+    { label: "类型 (Type)", value: Array.isArray(fitt?.type) ? fitt.type.join("、") : fitt?.type ?? "-", icon: User, tone: "purple" },
+    { label: "总量 (Volume)", value: fitt?.volume ?? "-", icon: BarChart, tone: "orange" },
+    { label: "进阶 (Progression)", value: fitt?.progression ?? "-", icon: TrendingUp, tone: "rose" }
+  ];
 
   return (
     <AppShell
@@ -182,6 +192,36 @@ export function PrescriptionPage() {
       }
     >
       <Space direction="vertical" size={16} className="onboarding-section">
+        <section className="ue-prescription-cover" aria-label="个性化运动处方">
+          <div>
+            <Typography.Title level={3}>个性化运动处方</Typography.Title>
+            <Typography.Paragraph>
+              {latest
+                ? `${latest.risk_level} · ${formatStatusLabel(latest.status, "review")} · ${latest.cluster_label || "未标注分型"}`
+                : "完成建档和风险评估后生成处方。"}
+            </Typography.Paragraph>
+          </div>
+          <Space wrap>
+            <ClinicalStatusBadge type="risk" value={latest?.risk_level} />
+            <ClinicalStatusBadge type="review" value={latest?.status ?? "pending"} label={latest ? formatStatusLabel(latest.status, "review") : "暂无处方"} />
+          </Space>
+        </section>
+        {latest && !hideTrainingPlan ? (
+          <section className="ue-fitt-showcase" aria-label="FITT-VP 六宫格">
+            {fittCards.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div className={`ue-fitt-showcase-cell tone-${item.tone}`} key={item.label}>
+                  <span aria-hidden="true">
+                    <Icon />
+                  </span>
+                  <small>{item.label}</small>
+                  <strong>{String(item.value)}</strong>
+                </div>
+              );
+            })}
+          </section>
+        ) : null}
         <DecisionBanner
           tone={bannerTone}
           title={

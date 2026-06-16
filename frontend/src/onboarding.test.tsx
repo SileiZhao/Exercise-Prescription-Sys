@@ -38,6 +38,8 @@ describe("onboarding wizard", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "用户建档" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "健康建档向导" })).toBeInTheDocument();
+    expect(screen.getByText("心血管与红旗症状筛查")).toBeInTheDocument();
     expect(screen.getAllByText("知情同意").length).toBeGreaterThan(0);
     expect(screen.getAllByText("基础信息").length).toBeGreaterThan(0);
     expect(screen.getAllByText("体质测试").length).toBeGreaterThan(0);

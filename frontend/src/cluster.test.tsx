@@ -41,7 +41,7 @@ describe("cluster pages", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "风险结果" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "查看审核状态" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "查看审核状态" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "重新评估" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "生成分型" })).not.toBeInTheDocument();
     expect(screen.getByText("审核通过前不开放训练入口")).toBeInTheDocument();

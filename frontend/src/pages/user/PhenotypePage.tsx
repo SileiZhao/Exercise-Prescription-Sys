@@ -1,6 +1,7 @@
 import { Alert, Button, Col, Row, Space, Tag, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Activity, AlertTriangle, ShieldAlert } from "lucide-react";
 
 import { classifyMe, type ClusterAssignment } from "../../api/clusters";
 import { getUserDashboard, type UserDashboardSummary } from "../../api/userDashboard";
@@ -124,7 +125,25 @@ export function PhenotypePage() {
       }
     >
       <Space direction="vertical" size={16} className="onboarding-section">
-        <RiskHeroBadge level={riskLevel} actionLabel={riskHeroActions} />
+        <div className={`ue-scope tone-${decisionTone === "danger" ? "danger" : decisionTone === "warning" ? "warning" : "info"}`}>
+          <section className="ue-hero" aria-label="风险评估结果">
+            <div className="ue-disc">
+              <span className="ue-disc-grade">{riskLevel ?? "--"}</span>
+              <span className="ue-disc-icon" aria-hidden="true">
+                {riskLevel === "R3" ? <ShieldAlert /> : riskLevel === "R2" ? <AlertTriangle /> : <Activity />}
+              </span>
+            </div>
+            <div className="ue-hero-body">
+              <span className="ue-hero-eyebrow">风险评估结果</span>
+              <h2 className="ue-hero-title">
+                {riskLevel ? `评估结果：${riskLevel} ${guidance.action}` : "评估结果待生成"}
+              </h2>
+              <p className="ue-hero-desc">{guidance.message}</p>
+            </div>
+            <div className="ue-hero-aside">{riskHeroActions}</div>
+          </section>
+        </div>
+        <RiskHeroBadge level={riskLevel} actionLabel={null} />
         {error ? <Alert type="error" showIcon message={error} /> : null}
         <div className="status-grid">
           <StatusTile label="风险规则" value={riskLevel ?? "待生成"} detail="R0/R1/R2/R3 不被聚类覆盖" tone={decisionTone === "danger" ? "danger" : decisionTone === "warning" ? "warning" : "info"} />
@@ -132,7 +151,7 @@ export function PhenotypePage() {
           <StatusTile label="下一步" value={guidance.action} detail="系统只展示允许的动作" />
         </div>
         <div className={`risk-report-grid risk-report-${String(riskLevel ?? "unknown").toLowerCase()}`}>
-          <WorkbenchSection title="风险判定报告" description="先给出安全结论，再展示规则、证据和流程位置。">
+          <WorkbenchSection title="触发规则与评判依据" description="先给出安全结论，再展示规则、证据和流程位置。">
             <Space direction="vertical" size={16} className="onboarding-section">
               <FlowProgress current={progressStep} />
               <Alert type="info" showIcon message="分型结果只用于模板匹配，不覆盖风险规则。" />
