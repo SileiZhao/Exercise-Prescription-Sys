@@ -1,12 +1,12 @@
-import { AppstoreOutlined, ExperimentOutlined, MedicineBoxOutlined, TeamOutlined } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Button, ConfigProvider, Layout, Spin } from "antd";
+import { Button, Card, ConfigProvider, Layout, Spin, Typography } from "antd";
 import zhCN from "antd/locale/zh_CN";
 import { lazy, Suspense, useEffect, type ComponentType } from "react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { ArrowRight, LineChart, Settings, Stethoscope, User } from "lucide-react";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { ClinicalStatusBadge, antdTheme } from "./components/ProductUI";
+import { antdTheme } from "./components/ProductUI";
 import type { AuthUserRole } from "./auth/token";
 import { lazyPageLoaders } from "./routeLoaders";
 import "./styles.css";
@@ -45,35 +45,43 @@ const UserDashboardPage = lazyPage(lazyPageLoaders.userDashboard, "UserDashboard
 
 const entryCards = [
   {
-    title: "用户端",
-    description: "建档、查看风险结论、接收处方和完成运动反馈。",
-    task: "确认能否运动",
+    title: "普通用户",
+    description: "建档与运动执行",
+    detail: "完成六类数据采集，查看风险结论、处方状态和今日运动通行证。",
+    task: "进入用户端",
     role: "USER",
-    icon: <AppstoreOutlined />,
+    icon: <User aria-hidden="true" />,
+    tone: "user",
     path: "/user/dashboard"
   },
   {
-    title: "专家端",
-    description: "处理 R2 处方、异常反馈和需要人工判断的任务。",
-    task: "处理审核队列",
+    title: "处方专家",
+    description: "高风险审核与分诊",
+    detail: "处理 R2 待审处方、异常反馈、医学评估和证据核对任务。",
+    task: "进入专家端",
     role: "EXPERT",
-    icon: <MedicineBoxOutlined />,
-    path: "/expert/dashboard"
+    icon: <Stethoscope aria-hidden="true" />,
+    tone: "expert",
+    path: "/expert/reviews"
   },
   {
-    title: "管理端",
-    description: "管理规则、模板、知识库、用户权限和上线审计。",
-    task: "检查运营闸口",
+    title: "系统管理",
+    description: "规则治理与上线配置",
+    detail: "管理风险规则、模板动作、知识索引、用户权限和上线闸口。",
+    task: "进入管理端",
     role: "ADMIN",
-    icon: <TeamOutlined />,
+    icon: <Settings aria-hidden="true" />,
+    tone: "admin",
     path: "/admin/dashboard"
   },
   {
-    title: "科研端",
-    description: "查看脱敏聚合指标，提交和下载已审批的数据导出。",
-    task: "查看脱敏总览",
+    title: "科研人员",
+    description: "脱敏数据与干预分析",
+    detail: "查看脱敏聚合指标，提交导出申请，分析分型与干预效果。",
+    task: "进入科研端",
     role: "RESEARCHER",
-    icon: <ExperimentOutlined />,
+    icon: <LineChart aria-hidden="true" />,
+    tone: "research",
     path: "/research/dashboard"
   }
 ];
@@ -86,130 +94,99 @@ const roleLabelByAuthRole: Record<string, string> = {
   RESEARCHER: "科研端"
 };
 
-const platformSignals = [
-  ["风险分级", "R0-R3", "R2 人工审核，R3 转介阻断"],
-  ["证据链路", "规则 + 知识库", "处方发布前保留来源"],
-  ["科研治理", "脱敏导出", "审批通过后限时下载"]
-];
-
-const safetyBoundaries = [
-  ["R2", "进入专家审核", "处方发布前必须完成证据核对。"],
-  ["R3", "医学评估优先", "系统只展示转介或机构复评建议。"],
-  ["导出", "审批后开放", "科研数据默认脱敏并记录下载行为。"]
-];
-
 function HomePage() {
   const currentRole = localStorage.getItem("current_user_role");
+  const currentUserName = localStorage.getItem("current_user_name") || localStorage.getItem("current_user_email") || "当前账号";
   const isLoggedIn = Boolean(localStorage.getItem("access_token"));
-  const activeEntry = entryCards.find((item) => item.role === currentRole) ?? entryCards[0];
+  const currentEntryRole = currentRole === "ORG_ADMIN" ? "ADMIN" : currentRole;
+  const activeEntry = entryCards.find((item) => item.role === currentEntryRole) ?? entryCards[0];
   const currentRoleLabel = currentRole ? roleLabelByAuthRole[currentRole] ?? currentRole : "";
 
   return (
-    <Layout className="app-shell home-shell">
-      <header className="home-topbar">
-        <Link to="/" className="home-brand-lockup" aria-label="启衡首页">
-          <span className="home-brand-mark">启</span>
-          <span>
-            <strong>启衡</strong>
-            <small>运动处方与健康干预系统</small>
-          </span>
+    <Layout className="public-home-shell">
+      <div className="public-home-bg" aria-hidden="true">
+        <div className="public-home-grid" />
+        <div className="public-home-wireframe">
+          <span className="wire-node wire-node-a" />
+          <span className="wire-node wire-node-b" />
+          <span className="wire-node wire-node-c" />
+          <span className="wire-node wire-node-d" />
+        </div>
+        <div className="public-home-trajectory">
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+
+      <header className="public-home-header">
+        <Link to="/" className="public-home-brand" aria-label="启衡临床运动干预中台首页">
+          <span className="public-home-brand-mark">启</span>
+          <Typography.Title level={4} className="public-home-title">
+            启衡临床运动干预中台
+          </Typography.Title>
         </Link>
-        <nav className="home-top-actions" aria-label="账户操作">
+        <nav className="public-home-actions" aria-label="账户操作">
           {isLoggedIn ? (
-            <Link to={activeEntry.path}>
-              <Button>进入当前工作台</Button>
-            </Link>
+            <>
+              <span className="public-home-user">{currentRoleLabel || activeEntry.title} · {currentUserName}</span>
+              <Link to={activeEntry.path}>
+                <Button type="primary">进入我的工作台</Button>
+              </Link>
+            </>
           ) : (
-            <Link to="/login">
-              <Button>登录账号</Button>
-            </Link>
+            <>
+              <Link to="/register">
+                <Button type="default">注册</Button>
+              </Link>
+              <Link to="/login">
+                <Button type="primary">登录工作台</Button>
+              </Link>
+            </>
           )}
-          <Link to={isLoggedIn ? "/login" : "/register"}>
-            <Button>{isLoggedIn ? "切换账号" : "注册用户"}</Button>
-          </Link>
         </nav>
       </header>
 
-      <Layout.Content className="home-content">
-        <main className="home-gateway" aria-label="角色控制台入口">
-          <section className="home-briefing">
-            <div className="home-kicker">临床运动干预中台</div>
-            <h1>安全评估先行，处方执行随后</h1>
-            <p className="home-briefing-copy">
-              启衡把建档、风险分级、专家审核、规则治理和科研导出收在同一个受控入口，先确认边界，再进入任务。
-            </p>
-            <div className="home-briefing-actions">
-              <Link to={isLoggedIn ? activeEntry.path : "/login"}>
-                <Button type="primary" size="large" className="home-primary-action">
-                  {isLoggedIn ? `进入${activeEntry.title}` : "登录账号"}
-                </Button>
-              </Link>
-              <Link to="/register">
-                <Button size="large" className="home-secondary-action">注册用户</Button>
-              </Link>
-            </div>
-            <dl className="home-signal-list" aria-label="系统边界">
-              {platformSignals.map(([label, value, detail]) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>
-                    <strong>{value}</strong>
-                    <span>{detail}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-
-          <aside className="home-access-panel" aria-label="选择工作台">
-            <div className="home-access-head">
-              <div>
-                <span className="home-section-label">选择工作台</span>
-                <h2>{isLoggedIn ? `${currentRoleLabel || activeEntry.title}已识别` : "请选择账号进入"}</h2>
-              </div>
-              <ClinicalStatusBadge
-                type="readiness"
-                value={isLoggedIn ? "ready" : "degraded"}
-                label={isLoggedIn ? "已登录" : "未登录"}
-              />
-            </div>
-            <div className="home-current-task">
-              <span>{isLoggedIn ? "当前建议入口" : "登录后按角色进入"}</span>
-              <strong>{isLoggedIn ? activeEntry.task : "角色工作台"}</strong>
-            </div>
-            <nav className="home-role-list" aria-label="工作台列表">
-              {entryCards.map((item) => {
-                const isActive = currentRole === item.role;
-                return (
-                  <Link
-                    key={item.title}
-                    to={isLoggedIn ? item.path : "/login"}
-                    className={`home-role-row${isActive ? " is-active" : ""}`}
-                    aria-current={isActive ? "page" : undefined}
+      <Layout.Content className="public-home-main">
+        <main className="public-home-router" aria-label="角色入口分流">
+          <Typography.Text type="secondary" className="public-home-statement">
+            受监管的医疗场景 · 风险分级 · 专家审核 · 科研治理
+          </Typography.Text>
+          <section className="public-role-grid" aria-label="选择角色工作台">
+            {entryCards.map((item) => {
+              const isActive = currentEntryRole === item.role;
+              const targetPath = isLoggedIn ? item.path : "/login";
+              return (
+                <Link
+                  to={targetPath}
+                  key={item.role}
+                  className="public-role-link"
+                  aria-label={`${item.title}，${item.description}`}
+                >
+                  <Card
+                    hoverable
+                    className={`public-role-card public-role-card-${item.tone}${isActive ? " is-current" : ""}`}
                   >
-                    <span className="home-role-icon" aria-hidden="true">{item.icon}</span>
-                    <span className="home-role-copy">
-                      <strong>{item.title}</strong>
-                      <small>{item.description}</small>
+                    <span className="public-role-icon">{item.icon}</span>
+                    <span className="public-role-kicker">{item.role}</span>
+                    <Typography.Title level={3}>{item.title}</Typography.Title>
+                    <Typography.Text className="public-role-description">{item.description}</Typography.Text>
+                    <Typography.Paragraph className="public-role-detail">{item.detail}</Typography.Paragraph>
+                    <span className="public-role-action">
+                      {isLoggedIn && isActive ? "当前角色" : item.task}
+                      <ArrowRight aria-hidden="true" />
                     </span>
-                    <span className="home-role-action">{isActive ? "进入" : item.task}</span>
-                  </Link>
-                );
-              })}
-            </nav>
-          </aside>
+                  </Card>
+                </Link>
+              );
+            })}
+          </section>
         </main>
-
-        <section className="home-safety-rail" aria-label="安全边界">
-          {safetyBoundaries.map(([label, title, detail]) => (
-            <div className="home-safety-item" key={label}>
-              <span>{label}</span>
-              <strong>{title}</strong>
-              <small>{detail}</small>
-            </div>
-          ))}
-        </section>
       </Layout.Content>
+
+      <footer className="public-security-banner">
+        系统提供运动指导与处方辅助，不替代临床医疗诊断。高风险场景 (R3) 严格阻断。
+      </footer>
     </Layout>
   );
 }
