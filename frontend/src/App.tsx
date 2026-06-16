@@ -106,17 +106,7 @@ function HomePage() {
     <Layout className="public-home-shell">
       <div className="public-home-bg" aria-hidden="true">
         <div className="public-home-grid" />
-        <div className="public-home-wireframe">
-          <span className="wire-node wire-node-a" />
-          <span className="wire-node wire-node-b" />
-          <span className="wire-node wire-node-c" />
-          <span className="wire-node wire-node-d" />
-        </div>
-        <div className="public-home-trajectory">
-          <span />
-          <span />
-          <span />
-        </div>
+        <div className="public-home-visual" />
       </div>
 
       <header className="public-home-header">

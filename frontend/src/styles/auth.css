@@ -113,7 +113,7 @@
   padding: 48px;
   overflow: hidden;
   color: #ffffff;
-  background: #145c72;
+  background: #0f465b;
 }
 
 .login-clinical-panel::before {
@@ -121,108 +121,45 @@
   inset: 0;
   content: "";
   background:
-    radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.12), transparent 24%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 42%),
-    linear-gradient(180deg, rgba(8, 46, 61, 0), rgba(8, 46, 61, 0.34));
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.18), transparent 30%),
+    linear-gradient(90deg, rgba(8, 34, 49, 0.82) 0%, rgba(10, 54, 72, 0.5) 52%, rgba(8, 34, 49, 0.82) 100%),
+    linear-gradient(180deg, rgba(8, 46, 61, 0.1), rgba(8, 46, 61, 0.72));
+  pointer-events: none;
+}
+
+.login-panel-photo {
+  position: absolute;
+  inset: 0;
+  opacity: 0.68;
+  background-image: url("/visuals/login-clinical-dna.webp");
+  background-position: 58% center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.94) contrast(0.96);
   pointer-events: none;
 }
 
 .login-panel-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.18;
+  opacity: 0.08;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.26) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.26) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.86), transparent 80%);
+    linear-gradient(rgba(236, 249, 252, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 249, 252, 0.22) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.9), transparent 78%);
 }
 
-.login-flow-map {
+.login-panel-scan {
   position: absolute;
-  right: -42px;
-  bottom: 92px;
-  width: min(620px, 82%);
-  height: 300px;
-  opacity: 0.5;
+  top: 0;
+  bottom: 0;
+  left: 42%;
+  width: 34%;
+  opacity: 0.24;
+  background: linear-gradient(90deg, transparent, rgba(204, 244, 250, 0.26), transparent);
+  filter: blur(18px);
   pointer-events: none;
-}
-
-.flow-line {
-  position: absolute;
-  height: 1px;
-  background: rgba(225, 243, 248, 0.72);
-  transform-origin: left center;
-}
-
-.flow-line::before,
-.flow-line::after {
-  position: absolute;
-  top: -3px;
-  width: 7px;
-  height: 7px;
-  content: "";
-  border-radius: 999px;
-  background: #e8f7fb;
-}
-
-.flow-line::before {
-  left: 0;
-}
-
-.flow-line::after {
-  right: 0;
-}
-
-.flow-line-primary {
-  top: 118px;
-  left: 44px;
-  width: 470px;
-  transform: rotate(-8deg);
-}
-
-.flow-line-secondary {
-  top: 162px;
-  left: 120px;
-  width: 360px;
-  background: rgba(255, 219, 172, 0.58);
-  transform: rotate(15deg);
-}
-
-.flow-node {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  color: #e9f7fb;
-  border: 1px solid rgba(236, 249, 252, 0.56);
-  border-radius: 16px;
-  background: rgba(9, 50, 66, 0.42);
-}
-
-.flow-node svg {
-  width: 24px;
-  height: 24px;
-  stroke-width: 1.9;
-}
-
-.flow-node-user {
-  top: 62px;
-  left: 44px;
-}
-
-.flow-node-review {
-  top: 126px;
-  left: 246px;
-  color: #ffddb0;
-}
-
-.flow-node-data {
-  right: 66px;
-  bottom: 60px;
-  color: #d8d1ea;
 }
 
 .login-panel-copy,
@@ -460,10 +397,14 @@
   .login-card {
     padding: 32px 36px;
   }
+
+  .login-panel-photo {
+    opacity: 0.56;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .login-flow-map {
+  .login-panel-scan {
     transform: none !important;
   }
 }

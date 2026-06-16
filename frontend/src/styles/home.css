@@ -4,7 +4,10 @@
   height: 100dvh;
   min-height: 640px;
   overflow: hidden;
-  background: #eef3f7;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.94), transparent 30%),
+    radial-gradient(circle at 88% 18%, rgba(198, 219, 228, 0.52), transparent 34%),
+    linear-gradient(180deg, #eef3f7 0%, #e7eff4 100%);
   color: #132235;
 }
 
@@ -19,121 +22,39 @@
 .public-home-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.2;
+  opacity: 0.08;
   background-image:
-    linear-gradient(rgba(20, 92, 114, 0.28) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 92, 114, 0.28) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.3) 72%, transparent);
+    linear-gradient(rgba(20, 92, 114, 0.24) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 92, 114, 0.24) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.18) 72%, transparent);
 }
 
-.public-home-wireframe {
+.public-home-visual {
   position: absolute;
-  top: 88px;
-  right: max(-90px, -5vw);
-  width: min(760px, 62vw);
-  height: 240px;
-  opacity: 0.52;
-  transform: perspective(900px) rotateX(58deg) rotateZ(-9deg);
-  transform-origin: center;
+  inset: 64px 0 34px;
+  opacity: 1;
+  background-image:
+    linear-gradient(90deg, rgba(238, 243, 247, 0.96) 0%, rgba(238, 243, 247, 0.7) 20%, rgba(238, 243, 247, 0.52) 50%, rgba(238, 243, 247, 0.82) 100%),
+    linear-gradient(180deg, rgba(238, 243, 247, 0.35), rgba(238, 243, 247, 0.9) 82%),
+    url("/visuals/entry-clinical-texture.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.9);
+  mask-image:
+    linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.72) 18%, rgba(0, 0, 0, 0.76) 82%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.86) 18%, rgba(0, 0, 0, 0.8) 78%, transparent 100%);
 }
 
-.public-home-wireframe::before,
-.public-home-wireframe::after {
+.public-home-visual::after {
   position: absolute;
   inset: 0;
   content: "";
-  border: 1px solid rgba(20, 92, 114, 0.22);
-}
-
-.public-home-wireframe::before {
   background:
-    linear-gradient(90deg, transparent 0 13%, rgba(20, 92, 114, 0.18) 13.2% 13.6%, transparent 13.8% 38%, rgba(29, 111, 216, 0.18) 38.2% 38.6%, transparent 38.8% 64%, rgba(118, 92, 148, 0.18) 64.2% 64.6%, transparent 64.8%),
-    linear-gradient(180deg, transparent 0 28%, rgba(20, 92, 114, 0.2) 28.2% 28.6%, transparent 28.8% 64%, rgba(20, 92, 114, 0.15) 64.2% 64.5%, transparent 64.8%);
-}
-
-.public-home-wireframe::after {
-  inset: 38px 56px;
-  border-color: rgba(29, 111, 216, 0.18);
-  transform: translate3d(-22px, 18px, 0);
-}
-
-.wire-node {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  background: #145c72;
-  border-radius: 999px;
-  box-shadow: 0 0 0 4px rgba(20, 92, 114, 0.12);
-}
-
-.wire-node-a {
-  top: 36px;
-  left: 96px;
-}
-
-.wire-node-b {
-  top: 132px;
-  left: 256px;
-  background: #1d6fd8;
-}
-
-.wire-node-c {
-  top: 72px;
-  right: 164px;
-  background: #b76504;
-}
-
-.wire-node-d {
-  right: 92px;
-  bottom: 42px;
-  background: #6e6683;
-}
-
-.public-home-trajectory {
-  position: absolute;
-  left: 5vw;
-  bottom: 62px;
-  width: min(620px, 54vw);
-  height: 150px;
-  opacity: 0.36;
-}
-
-.public-home-trajectory::before {
-  position: absolute;
-  inset: 36px 0 auto;
-  height: 78px;
-  content: "";
-  border-top: 1px solid rgba(20, 92, 114, 0.24);
-  border-bottom: 1px solid rgba(20, 92, 114, 0.14);
-  transform: skewY(-7deg);
-}
-
-.public-home-trajectory span {
-  position: absolute;
-  width: 34%;
-  height: 72px;
-  border-top: 2px solid rgba(20, 92, 114, 0.34);
-  border-radius: 50% 50% 0 0;
-  transform: rotate(-9deg);
-}
-
-.public-home-trajectory span:nth-child(1) {
-  left: 3%;
-  top: 54px;
-}
-
-.public-home-trajectory span:nth-child(2) {
-  left: 31%;
-  top: 34px;
-  border-color: rgba(29, 111, 216, 0.26);
-}
-
-.public-home-trajectory span:nth-child(3) {
-  right: 7%;
-  top: 62px;
-  border-color: rgba(15, 118, 110, 0.24);
+    radial-gradient(ellipse at 50% 52%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.86) 68%),
+    linear-gradient(180deg, rgba(238, 243, 247, 0.36), rgba(238, 243, 247, 0.92));
+  pointer-events: none;
 }
 
 .public-home-header {
@@ -440,9 +361,9 @@
     min-height: 218px;
   }
 
-  .public-home-wireframe {
-    width: 720px;
-    opacity: 0.32;
+  .public-home-visual {
+    opacity: 0.5;
+    background-size: 1180px auto;
   }
 }
 
@@ -485,6 +406,14 @@
     height: calc(100dvh - 86px);
     min-height: 0;
     padding: 18px 16px 64px;
+  }
+
+  .public-home-visual {
+    inset: 92px 0 42px;
+    opacity: 0.32;
+    background-position: center top;
+    background-size: 1040px auto;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.2) 60%, transparent);
   }
 
   .public-home-router {

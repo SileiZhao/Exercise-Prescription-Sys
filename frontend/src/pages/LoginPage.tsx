@@ -1,6 +1,6 @@
 import { Alert, Button, Form, Input, Layout, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Database, Lock, Mail, ShieldCheck, Stethoscope, UserRoundCheck } from "lucide-react";
+import { Lock, Mail, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -56,19 +56,14 @@ export function LoginPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
       >
+        <div className="login-panel-photo" aria-hidden="true" />
         <div className="login-panel-grid" aria-hidden="true" />
         <motion.div
-          className="login-flow-map"
+          className="login-panel-scan"
           aria-hidden="true"
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <span className="flow-line flow-line-primary" />
-          <span className="flow-line flow-line-secondary" />
-          <span className="flow-node flow-node-user"><UserRoundCheck aria-hidden="true" /></span>
-          <span className="flow-node flow-node-review"><Stethoscope aria-hidden="true" /></span>
-          <span className="flow-node flow-node-data"><Database aria-hidden="true" /></span>
-        </motion.div>
+          animate={{ x: ["-12%", "8%", "-12%"], opacity: [0.18, 0.34, 0.18] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
 
         <div className="login-panel-copy">
           <ShieldCheck className="login-shield-icon" aria-hidden="true" />
