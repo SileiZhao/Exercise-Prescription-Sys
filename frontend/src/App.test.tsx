@@ -202,7 +202,7 @@ describe("App", () => {
     );
 
     expect(screen.getByLabelText("启衡首页")).toBeInTheDocument();
-    expect(screen.getByText("运动处方与健康干预系统")).toBeInTheDocument();
+    expect(screen.getAllByText("启衡运动处方平台").length).toBeGreaterThan(0);
     expect(screen.getByText("用户端")).toBeInTheDocument();
     expect(screen.getByText("专家端")).toBeInTheDocument();
     expect(screen.getByText("管理端")).toBeInTheDocument();
@@ -220,7 +220,7 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole("button", { name: "进入当前工作台" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /进入当前工作台/ })).toBeInTheDocument();
     expect(document.querySelectorAll(".home-shell .ant-btn-primary")).toHaveLength(1);
   });
 

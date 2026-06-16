@@ -1,4 +1,4 @@
-# 启衡运动处方系统 Design System
+# 启衡运动处方平台 Design System
 
 ## Product Register
 

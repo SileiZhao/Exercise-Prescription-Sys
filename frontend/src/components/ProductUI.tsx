@@ -351,9 +351,9 @@ export function RoleSidebar({ role }: { role: AppRole }) {
         <span className="role-brand-mark" aria-hidden="true">启</span>
         <div className="role-brand-copy">
           <Typography.Title level={5} className="role-brand">
-            启衡
+            启衡运动处方平台
           </Typography.Title>
-          <Typography.Text className="role-brand-subtitle">运动处方与健康干预系统</Typography.Text>
+          <Typography.Text className="role-brand-subtitle">临床安全 · 专家审核 · 科研治理</Typography.Text>
         </div>
       </div>
       <RoleNavLinks role={role} />
