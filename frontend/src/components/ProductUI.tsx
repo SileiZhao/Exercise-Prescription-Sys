@@ -348,10 +348,10 @@ export function RoleSidebar({ role }: { role: AppRole }) {
   return (
     <Layout.Sider className="role-sidebar" breakpoint="lg" collapsedWidth={0} width={216}>
       <div className="role-brand-block">
-        <span className="role-brand-mark" aria-hidden="true">启</span>
+        <span className="role-brand-mark" aria-hidden="true">衡</span>
         <div className="role-brand-copy">
           <Typography.Title level={5} className="role-brand">
-            启衡运动处方平台
+            衡策运动处方平台
           </Typography.Title>
           <Typography.Text className="role-brand-subtitle">临床安全 · 专家审核 · 科研治理</Typography.Text>
         </div>

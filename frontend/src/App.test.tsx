@@ -201,8 +201,8 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByLabelText("启衡首页")).toBeInTheDocument();
-    expect(screen.getAllByText("启衡运动处方平台").length).toBeGreaterThan(0);
+    expect(screen.getByLabelText("衡策首页")).toBeInTheDocument();
+    expect(screen.getAllByText("衡策运动处方平台").length).toBeGreaterThan(0);
     expect(screen.getByText("用户端")).toBeInTheDocument();
     expect(screen.getByText("专家端")).toBeInTheDocument();
     expect(screen.getByText("管理端")).toBeInTheDocument();
@@ -286,6 +286,6 @@ describe("App", () => {
     );
 
     expect((await screen.findAllByRole("heading", { name: expectedHeading })).length).toBeGreaterThan(0);
-    expect(screen.queryByText("启衡运动处方系统")).not.toBeInTheDocument();
+    expect(screen.queryByText("衡策运动处方系统")).not.toBeInTheDocument();
   });
 });

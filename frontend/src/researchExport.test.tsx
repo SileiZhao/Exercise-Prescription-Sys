@@ -404,7 +404,7 @@ describe("research export page", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "科研脱敏导出" })).toBeInTheDocument();
-    expect(screen.getByText("启衡")).toBeInTheDocument();
+    expect(screen.getByText("衡策运动处方平台")).toBeInTheDocument();
     expect(screen.getByText("导出前可见范围")).toBeInTheDocument();
     expect(screen.getByText("审批后下载规则")).toBeInTheDocument();
     expect(document.querySelectorAll(".ant-btn-primary")).toHaveLength(1);

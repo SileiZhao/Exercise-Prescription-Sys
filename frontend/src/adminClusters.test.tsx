@@ -86,7 +86,7 @@ describe("admin cluster model page", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "聚类模型生命周期" })).toBeInTheDocument();
-    expect(screen.getByText("启衡")).toBeInTheDocument();
+    expect(screen.getByText("衡策运动处方平台")).toBeInTheDocument();
     expect(await screen.findByText("DBSCAN 分型 v1")).toBeInTheDocument();
     const modelVersionSection = screen.getByText("模型版本").closest("section");
     expect(modelVersionSection).not.toBeNull();

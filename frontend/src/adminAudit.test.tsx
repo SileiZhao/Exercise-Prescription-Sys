@@ -42,7 +42,7 @@ describe("admin audit log page", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "审计日志" })).toBeInTheDocument();
-    expect(screen.getByText("启衡")).toBeInTheDocument();
+    expect(screen.getByText("衡策运动处方平台")).toBeInTheDocument();
     expect(await screen.findByText("反馈调整处方")).toBeInTheDocument();
     expect(screen.getAllByText("运动处方")[0]).toBeInTheDocument();
     expect(screen.queryByText("FEEDBACK_ADJUST_PRESCRIPTION")).not.toBeInTheDocument();

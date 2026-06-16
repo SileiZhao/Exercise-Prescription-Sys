@@ -12,7 +12,6 @@ import {
   Gauge,
   HeartPulse,
   LogIn,
-  Route as RouteIcon,
   ShieldAlert,
   ShieldCheck,
   Stethoscope,
@@ -62,7 +61,7 @@ const UserDashboardPage = lazyPage(lazyPageLoaders.userDashboard, "UserDashboard
 const entryCards = [
   {
     title: "用户端",
-    description: "建档、查看风险结论、接收处方和完成运动反馈。",
+    description: "建档、风险结论、处方执行和运动反馈。",
     task: "确认能否运动",
     role: "USER",
     icon: <HeartPulse />,
@@ -70,7 +69,7 @@ const entryCards = [
   },
   {
     title: "专家端",
-    description: "处理 R2 处方、异常反馈和需要人工判断的任务。",
+    description: "处理 R2 处方、异常反馈和人工复核。",
     task: "处理审核队列",
     role: "EXPERT",
     icon: <Stethoscope />,
@@ -78,7 +77,7 @@ const entryCards = [
   },
   {
     title: "管理端",
-    description: "管理规则、模板、知识库、用户权限和上线审计。",
+    description: "维护规则、模板、权限和上线审计。",
     task: "检查运营闸口",
     role: "ADMIN",
     icon: <ShieldCheck />,
@@ -86,7 +85,7 @@ const entryCards = [
   },
   {
     title: "科研端",
-    description: "查看脱敏聚合指标，提交和下载已审批的数据导出。",
+    description: "查看脱敏聚合指标和审批导出。",
     task: "查看脱敏总览",
     role: "RESEARCHER",
     icon: <Database />,
@@ -103,15 +102,15 @@ const roleLabelByAuthRole: Record<string, string> = {
 };
 
 const platformSignals = [
-  ["R2", "专家审核", "处方动作发布前锁定"],
-  ["R3", "医学转介", "系统不生成训练任务"],
-  ["导出", "脱敏审批", "科研下载留痕"]
+  ["R0-R1", "自动处方", "允许训练并持续监测"],
+  ["R2", "专家审核", "处方发布前锁定"],
+  ["R3", "医学转介", "阻断训练任务"]
 ];
 
 const safetyBoundaries = [
-  ["R2", "进入专家审核", "处方发布前必须完成证据核对。"],
-  ["R3", "医学评估优先", "系统只展示转介或机构复评建议。"],
-  ["导出", "审批后开放", "科研数据默认脱敏并记录下载行为。"]
+  ["R2", "审核后发布"],
+  ["R3", "转介优先"],
+  ["科研", "脱敏留痕"]
 ];
 
 const prescriptionMetrics = [
@@ -131,27 +130,27 @@ const riskLevels = [
 const clinicalRoute = [
   {
     title: "用户建档",
-    detail: "健康问卷、体适能、慢病风险",
+    detail: "问卷、体适能、慢病风险",
     icon: <HeartPulse />
   },
   {
     title: "风险分层",
-    detail: "规则命中 R0-R3，颜色只作辅助",
+    detail: "规则命中 R0-R3",
     icon: <Gauge />
   },
   {
     title: "专家审核",
-    detail: "R2 处方进入审核队列",
+    detail: "R2 进入队列",
     icon: <Stethoscope />
   },
   {
     title: "处方发布",
-    detail: "FITT-VP 与禁忌动作可追溯",
+    detail: "FITT-VP 可追溯",
     icon: <ClipboardCheck />
   },
   {
     title: "科研治理",
-    detail: "聚合脱敏，审批后限时下载",
+    detail: "聚合脱敏导出",
     icon: <FlaskConical />
   }
 ];
@@ -170,10 +169,10 @@ function HomePage() {
         <span className="home-vital-line home-vital-line-secondary" />
       </div>
       <header className="home-topbar">
-        <Link to="/" className="home-brand-lockup" aria-label="启衡首页">
-          <span className="home-brand-mark">启</span>
+        <Link to="/" className="home-brand-lockup" aria-label="衡策首页">
+          <span className="home-brand-mark">衡</span>
           <span>
-            <strong>启衡运动处方平台</strong>
+            <strong>衡策运动处方平台</strong>
             <small>临床安全 · 专家审核 · 科研治理</small>
           </span>
         </Link>
@@ -209,10 +208,10 @@ function HomePage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.08, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="home-kicker">运动处方安全中台</div>
-            <h1>启衡运动处方平台</h1>
+            <div className="home-kicker">临床运动处方入口</div>
+            <h1>先判风险，再开处方</h1>
             <p className="home-briefing-copy">
-              把体征采集、R0-R3 风险判定、专家审核、FITT-VP 处方发布和科研脱敏出口收在一张可审计链路里。
+              衡策把体征采集、R0-R3 风险判定、专家审核、FITT-VP 处方和科研脱敏出口收进一条可审计链路。
             </p>
             <div className="home-briefing-actions">
               <Link to={isLoggedIn ? activeEntry.path : "/login"}>
@@ -223,51 +222,6 @@ function HomePage() {
               <Link to="/register">
                 <Button size="large" className="home-secondary-action" icon={<UserPlus size={17} />}>注册用户</Button>
               </Link>
-            </div>
-            <div className="home-prescription-board" aria-label="运动处方主视觉">
-              <div className="home-patient-card">
-                <div>
-                  <span>Adult · 初筛</span>
-                  <strong>慢病风险复合人群</strong>
-                </div>
-                <HeartPulse size={24} />
-              </div>
-              <div className="home-prescription-vitals" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
-              <div className="home-risk-ladder">
-                {riskLevels.map(([level, title, detail]) => (
-                  <div className={`home-risk-node home-risk-${level.toLowerCase()}`} key={level}>
-                    <b>{level}</b>
-                    <strong>{title}</strong>
-                    <small>{detail}</small>
-                  </div>
-                ))}
-              </div>
-              <div className="home-prescription-sheet">
-                <div className="home-sheet-title">
-                  <FileCheck2 size={18} />
-                  <span>处方发布单</span>
-                </div>
-                <div className="home-metric-strip">
-                  {prescriptionMetrics.map(([label, value, detail]) => (
-                    <div key={label}>
-                      <b>{label}</b>
-                      <strong>{value}</strong>
-                      <small>{detail}</small>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="home-review-gate">
-                <ShieldAlert size={18} />
-                <span>R2/R3 先过安全闸门</span>
-              </div>
             </div>
             <dl className="home-signal-list" aria-label="系统边界">
               {platformSignals.map(([label, value, detail]) => (
@@ -280,49 +234,6 @@ function HomePage() {
                 </div>
               ))}
             </dl>
-          </motion.section>
-
-          <motion.aside
-            className="home-access-panel"
-            aria-label="选择工作台"
-            initial={{ opacity: 0, x: 18 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.14, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="home-access-head">
-              <div>
-                <span className="home-section-label">选择工作台</span>
-                <h2>{isLoggedIn ? `${currentRoleLabel || activeEntry.title}已识别` : "请选择账号进入"}</h2>
-              </div>
-              <ClinicalStatusBadge
-                type="readiness"
-                value={isLoggedIn ? "ready" : "degraded"}
-                label={isLoggedIn ? "已登录" : "未登录"}
-              />
-            </div>
-            <div className="home-current-task home-map-status">
-              <span>{isLoggedIn ? "当前建议入口" : "处方链路状态"}</span>
-              <strong>{isLoggedIn ? activeEntry.task : "安全闸门已启用"}</strong>
-            </div>
-            <div className="home-route-map" aria-label="处方流转地图">
-              {clinicalRoute.map((item, index) => (
-                <div className="home-route-step" key={item.title}>
-                  <span className="home-route-icon" aria-hidden="true">{item.icon}</span>
-                  <span className="home-route-copy">
-                    <strong>{item.title}</strong>
-                    <small>{item.detail}</small>
-                  </span>
-                  <span className="home-route-index">{String(index + 1).padStart(2, "0")}</span>
-                </div>
-              ))}
-            </div>
-            <div className="home-access-split">
-              <div>
-                <RouteIcon size={18} />
-                <strong>处方执行只在安全结论后开放</strong>
-              </div>
-              <small>未登录时所有角色入口都会先进入机构登录；登录后按账号角色打开工作台。</small>
-            </div>
             <nav className="home-role-list" aria-label="工作台列表">
               {entryCards.map((item) => {
                 const isActive = currentRole === item.role;
@@ -352,29 +263,121 @@ function HomePage() {
                 );
               })}
             </nav>
+          </motion.section>
+
+          <motion.aside
+            className="home-access-panel"
+            aria-label="选择工作台"
+            initial={{ opacity: 0, x: 18 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.14, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="home-access-head">
+              <div>
+                <span className="home-section-label">处方驾驶舱</span>
+                <h2>{isLoggedIn ? `${currentRoleLabel || activeEntry.title}已识别` : "安全闸门在线"}</h2>
+              </div>
+              <ClinicalStatusBadge
+                type="readiness"
+                value={isLoggedIn ? "ready" : "degraded"}
+                label={isLoggedIn ? "已登录" : "未登录"}
+              />
+            </div>
+            <div className="home-current-task home-map-status">
+              <span>{isLoggedIn ? "当前建议入口" : "处方链路状态"}</span>
+              <strong>{isLoggedIn ? activeEntry.task : "R2/R3 自动拦截"}</strong>
+            </div>
+            <div className="home-cockpit-board" aria-label="运动处方驾驶舱">
+              <div className="home-cockpit-figure" aria-label="运动干预对象示意">
+                <div className="home-body-figure" aria-hidden="true">
+                  <span className="home-body-head" />
+                  <span className="home-body-torso" />
+                  <span className="home-body-arm home-body-arm-left" />
+                  <span className="home-body-arm home-body-arm-right" />
+                  <span className="home-body-leg home-body-leg-left" />
+                  <span className="home-body-leg home-body-leg-right" />
+                </div>
+                <div className="home-figure-label home-figure-label-heart">
+                  <HeartPulse size={15} />
+                  <span>心肺</span>
+                </div>
+                <div className="home-figure-label home-figure-label-strength">
+                  <Dumbbell size={15} />
+                  <span>力量</span>
+                </div>
+                <div className="home-figure-label home-figure-label-risk">
+                  <ShieldAlert size={15} />
+                  <span>风险闸门</span>
+                </div>
+              </div>
+              <div className="home-prescription-board" aria-label="运动处方主视觉">
+                <div className="home-patient-card">
+                  <div>
+                    <span>建档 · 初筛</span>
+                    <strong>慢病风险复合人群</strong>
+                  </div>
+                  <HeartPulse size={22} />
+                </div>
+                <div className="home-prescription-vitals" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <div className="home-risk-ladder">
+                  {riskLevels.map(([level, title, detail]) => (
+                    <div className={`home-risk-node home-risk-${level.toLowerCase()}`} key={level}>
+                      <b>{level}</b>
+                      <strong>{title}</strong>
+                      <small>{detail}</small>
+                    </div>
+                  ))}
+                </div>
+                <div className="home-prescription-sheet">
+                  <div className="home-sheet-title">
+                    <FileCheck2 size={18} />
+                    <span>FITT-VP 处方单</span>
+                  </div>
+                  <div className="home-metric-strip">
+                    {prescriptionMetrics.map(([label, value, detail]) => (
+                      <div key={label}>
+                        <b>{label}</b>
+                        <strong>{value}</strong>
+                        <small>{detail}</small>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="home-review-gate">
+                  <ShieldAlert size={18} />
+                  <span>高风险先过安全闸门</span>
+                </div>
+              </div>
+              <div className="home-route-map" aria-label="处方流转地图">
+                {clinicalRoute.map((item, index) => (
+                  <div className="home-route-step" key={item.title}>
+                    <span className="home-route-icon" aria-hidden="true">{item.icon}</span>
+                    <span className="home-route-copy">
+                      <strong>{item.title}</strong>
+                      <small>{item.detail}</small>
+                    </span>
+                    <span className="home-route-index">{String(index + 1).padStart(2, "0")}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="home-boundary-strip" aria-label="安全边界摘要">
+                {safetyBoundaries.map(([label, title]) => (
+                  <span key={label}>
+                    <b>{label}</b>
+                    {title}
+                  </span>
+                ))}
+              </div>
+            </div>
           </motion.aside>
         </motion.main>
-
-        <motion.section
-          className="home-safety-rail"
-          aria-label="安全边界"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22, duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {safetyBoundaries.map(([label, title, detail]) => (
-            <div className="home-safety-item" key={label}>
-              <span>{label}</span>
-              <strong>{title}</strong>
-              <small>{detail}</small>
-            </div>
-          ))}
-          <div className="home-safety-item home-safety-item-wide">
-            <span><Dumbbell size={15} /></span>
-            <strong>运动动作与禁忌共管</strong>
-            <small>有氧、抗阻、柔韧和平衡训练都必须带强度、进阶与停止条件。</small>
-          </div>
-        </motion.section>
       </Layout.Content>
     </Layout>
   );
@@ -413,10 +416,11 @@ const RESEARCH_ONLY: AuthUserRole[] = ["RESEARCHER"];
 
 function sanitizeVisibleRuntimeText(value: string) {
   return value
-    .replace(/AI\s*个性化运动处方平台/g, "启衡运动处方平台")
-    .replace(/启衡运动处方系统/g, "启衡运动处方平台")
-    .replace(/智能化运动处方系统/g, "启衡运动处方平台")
-    .replace(/AI\s*运动处方/g, "启衡运动处方")
+    .replace(/AI\s*个性化运动处方平台/g, "衡策运动处方平台")
+    .replace(/启衡运动处方平台/g, "衡策运动处方平台")
+    .replace(/启衡运动处方系统/g, "衡策运动处方平台")
+    .replace(/智能化运动处方系统/g, "衡策运动处方平台")
+    .replace(/AI\s*运动处方/g, "衡策运动处方")
     .replace(/AI\s*初稿/g, "系统初稿")
     .replace(/\bAI_DRAFT\b/g, "系统初稿")
     .replace(/\[DEMO\]\s*/g, "")
