@@ -4,9 +4,16 @@ import { motion } from "framer-motion";
 import zhCN from "antd/locale/zh_CN";
 import {
   ArrowRight,
+  ClipboardCheck,
   Database,
+  Dumbbell,
+  FileCheck2,
+  FlaskConical,
+  Gauge,
   HeartPulse,
   LogIn,
+  Route as RouteIcon,
+  ShieldAlert,
   ShieldCheck,
   Stethoscope,
   UserPlus
@@ -96,9 +103,9 @@ const roleLabelByAuthRole: Record<string, string> = {
 };
 
 const platformSignals = [
-  ["风险分级", "R0-R3", "R2 人工审核，R3 转介阻断"],
-  ["证据链路", "规则 + 知识库", "处方发布前保留来源"],
-  ["科研治理", "脱敏导出", "审批通过后限时下载"]
+  ["R2", "专家审核", "处方动作发布前锁定"],
+  ["R3", "医学转介", "系统不生成训练任务"],
+  ["导出", "脱敏审批", "科研下载留痕"]
 ];
 
 const safetyBoundaries = [
@@ -107,11 +114,46 @@ const safetyBoundaries = [
   ["导出", "审批后开放", "科研数据默认脱敏并记录下载行为。"]
 ];
 
-const flowCheckpoints = [
-  ["建档", "健康数据采集"],
-  ["筛查", "R0-R3 风险分级"],
-  ["审核", "专家确认边界"],
-  ["处方", "发布可执行方案"]
+const prescriptionMetrics = [
+  ["F", "3 次/周", "频率"],
+  ["I", "RPE 11-13", "强度"],
+  ["T", "30 分钟", "时间"],
+  ["VP", "+10%/2 周", "进阶"]
+];
+
+const riskLevels = [
+  ["R0", "直接可训", "低风险建档完整"],
+  ["R1", "提醒执行", "需监测 RPE 与不适"],
+  ["R2", "专家审核", "处方动作暂不发布"],
+  ["R3", "医学转介", "阻断训练入口"]
+];
+
+const clinicalRoute = [
+  {
+    title: "用户建档",
+    detail: "健康问卷、体适能、慢病风险",
+    icon: <HeartPulse />
+  },
+  {
+    title: "风险分层",
+    detail: "规则命中 R0-R3，颜色只作辅助",
+    icon: <Gauge />
+  },
+  {
+    title: "专家审核",
+    detail: "R2 处方进入审核队列",
+    icon: <Stethoscope />
+  },
+  {
+    title: "处方发布",
+    detail: "FITT-VP 与禁忌动作可追溯",
+    icon: <ClipboardCheck />
+  },
+  {
+    title: "科研治理",
+    detail: "聚合脱敏，审批后限时下载",
+    icon: <FlaskConical />
+  }
 ];
 
 function HomePage() {
@@ -167,10 +209,10 @@ function HomePage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.08, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="home-kicker">临床运动干预中台</div>
+            <div className="home-kicker">运动处方安全中台</div>
             <h1>启衡运动处方平台</h1>
             <p className="home-briefing-copy">
-              把建档、风险分级、专家审核、规则治理和科研导出收在同一个受控入口，先确认边界，再进入任务。
+              把体征采集、R0-R3 风险判定、专家审核、FITT-VP 处方发布和科研脱敏出口收在一张可审计链路里。
             </p>
             <div className="home-briefing-actions">
               <Link to={isLoggedIn ? activeEntry.path : "/login"}>
@@ -182,19 +224,49 @@ function HomePage() {
                 <Button size="large" className="home-secondary-action" icon={<UserPlus size={17} />}>注册用户</Button>
               </Link>
             </div>
-            <div className="home-flow-card" aria-label="处方安全流程">
-              <div className="home-flow-pulse">
-                <HeartPulse size={22} />
-                <span>Safety gate active</span>
+            <div className="home-prescription-board" aria-label="运动处方主视觉">
+              <div className="home-patient-card">
+                <div>
+                  <span>Adult · 初筛</span>
+                  <strong>慢病风险复合人群</strong>
+                </div>
+                <HeartPulse size={24} />
               </div>
-              <div className="home-flow-steps">
-                {flowCheckpoints.map(([label, detail], index) => (
-                  <div className="home-flow-step" key={label}>
-                    <span>{index + 1}</span>
-                    <strong>{label}</strong>
+              <div className="home-prescription-vitals" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className="home-risk-ladder">
+                {riskLevels.map(([level, title, detail]) => (
+                  <div className={`home-risk-node home-risk-${level.toLowerCase()}`} key={level}>
+                    <b>{level}</b>
+                    <strong>{title}</strong>
                     <small>{detail}</small>
                   </div>
                 ))}
+              </div>
+              <div className="home-prescription-sheet">
+                <div className="home-sheet-title">
+                  <FileCheck2 size={18} />
+                  <span>处方发布单</span>
+                </div>
+                <div className="home-metric-strip">
+                  {prescriptionMetrics.map(([label, value, detail]) => (
+                    <div key={label}>
+                      <b>{label}</b>
+                      <strong>{value}</strong>
+                      <small>{detail}</small>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="home-review-gate">
+                <ShieldAlert size={18} />
+                <span>R2/R3 先过安全闸门</span>
               </div>
             </div>
             <dl className="home-signal-list" aria-label="系统边界">
@@ -228,9 +300,28 @@ function HomePage() {
                 label={isLoggedIn ? "已登录" : "未登录"}
               />
             </div>
-            <div className="home-current-task">
-              <span>{isLoggedIn ? "当前建议入口" : "登录后按角色进入"}</span>
-              <strong>{isLoggedIn ? activeEntry.task : "角色工作台"}</strong>
+            <div className="home-current-task home-map-status">
+              <span>{isLoggedIn ? "当前建议入口" : "处方链路状态"}</span>
+              <strong>{isLoggedIn ? activeEntry.task : "安全闸门已启用"}</strong>
+            </div>
+            <div className="home-route-map" aria-label="处方流转地图">
+              {clinicalRoute.map((item, index) => (
+                <div className="home-route-step" key={item.title}>
+                  <span className="home-route-icon" aria-hidden="true">{item.icon}</span>
+                  <span className="home-route-copy">
+                    <strong>{item.title}</strong>
+                    <small>{item.detail}</small>
+                  </span>
+                  <span className="home-route-index">{String(index + 1).padStart(2, "0")}</span>
+                </div>
+              ))}
+            </div>
+            <div className="home-access-split">
+              <div>
+                <RouteIcon size={18} />
+                <strong>处方执行只在安全结论后开放</strong>
+              </div>
+              <small>未登录时所有角色入口都会先进入机构登录；登录后按账号角色打开工作台。</small>
             </div>
             <nav className="home-role-list" aria-label="工作台列表">
               {entryCards.map((item) => {
@@ -278,6 +369,11 @@ function HomePage() {
               <small>{detail}</small>
             </div>
           ))}
+          <div className="home-safety-item home-safety-item-wide">
+            <span><Dumbbell size={15} /></span>
+            <strong>运动动作与禁忌共管</strong>
+            <small>有氧、抗阻、柔韧和平衡训练都必须带强度、进阶与停止条件。</small>
+          </div>
         </motion.section>
       </Layout.Content>
     </Layout>

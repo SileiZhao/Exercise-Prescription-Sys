@@ -1,6 +1,15 @@
 import { Alert, Button, Card, Form, Input, Layout, Space, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Activity, ArrowLeft, Database, LockKeyhole, Mail, ShieldCheck, Stethoscope } from "lucide-react";
+import {
+  Activity,
+  ArrowLeft,
+  Database,
+  FileCheck2,
+  LockKeyhole,
+  Mail,
+  ShieldAlert,
+  ShieldCheck
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -20,6 +29,20 @@ const defaultRouteByRole: Record<UserRole, string> = {
   ORG_ADMIN: "/admin/dashboard",
   RESEARCHER: "/research/dashboard"
 };
+
+const authAccessLanes = [
+  ["用户端", "今日能否运动", "先显示安全结论"],
+  ["专家端", "R2 审核队列", "核对证据后发布"],
+  ["管理端", "规则与模板", "维护上线闸口"],
+  ["科研端", "脱敏分析", "审批后导出"]
+];
+
+const authGateFlow = [
+  { title: "账号校验", detail: "机构身份与角色权限", icon: <LockKeyhole size={17} /> },
+  { title: "风险门控", detail: "R2/R3 不直接训练", icon: <ShieldAlert size={17} /> },
+  { title: "处方发布", detail: "FITT-VP 与禁忌留痕", icon: <FileCheck2 size={17} /> },
+  { title: "科研出口", detail: "聚合脱敏与下载审计", icon: <Database size={17} /> }
+];
 
 export function LoginPage() {
   const [form] = Form.useForm<LoginFormValues>();
@@ -106,69 +129,87 @@ export function LoginPage() {
               <ClinicalStatusBadge type="review" value="pending_review" label="R2 专家审核" />
               <ClinicalStatusBadge type="risk" value="R3" label="R3 训练阻断" />
             </Space>
-            <Typography.Title level={3}>安全边界清晰，处方流转可追踪</Typography.Title>
+            <Typography.Title level={3}>登录后进入受控处方链路</Typography.Title>
             <Typography.Paragraph>
-              启衡运动处方平台面向运动健康干预、专家审核和科研治理，优先呈现安全状态、审核结论和证据来源。
+              启衡按账号角色打开任务界面，所有 R2/R3 风险、处方发布和科研导出都先经过安全门控。
             </Typography.Paragraph>
           </div>
-          <div className="auth-visual-console" aria-label="系统状态视觉">
-            <div className="auth-console-head">
-              <span>
+          <div className="auth-access-map" aria-label="机构登录访问链路">
+            <div className="auth-identity-card">
+              <div>
+                <span>Identity gateway</span>
+                <strong>机构账号接入</strong>
+                <small>认证后按角色打开最小权限工作台</small>
+              </div>
+              <ShieldCheck size={24} />
+            </div>
+            <div className="auth-access-lanes">
+              {authAccessLanes.map(([role, task, detail]) => (
+                <div key={role}>
+                  <strong>{role}</strong>
+                  <span>{task}</span>
+                  <small>{detail}</small>
+                </div>
+              ))}
+            </div>
+            <div className="auth-prescription-card">
+              <div className="auth-prescription-head">
                 <Activity size={18} />
-                Prescription safety console
-              </span>
-              <strong>READY</strong>
-            </div>
-            <div className="auth-vitals">
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="auth-console-grid">
-              <div>
-                <ShieldCheck size={18} />
-                <strong>R2 审核</strong>
-                <small>专家确认后发布</small>
+                <span>处方安全监控</span>
+                <b>READY</b>
               </div>
-              <div>
-                <Stethoscope size={18} />
-                <strong>R3 阻断</strong>
-                <small>医学评估优先</small>
+              <div className="auth-vitals" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
               </div>
-              <div>
-                <Database size={18} />
-                <strong>科研导出</strong>
-                <small>脱敏审批留痕</small>
+              <div className="auth-risk-mini">
+                <span>R0 可训</span>
+                <span>R1 监测</span>
+                <span>R2 审核</span>
+                <span>R3 阻断</span>
               </div>
             </div>
           </div>
+          <div className="auth-gate-flow" aria-label="登录后门控流程">
+            {authGateFlow.map((item, index) => (
+              <div className="auth-gate-step" key={item.title}>
+                <span aria-hidden="true">{item.icon}</span>
+                <div>
+                  <strong>{item.title}</strong>
+                  <small>{item.detail}</small>
+                </div>
+                <b>{String(index + 1).padStart(2, "0")}</b>
+              </div>
+            ))}
+          </div>
           <ProcessRail
-            title="工作台安全流程"
-            description="不同角色进入各自的任务界面，关键动作保留审核、证据和审计记录。"
+            title="审核与治理闭环"
+            description="关键动作保留审核、证据和审计记录，避免未确认处方直接进入训练。"
             steps={[
               {
-                title: "安全边界",
-                description: "用户端先显示今日能否运动，R2/R3 不直接进入训练。",
+                title: "风险分级",
+                description: "规则命中 R0-R3，并保留数据缺口和触发原因。",
                 status: "active"
               },
               {
-                title: "审核链路",
-                description: "专家端处理待审处方、异常反馈和证据核对。",
+                title: "专家确认",
+                description: "R2 进入审核，R3 显示转介或机构复评建议。",
                 status: "pending"
               },
               {
-                title: "脱敏治理",
+                title: "脱敏导出",
                 description: "科研端只看聚合数据，导出需要审批和下载留痕。",
                 status: "pending"
               }
             ]}
           />
           <div className="status-grid auth-status-grid">
-            <StatusTile label="R2" value="审核后可见" detail="发布前隐藏训练动作" tone="warning" />
-            <StatusTile label="R3" value="医学评估" detail="不生成训练计划" tone="danger" />
-            <StatusTile label="科研" value="脱敏导出" detail="审批通过后限时下载" tone="info" />
+            <StatusTile label="风险" value="R0-R3" detail="风险颜色不作为唯一信号" tone="info" />
+            <StatusTile label="审核" value="专家确认" detail="处方发布前核验证据" tone="warning" />
+            <StatusTile label="科研" value="脱敏出口" detail="审批通过后限时下载" tone="info" />
           </div>
         </motion.section>
       </motion.div>
