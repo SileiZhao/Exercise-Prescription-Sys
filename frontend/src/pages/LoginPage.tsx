@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Form, Input, Layout, Typography } from "antd";
+import { Alert, Button, Card, Form, Input, Layout, Space, Typography } from "antd";
 import { motion } from "framer-motion";
 import {
   Activity,
@@ -15,7 +15,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { getCurrentUser, login, type UserRole } from "../api/auth";
 import { setAccessToken, setCurrentUserId, setCurrentUserRole, setRefreshToken } from "../auth/token";
-import { ClinicalStatusBadge } from "../components/ProductUI";
+import { ClinicalStatusBadge, ProcessRail, StatusTile } from "../components/ProductUI";
 
 type LoginFormValues = {
   username: string;
@@ -31,10 +31,10 @@ const defaultRouteByRole: Record<UserRole, string> = {
 };
 
 const authAccessLanes = [
-  ["用户端", "今日能否运动"],
-  ["专家端", "R2 审核队列"],
-  ["管理端", "规则与模板"],
-  ["科研端", "脱敏分析"]
+  ["用户端", "今日能否运动", "先显示安全结论"],
+  ["专家端", "R2 审核队列", "核对证据后发布"],
+  ["管理端", "规则与模板", "维护上线闸口"],
+  ["科研端", "脱敏分析", "审批后导出"]
 ];
 
 const authGateFlow = [
@@ -90,15 +90,15 @@ export function LoginPage() {
             返回入口
           </Link>
           <div className="auth-brand-lockup">
-            <span className="auth-brand-mark">衡</span>
+            <span className="auth-brand-mark">启</span>
             <span>
-              <strong>衡策运动处方平台</strong>
+              <strong>启衡运动处方平台</strong>
               <small>机构账号登录</small>
             </span>
           </div>
           <Typography.Title level={3}>登录账号</Typography.Title>
           <Typography.Paragraph type="secondary">
-            使用机构账号进入对应工作台，系统按角色打开当前任务。
+            使用邮箱和密码进入对应角色工作台，系统会按权限打开当前任务。
           </Typography.Paragraph>
           {error ? <Alert type="error" message={error} showIcon className="form-alert" /> : null}
           <Form form={form} layout="vertical" onFinish={handleFinish}>
@@ -109,7 +109,7 @@ export function LoginPage() {
               <Input.Password autoComplete="current-password" placeholder="输入登录密码" prefix={<LockKeyhole size={16} />} />
             </Form.Item>
             <Button className="auth-primary-action" type="primary" htmlType="submit" loading={loading} block>
-              登录进入工作台
+              登录并进入工作台
             </Button>
           </Form>
           <Typography.Paragraph className="auth-link">
@@ -124,14 +124,14 @@ export function LoginPage() {
           transition={{ delay: 0.12, duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="auth-context-copy">
-            <div className="auth-meta-row">
+            <Space className="auth-meta-row">
               <ClinicalStatusBadge type="readiness" value="ready" label="角色工作台" />
               <ClinicalStatusBadge type="review" value="pending_review" label="R2 专家审核" />
               <ClinicalStatusBadge type="risk" value="R3" label="R3 训练阻断" />
-            </div>
+            </Space>
             <Typography.Title level={3}>登录后进入受控处方链路</Typography.Title>
             <Typography.Paragraph>
-              衡策按账号角色打开任务界面，R2/R3 风险、处方发布和科研导出都先经过安全门控。
+              启衡按账号角色打开任务界面，所有 R2/R3 风险、处方发布和科研导出都先经过安全门控。
             </Typography.Paragraph>
           </div>
           <div className="auth-access-map" aria-label="机构登录访问链路">
@@ -144,10 +144,11 @@ export function LoginPage() {
               <ShieldCheck size={24} />
             </div>
             <div className="auth-access-lanes">
-              {authAccessLanes.map(([role, task]) => (
+              {authAccessLanes.map(([role, task, detail]) => (
                 <div key={role}>
                   <strong>{role}</strong>
                   <span>{task}</span>
+                  <small>{detail}</small>
                 </div>
               ))}
             </div>
@@ -184,10 +185,31 @@ export function LoginPage() {
               </div>
             ))}
           </div>
-          <div className="auth-control-strip" aria-label="审核与治理闭环">
-            <span><b>风险</b>R0-R3 规则命中</span>
-            <span><b>审核</b>R2 发布前确认</span>
-            <span><b>科研</b>脱敏导出留痕</span>
+          <ProcessRail
+            title="审核与治理闭环"
+            description="关键动作保留审核、证据和审计记录，避免未确认处方直接进入训练。"
+            steps={[
+              {
+                title: "风险分级",
+                description: "规则命中 R0-R3，并保留数据缺口和触发原因。",
+                status: "active"
+              },
+              {
+                title: "专家确认",
+                description: "R2 进入审核，R3 显示转介或机构复评建议。",
+                status: "pending"
+              },
+              {
+                title: "脱敏导出",
+                description: "科研端只看聚合数据，导出需要审批和下载留痕。",
+                status: "pending"
+              }
+            ]}
+          />
+          <div className="status-grid auth-status-grid">
+            <StatusTile label="风险" value="R0-R3" detail="风险颜色不作为唯一信号" tone="info" />
+            <StatusTile label="审核" value="专家确认" detail="处方发布前核验证据" tone="warning" />
+            <StatusTile label="科研" value="脱敏出口" detail="审批通过后限时下载" tone="info" />
           </div>
         </motion.section>
       </motion.div>

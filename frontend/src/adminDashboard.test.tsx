@@ -75,7 +75,7 @@ describe("admin dashboard", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "运营指挥台" })).toBeInTheDocument();
-    expect(screen.getByText("衡策运动处方平台")).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
     const kpiStrip = screen.getByTestId("admin-kpi-strip");
     expect(kpiStrip.querySelectorAll(".status-tile")).toHaveLength(3);
     expect(within(kpiStrip).getByText("上线阻断")).toBeInTheDocument();

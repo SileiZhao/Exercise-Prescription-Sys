@@ -89,7 +89,7 @@ describe("admin users page", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "身份治理台" })).toBeInTheDocument();
-    expect(screen.getByText("衡策运动处方平台")).toBeInTheDocument();
+    expect(screen.getByText("启衡")).toBeInTheDocument();
     expect(await screen.findByText("user@example.com")).toBeInTheDocument();
     expect((await screen.findAllByText("社区运动健康中心")).length).toBeGreaterThan(0);
     expect(screen.queryByRole("button", { name: "维护" })).not.toBeInTheDocument();

@@ -81,7 +81,7 @@ describe("user dashboard", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "今日通行证" })).toBeInTheDocument();
-    expect(screen.getAllByText("衡策运动处方平台").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("启衡").length).toBeGreaterThan(0);
     expect(await screen.findByText(/当前状态为 R2，审核状态为 已发布/)).toBeInTheDocument();
     expect(screen.getByText("安全状态")).toBeInTheDocument();
     expect(screen.getAllByText("R2 专家审核中").length).toBeGreaterThan(0);
