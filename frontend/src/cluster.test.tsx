@@ -20,32 +20,40 @@ vi.mock("./api/userDashboard", () => ({
     streak_days: 0,
     weekly_target_hits: 0,
     plan_completion_trend: [],
+    feedback_trend: [],
+    health_radar: [],
     abnormal_feedback_count: 0,
     review_status_label: "专家审核中",
     prescription_summary: null
   })
 }));
 
-describe("cluster pages", () => {
-  it("renders user phenotype page", async () => {
+vi.mock("./api/prescriptions", () => ({
+  listMyPrescriptions: vi.fn().mockResolvedValue([])
+}));
+
+vi.mock("./api/feedback", () => ({
+  getPhaseAssessment: vi.fn().mockRejectedValue(new Error("not needed"))
+}));
+
+describe("risk result direct portal page", () => {
+  it("renders the user-pages risk result report", async () => {
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "USER");
 
     render(
       <MemoryRouter
-        initialEntries={["/user/phenotype"]}
+        initialEntries={["/user/risk-result"]}
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
         <App />
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole("heading", { name: "风险结果" })).toBeInTheDocument();
-    expect(await screen.findByRole("button", { name: "查看审核状态" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "重新评估" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "生成分型" })).not.toBeInTheDocument();
-    expect(screen.getByText("审核通过前不开放训练入口")).toBeInTheDocument();
-    expect(screen.getByText("分型结果只用于模板匹配，不覆盖风险规则。")).toBeInTheDocument();
-    expect(screen.getByText("当前风险边界")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "风险评估结果" })).toBeInTheDocument();
+    expect(screen.getByText("评估结果：R2 中风险干预型")).toBeInTheDocument();
+    expect(screen.getByText("触发规则与评判依据")).toBeInTheDocument();
+    expect(screen.getByText("辅助人群分型标签")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "风险结果" })).not.toBeInTheDocument();
   });
 });

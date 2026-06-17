@@ -1,15 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
-const exportPhaseAssessmentReport = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["docx"])));
-const exportPhaseAssessmentPdfReport = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["pdf"])));
-
 vi.mock("./api/feedback", () => ({
-  exportPhaseAssessmentReport,
-  exportPhaseAssessmentPdfReport,
   getPhaseAssessment: vi.fn().mockResolvedValue({
     prescription_id: 10,
     weeks: 4,
@@ -21,30 +16,21 @@ vi.mock("./api/feedback", () => ({
     red_alert_events: 0,
     decision: "REVIEW_REQUIRED",
     summary: "近4周共记录3次运动反馈，平均完成率71.67%，平均RPE 8，疼痛事件2次，不适事件1次。",
-    measurement_changes: {
-      profile: {
-        weight_kg: { before: 86, after: 82, delta: -4 },
-        bmi: { before: 29.76, after: 28.37, delta: -1.39 },
-        waist_cm: { before: 98, after: 93, delta: -5 }
-      },
-      fitness_test: {
-        sbp: { before: 142, after: 132, delta: -10 },
-        dbp: { before: 92, after: 84, delta: -8 }
-      },
-      body_composition: {
-        body_fat_pct: { before: 31.5, after: 28, delta: -3.5 },
-        skeletal_muscle_kg: { before: 25.2, after: 26.1, delta: 0.9 }
-      },
-      biochemical_index: {
-        fbg: { value: null, null_reason: "BiochemicalIndex 记录不足 2 条，无法计算最早与最新差值" }
-      }
-    },
+    measurement_changes: {},
     recommendations: ["疼痛或RPE偏高，进入专家复核"]
   })
 }));
 
-describe("phase report page", () => {
-  it("renders phase assessment metrics and recommendations", async () => {
+vi.mock("./api/userDashboard", () => ({
+  getUserDashboard: vi.fn().mockRejectedValue(new Error("not needed"))
+}));
+
+vi.mock("./api/prescriptions", () => ({
+  listMyPrescriptions: vi.fn().mockResolvedValue([])
+}));
+
+describe("phase report direct portal page", () => {
+  it("renders phase summary metrics and recommendations in the replacement page", async () => {
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "USER");
 
@@ -57,35 +43,14 @@ describe("phase report page", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole("heading", { name: "阶段报告" })).toBeInTheDocument();
-    expect(screen.getByText("启衡")).toBeInTheDocument();
-    expect(screen.getByText("阶段评估报告")).toBeInTheDocument();
-    expect(screen.getByText("四周反馈、安全事件与指标变化的复评视图")).toBeInTheDocument();
-    expect(
-      (await screen.findAllByText("近4周共记录3次运动反馈，平均完成率71.67%，平均RPE 8，疼痛事件2次，不适事件1次。")).length
-    ).toBeGreaterThan(0);
-    expect(screen.getByText("打卡次数")).toBeInTheDocument();
-    expect(screen.getByText("3次")).toBeInTheDocument();
-    expect(screen.getByText("评估周期")).toBeInTheDocument();
-    expect(screen.getByText("4周")).toBeInTheDocument();
-    expect(screen.getAllByText("71.67%").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("8").length).toBeGreaterThan(0);
-    expect(screen.getByText("2 次")).toBeInTheDocument();
-    expect(screen.getAllByText("疼痛或RPE偏高，进入专家复核").length).toBeGreaterThan(0);
-    expect(screen.getByText("阶段变化")).toBeInTheDocument();
-    expect(screen.getByText("阶段指标对比")).toBeInTheDocument();
-    expect(screen.getByTestId("StageEvaluationCompareChart-echart")).toBeInTheDocument();
-    expect(screen.getByText("阶段反馈趋势")).toBeInTheDocument();
-    expect(screen.getByTestId("FeedbackTrendChart-echart")).toBeInTheDocument();
-    expect(screen.getAllByText("体重").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("86 → 82").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("-4").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("收缩压").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("142 → 132").length).toBeGreaterThan(0);
-    expect(screen.getByText("BiochemicalIndex 记录不足 2 条，无法计算最早与最新差值")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "导出 Word" }));
-    await waitFor(() => expect(exportPhaseAssessmentReport).toHaveBeenCalledWith(4));
-    fireEvent.click(screen.getByRole("button", { name: "导出 PDF" }));
-    await waitFor(() => expect(exportPhaseAssessmentPdfReport).toHaveBeenCalledWith(4));
+    expect((await screen.findAllByRole("heading", { name: "阶段评估报告" })).length).toBeGreaterThan(0);
+    expect(await screen.findByText("近4周共记录3次运动反馈，平均完成率71.67%，平均RPE 8，疼痛事件2次，不适事件1次。")).toBeInTheDocument();
+    expect(screen.getByText("平均完成率")).toBeInTheDocument();
+    expect(screen.getByText("71.67%")).toBeInTheDocument();
+    expect(screen.getByText("平均 RPE")).toBeInTheDocument();
+    expect(screen.getByText("8")).toBeInTheDocument();
+    expect(screen.getByText("复评建议")).toBeInTheDocument();
+    expect(screen.getByText("疼痛或RPE偏高，进入专家复核")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "阶段报告" })).not.toBeInTheDocument();
   });
 });

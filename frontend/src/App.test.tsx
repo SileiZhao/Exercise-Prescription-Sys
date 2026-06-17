@@ -201,13 +201,13 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByLabelText("启衡首页")).toBeInTheDocument();
-    expect(screen.getByText("运动处方与健康干预系统")).toBeInTheDocument();
-    expect(screen.getByText("用户端")).toBeInTheDocument();
-    expect(screen.getByText("专家端")).toBeInTheDocument();
-    expect(screen.getByText("管理端")).toBeInTheDocument();
-    expect(screen.getByText("科研端")).toBeInTheDocument();
-    expect(document.querySelectorAll(".home-shell .ant-btn-primary")).toHaveLength(1);
+    expect(screen.getByLabelText("启衡临床运动干预中台首页")).toBeInTheDocument();
+    expect(screen.getByText("启衡临床运动干预中台")).toBeInTheDocument();
+    expect(screen.getByText("普通用户")).toBeInTheDocument();
+    expect(screen.getByText("处方专家")).toBeInTheDocument();
+    expect(screen.getByText("系统管理")).toBeInTheDocument();
+    expect(screen.getByText("科研人员")).toBeInTheDocument();
+    expect(document.querySelectorAll(".public-home-shell .ant-btn-primary")).toHaveLength(1);
   });
 
   it("keeps the public home page to one primary action for signed-in users", () => {
@@ -220,8 +220,8 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole("button", { name: "进入当前工作台" })).toBeInTheDocument();
-    expect(document.querySelectorAll(".home-shell .ant-btn-primary")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "进入我的工作台" })).toBeInTheDocument();
+    expect(document.querySelectorAll(".public-home-shell .ant-btn-primary")).toHaveLength(1);
   });
 
   it("registers protected workspaces as lazy route modules", () => {
@@ -247,12 +247,12 @@ describe("App", () => {
   });
 
   it.each([
-    ["/user/profile", "用户建档", "USER"],
-    ["/user/health-data", "用户建档", "USER"],
-    ["/user/risk-result", "风险结果", "USER"],
-    ["/user/prescriptions/88", "处方发布面板", "USER"],
-    ["/user/feedback", "运动前安全闸门", "USER"],
-    ["/user/follow-up-report", "阶段报告", "USER"],
+    ["/user/profile", "健康建档向导", "USER"],
+    ["/user/health-data", "健康建档向导", "USER"],
+    ["/user/risk-result", "风险评估结果", "USER"],
+    ["/user/prescriptions/88", "最新运动处方", "USER"],
+    ["/user/feedback", "今日运动打卡", "USER"],
+    ["/user/follow-up-report", "阶段评估报告", "USER"],
     ["/expert/dashboard", "专家分诊队列", "EXPERT"],
     ["/expert/reviews/88", "处方审核详情", "EXPERT"],
     ["/admin/exercises", "动作库管理", "ADMIN"],

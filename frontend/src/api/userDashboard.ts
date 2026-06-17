@@ -14,7 +14,7 @@ export interface UserDashboardSummary {
     pain_score_after: number | null;
     discomfort: string[];
     completion_rate: number | null;
-  };
+  } | null;
   monitoring_reminders: string[];
   prescription_id: number | null;
   prescription_version: number | null;

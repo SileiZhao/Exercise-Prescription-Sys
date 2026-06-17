@@ -1,52 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
-const exportPrescriptionReport = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["docx"])));
-const exportPrescriptionPdfReport = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["pdf"])));
-const listReportExportRecords = vi.hoisted(() =>
-  vi.fn().mockResolvedValue({
-    total: 2,
-    items: [
-      {
-        id: 2,
-        user_id: 1,
-        exported_by: 1,
-        prescription_id: 8,
-        report_type: "PRESCRIPTION",
-        format: "pdf",
-        filename: "prescription-8-v1.pdf",
-        risk_level: "R1",
-        status: "PUBLISHED",
-        version: 1,
-        metadata: {},
-        created_at: "2026-05-30T10:00:00"
-      },
-      {
-        id: 1,
-        user_id: 1,
-        exported_by: 1,
-        prescription_id: 8,
-        report_type: "PRESCRIPTION",
-        format: "docx",
-        filename: "prescription-8-v1.docx",
-        risk_level: "R1",
-        status: "PUBLISHED",
-        version: 1,
-        metadata: {},
-        created_at: "2026-05-30T09:00:00"
-      }
-    ]
-  })
-);
-
 vi.mock("./api/prescriptions", () => ({
-  generatePrescription: vi.fn(),
-  exportPrescriptionReport,
-  exportPrescriptionPdfReport,
-  listReportExportRecords,
   listMyPrescriptions: vi.fn().mockResolvedValue([
     {
       id: 8,
@@ -55,7 +13,7 @@ vi.mock("./api/prescriptions", () => ({
       goals: ["增强心肺"],
       fitt_vp: {
         frequency: "每周4次",
-        intensity: "低—中等强度",
+        intensity: "低-中等强度",
         time: "每次30分钟",
         type: ["快走"],
         volume: "每周120分钟",
@@ -74,8 +32,16 @@ vi.mock("./api/prescriptions", () => ({
   ])
 }));
 
-describe("prescription report export", () => {
-  it("keeps Word and PDF report exports behind more actions for the latest prescription", async () => {
+vi.mock("./api/userDashboard", () => ({
+  getUserDashboard: vi.fn().mockRejectedValue(new Error("not needed"))
+}));
+
+vi.mock("./api/feedback", () => ({
+  getPhaseAssessment: vi.fn().mockRejectedValue(new Error("not needed"))
+}));
+
+describe("prescription report entry in direct portal", () => {
+  it("keeps the simplified PDF export entry without the old report history workbench", async () => {
     localStorage.setItem("access_token", "test-token");
     localStorage.setItem("current_user_role", "USER");
 
@@ -88,13 +54,9 @@ describe("prescription report export", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getByRole("button", { name: "更多操作" })).toBeInTheDocument());
-    expect(screen.queryByRole("button", { name: "导出 Word" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "导出 PDF" })).not.toBeInTheDocument();
-    expect(await screen.findByText("最近导出记录")).toBeInTheDocument();
-    expect(screen.queryByText("prescription-8-v1.pdf")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByText("最近导出记录"));
-    expect(screen.getByText("prescription-8-v1.pdf")).toBeInTheDocument();
-    expect(screen.getByText("PRESCRIPTION / PDF")).toBeInTheDocument();
+    expect(await screen.findByText("个性化运动处方")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "导出 PDF" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "更多操作" })).not.toBeInTheDocument();
+    expect(screen.queryByText("最近导出记录")).not.toBeInTheDocument();
   });
 });
