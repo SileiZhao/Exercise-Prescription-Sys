@@ -253,16 +253,16 @@ describe("App", () => {
     ["/user/prescriptions/88", "最新运动处方", "USER"],
     ["/user/feedback", "今日运动打卡", "USER"],
     ["/user/follow-up-report", "阶段评估报告", "USER"],
-    ["/expert/dashboard", "专家分诊队列", "EXPERT"],
-    ["/expert/reviews/88", "处方审核详情", "EXPERT"],
+    ["/expert/dashboard", "紧急分诊与队列", "EXPERT"],
+    ["/expert/reviews/88", "单任务审核工作台", "EXPERT"],
     ["/admin/exercises", "动作库管理", "ADMIN"],
     ["/admin/knowledge", "知识库管理", "ADMIN"],
     ["/admin/clustering", "聚类模型生命周期", "ADMIN"],
     ["/admin/research-export", "科研导出审批", "ADMIN"],
-    ["/research/dashboard", "科研数据看板", "RESEARCHER"],
-    ["/research/cluster-analysis", "科研分型分析", "RESEARCHER"],
-    ["/research/intervention-effects", "科研干预效果", "RESEARCHER"],
-    ["/research/export-jobs", "科研导出任务", "RESEARCHER"]
+    ["/research/dashboard", "宏观统计大盘", "RESEARCHER"],
+    ["/research/cluster-analysis", "人群聚类分析", "RESEARCHER"],
+    ["/research/intervention-effects", "群体干预效果", "RESEARCHER"],
+    ["/research/export-jobs", "数据导出审批", "RESEARCHER"]
   ])("renders required route alias %s", async (path, expectedHeading, role) => {
     localStorage.setItem("access_token", "test-token");
     getCurrentUserMock.mockResolvedValue({

@@ -1,0 +1,596 @@
+import React, { useState } from 'react';
+import {
+  LayoutDashboard, ListTodo, AlertOctagon, ArrowLeft, ArrowUp,
+  CheckCircle, AlertTriangle, ShieldAlert, BookOpen, Clock,
+  User, CheckSquare, XSquare, LogOut, ChevronRight, Search,
+  Filter, Activity, FileText, ChevronDown, Check
+} from 'lucide-react';
+
+// --- 通用 UI 组件 (模拟 Ant Design 风格定制) ---
+const Button = ({ children, type = 'default', danger = false, disabled = false, className = '', onClick }) => {
+  let baseStyle = "px-4 py-2 rounded-md font-medium transition-colors inline-flex items-center justify-center gap-2 text-sm ";
+  if (disabled) {
+    baseStyle += "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed ";
+  } else if (type === 'primary' && danger) {
+    baseStyle += "bg-[#bf3030] text-white hover:bg-red-800 border border-transparent ";
+  } else if (type === 'primary') {
+    baseStyle += "bg-[#145c72] text-white hover:bg-[#104b5d] border border-transparent ";
+  } else if (danger) {
+    baseStyle += "bg-white text-[#bf3030] hover:bg-red-50 border border-[#bf3030] ";
+  } else if (type === 'text') {
+    baseStyle += "bg-transparent text-[#132235] hover:bg-gray-100 border-transparent px-2 ";
+  } else {
+    baseStyle += "bg-white text-[#132235] hover:bg-gray-50 border border-[#d8e2ea] ";
+  }
+  return <button className={`${baseStyle} ${className}`} disabled={disabled} onClick={onClick}>{children}</button>;
+};
+
+const Badge = ({ status, text, color, dot = false }) => {
+  const colors = {
+    processing: "bg-[#1d6fd8] text-white border-transparent",
+    warning: "bg-orange-100 text-orange-800 border-orange-200",
+    error: "bg-red-100 text-red-800 border-red-200",
+    success: "bg-green-100 text-green-800 border-green-200"
+  };
+
+  if (dot) {
+    return (
+      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-red-600">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+        </span>
+        {text}
+      </span>
+    );
+  }
+
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded border text-xs font-medium ${color || colors[status]}`}>
+      {text}
+    </span>
+  );
+};
+
+const Card = ({ children, className = '' }) => (
+  <div className={`bg-white rounded-lg border border-[#d8e2ea] shadow-sm ${className}`}>{children}</div>
+);
+
+// --- 模态框组件 ---
+const Modal = ({ isOpen, onClose, onConfirm, title, children, confirmDisabled }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-[#f7fafc]">
+          <h3 className="font-semibold text-lg text-[#132235] flex items-center gap-2">
+            <ShieldAlert className="w-5 h-5 text-[#b76504]" />
+            {title}
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><XSquare className="w-5 h-5"/></button>
+        </div>
+        <div className="p-6">
+          {children}
+        </div>
+        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+          <Button onClick={onClose}>取消</Button>
+          <Button type="primary" onClick={onConfirm} disabled={confirmDisabled} className="bg-[#145c72]">确认发布</Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+// --- 视图 1: 专家分诊看板 (Triage Dashboard) ---
+const TriageDashboard = ({ onOpenReview }) => {
+  const mockQueue = [
+    { id: 'PR-2026-081', user: '李** (男, 58岁)', risk: 'R3', status: '待领取', waitTime: '15分钟', alert: '近期频发心绞痛' },
+    { id: 'PR-2026-082', user: '张** (男, 62岁)', risk: 'R2', status: '审核中', waitTime: '2小时', alert: null },
+    { id: 'PR-2026-083', user: '王** (女, 45岁)', risk: 'R2', status: '待领取', waitTime: '45分钟', alert: '严重关节弹响' },
+    { id: 'PR-2026-084', user: '赵** (男, 70岁)', risk: 'R2', status: '待领取', waitTime: '3小时', alert: null },
+  ];
+
+  return (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300 max-w-7xl mx-auto">
+      {/* 1. 紧急分诊摘要 (KPI Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="p-5 flex flex-col justify-center">
+          <div className="text-sm text-gray-500 mb-1">平均审核耗时</div>
+          <div className="text-2xl font-bold text-[#132235]">1.4 小时</div>
+        </Card>
+        <Card className="p-5 flex flex-col justify-center">
+          <div className="text-sm text-gray-500 mb-1">R2 待审核</div>
+          <div className="text-2xl font-bold text-[#b76504]">12 份</div>
+        </Card>
+        <Card className="p-5 flex flex-col justify-center">
+          <div className="text-sm text-gray-500 mb-1">超时待办 (&gt;24h)</div>
+          <div className="text-2xl font-bold text-[#132235]">0 份</div>
+        </Card>
+        {/* 强制要求最高视觉优先级的红色实体块 */}
+        <div className="bg-[#bf3030] rounded-lg shadow-sm p-5 flex flex-col justify-center text-white relative overflow-hidden">
+          <AlertOctagon className="absolute right-4 bottom-4 w-16 h-16 text-white/20" />
+          <div className="text-sm text-white/90 mb-1 z-10">R3 / 红色异常反馈</div>
+          <div className="text-3xl font-bold z-10">3 份</div>
+        </div>
+      </div>
+
+      {/* 2. 队列筛选 */}
+      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center justify-between">
+        <div className="flex bg-gray-100 p-1 rounded-md">
+          <button className="px-4 py-1.5 bg-white shadow-sm rounded text-sm font-medium text-[#132235]">全部待办</button>
+          <button className="px-4 py-1.5 text-sm font-medium text-gray-500 hover:text-[#132235]">待领取</button>
+          <button className="px-4 py-1.5 text-sm font-medium text-gray-500 hover:text-[#132235]">我的审核中</button>
+        </div>
+        <div className="flex gap-3">
+          <div className="flex items-center gap-2 border border-gray-200 rounded-md px-3 py-1.5 bg-gray-50 text-sm">
+            <Filter className="w-4 h-4 text-gray-400" />
+            <span className="text-gray-600">风险等级：全部</span>
+            <ChevronDown className="w-4 h-4 text-gray-400" />
+          </div>
+          <div className="flex items-center gap-2 border border-gray-200 rounded-md px-3 py-1.5 text-sm w-64 focus-within:border-[#145c72]">
+            <Search className="w-4 h-4 text-gray-400" />
+            <input type="text" placeholder="搜索患者或处方编号" className="outline-none w-full" />
+          </div>
+        </div>
+      </div>
+
+      {/* 3. 分诊任务列表 */}
+      <Card className="overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-[#f7fafc] border-b border-gray-200 text-sm text-gray-500">
+              <th className="py-3 px-6 font-medium">处方编号</th>
+              <th className="py-3 px-6 font-medium">患者信息</th>
+              <th className="py-3 px-6 font-medium">风险评级</th>
+              <th className="py-3 px-6 font-medium">异常反馈预警</th>
+              <th className="py-3 px-6 font-medium">当前状态</th>
+              <th className="py-3 px-6 font-medium">等待时长</th>
+              <th className="py-3 px-6 font-medium text-right">操作</th>
+            </tr>
+          </thead>
+          <tbody className="text-sm">
+            {mockQueue.map((task, i) => (
+              <tr key={i} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <td className="py-4 px-6 text-[#145c72] font-medium">{task.id}</td>
+                <td className="py-4 px-6 text-[#132235] font-medium">{task.user}</td>
+                <td className="py-4 px-6">
+                  {task.risk === 'R3' ? (
+                    <Badge status="error" text="R3 红色高危" color="bg-red-100 text-red-800 border-red-200 font-bold" />
+                  ) : (
+                    <Badge status="warning" text="R2 中风险" />
+                  )}
+                </td>
+                <td className="py-4 px-6">
+                  {task.alert ? <Badge dot text={task.alert} /> : <span className="text-gray-400">-</span>}
+                </td>
+                <td className="py-4 px-6">
+                  <span className={`px-2 py-1 rounded text-xs ${task.status === '待领取' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+                    {task.status}
+                  </span>
+                </td>
+                <td className="py-4 px-6 text-gray-500">{task.waitTime}</td>
+                <td className="py-4 px-6 text-right">
+                  <Button type="primary" className="bg-[#145c72] py-1.5 px-3 text-xs" onClick={() => onOpenReview(task.risk)}>
+                    {task.status === '待领取' ? '领取并审核' : '继续审核'}
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+    </div>
+  );
+};
+
+
+// --- 视图 2: 单任务审核工作台 (Single Task Review Workspace) ---
+const SingleReviewWorkspace = ({ onBack, initialRiskMode }) => {
+  const [riskMode, setRiskMode] = useState(initialRiskMode || 'R2');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [checkConfirmed, setCheckConfirmed] = useState(false);
+
+  // 模拟组件内部逻辑
+  const handleApproveClick = () => {
+    setCheckConfirmed(false);
+    setModalOpen(true);
+  };
+
+  return (
+    // 强制接管全屏高度，取消外部 Layout 的限制
+    <div className="fixed inset-0 z-50 flex flex-col bg-gray-50 font-sans text-[#132235]">
+
+      {/* 1. 顶部栏 (Header) */}
+      <header className="h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0 shadow-sm z-10">
+        <div className="flex items-center">
+          <Button type="text" onClick={onBack} className="mr-2 px-2 hover:bg-gray-100 rounded">
+            <ArrowLeft className="w-5 h-5 text-gray-600" />
+          </Button>
+          <div className="h-4 w-px bg-gray-300 mx-2"></div>
+          <User className="w-4 h-4 text-[#145c72] mr-2" />
+          <span className="font-semibold text-lg">患者：张建国 | 男 | 62岁</span>
+          <span className="ml-4 text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded border border-gray-200">档案完整度: 92%</span>
+        </div>
+        <div className="flex items-center gap-4">
+          {/* 开发者切换按钮，方便预览 R2/R3 不同状态 */}
+          <div className="flex items-center bg-gray-100 p-1 rounded-md border border-gray-200 mr-4">
+            <button onClick={() => setRiskMode('R2')} className={`text-xs px-2 py-1 rounded ${riskMode === 'R2' ? 'bg-white shadow-sm font-bold text-orange-600' : 'text-gray-500'}`}>R2视图</button>
+            <button onClick={() => setRiskMode('R3')} className={`text-xs px-2 py-1 rounded ${riskMode === 'R3' ? 'bg-white shadow-sm font-bold text-red-600' : 'text-gray-500'}`}>R3视图</button>
+          </div>
+
+          <Badge
+            status={riskMode === 'R2' ? 'warning' : 'error'}
+            text={riskMode === 'R2' ? 'R2 中风险干预型' : 'R3 高风险转介型'}
+            color={riskMode === 'R3' ? 'bg-red-100 text-red-800 border-red-200 font-bold' : ''}
+          />
+          <span className="text-sm text-gray-400 flex items-center gap-1"><Clock className="w-4 h-4"/> 等待: 2小时</span>
+        </div>
+      </header>
+
+      {/* 2. 三栏主工作区 */}
+      <div className="flex-1 flex flex-row overflow-hidden bg-gray-100">
+
+        {/* 左栏: 用户安全摘要 (w-1/4) */}
+        <div className="w-1/4 min-w-[300px] bg-white border-r border-[#d8e2ea] flex flex-col z-0">
+          <div className="px-4 py-3 border-b border-gray-100 bg-[#f7fafc] font-semibold text-[#145c72] flex items-center gap-2">
+            <Activity className="w-4 h-4" /> 用户安全摘要
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+
+            {/* 基础信息 */}
+            <div>
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">基础与体成分</div>
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr className="border-b border-gray-50"><td className="py-2 text-gray-500 w-24">BMI</td><td className="py-2 font-medium">26.4 (超重)</td></tr>
+                  <tr className="border-b border-gray-50"><td className="py-2 text-gray-500">体脂率</td><td className="py-2 font-medium">28%</td></tr>
+                  <tr className="border-b border-gray-50"><td className="py-2 text-gray-500">运动习惯</td><td className="py-2 font-medium">极少运动 (久坐)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* 体测异常项 (强指令表现：红标 + 箭头) */}
+            <div>
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                体质与生命体征 <Badge status="error" text="2 异常" color="bg-red-50 text-red-600 border-red-100" />
+              </div>
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr className="border-b border-gray-50">
+                    <td className="py-2 text-gray-500 w-24">静息收缩压</td>
+                    <td className="py-2 font-bold text-red-600 bg-red-50 px-2 rounded flex items-center gap-1">
+                      145 mmHg <ArrowUp className="w-3 h-3"/>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-50">
+                    <td className="py-2 text-gray-500">静息舒张压</td>
+                    <td className="py-2 font-medium">88 mmHg</td>
+                  </tr>
+                  <tr className="border-b border-gray-50">
+                    <td className="py-2 text-gray-500">疼痛评分</td>
+                    <td className="py-2 font-medium">2分 (轻微膝痛)</td>
+                  </tr>
+                  {riskMode === 'R3' && (
+                    <tr className="border-b border-gray-50">
+                      <td className="py-2 text-gray-500">近期红旗</td>
+                      <td className="py-2 font-bold text-red-600">不明原因胸闷</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* 慢病问卷 */}
+            <div>
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">疾病筛查</div>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-2 py-1 bg-orange-50 text-orange-700 border border-orange-200 rounded text-xs font-medium">高血压病史</span>
+                <span className="px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-medium">高脂血症</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* 中栏: 处方编辑器 (w-1/2) */}
+        <div className="w-1/2 min-w-[500px] flex flex-col bg-[#f0f4f8] z-0">
+          <div className="px-6 py-3 border-b border-[#d8e2ea] bg-white font-semibold text-[#132235] flex items-center justify-between">
+            <div className="flex items-center gap-2"><FileText className="w-4 h-4 text-gray-500"/> AI 处方初稿核对与编辑</div>
+            <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded border border-blue-100 flex items-center gap-1">
+              <CheckCircle className="w-3 h-3"/> 匹配模板：高血压稳定期改善模板
+            </span>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-6">
+            {/* 绝对红线指令：根据 RiskMode 拦截表单 */}
+            {riskMode === 'R3' ? (
+              <div className="animate-in zoom-in-95 duration-300">
+                <div className="bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden mb-6">
+                  <div className="bg-red-50 p-8 text-center border-b border-red-100">
+                    <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <AlertOctagon className="w-10 h-10 text-red-600" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-red-800 mb-2">R3 高风险转介型</h2>
+                    <p className="text-red-600 max-w-md mx-auto">
+                      系统已安全阻断，该用户禁止生成训练处方。请基于用户异常体征填写医学评估或转介建议。
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <label className="block text-sm font-medium text-[#132235] mb-2">医学评估与转介建议 (必填)</label>
+                    <textarea
+                      className="w-full h-40 border border-[#d8e2ea] rounded-md p-3 focus:outline-none focus:border-[#145c72] resize-none"
+                      placeholder="请向用户说明为何暂停运动，并建议去心内科做进一步检查..."
+                      defaultValue="用户近期存在不明原因胸闷，且血压处于较高水平，属于运动高危红旗症状。不建议目前进行任何规律性锻炼，请务必前往医院心血管内科进行运动平板试验及全面心肺评估。"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // R2 视图展示完整的结构化 FITT-VP 编辑器
+              <div className="space-y-6 animate-in fade-in duration-300">
+                <Alert
+                  type="info"
+                  message="AI 生成变更提示"
+                  description="系统已根据「高血压边界风险」，自动将最高强度上限锁定为「中低强度」，并自动排除了大重量抗阻动作。"
+                />
+
+                <div className="bg-white rounded-xl shadow-sm border border-[#d8e2ea] p-6 space-y-6">
+                  {/* FITT-VP 结构化输入 */}
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-[#132235] mb-2">频率 (Frequency)</label>
+                      <input type="text" defaultValue="每周 3-5 次" className="w-full border border-[#d8e2ea] rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#145c72]" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#132235] mb-2">单次时间 (Time)</label>
+                      <input type="text" defaultValue="每次 30-45 分钟" className="w-full border border-[#d8e2ea] rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#145c72]" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#132235] mb-2">强度 (Intensity) <span className="text-orange-500 text-xs ml-2 font-normal">受规则上限约束</span></label>
+                    <div className="flex bg-gray-50 border border-gray-200 rounded-md p-1 w-full gap-1">
+                      <div className="flex-1 text-center py-2 text-sm bg-white border border-gray-200 rounded shadow-sm font-medium text-[#145c72]">中低强度 (RPE 4-6)</div>
+                      <div className="flex-1 text-center py-2 text-sm text-gray-400 cursor-not-allowed">中等强度 (被锁定)</div>
+                      <div className="flex-1 text-center py-2 text-sm text-gray-400 cursor-not-allowed">高强度 (被锁定)</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#132235] mb-2 flex justify-between">
+                      <span>运动类型 (Type)</span>
+                      <span className="text-xs text-[#145c72] cursor-pointer hover:underline">+ 从候选动作库添加</span>
+                    </label>
+                    <div className="border border-gray-200 rounded-md bg-gray-50 p-2 space-y-2">
+                      {/* 模拟可拖拽卡片 */}
+                      <div className="bg-white border border-gray-200 p-3 rounded shadow-sm flex items-center justify-between cursor-move hover:border-[#145c72]">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 bg-blue-100 text-blue-700 rounded flex items-center justify-center text-xs font-bold">1</div>
+                          <div>
+                            <div className="text-sm font-medium text-[#132235]">热身：关节活动操</div>
+                            <div className="text-xs text-gray-500">5-10 分钟</div>
+                          </div>
+                        </div>
+                        <button className="text-gray-400 hover:text-red-500"><XSquare className="w-4 h-4"/></button>
+                      </div>
+                      <div className="bg-white border border-gray-200 p-3 rounded shadow-sm flex items-center justify-between cursor-move hover:border-[#145c72]">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 bg-teal-100 text-teal-700 rounded flex items-center justify-center text-xs font-bold">2</div>
+                          <div>
+                            <div className="text-sm font-medium text-[#132235]">主训练：快走 / 功率自行车</div>
+                            <div className="text-xs text-gray-500">20-30 分钟，保持可完整说话状态</div>
+                          </div>
+                        </div>
+                        <button className="text-gray-400 hover:text-red-500"><XSquare className="w-4 h-4"/></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#132235] mb-2">禁忌动作 (Contraindications)</label>
+                    <div className="w-full border border-red-200 bg-red-50 rounded-md p-2 flex flex-wrap gap-2 min-h-[42px] items-center">
+                      <span className="bg-white border border-red-200 text-red-700 px-2 py-1 rounded text-sm flex items-center gap-1">
+                        避免长时间憋气动作 <XSquare className="w-3 h-3 cursor-pointer hover:text-red-900"/>
+                      </span>
+                      <span className="bg-white border border-red-200 text-red-700 px-2 py-1 rounded text-sm flex items-center gap-1">
+                        避免大重量深蹲 <XSquare className="w-3 h-3 cursor-pointer hover:text-red-900"/>
+                      </span>
+                      <input type="text" placeholder="输入新增禁忌..." className="bg-transparent text-sm focus:outline-none flex-1 min-w-[120px] text-red-800 placeholder-red-300" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#132235] mb-2">复测周期安排</label>
+                    <textarea defaultValue="前两周密切关注运动后血压变化，无异常则 4 周后进行线上阶段小结，12 周线下门诊复测。" className="w-full border border-[#d8e2ea] rounded-md p-3 text-sm focus:outline-none focus:border-[#145c72] resize-none h-20"></textarea>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 右栏: 证据与规则 (w-1/4) */}
+        <div className="w-1/4 min-w-[300px] bg-white border-l border-[#d8e2ea] flex flex-col z-0">
+          <div className="px-4 py-3 border-b border-gray-100 bg-[#f7fafc] font-semibold text-[#132235] flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-gray-500" /> 规则与证据核对
+          </div>
+          <div className="flex-1 overflow-y-auto bg-white">
+            {/* 模拟 AntD Collapse */}
+            <div className="border-b border-gray-100">
+              <div className="px-4 py-3 bg-white font-medium text-sm flex justify-between items-center cursor-pointer hover:bg-gray-50 text-[#145c72]">
+                命中风险规则 (1) <ChevronDown className="w-4 h-4" />
+              </div>
+              <div className="px-4 pb-4 bg-white">
+                <div className="p-3 bg-orange-50 border border-orange-200 rounded-md">
+                  <div className="text-sm font-bold text-orange-800 mb-1">YELLOW_HYPERTENSION</div>
+                  <div className="text-xs text-orange-700 mb-2">条件：收缩压 {'>='} 140 或高血压病史 = 是</div>
+                  <div className="text-xs bg-white p-2 border border-orange-100 rounded text-gray-600">
+                    <span className="font-semibold">系统动作约束：</span><br/>
+                    - 强度上限：低-中等强度<br/>
+                    - 强制拦截：大重量抗阻
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-b border-gray-100">
+              <div className="px-4 py-3 bg-white font-medium text-sm flex justify-between items-center cursor-pointer hover:bg-gray-50 text-[#145c72]">
+                RAG 知识证据溯源 (2) <ChevronDown className="w-4 h-4" />
+              </div>
+              <div className="px-4 pb-4 bg-white space-y-3">
+                <div className="p-3 bg-gray-50 border border-gray-200 rounded-md">
+                  <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 border border-blue-200 rounded text-[10px] mb-2 font-medium tracking-wide">
+                    文献：高血压运动干预指南 2020版
+                  </span>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    “...对于收缩压处于 140-159 mmHg 的患者，在药物控制稳定的前提下，优先推荐中低强度的有氧运动（如快走），避免憋气动作以防血压骤升...”
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. 吸底操作条 (Sticky Footer) */}
+      <footer className="h-16 bg-white border-t border-gray-200 flex items-center justify-between px-6 shrink-0 z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
+        <div className="flex gap-3">
+          {riskMode === 'R3' ? (
+             <Button className="font-medium">要求补充院内诊断资料</Button>
+          ) : (
+             <>
+               <Button danger ghost>判定为 R3 并转介</Button>
+               <Button>要求补充体测数据</Button>
+             </>
+          )}
+        </div>
+        <div className="flex gap-3">
+          <Button danger>驳回初稿重生成</Button>
+          {riskMode === 'R3' ? (
+            <Button type="primary" danger className="bg-[#bf3030] hover:bg-red-800">核对并发送转介通知</Button>
+          ) : (
+            <Button type="primary" className="bg-[#228b4e] hover:bg-[#1a6639] border-none px-6" onClick={handleApproveClick}>核对并批准发布</Button>
+          )}
+        </div>
+      </footer>
+
+      {/* 4. 安全二次确认 Modal (点击批准时触发) */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="安全二次确认"
+        onConfirm={() => { alert('处方已成功发布！'); setModalOpen(false); }}
+        confirmDisabled={!checkConfirmed}
+      >
+        <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+          您即将把该处方状态变更为 <strong>PUBLISHED (已发布)</strong>。发布后，用户将在客户端直接看到该训练计划并可以开始运动打卡。
+          请确保您已审阅所有红旗风险并剔除了不适宜动作。
+        </p>
+        <label className="flex items-start gap-3 p-4 bg-[#f0f9f4] border border-[#228b4e]/30 rounded-lg cursor-pointer transition-colors hover:bg-[#e6f4ea]">
+          <input
+            type="checkbox"
+            className="mt-0.5 w-5 h-5 text-[#228b4e] border-gray-300 rounded focus:ring-[#228b4e]"
+            checked={checkConfirmed}
+            onChange={(e) => setCheckConfirmed(e.target.checked)}
+          />
+          <span className="text-sm font-medium text-[#132235]">
+            我已亲自核对用户的医疗风险、禁忌动作与处方运动强度，确认该处方可安全执行。
+          </span>
+        </label>
+      </Modal>
+
+    </div>
+  );
+};
+
+
+// --- 主应用 Shell (包含角色路由逻辑) ---
+export default function QihengExpertPortal() {
+  // 控制整体视图是在“看板”还是在“单任务审核”
+  const [currentView, setCurrentView] = useState('dashboard');
+  // 控制单任务审核传入的风险模式
+  const [reviewMode, setReviewMode] = useState('R2');
+
+  const navItems = [
+    { id: 'dashboard', icon: LayoutDashboard, label: '紧急分诊与队列' },
+    { id: 'history', icon: CheckSquare, label: '已审核记录' },
+  ];
+
+  const handleOpenReview = (risk) => {
+    setReviewMode(risk);
+    setCurrentView('review');
+  };
+
+  // 如果处于 review 视图，直接渲染全屏的工作台，不渲染左侧导航
+  if (currentView === 'review') {
+    return <SingleReviewWorkspace onBack={() => setCurrentView('dashboard')} initialRiskMode={reviewMode} />;
+  }
+
+  return (
+    <div className="flex h-screen bg-[#eef3f7] font-sans text-[#132235] overflow-hidden">
+      {/* 左侧边栏 */}
+      <aside className="w-64 bg-[#132235] text-white flex flex-col z-20 shadow-xl relative">
+        <div className="h-14 flex items-center px-6 bg-[#0c1622] border-b border-gray-800 shadow-sm">
+          <div className="w-6 h-6 bg-orange-500 rounded flex items-center justify-center mr-3 shadow-inner">
+             <Activity className="w-4 h-4 text-white" />
+          </div>
+          <span className="font-bold text-[15px] tracking-wide">启衡临床中台</span>
+        </div>
+
+        <div className="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+          <div className="text-[10px] font-bold text-gray-500 mb-3 px-3 uppercase tracking-widest">专家工作台 (EXPERT)</div>
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => setCurrentView(item.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-sm font-medium
+                ${currentView === item.id
+                  ? 'bg-[#145c72] text-white shadow-inner'
+                  : 'text-gray-400 hover:bg-[#1a2d42] hover:text-white'}`}
+            >
+              <item.icon className="w-4 h-4" />
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="p-4 bg-[#0c1622]">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-sm">
+              专
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <div className="text-sm font-medium truncate">李主任医生</div>
+              <div className="text-xs text-gray-500 truncate">内分泌与代谢科</div>
+            </div>
+            <LogOut className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white transition-colors" />
+          </div>
+        </div>
+      </aside>
+
+      {/* 主工作区 */}
+      <main className="flex-1 flex flex-col relative z-10 overflow-hidden">
+        {/* 背景轻微网格装饰 (临床感) */}
+        <div className="absolute inset-0 pointer-events-none opacity-20"
+             style={{ backgroundImage: 'linear-gradient(#d8e2ea 1px, transparent 1px), linear-gradient(90deg, #d8e2ea 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
+        </div>
+
+        {/* 顶部 Header */}
+        <header className="h-14 bg-white border-b border-[#d8e2ea] flex items-center px-6 shrink-0 z-10 relative shadow-sm">
+          <h2 className="text-[15px] font-semibold text-[#132235]">
+            {navItems.find(i => i.id === currentView)?.label}
+          </h2>
+          <div className="ml-auto flex items-center gap-4">
+             <span className="text-xs text-gray-500 font-medium">当前辖区：北京示范基地第一卫生站</span>
+          </div>
+        </header>
+
+        {/* 内容滚动区 */}
+        <div className="flex-1 overflow-y-auto p-6 relative z-10">
+          <TriageDashboard onOpenReview={handleOpenReview} />
+        </div>
+      </main>
+    </div>
+  );
+}

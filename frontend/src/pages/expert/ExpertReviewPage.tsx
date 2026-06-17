@@ -1,5 +1,5 @@
-import { ExpertReviewWorkspace } from "./review/ExpertReviewWorkspace";
+import { ExpertPortalPage } from "./ExpertPortalPage";
 
 export function ExpertReviewPage() {
-  return <ExpertReviewWorkspace />;
+  return <ExpertPortalPage />;
 }

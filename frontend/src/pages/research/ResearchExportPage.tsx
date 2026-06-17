@@ -1,5 +1,5 @@
-import { ResearchExportWorkspace } from "./export/ResearchExportWorkspace";
+import { ResearchPortalPage } from "./ResearchPortalPage";
 
 export function ResearchExportPage() {
-  return <ResearchExportWorkspace />;
+  return <ResearchPortalPage />;
 }
