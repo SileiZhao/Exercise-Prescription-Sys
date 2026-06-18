@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Activity,
@@ -34,8 +34,7 @@ import {
   type ReviewQueueItem,
   type ReviewStats
 } from "../../api/expertReviews";
-import { logout as logoutSession } from "../../api/auth";
-import { clearAuthTokens, getRefreshToken } from "../../auth/token";
+import { performLogout } from "../../auth/session";
 import "./expert-portal.css";
 
 type RiskMode = "R2" | "R3";
@@ -226,18 +225,8 @@ function ExpertShell({
   async function handleLogout() {
     if (loggingOut) return;
     setLoggingOut(true);
-    const refreshToken = getRefreshToken();
-    try {
-      if (refreshToken) {
-        await logoutSession(refreshToken);
-      }
-    } catch {
-      // Local logout should still clear access if the token revoke request fails.
-    } finally {
-      clearAuthTokens();
-      localStorage.removeItem("current_user_name");
-      navigate("/login", { replace: true });
-    }
+    await performLogout();
+    navigate("/login", { replace: true });
   }
 
   return (
@@ -553,17 +542,25 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
   const [confirmed, setConfirmed] = useState(false);
   const [acting, setActing] = useState<string | null>(null);
   const [actionNotice, setActionNotice] = useState<ActionNotice | null>(null);
+  const editedFieldsRef = useRef({ frequency: false, time: false, reassessment: false });
 
   useEffect(() => {
     let mounted = true;
     setLoading(true);
+    editedFieldsRef.current = { frequency: false, time: false, reassessment: false };
     getReviewDetail(prescriptionId)
       .then((data) => {
         if (!mounted) return;
         setDetail(data);
-        setFrequency(fittValue(data, "frequency", "每周 3-5 次"));
-        setTime(fittValue(data, "time", "每次 30-45 分钟"));
-        setReassessment(asText(data.prescription.reassessment, "前两周密切关注运动后血压变化，无异常则 4 周后进行线上阶段小结。"));
+        if (!editedFieldsRef.current.frequency) {
+          setFrequency(fittValue(data, "frequency", "每周 3-5 次"));
+        }
+        if (!editedFieldsRef.current.time) {
+          setTime(fittValue(data, "time", "每次 30-45 分钟"));
+        }
+        if (!editedFieldsRef.current.reassessment) {
+          setReassessment(asText(data.prescription.reassessment, "前两周密切关注运动后血压变化，无异常则 4 周后进行线上阶段小结。"));
+        }
       })
       .catch(() => {
         if (!mounted) return;
@@ -766,11 +763,23 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
                   <div className="expert-form-grid">
                     <label className="expert-field">
                       频率 (Frequency)
-                      <input value={frequency} onChange={(event) => setFrequency(event.target.value)} />
+                      <input
+                        value={frequency}
+                        onChange={(event) => {
+                          editedFieldsRef.current.frequency = true;
+                          setFrequency(event.target.value);
+                        }}
+                      />
                     </label>
                     <label className="expert-field">
                       单次时间 (Time)
-                      <input value={time} onChange={(event) => setTime(event.target.value)} />
+                      <input
+                        value={time}
+                        onChange={(event) => {
+                          editedFieldsRef.current.time = true;
+                          setTime(event.target.value);
+                        }}
+                      />
                     </label>
                   </div>
                   <div className="expert-field">
@@ -797,7 +806,13 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
                   </div>
                   <label className="expert-field">
                     复测周期安排
-                    <textarea value={reassessment} onChange={(event) => setReassessment(event.target.value)} />
+                    <textarea
+                      value={reassessment}
+                      onChange={(event) => {
+                        editedFieldsRef.current.reassessment = true;
+                        setReassessment(event.target.value);
+                      }}
+                    />
                   </label>
                 </div>
               </div>

@@ -57,6 +57,27 @@ describe("auth routes", () => {
     expect(screen.getByRole("button", { name: /登\s*录/ })).toBeInTheDocument();
   });
 
+  it("links forgotten password users to a controlled support flow", async () => {
+    render(
+      <MemoryRouter initialEntries={["/login"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        <App />
+      </MemoryRouter>
+    );
+
+    const forgotPasswordLink = await screen.findByRole("link", { name: "忘记密码？" });
+    expect(forgotPasswordLink).toHaveAttribute("href", "/password-support");
+
+    render(
+      <MemoryRouter initialEntries={["/password-support"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("heading", { name: "密码找回支持" })).toBeInTheDocument();
+    expect(screen.getByText("请联系所在机构管理员核验身份后重置登录凭证。")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "返回系统登录" })).toHaveAttribute("href", "/login");
+  });
+
   it("protects user dashboard without token", async () => {
     localStorage.removeItem("access_token");
 

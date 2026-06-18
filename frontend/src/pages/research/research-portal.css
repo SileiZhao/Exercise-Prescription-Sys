@@ -74,6 +74,7 @@
 
 .research-nav {
   flex: 1;
+  overflow-y: auto;
   padding: 24px 16px;
 }
 
@@ -107,6 +108,83 @@
   color: #145c72;
   background: #eef3f7;
   font-weight: 800;
+}
+
+.research-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid #d8e2ea;
+  background: #fff;
+}
+
+.research-avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  color: #3730a3;
+  background: #eef2ff;
+  font-weight: 800;
+}
+
+.research-account > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+
+.research-account strong,
+.research-account small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.research-account strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.research-account small {
+  margin-top: 2px;
+  color: #5f7186;
+  font-size: 12px;
+}
+
+.research-logout-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid #d8e2ea;
+  border-radius: 8px;
+  color: #5f7186;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.research-logout-button:hover {
+  color: #3730a3;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.research-logout-button:disabled {
+  color: #9aa8b7;
+  cursor: not-allowed;
+}
+
+.research-logout-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .research-main {
@@ -623,13 +701,33 @@
   background: transparent;
 }
 
-.research-request-filter button {
-  display: grid;
-  width: 38px;
-  place-items: center;
+.research-status-select {
+  display: flex;
+  width: 128px;
+  min-height: 36px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
   border: 1px solid #d8e2ea;
   border-radius: 8px;
   background: #fff;
+}
+
+.research-status-select svg {
+  width: 15px;
+  height: 15px;
+  color: #5f7186;
+}
+
+.research-status-select select {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #5f7186;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
 }
 
 .research-request-items {
@@ -644,7 +742,7 @@
   padding: 16px;
   border: 0;
   border-bottom: 1px solid #d8e2ea;
-  border-left: 4px solid transparent;
+  border-left: 1px solid transparent;
   color: #132235;
   background: transparent;
   text-align: left;
@@ -655,6 +753,14 @@
 .research-request-item.is-active {
   background: #fff;
   border-left-color: #145c72;
+}
+
+.research-empty-state {
+  padding: 22px;
+  color: #5f7186;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
 }
 
 .research-request-item > span {

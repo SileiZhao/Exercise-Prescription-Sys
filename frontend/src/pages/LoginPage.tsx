@@ -86,7 +86,7 @@ export function LoginPage() {
           <Typography.Paragraph>请输入您的受控工作台凭证</Typography.Paragraph>
 
           <Form form={form} layout="vertical" size="large" onFinish={handleFinish}>
-            <Form.Item label="账号" name="username" rules={[{ required: true, message: "请输入工作邮箱或账号" }]}>
+            <Form.Item label="邮箱" name="username" rules={[{ required: true, message: "请输入工作邮箱或账号" }]}>
               <Input
                 autoComplete="username"
                 prefix={<Mail className="login-input-icon" aria-hidden="true" />}
@@ -109,7 +109,7 @@ export function LoginPage() {
           </Form>
 
           <div className="login-card-links">
-            <a href="#password-support">忘记密码？</a>
+            <Link to="/password-support">忘记密码？</Link>
             <Link to="/register">注册普通用户账户</Link>
           </div>
         </section>

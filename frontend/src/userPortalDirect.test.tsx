@@ -1,8 +1,18 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
+
+const logoutMock = vi.hoisted(() => vi.fn().mockResolvedValue({ revoked: true }));
+
+vi.mock("./api/auth", async () => {
+  const actual = await vi.importActual<typeof import("./api/auth")>("./api/auth");
+  return {
+    ...actual,
+    logout: logoutMock
+  };
+});
 
 vi.mock("./api/userDashboard", () => ({
   getUserDashboard: vi.fn().mockResolvedValue({
@@ -41,8 +51,14 @@ vi.mock("./api/userDashboard", () => ({
 }));
 
 describe("direct user portal replacement", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    logoutMock.mockClear();
+  });
+
   it("renders the user-pages portal shell instead of the old user workbench shell", async () => {
     localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("refresh_token", "refresh-token");
     localStorage.setItem("current_user_role", "USER");
 
     render(
@@ -59,5 +75,30 @@ describe("direct user portal replacement", () => {
     expect(screen.getByText("今日可进行运动")).toBeInTheDocument();
     expect(screen.getByText("当前执行处方")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "今日通行证" })).not.toBeInTheDocument();
+  });
+
+  it("logs out from the user portal shell", async () => {
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("refresh_token", "refresh-token");
+    localStorage.setItem("current_user_role", "USER");
+    localStorage.setItem("current_user_id", "6");
+
+    render(
+      <MemoryRouter
+        initialEntries={["/user/dashboard"]}
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("heading", { name: "工作台首页" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "退出登录" }));
+
+    await waitFor(() => expect(logoutMock).toHaveBeenCalledWith("refresh-token"));
+    expect(localStorage.getItem("access_token")).toBeNull();
+    expect(localStorage.getItem("refresh_token")).toBeNull();
+    expect(localStorage.getItem("current_user_role")).toBeNull();
+    expect(localStorage.getItem("current_user_id")).toBeNull();
   });
 });

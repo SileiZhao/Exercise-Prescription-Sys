@@ -2,6 +2,9 @@ const TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
 const CURRENT_USER_ROLE_KEY = "current_user_role";
 const CURRENT_USER_ID_KEY = "current_user_id";
+const CURRENT_USER_NAME_KEY = "current_user_name";
+const CURRENT_USER_EMAIL_KEY = "current_user_email";
+const CURRENT_ORGANIZATION_NAME_KEY = "current_organization_name";
 
 export type AuthUserRole = "USER" | "EXPERT" | "ADMIN" | "RESEARCHER" | "ORG_ADMIN";
 
@@ -58,4 +61,7 @@ export function clearAuthTokens() {
   clearRefreshToken();
   clearCurrentUserRole();
   clearCurrentUserId();
+  localStorage.removeItem(CURRENT_USER_NAME_KEY);
+  localStorage.removeItem(CURRENT_USER_EMAIL_KEY);
+  localStorage.removeItem(CURRENT_ORGANIZATION_NAME_KEY);
 }

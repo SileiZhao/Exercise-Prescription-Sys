@@ -17,7 +17,7 @@ import {
   Typography
 } from "antd";
 import { Children, useState, type ChangeEventHandler, type HTMLAttributes, type ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AlertTriangle,
   Activity,
@@ -36,6 +36,7 @@ import {
   Gauge,
   LayoutDashboard,
   ListChecks,
+  LogOut,
   Menu,
   ShieldAlert,
   ShieldCheck,
@@ -46,6 +47,7 @@ import {
 } from "lucide-react";
 
 import type { ChartDataRow } from "./charts/BaseEChart";
+import { performLogout } from "../auth/session";
 
 type RiskLevel = "R0" | "R1" | "R2" | "R3" | string | null | undefined;
 type AppRole = "user" | "expert" | "admin" | "research" | "public";
@@ -331,6 +333,8 @@ function locationNeedsBack(role: AppRole, pathname: string) {
 }
 
 export function RoleSidebar({ role }: { role: AppRole }) {
+  const navigate = useNavigate();
+  const [loggingOut, setLoggingOut] = useState(false);
   const roleLabel: Record<AppRole, string> = {
     public: "公开入口",
     user: "用户端",
@@ -345,6 +349,14 @@ export function RoleSidebar({ role }: { role: AppRole }) {
     admin: "管",
     research: "研"
   };
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    await performLogout();
+    navigate("/login", { replace: true });
+  }
+
   return (
     <Layout.Sider className="role-sidebar" breakpoint="lg" collapsedWidth={0} width={216}>
       <div className="role-brand-block">
@@ -366,6 +378,14 @@ export function RoleSidebar({ role }: { role: AppRole }) {
               <small>{roleLabel[role]} · {currentOrganizationName()}</small>
             </span>
           </div>
+          <Button
+            className="role-logout-button"
+            icon={<LogOut />}
+            onClick={handleLogout}
+            disabled={loggingOut}
+          >
+            {loggingOut ? "退出中" : "退出登录"}
+          </Button>
           <div className="role-safety-note">
             <ShieldCheck aria-hidden="true" />
             <span>胸痛、晕厥、严重气短等信号出现时立即停止并就医。</span>

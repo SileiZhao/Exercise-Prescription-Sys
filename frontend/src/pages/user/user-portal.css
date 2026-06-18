@@ -136,10 +136,36 @@
   font-size: 12px;
 }
 
-.user-portal-account svg {
+.user-portal-logout-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid #d8e2ea;
+  border-radius: 8px;
+  color: #5f7186;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.user-portal-logout-button:hover {
+  color: #145c72;
+  border-color: rgba(20, 92, 114, 0.26);
+  background: #eef3f7;
+}
+
+.user-portal-logout-button:disabled {
+  color: #9aa8b7;
+  cursor: not-allowed;
+}
+
+.user-portal-logout-button svg {
   width: 18px;
   height: 18px;
-  color: #9aa8b7;
 }
 
 .user-portal-main {

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
+const logoutMock = vi.hoisted(() => vi.fn().mockResolvedValue({ revoked: true }));
 const createResearchExportRequestMock = vi.hoisted(() =>
   vi.fn((payload: { format: "csv" | "xlsx" | "json"; purpose: string }) =>
     Promise.resolve({
@@ -22,8 +23,42 @@ const createResearchExportRequestMock = vi.hoisted(() =>
   )
 );
 const downloadResearchExportRequestMock = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["participant_code"], { type: "text/csv" })));
-const approveResearchExportRequestMock = vi.hoisted(() => vi.fn().mockResolvedValue({ status: "APPROVED" }));
-const rejectResearchExportRequestMock = vi.hoisted(() => vi.fn().mockResolvedValue({ status: "REJECTED" }));
+const approveResearchExportRequestMock = vi.hoisted(() =>
+  vi.fn((requestId: number, payload: { approval_comment: string }) =>
+    Promise.resolve({
+      id: requestId,
+      requested_by: 3,
+      organization_id: 1,
+      format: "json",
+      purpose: "高血压人群依从性差异分析",
+      status: "APPROVED",
+      approved_by: 1,
+      approval_comment: payload.approval_comment,
+      row_count: 5000,
+      expires_at: "2999-06-04T00:00:00",
+      downloaded_at: null,
+      created_at: "2026-06-03T00:00:00"
+    })
+  )
+);
+const rejectResearchExportRequestMock = vi.hoisted(() =>
+  vi.fn((requestId: number, payload: { approval_comment: string }) =>
+    Promise.resolve({
+      id: requestId,
+      requested_by: 3,
+      organization_id: 1,
+      format: "json",
+      purpose: "高血压人群依从性差异分析",
+      status: "REJECTED",
+      approved_by: 1,
+      approval_comment: payload.approval_comment,
+      row_count: 5000,
+      expires_at: null,
+      downloaded_at: null,
+      created_at: "2026-06-03T00:00:00"
+    })
+  )
+);
 const listResearchExportRequestsMock = vi.hoisted(() =>
   vi.fn().mockResolvedValue([
     {
@@ -127,10 +162,20 @@ vi.mock("./api/researchExport", () => ({
   listResearchExportRequests: listResearchExportRequestsMock
 }));
 
+vi.mock("./api/auth", async () => {
+  const actual = await vi.importActual<typeof import("./api/auth")>("./api/auth");
+  return {
+    ...actual,
+    logout: logoutMock
+  };
+});
+
 function renderResearchRoute(path: string, role = "RESEARCHER") {
   localStorage.setItem("access_token", "test-token");
+  localStorage.setItem("refresh_token", "refresh-token");
   localStorage.setItem("current_user_role", role);
   localStorage.setItem("current_user_id", role === "ADMIN" ? "1" : "2");
+  localStorage.setItem("current_user_name", role === "ADMIN" ? "科研管理员" : "王研究员");
 
   render(
     <MemoryRouter initialEntries={[path]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
@@ -142,10 +187,21 @@ function renderResearchRoute(path: string, role = "RESEARCHER") {
 describe("research direct portal replacement", () => {
   beforeEach(() => {
     localStorage.clear();
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      writable: true,
+      value: vi.fn(() => "blob:research-export")
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      writable: true,
+      value: vi.fn()
+    });
     createResearchExportRequestMock.mockClear();
     downloadResearchExportRequestMock.mockClear();
     approveResearchExportRequestMock.mockClear();
     rejectResearchExportRequestMock.mockClear();
+    logoutMock.mockClear();
     listResearchExportRequestsMock.mockClear();
     getResearchSummaryMock.mockClear();
     exportDesensitizedUsersMock.mockClear();
@@ -182,6 +238,16 @@ describe("research direct portal replacement", () => {
   });
 
   it("creates and downloads de-identified export jobs without exposing PII", async () => {
+    const anchorClicks: string[] = [];
+    const originalCreateElement = document.createElement.bind(document);
+    const createElementSpy = vi.spyOn(document, "createElement").mockImplementation((tagName: string) => {
+      const element = originalCreateElement(tagName);
+      if (tagName.toLowerCase() === "a") {
+        element.click = vi.fn(() => anchorClicks.push((element as HTMLAnchorElement).download));
+      }
+      return element;
+    });
+
     renderResearchRoute("/research/export-jobs");
 
     expect(await screen.findByRole("heading", { name: "数据导出审批" })).toBeInTheDocument();
@@ -204,6 +270,11 @@ describe("research direct portal replacement", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "下载脱敏数据包 #8" }));
     await waitFor(() => expect(downloadResearchExportRequestMock).toHaveBeenCalledWith(8));
+    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    expect(anchorClicks).toEqual(["research-export-8.csv"]);
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:research-export");
+
+    createElementSpy.mockRestore();
   });
 
   it("uses the same replacement shell for admin export approval and records approval actions", async () => {
@@ -223,5 +294,51 @@ describe("research direct portal replacement", () => {
         approval_comment: "同意用于课题结题分析"
       })
     );
+    await waitFor(() => expect(screen.getAllByText("已批准").length).toBeGreaterThan(0));
+    expect(screen.getByRole("button", { name: "下载脱敏数据包 #9" })).toBeInTheDocument();
+  });
+
+  it("rejects export requests and keeps the local approval queue in sync", async () => {
+    renderResearchRoute("/admin/research-export", "ADMIN");
+
+    expect(await screen.findByRole("heading", { name: "科研导出审批" })).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("审批意见 / 限制要求"), { target: { value: "缺少伦理审批编号，暂不批准" } });
+    fireEvent.click(screen.getByRole("button", { name: "驳回申请" }));
+
+    await waitFor(() =>
+      expect(rejectResearchExportRequestMock).toHaveBeenCalledWith(9, {
+        approval_comment: "缺少伦理审批编号，暂不批准"
+      })
+    );
+    await waitFor(() => expect(screen.getAllByText("已驳回").length).toBeGreaterThan(0));
+    expect(screen.queryByRole("button", { name: "下载脱敏数据包 #9" })).not.toBeInTheDocument();
+  });
+
+  it("filters export requests by purpose id and approval status", async () => {
+    renderResearchRoute("/research/export-jobs");
+
+    expect(await screen.findByRole("heading", { name: "数据导出审批" })).toBeInTheDocument();
+    const requestList = screen.getByLabelText("导出申请列表");
+    expect(within(requestList).getByText("高血压人群依从性差异分析")).toBeInTheDocument();
+    expect(within(requestList).getByText("阶段效果分析")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText("搜索申请人/编号..."), { target: { value: "阶段" } });
+    expect(within(requestList).queryByText("高血压人群依从性差异分析")).not.toBeInTheDocument();
+    expect(within(requestList).getByText("阶段效果分析")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText("申请状态筛选"), { target: { value: "PENDING" } });
+    expect(screen.getByText("当前筛选条件下没有导出申请。")).toBeInTheDocument();
+  });
+
+  it("logs out from the researcher portal shell", async () => {
+    renderResearchRoute("/research/dashboard");
+
+    expect(await screen.findByRole("heading", { name: "宏观统计大盘" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "退出登录" }));
+
+    await waitFor(() => expect(logoutMock).toHaveBeenCalledWith("refresh-token"));
+    expect(localStorage.getItem("access_token")).toBeNull();
+    expect(localStorage.getItem("refresh_token")).toBeNull();
+    expect(localStorage.getItem("current_user_role")).toBeNull();
   });
 });

@@ -35,6 +35,7 @@ const ChangePasswordPage = lazyPage(lazyPageLoaders.changePassword, "ChangePassw
 const ExpertReviewPage = lazyPage(lazyPageLoaders.expertReview, "ExpertReviewPage");
 const LoginPage = lazyPage(lazyPageLoaders.login, "LoginPage");
 const OnboardingWizardPage = lazyPage(lazyPageLoaders.onboarding, "OnboardingWizardPage");
+const PasswordSupportPage = lazyPage(lazyPageLoaders.passwordSupport, "PasswordSupportPage");
 const PhenotypePage = lazyPage(lazyPageLoaders.phenotype, "PhenotypePage");
 const PhaseReportPage = lazyPage(lazyPageLoaders.phaseReport, "PhaseReportPage");
 const PrescriptionPage = lazyPage(lazyPageLoaders.prescription, "PrescriptionPage");
@@ -287,6 +288,7 @@ export function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={routePage(<LoginPage />)} />
+          <Route path="/password-support" element={routePage(<PasswordSupportPage />)} />
           <Route
             path="/auth/change-password"
             element={

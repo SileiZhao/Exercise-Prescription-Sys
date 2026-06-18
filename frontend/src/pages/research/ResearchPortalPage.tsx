@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Activity,
   AlertTriangle,
@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   LineChart,
   Lock,
+  LogOut,
   Search,
   ShieldAlert,
   Users
@@ -24,13 +25,16 @@ import {
   exportDesensitizedUsers,
   getResearchSummary,
   listResearchExportRequests,
+  rejectResearchExportRequest,
   type ResearchExportFormat,
   type ResearchExportRequest,
   type ResearchSummary
 } from "../../api/researchExport";
+import { performLogout } from "../../auth/session";
 import "./research-portal.css";
 
 type ResearchView = "dashboard" | "clusters" | "effects" | "export";
+type ResearchNotice = { type: "info" | "success" | "warning" | "error"; message: string; description?: string };
 
 const fallbackSummary: ResearchSummary = {
   total_participants: 12458,
@@ -193,7 +197,18 @@ function ResearchShell({
   isAdminMode: boolean;
   children: ReactNode;
 }) {
+  const navigate = useNavigate();
   const title = isAdminMode ? "科研导出审批" : navItems.find((item) => item.id === view)?.label ?? "宏观统计大盘";
+  const [loggingOut, setLoggingOut] = useState(false);
+  const userName = localStorage.getItem("current_user_name") || (isAdminMode ? "科研管理员" : "王研究员");
+  const userRole = isAdminMode ? "ADMIN" : "RESEARCHER";
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    await performLogout();
+    navigate("/login", { replace: true });
+  }
 
   return (
     <div className="research-portal-shell">
@@ -216,6 +231,17 @@ function ResearchShell({
             </Link>
           ))}
         </nav>
+        <footer className="research-account">
+          <div className="research-avatar">{isAdminMode ? "管" : "研"}</div>
+          <div>
+            <strong>{userName}</strong>
+            <small>{userRole} · 脱敏数据治理</small>
+          </div>
+          <button type="button" className="research-logout-button" onClick={handleLogout} disabled={loggingOut}>
+            <LogOut />
+            <span>{loggingOut ? "退出中" : "退出登录"}</span>
+          </button>
+        </footer>
       </aside>
       <main className="research-main">
         <header className="research-topbar">
@@ -387,28 +413,105 @@ function ExportWorkspace({
   const [requestOpen, setRequestOpen] = useState(false);
   const [purpose, setPurpose] = useState("");
   const [format, setFormat] = useState<ResearchExportFormat>("csv");
-  const selected = requests.find((request) => request.id === selectedId) ?? requests[0] ?? fallbackRequests[0];
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [acting, setActing] = useState<string | null>(null);
+  const [notice, setNotice] = useState<ResearchNotice | null>(null);
+  const filteredRequests = useMemo(() => {
+    const term = searchText.trim().toLowerCase();
+    return requests.filter((request) => {
+      const matchesStatus = statusFilter === "all" || request.status === statusFilter;
+      const requestCode = `REQ-2026-${String(request.id).padStart(4, "0")}`;
+      const ownerLabel = request.requested_by === 2 ? "科研组-王力" : "运动医学基础研究联合实验组";
+      const matchesSearch = !term || [
+        requestCode,
+        String(request.id),
+        request.purpose,
+        ownerLabel,
+        request.format
+      ].some((value) => value.toLowerCase().includes(term));
+      return matchesStatus && matchesSearch;
+    });
+  }, [requests, searchText, statusFilter]);
+  const selected = requests.find((request) => request.id === selectedId) ?? filteredRequests[0] ?? requests[0] ?? fallbackRequests[0];
 
   useEffect(() => {
-    if (selectedId === null && requests.length) {
-      setSelectedId(requests[0].id);
+    if (!filteredRequests.length) return;
+    if (selectedId === null || !filteredRequests.some((request) => request.id === selectedId)) {
+      setSelectedId(filteredRequests[0].id);
     }
-  }, [requests, selectedId]);
+  }, [filteredRequests, selectedId]);
 
   async function submitRequest() {
-    const item = await createResearchExportRequest({ format, purpose });
-    setRequests([item, ...requests]);
-    setPurpose("");
-    setFormat("csv");
-    setRequestOpen(false);
+    setActing("create");
+    setNotice(null);
+    try {
+      const item = await createResearchExportRequest({ format, purpose });
+      setRequests([item, ...requests]);
+      setSelectedId(item.id);
+      setPurpose("");
+      setFormat("csv");
+      setRequestOpen(false);
+      setNotice({ type: "success", message: "导出申请已提交", description: "申请进入审批队列，授权前不会生成可下载数据包。" });
+    } catch {
+      setNotice({ type: "error", message: "导出申请提交失败", description: "请检查用途说明或稍后重试。" });
+    } finally {
+      setActing(null);
+    }
   }
 
   async function approveSelected() {
-    await approveResearchExportRequest(selected.id, { approval_comment: approvalText });
+    setActing("approve");
+    setNotice(null);
+    try {
+      const updated = await approveResearchExportRequest(selected.id, { approval_comment: approvalText });
+      setRequests(requests.map((request) => (request.id === updated.id ? { ...request, ...updated } : request)));
+      setApprovalText("");
+      setNotice({ type: "success", message: "申请已批准", description: "脱敏数据包已进入授权下载窗口。" });
+    } catch {
+      setNotice({ type: "error", message: "批准申请失败", description: "审批动作未写入，请稍后重试。" });
+    } finally {
+      setActing(null);
+    }
+  }
+
+  async function rejectSelected() {
+    setActing("reject");
+    setNotice(null);
+    try {
+      const updated = await rejectResearchExportRequest(selected.id, { approval_comment: approvalText });
+      setRequests(requests.map((request) => (request.id === updated.id ? { ...request, ...updated } : request)));
+      setApprovalText("");
+      setNotice({ type: "success", message: "申请已驳回", description: "驳回原因已进入审计记录，申请人需重新补充用途说明。" });
+    } catch {
+      setNotice({ type: "error", message: "驳回申请失败", description: "审批动作未写入，请稍后重试。" });
+    } finally {
+      setActing(null);
+    }
   }
 
   async function downloadRequest(id: number) {
-    await downloadResearchExportRequest(id);
+    const target = requests.find((request) => request.id === id);
+    setActing(`download-${id}`);
+    setNotice(null);
+    try {
+      const blob = await downloadResearchExportRequest(id);
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `research-export-${id}.${target?.format ?? "csv"}`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+      const downloadedAt = new Date().toISOString();
+      setRequests(requests.map((request) => (request.id === id ? { ...request, downloaded_at: downloadedAt } : request)));
+      setNotice({ type: "success", message: "脱敏数据包已开始下载", description: "下载动作已写入平台审计链路。" });
+    } catch {
+      setNotice({ type: "error", message: "下载失败", description: "请确认该申请仍在有效下载窗口内。" });
+    } finally {
+      setActing(null);
+    }
   }
 
   return (
@@ -421,14 +524,24 @@ function ExportWorkspace({
         <div className="research-request-filter">
           <label>
             <Search />
-            <input placeholder="搜索申请人/编号..." />
+            <input
+              placeholder="搜索申请人/编号..."
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
+            />
           </label>
-          <button type="button" aria-label="筛选">
+          <label className="research-status-select">
             <Filter />
-          </button>
+            <select aria-label="申请状态筛选" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+              <option value="all">全部状态</option>
+              <option value="PENDING">待审批</option>
+              <option value="APPROVED">已批准</option>
+              <option value="REJECTED">已驳回</option>
+            </select>
+          </label>
         </div>
-        <div className="research-request-items">
-          {requests.map((request) => (
+        <div className="research-request-items" aria-label="导出申请列表">
+          {filteredRequests.map((request) => (
             <div
               role="button"
               tabIndex={0}
@@ -455,14 +568,18 @@ function ExportWorkspace({
                 <Button
                   type="primary"
                   className="research-download-button"
+                  disabled={acting === `download-${request.id}`}
                   onClick={() => downloadRequest(request.id)}
                 >
                   <Download />
-                  {`下载脱敏数据包 #${request.id}`}
+                  {acting === `download-${request.id}` ? "下载中" : `下载脱敏数据包 #${request.id}`}
                 </Button>
               ) : null}
             </div>
           ))}
+          {!filteredRequests.length ? (
+            <div className="research-empty-state">当前筛选条件下没有导出申请。</div>
+          ) : null}
         </div>
       </aside>
       <section className="research-request-detail">
@@ -471,6 +588,7 @@ function ExportWorkspace({
           <Badge tone="warning" text={`当前状态：${statusLabel(selected.status)}`} />
         </header>
         <div className="research-detail-scroll">
+          {notice ? <Alert type={notice.type} message={notice.message} description={notice.description} /> : null}
           <Alert
             type="success"
             icon={<Lock />}
@@ -528,8 +646,12 @@ function ExportWorkspace({
           </label>
           <div>
             <span><Info /> 审批操作将被完整记录至平台审计日志</span>
-            <Button danger disabled={!approvalText.trim()}>驳回申请</Button>
-            <Button type="primary" disabled={!approvalText.trim()} onClick={approveSelected}>批准并授权导出</Button>
+            <Button danger disabled={!approvalText.trim() || acting === "reject"} onClick={rejectSelected}>
+              {acting === "reject" ? "驳回中" : "驳回申请"}
+            </Button>
+            <Button type="primary" disabled={!approvalText.trim() || acting === "approve"} onClick={approveSelected}>
+              {acting === "approve" ? "批准中" : "批准并授权导出"}
+            </Button>
           </div>
         </footer>
       </section>
@@ -541,6 +663,7 @@ function ExportWorkspace({
         onFormatChange={setFormat}
         onClose={() => setRequestOpen(false)}
         onSubmit={submitRequest}
+        submitting={acting === "create"}
       />
     </div>
   );
@@ -553,7 +676,8 @@ function RequestModal({
   onPurposeChange,
   onFormatChange,
   onClose,
-  onSubmit
+  onSubmit,
+  submitting = false
 }: {
   open: boolean;
   purpose: string;
@@ -562,6 +686,7 @@ function RequestModal({
   onFormatChange: (value: ResearchExportFormat) => void;
   onClose: () => void;
   onSubmit: () => void;
+  submitting?: boolean;
 }) {
   if (!open) return null;
   return (
@@ -587,7 +712,9 @@ function RequestModal({
         </div>
         <footer>
           <Button onClick={onClose}>取消</Button>
-          <Button type="primary" disabled={!purpose.trim()} onClick={onSubmit}>提交申请</Button>
+          <Button type="primary" disabled={!purpose.trim() || submitting} onClick={onSubmit}>
+            {submitting ? "提交中" : "提交申请"}
+          </Button>
         </footer>
       </div>
     </div>

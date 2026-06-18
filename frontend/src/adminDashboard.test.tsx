@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -51,14 +51,25 @@ const readySummary = {
 };
 
 const getAdminDashboardSummaryMock = vi.hoisted(() => vi.fn());
+const logoutMock = vi.hoisted(() => vi.fn().mockResolvedValue({ revoked: true }));
 
 vi.mock("./api/adminDashboard", () => ({
   getAdminDashboardSummary: getAdminDashboardSummaryMock
 }));
 
+vi.mock("./api/auth", async () => {
+  const actual = await vi.importActual<typeof import("./api/auth")>("./api/auth");
+  return {
+    ...actual,
+    logout: logoutMock
+  };
+});
+
 describe("admin dashboard", () => {
   beforeEach(() => {
+    localStorage.clear();
     getAdminDashboardSummaryMock.mockResolvedValue(readySummary);
+    logoutMock.mockClear();
   });
 
   it("renders operational and safety statistics", async () => {
@@ -167,5 +178,30 @@ describe("admin dashboard", () => {
     expect(screen.getAllByText("OCR 未启用，资料入库链路不可用").length).toBeGreaterThan(0);
     expect(screen.getAllByText("RAG 存在 3 份跳过文档").length).toBeGreaterThan(0);
     expect(screen.getAllByText("RAG 索引未完成：12049 / 12050 切片").length).toBeGreaterThan(0);
+  });
+
+  it("logs out from the admin shell", async () => {
+    localStorage.setItem("access_token", "test-token");
+    localStorage.setItem("refresh_token", "refresh-token");
+    localStorage.setItem("current_user_role", "ADMIN");
+    localStorage.setItem("current_user_id", "1");
+
+    render(
+      <MemoryRouter
+        initialEntries={["/admin/dashboard"]}
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("heading", { name: "运营指挥台" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "退出登录" }));
+
+    await waitFor(() => expect(logoutMock).toHaveBeenCalledWith("refresh-token"));
+    expect(localStorage.getItem("access_token")).toBeNull();
+    expect(localStorage.getItem("refresh_token")).toBeNull();
+    expect(localStorage.getItem("current_user_role")).toBeNull();
+    expect(localStorage.getItem("current_user_id")).toBeNull();
   });
 });

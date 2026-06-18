@@ -48,6 +48,11 @@ export async function login(payload: LoginPayload): Promise<TokenResponse> {
   return response.data;
 }
 
+export async function refreshToken(refreshTokenValue: string): Promise<TokenResponse> {
+  const response = await apiClient.post<TokenResponse>("/auth/refresh", { refresh_token: refreshTokenValue });
+  return response.data;
+}
+
 export async function changePassword(payload: ChangePasswordPayload): Promise<{ must_change_password: boolean }> {
   const response = await apiClient.post("/auth/change-password", payload);
   return response.data;

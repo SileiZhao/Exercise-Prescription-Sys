@@ -999,6 +999,24 @@
 .role-account-copy strong { color: var(--color-ink); font-size: 13px; font-weight: 680; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .role-account-copy small { color: var(--color-muted); font-size: 11.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+.role-logout-button.ant-btn {
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 34px;
+  border-color: var(--color-line);
+  color: var(--color-muted);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.role-logout-button.ant-btn:not(:disabled):hover,
+.role-logout-button.ant-btn:not(:disabled):focus-visible {
+  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-line));
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 6%, #fff);
+}
+
 .role-safety-note {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -1054,6 +1072,5 @@
 @media (prefers-reduced-motion: reduce) {
   .ue-nextstep:hover { transform: none; }
 }
-
 
 

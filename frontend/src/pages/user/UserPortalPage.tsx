@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Activity,
   ActivitySquare,
@@ -47,6 +47,7 @@ import {
   type HealthPayload
 } from "../../api/healthData";
 import { getUserDashboard, type UserDashboardSummary } from "../../api/userDashboard";
+import { performLogout } from "../../auth/session";
 import "./user-portal.css";
 
 export type UserPortalView = "dashboard" | "onboarding" | "risk-result" | "prescription" | "today" | "phase-report";
@@ -340,9 +341,18 @@ function PortalBadge({ status = "default", text }: { status?: "processing" | "su
 
 function UserPortalShell({ view, children }: { view: UserPortalView; children: ReactNode }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const active = navItems.find((item) => item.id === view) ?? navItems[0];
   const userName = localStorage.getItem("current_user_name") || "测试用户";
   const email = localStorage.getItem("current_user_email") || "user@example.com";
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    await performLogout();
+    navigate("/login", { replace: true });
+  }
 
   return (
     <div className="user-portal-shell">
@@ -372,7 +382,10 @@ function UserPortalShell({ view, children }: { view: UserPortalView; children: R
             <strong>{userName}</strong>
             <small>{email}</small>
           </div>
-          <LogOut aria-hidden="true" />
+          <button type="button" className="user-portal-logout-button" onClick={handleLogout} disabled={loggingOut}>
+            <LogOut aria-hidden="true" />
+            <span>{loggingOut ? "退出中" : "退出登录"}</span>
+          </button>
         </div>
       </aside>
 

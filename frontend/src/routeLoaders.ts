@@ -13,6 +13,7 @@ export const lazyPageLoaders = {
   expertReview: () => import("./pages/expert/ExpertReviewPage"),
   login: () => import("./pages/LoginPage"),
   onboarding: () => import("./pages/user/OnboardingWizardPage"),
+  passwordSupport: () => import("./pages/PasswordSupportPage"),
   phaseReport: () => import("./pages/user/PhaseReportPage"),
   phenotype: () => import("./pages/user/PhenotypePage"),
   prescription: () => import("./pages/user/PrescriptionPage"),

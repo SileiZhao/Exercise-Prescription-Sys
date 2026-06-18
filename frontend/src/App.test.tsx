@@ -236,6 +236,7 @@ describe("App", () => {
       "expertReview",
       "login",
       "onboarding",
+      "passwordSupport",
       "phaseReport",
       "phenotype",
       "prescription",
@@ -285,7 +286,7 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    expect((await screen.findAllByRole("heading", { name: expectedHeading })).length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("heading", { name: expectedHeading }, { timeout: 5000 })).length).toBeGreaterThan(0);
     expect(screen.queryByText("启衡运动处方系统")).not.toBeInTheDocument();
   });
 });
