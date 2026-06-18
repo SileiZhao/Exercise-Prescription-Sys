@@ -836,6 +836,10 @@
   gap: 12px;
 }
 
+.up-inline-notice {
+  padding: 0 32px 24px;
+}
+
 .up-risk-result {
   max-width: 880px;
 }
@@ -1028,6 +1032,14 @@
 .up-page-title-row p svg {
   width: 13px;
   height: 13px;
+}
+
+.up-action-row,
+.up-phase-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .up-fitt-grid {
@@ -1421,6 +1433,8 @@
   }
 
   .up-form-panel > footer > div,
+  .up-action-row,
+  .up-phase-actions,
   .up-result-card > div,
   .up-gate-actions {
     flex-direction: column;

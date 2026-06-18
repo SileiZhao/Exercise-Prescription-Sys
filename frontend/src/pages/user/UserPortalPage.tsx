@@ -20,14 +20,39 @@ import {
   User
 } from "lucide-react";
 
-import { getPhaseAssessment, type PhaseAssessment } from "../../api/feedback";
-import { listMyPrescriptions, type PrescriptionRecord } from "../../api/prescriptions";
+import {
+  adjustFeedback,
+  exportPhaseAssessmentPdfReport,
+  exportPhaseAssessmentReport,
+  getPhaseAssessment,
+  type FeedbackAdjustment,
+  type PhaseAssessment
+} from "../../api/feedback";
+import {
+  exportPrescriptionPdfReport,
+  exportPrescriptionReport,
+  generatePrescription,
+  listMyPrescriptions,
+  type PrescriptionRecord
+} from "../../api/prescriptions";
+import { classifyMe } from "../../api/clusters";
+import {
+  acceptConsent,
+  createBiochemicalIndex,
+  createBodyComposition,
+  createExerciseFeedback,
+  createFitnessTest,
+  createRiskScreening,
+  upsertProfile,
+  type HealthPayload
+} from "../../api/healthData";
 import { getUserDashboard, type UserDashboardSummary } from "../../api/userDashboard";
 import "./user-portal.css";
 
 export type UserPortalView = "dashboard" | "onboarding" | "risk-result" | "prescription" | "today" | "phase-report";
 
 type PortalTone = "default" | "primary" | "success" | "warning" | "danger" | "info" | "purple" | "orange" | "teal";
+type PortalNotice = { type: "info" | "success" | "warning" | "error"; message: string; description?: string };
 
 const navItems: Array<{ id: UserPortalView; icon: typeof LayoutDashboard; label: string; path: string }> = [
   { id: "dashboard", icon: LayoutDashboard, label: "工作台首页", path: "/user/dashboard" },
@@ -96,6 +121,61 @@ const fallbackPrescription: PrescriptionRecord = {
   created_at: "2026-06-02T00:00:00"
 };
 
+const consentPayload = {
+  consent_version: "2026-v1",
+  consent_text: "我同意平台采集六类运动健康数据用于风险筛查和运动处方服务，并理解系统提供运动指导与处方辅助，不替代临床医疗诊断。"
+};
+
+const profilePayload: HealthPayload = {
+  name: "处方用户",
+  sex: "男",
+  birth_date: "1988-01-01",
+  height_cm: 170,
+  weight_kg: 82,
+  waist_cm: 96,
+  hip_cm: 102,
+  occupation_type: "久坐办公",
+  sedentary_hours: 8,
+  sleep_hours: 7,
+  exercise_goal: ["增强心肺", "体重管理"],
+  exercise_habit: "无规律运动",
+  exercise_experience: "初级"
+};
+
+const fitnessTestPayload: HealthPayload = {
+  resting_hr: 78,
+  sbp: 128,
+  dbp: 82,
+  vital_capacity: 3200,
+  grip_left: 32,
+  grip_right: 35,
+  sit_reach: 8,
+  single_leg_stand: 22,
+  pain_score: 1,
+  rpe_baseline: 4,
+  source: "user_portal"
+};
+
+const bodyCompositionPayload: HealthPayload = {
+  body_fat_pct: 31,
+  skeletal_muscle_kg: 25,
+  visceral_fat_level: 12,
+  bmr: 1580,
+  body_type: "代谢风险关注",
+  device_model: "manual",
+  is_fasting: true
+};
+
+const biochemicalPayload: HealthPayload = {
+  fbg: 5.8,
+  tc: 5,
+  tg: 1.5,
+  hdl_c: 1.1,
+  ldl_c: 3,
+  spo2: 98,
+  source: "user_portal"
+};
+
 function asText(value: unknown, fallback = "-") {
   if (value === null || value === undefined || value === "") return fallback;
   if (Array.isArray(value)) return value.map((item) => String(item)).join("、") || fallback;
@@ -126,6 +206,55 @@ function daysUntil(dateText: string | null | undefined) {
   const start = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
   const end = new Date(target.getFullYear(), target.getMonth(), target.getDate()).getTime();
   return Math.max(0, Math.ceil((end - start) / 86400000));
+}
+
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function errorText(error: unknown, fallback: string) {
+  if (error instanceof Error && error.message) return error.message;
+  return fallback;
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.rel = "noreferrer";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function saveHealthDraft(hasRedFlag: boolean) {
+  const riskPayload: HealthPayload = {
+    has_hypertension: false,
+    has_diabetes: false,
+    has_chd: false,
+    has_stroke: false,
+    has_ckd: false,
+    has_respiratory_disease: false,
+    has_joint_pain: false,
+    pain_location: [],
+    recent_injury: false,
+    medication: [],
+    chest_pain: hasRedFlag,
+    syncope: false,
+    abnormal_dyspnea: false,
+    palpitation: false,
+    doctor_restriction: "无",
+    parq_result: hasRedFlag ? "阳性" : "阴性"
+  };
+
+  await acceptConsent(consentPayload);
+  await upsertProfile(profilePayload);
+  await createFitnessTest({ ...fitnessTestPayload, pain_score: hasRedFlag ? 7 : 1 });
+  await createBodyComposition(bodyCompositionPayload);
+  await createBiochemicalIndex(biochemicalPayload);
+  return createRiskScreening(riskPayload);
 }
 
 function PortalButton({
@@ -356,6 +485,9 @@ function DashboardView() {
 
 function OnboardingView() {
   const [hasRedFlag, setHasRedFlag] = useState(false);
+  const [notice, setNotice] = useState<PortalNotice | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const steps = [
     { step: 1, title: "基础档案", status: "done" },
     { step: 2, title: "体质测试", status: "done" },
@@ -364,6 +496,42 @@ function OnboardingView() {
     { step: 5, title: "风险筛查问卷", status: "active" },
     { step: 6, title: "生成风险结果", status: "wait" }
   ];
+
+  const handleSaveDraft = async () => {
+    setSaving(true);
+    setNotice(null);
+    try {
+      await saveHealthDraft(hasRedFlag);
+      setNotice({
+        type: "success",
+        message: "健康建档草稿已保存",
+        description: "知情同意、基础档案、体测、体成分、生化指标和风险问卷已写入后端。"
+      });
+    } catch (error) {
+      setNotice({ type: "error", message: "健康建档保存失败", description: errorText(error, "请检查网络或稍后重试。") });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleGenerateAssessment = async () => {
+    setGenerating(true);
+    setNotice(null);
+    try {
+      await saveHealthDraft(false);
+      const cluster = await classifyMe();
+      const prescription = await generatePrescription();
+      setNotice({
+        type: prescription.risk_level === "R3" ? "warning" : "success",
+        message: "评估结果已生成",
+        description: `分型：${cluster.cluster_label || "待补充分型"}；处方：${prescription.risk_level} ${reviewLabel(prescription.status)}。`
+      });
+    } catch (error) {
+      setNotice({ type: "error", message: "评估结果生成失败", description: errorText(error, "请确认最小必填集已完整保存。") });
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   return (
     <div className="up-onboarding up-fade-in">
@@ -426,12 +594,19 @@ function OnboardingView() {
         <footer>
           <PortalButton>上一步</PortalButton>
           <div>
-            <PortalButton>保存草稿</PortalButton>
-            <PortalButton type="primary" disabled={hasRedFlag}>
-              生成评估结果
+            <PortalButton disabled={saving || generating} onClick={handleSaveDraft}>
+              {saving ? "保存中..." : "保存草稿"}
+            </PortalButton>
+            <PortalButton type="primary" disabled={hasRedFlag || saving || generating} onClick={handleGenerateAssessment}>
+              {generating ? "生成中..." : "生成评估结果"}
             </PortalButton>
           </div>
         </footer>
+        {notice ? (
+          <div className="up-inline-notice">
+            <PortalAlert type={notice.type} icon={notice.type === "error" ? <AlertTriangle /> : <CheckCircle />} message={notice.message} description={notice.description} />
+          </div>
+        ) : null}
       </section>
     </div>
   );
@@ -507,6 +682,9 @@ function RiskResultView() {
 
 function PrescriptionView() {
   const [items, setItems] = useState<PrescriptionRecord[]>([fallbackPrescription]);
+  const [exportNotice, setExportNotice] = useState<PortalNotice | null>(null);
+  const [exporting, setExporting] = useState<"pdf" | "docx" | null>(null);
+  const [loadingPrescriptions, setLoadingPrescriptions] = useState(true);
 
   useEffect(() => {
     let active = true;
@@ -514,7 +692,10 @@ function PrescriptionView() {
       .then((records) => {
         if (active && records.length) setItems(records);
       })
-      .catch(() => undefined);
+      .catch(() => undefined)
+      .finally(() => {
+        if (active) setLoadingPrescriptions(false);
+      });
     return () => {
       active = false;
     };
@@ -532,6 +713,24 @@ function PrescriptionView() {
     { label: "进阶 (Progression)", value: fittValue(fitt, "progression", "每两周根据心率微调"), icon: TrendingUp, tone: "danger" as PortalTone }
   ];
 
+  const handleExport = async (format: "pdf" | "docx") => {
+    setExporting(format);
+    setExportNotice(null);
+    try {
+      const blob = format === "pdf" ? await exportPrescriptionPdfReport(latest.id) : await exportPrescriptionReport(latest.id);
+      downloadBlob(blob, `exercise-prescription-${latest.id}.${format}`);
+      setExportNotice({
+        type: "success",
+        message: format === "pdf" ? "处方 PDF 已导出" : "处方 DOCX 已导出",
+        description: "报告由后端生成并记录导出审计，适合归档或提交专家复核。"
+      });
+    } catch (error) {
+      setExportNotice({ type: "error", message: "处方报告导出失败", description: errorText(error, "请稍后重试或联系管理员检查报告服务。") });
+    } finally {
+      setExporting(null);
+    }
+  };
+
   return (
     <div className="up-prescription up-fade-in">
       <header className="up-page-title-row">
@@ -544,11 +743,28 @@ function PrescriptionView() {
             风险: {latest.risk_level} <ChevronRight aria-hidden="true" /> 分型: {latest.cluster_label || "代谢风险"} <ChevronRight aria-hidden="true" /> 知识增强: 匹配
           </p>
         </div>
-        <PortalButton>
-          <Download aria-hidden="true" />
-          导出 PDF
-        </PortalButton>
+        <div className="up-action-row">
+          <PortalButton disabled={loadingPrescriptions || exporting !== null} onClick={() => handleExport("docx")}>
+            <Download aria-hidden="true" />
+            {loadingPrescriptions ? "加载中..." : exporting === "docx" ? "导出中..." : "导出 DOCX"}
+          </PortalButton>
+          <PortalButton disabled={loadingPrescriptions || exporting !== null} onClick={() => handleExport("pdf")}>
+            <Download aria-hidden="true" />
+            {loadingPrescriptions ? "加载中..." : exporting === "pdf" ? "导出中..." : "导出 PDF"}
+          </PortalButton>
+        </div>
       </header>
+
+      {exportNotice ? (
+        <div className="up-inline-notice">
+          <PortalAlert
+            type={exportNotice.type}
+            icon={exportNotice.type === "error" ? <AlertTriangle /> : <CheckCircle />}
+            message={exportNotice.message}
+            description={exportNotice.description}
+          />
+        </div>
+      ) : null}
 
       {!isLocked ? (
         <section className="up-fitt-grid">
@@ -596,6 +812,61 @@ function PrescriptionView() {
 
 function TodayGatekeeperView() {
   const [gatePassed, setGatePassed] = useState(false);
+  const [summary, setSummary] = useState<UserDashboardSummary>(fallbackSummary);
+  const [exerciseType, setExerciseType] = useState("快走");
+  const [durationMin, setDurationMin] = useState(30);
+  const [avgHr, setAvgHr] = useState("");
+  const [rpe, setRpe] = useState(4);
+  const [submitting, setSubmitting] = useState(false);
+  const [feedbackNotice, setFeedbackNotice] = useState<PortalNotice | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    getUserDashboard()
+      .then((data) => {
+        if (active) setSummary({ ...fallbackSummary, ...data });
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleFeedbackSubmit = async () => {
+    setSubmitting(true);
+    setFeedbackNotice(null);
+    try {
+      const feedback = await createExerciseFeedback({
+        prescription_id: summary.prescription_id,
+        pre_exercise_confirmed: true,
+        exercise_date: todayISO(),
+        exercise_type: exerciseType,
+        frequency_week: 1,
+        duration_min: durationMin,
+        intensity_level: "中低强度",
+        avg_hr: avgHr ? Number(avgHr) : null,
+        rpe,
+        completion_rate: 100,
+        discomfort: ["无"],
+        pain_score_after: 0,
+        source: "user_portal"
+      });
+      const feedbackId = Number((feedback as { id?: number }).id);
+      let adjustment: FeedbackAdjustment | null = null;
+      if (feedbackId) {
+        adjustment = await adjustFeedback(feedbackId);
+      }
+      setFeedbackNotice({
+        type: adjustment?.action === "RED_ALERT" || adjustment?.action === "REVIEW_REQUIRED" ? "warning" : "success",
+        message: "今日反馈已上传",
+        description: adjustment ? `动态调整：${adjustment.action}` : "反馈已记录，暂无可执行的动态调整。"
+      });
+    } catch (error) {
+      setFeedbackNotice({ type: "error", message: "今日反馈上传失败", description: errorText(error, "请检查反馈信息或稍后重试。") });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="up-today up-fade-in">
@@ -633,34 +904,47 @@ function TodayGatekeeperView() {
               <label>
                 <span>执行的运动项目</span>
                 <div className="up-choice-row">
-                  <button type="button" className="is-selected">快走</button>
-                  <button type="button">八段锦</button>
+                  {["快走", "八段锦"].map((item) => (
+                    <button key={item} type="button" className={exerciseType === item ? "is-selected" : ""} onClick={() => setExerciseType(item)}>
+                      {item}
+                    </button>
+                  ))}
                 </div>
               </label>
               <div className="up-form-grid-2">
                 <label>
                   <span>实际时长 (分钟)</span>
-                  <input type="number" defaultValue={30} />
+                  <input type="number" value={durationMin} onChange={(event) => setDurationMin(Number(event.target.value) || 0)} />
                 </label>
                 <label>
                   <span>运动后心率 (bpm)</span>
-                  <input type="number" placeholder="选填" />
+                  <input type="number" placeholder="选填" value={avgHr} onChange={(event) => setAvgHr(event.target.value)} />
                 </label>
               </div>
               <label>
                 <span className="up-form-label-row">
                   主观疲劳感知 (RPE)
-                  <strong>4 - 有些吃力</strong>
+                  <strong>{rpe} - {rpe <= 3 ? "轻松" : rpe <= 6 ? "有些吃力" : "偏高"}</strong>
                 </span>
-                <input type="range" min={0} max={10} defaultValue={4} />
+                <input type="range" min={0} max={10} value={rpe} onChange={(event) => setRpe(Number(event.target.value))} />
                 <small className="up-range-labels">
                   <span>0 (轻松)</span>
                   <span>5 (中等)</span>
                   <span>10 (极限)</span>
                 </small>
               </label>
+              {feedbackNotice ? (
+                <PortalAlert
+                  type={feedbackNotice.type}
+                  icon={feedbackNotice.type === "error" ? <AlertTriangle /> : <CheckCircle />}
+                  message={feedbackNotice.message}
+                  description={feedbackNotice.description}
+                />
+              ) : null}
               <footer>
-                <PortalButton type="primary">提交反馈并上传</PortalButton>
+                <PortalButton type="primary" disabled={submitting} onClick={handleFeedbackSubmit}>
+                  {submitting ? "上传中..." : "提交反馈并上传"}
+                </PortalButton>
               </footer>
             </div>
           </PortalCard>
@@ -672,6 +956,8 @@ function TodayGatekeeperView() {
 
 function PhaseReportView() {
   const [assessment, setAssessment] = useState<PhaseAssessment | null>(null);
+  const [exporting, setExporting] = useState<"pdf" | "docx" | null>(null);
+  const [exportNotice, setExportNotice] = useState<PortalNotice | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -690,6 +976,24 @@ function PhaseReportView() {
   const rpe = assessment?.average_rpe ?? 5.6;
   const pain = assessment?.pain_events ?? 1;
 
+  const handlePhaseExport = async (format: "pdf" | "docx") => {
+    setExporting(format);
+    setExportNotice(null);
+    try {
+      const blob = format === "pdf" ? await exportPhaseAssessmentPdfReport(4) : await exportPhaseAssessmentReport(4);
+      downloadBlob(blob, `phase-assessment-4w.${format}`);
+      setExportNotice({
+        type: "success",
+        message: format === "pdf" ? "阶段 PDF 已导出" : "阶段 DOCX 已导出",
+        description: "阶段报告已按近 4 周评估窗口生成，包含反馈、安全事件与复评建议。"
+      });
+    } catch (error) {
+      setExportNotice({ type: "error", message: "阶段报告导出失败", description: errorText(error, "请稍后重试或确认报告服务可用。") });
+    } finally {
+      setExporting(null);
+    }
+  };
+
   return (
     <div className="up-phase up-fade-in">
       <section className="up-phase-hero">
@@ -699,12 +1003,26 @@ function PhaseReportView() {
           <p>{assessment?.summary || "四周反馈、安全事件与指标变化的复评视图，后续可补充完整导出与指标追踪入口。"}</p>
         </div>
         <div className="up-phase-actions">
-          <PortalButton>
+          <PortalButton disabled={exporting !== null} onClick={() => handlePhaseExport("docx")}>
             <Download aria-hidden="true" />
-            导出 PDF
+            {exporting === "docx" ? "导出中..." : "导出 DOCX"}
+          </PortalButton>
+          <PortalButton disabled={exporting !== null} onClick={() => handlePhaseExport("pdf")}>
+            <Download aria-hidden="true" />
+            {exporting === "pdf" ? "导出中..." : "导出 PDF"}
           </PortalButton>
         </div>
       </section>
+      {exportNotice ? (
+        <div className="up-inline-notice">
+          <PortalAlert
+            type={exportNotice.type}
+            icon={exportNotice.type === "error" ? <AlertTriangle /> : <CheckCircle />}
+            message={exportNotice.message}
+            description={exportNotice.description}
+          />
+        </div>
+      ) : null}
       <section className="up-metric-grid">
         <PortalCard>
           <small>平均完成率</small>
