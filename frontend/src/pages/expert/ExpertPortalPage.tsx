@@ -24,14 +24,28 @@ import {
   getReviewDetail,
   getReviewStats,
   listReviewQueue,
+  pausePrescription,
   referPrescription,
+  rejectPrescription,
+  requestMoreInformation,
+  startReview,
   type ReviewDetail,
+  type ReviewQueueFilters,
   type ReviewQueueItem,
   type ReviewStats
 } from "../../api/expertReviews";
+import { logout as logoutSession } from "../../api/auth";
+import { clearAuthTokens, getRefreshToken } from "../../auth/token";
 import "./expert-portal.css";
 
 type RiskMode = "R2" | "R3";
+type QueueStatusFilter = "all" | "pending" | "mine";
+type QueueRiskFilter = "all" | RiskMode;
+type ActionNotice = {
+  type: "success" | "error" | "warning" | "info";
+  message: string;
+  description?: string;
+};
 
 const fallbackStats: ReviewStats = {
   average_review_hours: 1.4,
@@ -157,12 +171,14 @@ function statusText(status: string | null | undefined) {
     NEEDS_INFO: "待补充",
     REFERRED: "已转介",
     APPROVED: "已批准",
-    REJECTED: "已驳回"
+    REJECTED: "已驳回",
+    PAUSED: "已暂停"
   };
   return labels[String(status ?? "")] ?? String(status || "待领取");
 }
 
-function queueAlert(task: ReviewQueueItem) {
+function queueAlert(task: ReviewQueueItem | null | undefined) {
+  if (!task) return null;
   if (task.risk_level === "R3") return "近期不明原因胸闷";
   if (task.abnormal_feedback_count > 0) return `异常反馈 ${task.abnormal_feedback_count}`;
   return null;
@@ -172,6 +188,26 @@ function displayPrescriptionId(task: ReviewQueueItem | null | undefined) {
   return task ? `处方 #${task.prescription_id}` : "处方 #--";
 }
 
+function errorMessage(error: unknown) {
+  if (typeof error === "object" && error !== null && "response" in error) {
+    const response = (error as { response?: { data?: { detail?: unknown } } }).response;
+    const detail = response?.data?.detail;
+    if (detail) return asText(detail, "操作失败，请稍后重试。");
+  }
+  if (error instanceof Error) return error.message;
+  return "操作失败，请稍后重试或联系管理员。";
+}
+
+function buildQueueFilters(statusFilter: QueueStatusFilter, riskFilter: QueueRiskFilter, searchText: string): ReviewQueueFilters {
+  const filters: ReviewQueueFilters = {};
+  if (statusFilter === "pending") filters.status = "PENDING_REVIEW";
+  if (statusFilter === "mine") filters.status = "IN_REVIEW";
+  if (riskFilter !== "all") filters.risk_level = riskFilter;
+  const search = searchText.trim();
+  if (search) filters.search = search;
+  return filters;
+}
+
 function ExpertShell({
   active,
   children
@@ -179,11 +215,30 @@ function ExpertShell({
   active: "dashboard" | "history";
   children: ReactNode;
 }) {
+  const navigate = useNavigate();
   const userName = localStorage.getItem("current_user_name") || "李主任医生";
+  const [loggingOut, setLoggingOut] = useState(false);
   const navItems = [
     { id: "dashboard", icon: LayoutDashboard, label: "紧急分诊与队列", path: "/expert/dashboard" },
     { id: "history", icon: CheckSquare, label: "已审核记录", path: "/expert/reviews" }
   ] as const;
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    const refreshToken = getRefreshToken();
+    try {
+      if (refreshToken) {
+        await logoutSession(refreshToken);
+      }
+    } catch {
+      // Local logout should still clear access if the token revoke request fails.
+    } finally {
+      clearAuthTokens();
+      localStorage.removeItem("current_user_name");
+      navigate("/login", { replace: true });
+    }
+  }
 
   return (
     <div className="expert-portal-shell">
@@ -209,7 +264,10 @@ function ExpertShell({
             <strong>{userName}</strong>
             <small>内分泌与代谢科</small>
           </div>
-          <LogOut />
+          <button type="button" className="expert-logout-button" onClick={handleLogout} disabled={loggingOut}>
+            <LogOut />
+            <span>{loggingOut ? "退出中" : "退出登录"}</span>
+          </button>
         </footer>
       </aside>
       <main className="expert-main">
@@ -228,19 +286,22 @@ function TriageDashboard() {
   const navigate = useNavigate();
   const [queue, setQueue] = useState<ReviewQueueItem[]>(fallbackQueue);
   const [stats, setStats] = useState<ReviewStats>(fallbackStats);
+  const [statusFilter, setStatusFilter] = useState<QueueStatusFilter>("all");
+  const [riskFilter, setRiskFilter] = useState<QueueRiskFilter>("all");
+  const [searchText, setSearchText] = useState("");
+  const [claimingId, setClaimingId] = useState<number | null>(null);
+  const [queueNotice, setQueueNotice] = useState<ActionNotice | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
-    Promise.all([listReviewQueue({}), getReviewStats()])
-      .then(([queueData, statsData]) => {
+    getReviewStats()
+      .then((statsData) => {
         if (!mounted) return;
-        setQueue(queueData.length ? queueData : fallbackQueue);
         setStats(statsData);
       })
       .catch(() => {
         if (!mounted) return;
-        setQueue(fallbackQueue);
         setStats(fallbackStats);
       });
 
@@ -249,8 +310,69 @@ function TriageDashboard() {
     };
   }, []);
 
-  const r3Count = queue.filter((task) => task.risk_level === "R3" || task.abnormal_feedback_count > 0).length;
-  const highPriority = queue[0] ?? fallbackQueue[0];
+  useEffect(() => {
+    let mounted = true;
+    const filters = buildQueueFilters(statusFilter, riskFilter, searchText);
+
+    listReviewQueue(filters)
+      .then((queueData) => {
+        if (!mounted) return;
+        setQueue(queueData);
+        setQueueNotice(null);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setQueue(fallbackQueue);
+        setQueueNotice({
+          type: "warning",
+          message: "队列读取失败",
+          description: "当前显示本地兜底数据，请稍后刷新重试。"
+        });
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [riskFilter, searchText, statusFilter]);
+
+  async function openTask(task: ReviewQueueItem) {
+    if (task.status === "IN_REVIEW") {
+      navigate(`/expert/reviews/${task.prescription_id}`);
+      return;
+    }
+    setClaimingId(task.prescription_id);
+    setQueueNotice(null);
+    try {
+      await startReview(task.prescription_id);
+      setQueue((current) =>
+        current.map((item) =>
+          item.prescription_id === task.prescription_id ? { ...item, status: "IN_REVIEW" } : item
+        )
+      );
+      navigate(`/expert/reviews/${task.prescription_id}`);
+    } catch (error) {
+      setQueueNotice({
+        type: "error",
+        message: "领取审核失败",
+        description: errorMessage(error)
+      });
+    } finally {
+      setClaimingId(null);
+    }
+  }
+
+  const visibleQueue = useMemo(() => {
+    const term = searchText.trim().toLowerCase();
+    if (!term) return queue;
+    return queue.filter((task) =>
+      String(task.prescription_id).includes(term) ||
+      String(task.user_id).includes(term) ||
+      displayPrescriptionId(task).toLowerCase().includes(term)
+    );
+  }, [queue, searchText]);
+
+  const r3Count = visibleQueue.filter((task) => task.risk_level === "R3" || task.abnormal_feedback_count > 0).length;
+  const highPriority = visibleQueue[0] ?? null;
 
   return (
     <ExpertShell active="dashboard">
@@ -277,22 +399,35 @@ function TriageDashboard() {
 
         <div className="expert-filter-bar">
           <div className="expert-segment" aria-label="队列筛选">
-            <button type="button" className="is-active">全部待办</button>
-            <button type="button">待领取</button>
-            <button type="button">我的审核中</button>
+            <button type="button" className={statusFilter === "all" ? "is-active" : ""} onClick={() => setStatusFilter("all")}>全部待办</button>
+            <button type="button" className={statusFilter === "pending" ? "is-active" : ""} onClick={() => setStatusFilter("pending")}>待领取</button>
+            <button type="button" className={statusFilter === "mine" ? "is-active" : ""} onClick={() => setStatusFilter("mine")}>我的审核中</button>
           </div>
           <div className="expert-filter-actions">
-            <span>
+            <label className="expert-risk-select">
               <Filter />
-              风险等级：全部
+              <select aria-label="风险等级" value={riskFilter} onChange={(event) => setRiskFilter(event.target.value as QueueRiskFilter)}>
+                <option value="all">风险等级：全部</option>
+                <option value="R2">风险等级：R2</option>
+                <option value="R3">风险等级：R3</option>
+              </select>
               <ChevronDown />
-            </span>
+            </label>
             <label>
               <Search />
-              <input type="text" placeholder="搜索患者或处方编号" />
+              <input
+                type="text"
+                placeholder="搜索患者或处方编号"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+              />
             </label>
           </div>
         </div>
+
+        {queueNotice ? (
+          <Alert type={queueNotice.type} message={queueNotice.message} description={queueNotice.description} />
+        ) : null}
 
         <Card className="expert-table-card">
           <table aria-label="专家分诊任务列表" className="expert-task-table">
@@ -308,7 +443,7 @@ function TriageDashboard() {
               </tr>
             </thead>
             <tbody>
-              {queue.map((task, index) => {
+              {visibleQueue.map((task, index) => {
                 const alertText = queueAlert(task);
                 return (
                   <tr key={`${task.prescription_id}-${task.review_id ?? index}`}>
@@ -328,13 +463,20 @@ function TriageDashboard() {
                     <td><Badge tone={task.status === "IN_REVIEW" ? "purple" : "info"} text={statusText(task.status)} /></td>
                     <td>{index === 0 ? "15分钟" : `${index + 1}小时`}</td>
                     <td>
-                      <Button type="primary" onClick={() => navigate(`/expert/reviews/${task.prescription_id}`)}>
-                        {task.status === "IN_REVIEW" ? "继续审核" : "领取并审核"}
+                      <Button type="primary" disabled={claimingId === task.prescription_id} onClick={() => openTask(task)}>
+                        {claimingId === task.prescription_id ? "领取中" : task.status === "IN_REVIEW" ? "继续审核" : "领取并审核"}
                       </Button>
                     </td>
                   </tr>
                 );
               })}
+              {!visibleQueue.length ? (
+                <tr>
+                  <td colSpan={7}>
+                    <div className="expert-empty-row">当前筛选条件下没有待处理审核任务。</div>
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </Card>
@@ -344,7 +486,7 @@ function TriageDashboard() {
             <strong>最高优先级</strong>
             <span>{displayPrescriptionId(highPriority)} · {queueAlert(highPriority) ?? "等待专家分诊"}</span>
           </div>
-          <Button type="primary" onClick={() => navigate(`/expert/reviews/${highPriority.prescription_id}`)}>
+          <Button type="primary" disabled={!highPriority} onClick={() => highPriority ? openTask(highPriority) : undefined}>
             打开单任务审核
           </Button>
         </section>
@@ -409,6 +551,8 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
   );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [acting, setActing] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState<ActionNotice | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -444,34 +588,98 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
   const templateName = asText(detail?.template?.name, "高血压稳定期改善模板");
 
   async function confirmPublish() {
-    await approvePrescription(prescriptionId, {
-      review_comment: "我已亲自核对用户的医疗风险、禁忌动作与处方运动强度，确认该处方可安全执行。",
-      edited_prescription: {
-        fitt_vp: {
-          frequency,
-          intensity: "中低强度 (RPE 4-6)",
-          time,
-          type: ["快走", "功率自行车"],
-          volume: "每周累计约 120 分钟",
-          progression: "每 2-4 周按反馈调整"
+    setActing("approve");
+    setActionNotice(null);
+    try {
+      await approvePrescription(prescriptionId, {
+        review_comment: "我已亲自核对用户的医疗风险、禁忌动作与处方运动强度，确认该处方可安全执行。",
+        edited_prescription: {
+          fitt_vp: {
+            frequency,
+            intensity: "中低强度 (RPE 4-6)",
+            time,
+            type: ["快走", "功率自行车"],
+            volume: "每周累计约 120 分钟",
+            progression: "每 2-4 周按反馈调整"
+          },
+          precautions: ["运动前后监测血压", "出现头晕胸闷立即停止"],
+          contraindications: ["避免长时间憋气动作", "避免大重量深蹲"],
+          reassessment,
+          safety_notice: "专家已锁定中低强度上限。"
         },
-        precautions: ["运动前后监测血压", "出现头晕胸闷立即停止"],
-        contraindications: ["避免长时间憋气动作", "避免大重量深蹲"],
-        reassessment,
-        safety_notice: "专家已锁定中低强度上限。"
-      }
-    });
-    setDialogOpen(false);
+      });
+      setDialogOpen(false);
+      setActionNotice({ type: "success", message: "处方已批准发布", description: "用户端将按专家锁定后的安全边界展示训练计划。" });
+    } catch (error) {
+      setActionNotice({ type: "error", message: "批准发布失败", description: errorMessage(error) });
+    } finally {
+      setActing(null);
+    }
   }
 
   async function sendReferral() {
-    await referPrescription(prescriptionId, {
-      review_comment: referralAdvice,
-      edited_prescription: {
-        contraindications: ["不发布训练处方"],
-        safety_notice: "当前仅建议医学评估或转介。"
-      }
-    });
+    await runReviewAction("refer", "已发送转介通知", () =>
+      referPrescription(prescriptionId, {
+        review_comment: referralAdvice,
+        edited_prescription: {
+          contraindications: ["不发布训练处方"],
+          safety_notice: "当前仅建议医学评估或转介。"
+        }
+      })
+    );
+  }
+
+  async function runReviewAction(key: string, successMessage: string, action: () => Promise<unknown>) {
+    setActing(key);
+    setActionNotice(null);
+    try {
+      await action();
+      setActionNotice({ type: "success", message: successMessage });
+    } catch (error) {
+      setActionNotice({ type: "error", message: "审核动作提交失败", description: errorMessage(error) });
+    } finally {
+      setActing(null);
+    }
+  }
+
+  async function requestHospitalDiagnosis() {
+    await runReviewAction("request-hospital", "已发送补充资料要求", () =>
+      requestMoreInformation(prescriptionId, {
+        review_comment: "要求补充院内诊断资料：请上传近期门诊诊断、心血管评估或医嘱结论，专家复核前保持运动阻断。"
+      })
+    );
+  }
+
+  async function requestFitnessData() {
+    await runReviewAction("request-fitness", "已发送补充资料要求", () =>
+      requestMoreInformation(prescriptionId, {
+        review_comment: "要求补充体测数据：请补充静息血压、心率、疼痛评分和基础体适能记录后再生成最终处方。"
+      })
+    );
+  }
+
+  async function rejectDraft() {
+    await runReviewAction("reject", "已驳回初稿并要求重生成", () =>
+      rejectPrescription(prescriptionId, {
+        review_comment: "驳回初稿重生成：当前处方初稿与风险分级或禁忌边界不匹配，请系统基于专家意见重新生成。"
+      })
+    );
+  }
+
+  async function pauseCurrentPrescription() {
+    await runReviewAction("pause", "已暂停处方执行", () =>
+      pausePrescription(prescriptionId, {
+        review_comment: "暂停处方执行：发现安全风险或资料缺口，用户端应停止执行，等待补充资料和专家复核。"
+      })
+    );
+  }
+
+  async function escalateToReferral() {
+    await runReviewAction("escalate-r3", "已判定为 R3 并转介", () =>
+      referPrescription(prescriptionId, {
+        review_comment: "专家复核后判定为 R3：当前风险状态不适合发布训练处方，转入院内评估或人工分诊。"
+      })
+    );
   }
 
   return (
@@ -532,6 +740,9 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
             <strong className="expert-template-name">{templateName}</strong>
           </header>
           <div className="expert-editor-scroll">
+            {actionNotice ? (
+              <Alert type={actionNotice.type} message={actionNotice.message} description={actionNotice.description} />
+            ) : null}
             {riskMode === "R3" ? (
               <div className="expert-r3-block">
                 <div className="expert-r3-head">
@@ -614,24 +825,37 @@ function SingleReviewWorkspace({ prescriptionId }: { prescriptionId: number }) {
       <footer className="expert-review-footer">
         <div>
           {riskMode === "R3" ? (
-            <Button>要求补充院内诊断资料</Button>
+            <Button disabled={acting === "request-hospital"} onClick={requestHospitalDiagnosis}>
+              {acting === "request-hospital" ? "发送中" : "要求补充院内诊断资料"}
+            </Button>
           ) : (
             <>
-              <Button danger>判定为 R3 并转介</Button>
-              <Button>要求补充体测数据</Button>
+              <Button danger disabled={acting === "escalate-r3"} onClick={escalateToReferral}>
+                {acting === "escalate-r3" ? "转介中" : "判定为 R3 并转介"}
+              </Button>
+              <Button disabled={acting === "request-fitness"} onClick={requestFitnessData}>
+                {acting === "request-fitness" ? "发送中" : "要求补充体测数据"}
+              </Button>
             </>
           )}
+          <Button danger disabled={acting === "pause"} onClick={pauseCurrentPrescription}>
+            {acting === "pause" ? "暂停中" : "暂停处方执行"}
+          </Button>
         </div>
         <div>
-          <Button danger>驳回初稿重生成</Button>
+          <Button danger disabled={acting === "reject"} onClick={rejectDraft}>
+            {acting === "reject" ? "驳回中" : "驳回初稿重生成"}
+          </Button>
           {riskMode === "R3" ? (
-            <Button type="primary" danger onClick={sendReferral}>核对并发送转介通知</Button>
+            <Button type="primary" danger disabled={acting === "refer"} onClick={sendReferral}>
+              {acting === "refer" ? "发送中" : "核对并发送转介通知"}
+            </Button>
           ) : (
-            <Button type="success" onClick={() => {
+            <Button type="success" disabled={acting === "approve"} onClick={() => {
               setConfirmed(false);
               setDialogOpen(true);
             }}>
-              核对并批准发布
+              {acting === "approve" ? "发布中" : "核对并批准发布"}
             </Button>
           )}
         </div>

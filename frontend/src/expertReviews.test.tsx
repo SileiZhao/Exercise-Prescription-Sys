@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 import type { ReviewDetail } from "./api/expertReviews";
 
+const logoutMock = vi.hoisted(() => vi.fn().mockResolvedValue({ revoked: true }));
 const approvePrescriptionMock = vi.hoisted(() => vi.fn().mockResolvedValue({ status: "APPROVED" }));
 const requestMoreInformationMock = vi.hoisted(() => vi.fn().mockResolvedValue({ status: "NEEDS_INFO" }));
 const pausePrescriptionMock = vi.hoisted(() => vi.fn().mockResolvedValue({ status: "PAUSED" }));
@@ -106,9 +107,19 @@ vi.mock("./api/expertReviews", () => ({
   startReview: startReviewMock
 }));
 
+vi.mock("./api/auth", async () => {
+  const actual = await vi.importActual<typeof import("./api/auth")>("./api/auth");
+  return {
+    ...actual,
+    logout: logoutMock
+  };
+});
+
 function renderExpertRoute(path: string) {
   localStorage.setItem("access_token", "test-token");
+  localStorage.setItem("refresh_token", "refresh-token");
   localStorage.setItem("current_user_role", "EXPERT");
+  localStorage.setItem("current_user_id", "17");
   localStorage.setItem("current_user_name", "李主任医生");
 
   render(
@@ -126,6 +137,7 @@ describe("expert direct portal replacement", () => {
     pausePrescriptionMock.mockClear();
     referPrescriptionMock.mockClear();
     rejectPrescriptionMock.mockClear();
+    logoutMock.mockClear();
     startReviewMock.mockClear();
     getReviewDetailMock.mockClear();
     getReviewStatsMock.mockClear();
@@ -195,5 +207,98 @@ describe("expert direct portal replacement", () => {
       }))
     );
     expect(approvePrescriptionMock).not.toHaveBeenCalled();
+  });
+
+  it("lets experts start a queued review before opening the workspace", async () => {
+    renderExpertRoute("/expert/dashboard");
+
+    expect(await screen.findByRole("heading", { name: "紧急分诊与队列" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "领取并审核" }));
+
+    await waitFor(() => expect(startReviewMock).toHaveBeenCalledWith(81));
+    expect(await screen.findByRole("heading", { name: "单任务审核工作台" })).toBeInTheDocument();
+  });
+
+  it("keeps the triage dashboard stable when the review queue is empty", async () => {
+    listReviewQueueMock.mockResolvedValueOnce([]);
+
+    renderExpertRoute("/expert/dashboard");
+
+    expect(await screen.findByRole("heading", { name: "紧急分诊与队列" })).toBeInTheDocument();
+    expect(await screen.findByText("当前筛选条件下没有待处理审核任务。")).toBeInTheDocument();
+    expect(screen.getByText("处方 #-- · 等待专家分诊")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "打开单任务审核" })).toBeDisabled();
+  });
+
+  it("uses queue filters and prescription search when loading the expert review queue", async () => {
+    renderExpertRoute("/expert/dashboard");
+
+    expect(await screen.findByRole("heading", { name: "紧急分诊与队列" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "待领取" }));
+    await waitFor(() => expect(listReviewQueueMock).toHaveBeenLastCalledWith({ status: "PENDING_REVIEW" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "我的审核中" }));
+    await waitFor(() => expect(listReviewQueueMock).toHaveBeenLastCalledWith({ status: "IN_REVIEW" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "全部待办" }));
+    await waitFor(() => expect(listReviewQueueMock).toHaveBeenLastCalledWith({}));
+    fireEvent.change(screen.getByPlaceholderText("搜索患者或处方编号"), { target: { value: "81" } });
+    await waitFor(() => expect(listReviewQueueMock).toHaveBeenLastCalledWith({ search: "81" }));
+    await waitFor(() => expect(screen.getByText("处方 #81")).toBeInTheDocument());
+    expect(screen.queryByText("处方 #82")).not.toBeInTheDocument();
+  });
+
+  it("requests missing clinical data and rejects drafts from the review workspace", async () => {
+    renderExpertRoute("/expert/reviews/82");
+
+    expect(await screen.findByRole("heading", { name: "单任务审核工作台" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "要求补充体测数据" }));
+    await waitFor(() =>
+      expect(requestMoreInformationMock).toHaveBeenCalledWith(82, expect.objectContaining({
+        review_comment: expect.stringContaining("体测数据")
+      }))
+    );
+    expect(await screen.findByText("已发送补充资料要求")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "驳回初稿重生成" }));
+    await waitFor(() =>
+      expect(rejectPrescriptionMock).toHaveBeenCalledWith(82, expect.objectContaining({
+        review_comment: expect.stringContaining("重新生成")
+      }))
+    );
+  });
+
+  it("requests hospital diagnosis information and can pause high-risk prescriptions", async () => {
+    renderExpertRoute("/expert/reviews/81");
+
+    expect(await screen.findByRole("heading", { name: "单任务审核工作台" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "要求补充院内诊断资料" }));
+    await waitFor(() =>
+      expect(requestMoreInformationMock).toHaveBeenCalledWith(81, expect.objectContaining({
+        review_comment: expect.stringContaining("院内诊断资料")
+      }))
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "暂停处方执行" }));
+    await waitFor(() =>
+      expect(pausePrescriptionMock).toHaveBeenCalledWith(81, expect.objectContaining({
+        review_comment: expect.stringContaining("暂停")
+      }))
+    );
+  });
+
+  it("clears the expert session and returns to login when logging out", async () => {
+    renderExpertRoute("/expert/dashboard");
+
+    expect(await screen.findByRole("heading", { name: "紧急分诊与队列" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "退出登录" }));
+
+    await waitFor(() => expect(logoutMock).toHaveBeenCalledWith("refresh-token"));
+    expect(localStorage.getItem("access_token")).toBeNull();
+    expect(localStorage.getItem("refresh_token")).toBeNull();
+    expect(localStorage.getItem("current_user_role")).toBeNull();
+    expect(localStorage.getItem("current_user_id")).toBeNull();
   });
 });

@@ -16,6 +16,7 @@ export interface ReviewQueueItem {
 export interface ReviewQueueFilters {
   risk_level?: string;
   status?: string;
+  search?: string;
   organization_id?: number;
   prescription_type?: string;
   abnormal_feedback?: boolean;

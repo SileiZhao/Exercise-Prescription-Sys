@@ -33,6 +33,7 @@ class ExpertReviewService:
         self,
         risk_level: str | None = None,
         status_filter: str | None = None,
+        search: str | None = None,
         organization_id: int | None = None,
         prescription_type: str | None = None,
         abnormal_feedback: bool | None = None,
@@ -71,6 +72,8 @@ class ExpertReviewService:
                 if review.expert_id is not None and review.expert_id != current_user.id:
                     continue
             user = self.db.get(User, record.user_id)
+            if not self._matches_queue_search(record, user, search):
+                continue
             queue.append(
                 {
                     "prescription_id": record.id,
@@ -87,6 +90,26 @@ class ExpertReviewService:
             )
         self.db.commit()
         return queue
+
+    def _matches_queue_search(self, record: PrescriptionRecord, user: User | None, search: str | None) -> bool:
+        term = (search or "").strip()
+        if not term:
+            return True
+
+        if term.isdigit():
+            value = int(term)
+            if record.id == value or record.user_id == value:
+                return True
+
+        lowered = term.lower()
+        haystacks = [
+            str(record.id),
+            str(record.user_id),
+            user.full_name if user else "",
+            user.email if user else "",
+            user.phone if user and user.phone else "",
+        ]
+        return any(lowered in str(item).lower() for item in haystacks if item)
 
     def stats(self, current_user: User | None = None) -> dict[str, Any]:
         reviewed_statement = (

@@ -329,6 +329,20 @@ def test_expert_review_queue_filters_stats_and_extended_actions(client: TestClie
     assert body[0]["organization_id"] == org.id
     assert body[0]["abnormal_feedback_count"] == 1
 
+    id_search = client.get(
+        f"/api/v1/expert-reviews?search={target.id}",
+        headers=expert_headers,
+    )
+    assert id_search.status_code == 200
+    assert [item["prescription_id"] for item in id_search.json()] == [target.id]
+
+    empty_search = client.get(
+        "/api/v1/expert-reviews?search=definitely-no-match",
+        headers=expert_headers,
+    )
+    assert empty_search.status_code == 200
+    assert empty_search.json() == []
+
     stats = client.get("/api/v1/expert-reviews/stats", headers=expert_headers)
 
     assert stats.status_code == 200

@@ -132,6 +132,38 @@
   font-size: 12px;
 }
 
+.expert-logout-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid rgba(216, 226, 234, 0.18);
+  border-radius: 8px;
+  color: #b6c1ce;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.expert-logout-button:hover {
+  color: #fff;
+  border-color: rgba(216, 226, 234, 0.36);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.expert-logout-button:disabled {
+  color: #8a98aa;
+  cursor: not-allowed;
+}
+
+.expert-logout-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 .expert-main {
   position: relative;
   display: flex;
@@ -331,6 +363,23 @@
   font-size: 13px;
 }
 
+.expert-filter-actions .expert-risk-select {
+  position: relative;
+  width: 174px;
+}
+
+.expert-risk-select select {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #5f7186;
+  background: transparent;
+  font: inherit;
+  font-weight: 650;
+  appearance: none;
+  cursor: pointer;
+}
+
 .expert-filter-actions label {
   width: 260px;
   background: #fff;
@@ -378,6 +427,14 @@
 
 .expert-task-table tr:hover td {
   background: #f7fafc;
+}
+
+.expert-empty-row {
+  padding: 22px;
+  color: #5f7186;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
 }
 
 .expert-id-link {
@@ -798,6 +855,24 @@
   border-color: #bfdbfe;
   color: #1e4f91;
   background: #eff6ff;
+}
+
+.ep-alert-success {
+  border-color: rgba(34, 139, 78, 0.28);
+  color: #1a6639;
+  background: #f0f9f4;
+}
+
+.ep-alert-warning {
+  border-color: #fed7aa;
+  color: #8a4a03;
+  background: #fff7ed;
+}
+
+.ep-alert-error {
+  border-color: #fecaca;
+  color: #9f1d1d;
+  background: #fff1f2;
 }
 
 .ep-alert-icon {

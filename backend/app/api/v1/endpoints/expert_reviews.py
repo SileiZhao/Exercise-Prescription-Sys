@@ -23,6 +23,7 @@ router = APIRouter(prefix="/expert-reviews", tags=["expert-reviews"])
 def list_review_queue(
     risk_level: str | None = None,
     status_filter: str | None = Query(default=None, alias="status"),
+    search: str | None = None,
     organization_id: int | None = None,
     prescription_type: str | None = None,
     abnormal_feedback: bool | None = None,
@@ -34,6 +35,7 @@ def list_review_queue(
     return ExpertReviewService(db).list_queue(
         risk_level=risk_level,
         status_filter=status_filter,
+        search=search,
         organization_id=organization_id,
         prescription_type=prescription_type,
         abnormal_feedback=abnormal_feedback,
